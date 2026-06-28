@@ -1,0 +1,1095 @@
+<!-- @dsCard group="Portfolio Hub" viewport="1100x1400" name="Writeup — Granite addendum (the champion fell)" subtitle="A better instrument erased the headline champion and replaced it with constructive findings: metastable-bug repair, a depth-separation stacking heuristic, U-shaped layers, and the transferred Σα-law" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Granite — the champion fell — The Vivisection Lab</title>
+<meta name="description" content="An addendum + correction to the published Granite page. A fair re-run erased the combo_10_38 champion (an artifact of a half-saturated battery) and replaced it with the real findings: capability is a few flipped metastable bugs, depth-separated treatments stack while proximate ones mask, U-shaped layers the endpoint map can't see, and the Σα-law transferred to a second model with the predicted downshift.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E141A'/%3E%3Cpath d='M6 16 H15' stroke='%236F7C88' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 9' stroke='%236FCBD8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 23' stroke='%23E3C24A' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='15' cy='16' r='2.6' fill='%23ECEFF3'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  main { max-width: var(--page-max); margin: 0 auto; padding: var(--sp-7) var(--gutter) var(--sp-9); }
+  section { padding: var(--sp-7) 0 0; }
+  .dek { font-family: var(--font-serif); font-style: italic; font-size: var(--fs-dek); line-height: 1.4; color: var(--text-dim); max-width: 62ch; margin: var(--sp-5) 0 0; }
+  h2 { font-size: var(--fs-h2); margin: 0 0 var(--sp-4); }
+  h2 .num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); letter-spacing: .1em; vertical-align: 0.7em; margin-right: var(--sp-3); }
+  p { max-width: var(--measure); }
+  .dropcap { max-width: var(--measure); }
+  .dropcap::first-letter { font-family: var(--font-serif); font-weight: 500; font-size: 3.4em; line-height: 0.82; float: left; padding: 0.04em 0.12em 0 0; color: var(--accent-bright); }
+  .col-side { display: grid; grid-template-columns: 1fr 260px; gap: var(--sp-7); align-items: start; }
+  .col-side .aside { font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); border-left: 1px solid var(--border-strong); padding-left: var(--sp-4); font-style: italic; }
+  .col-side .aside .nb-kicker { font-style: normal; display: block; margin-bottom: var(--sp-2); }
+  .hl-acc { color: var(--accent); font-weight: 500; }
+  .figure { margin: var(--sp-6) 0; }
+  .nb-plate svg { display: block; width: 100%; height: auto; }
+  .fig-mobile { display: none; }
+  /* [VERIFY] markers — visible honesty flags, not hidden */
+  .vrfy { font-family: var(--font-mono); font-size: 0.72em; letter-spacing: .04em; color: var(--cause); border: 1px solid var(--cause); border-radius: 3px; padding: 0 .35em; opacity: .85; white-space: nowrap; vertical-align: 1px; }
+  /* observation / interpretation epistemic tags — slate vs violet, both protan-safe */
+  .olabel { font-family: var(--font-mono); font-size: 0.7em; letter-spacing: .06em; text-transform: uppercase; padding: 0 .3em; border-radius: 3px; vertical-align: 1px; }
+  .olabel.obs { color: var(--fourth); border: 1px solid var(--fourth); }
+  .olabel.inf { color: var(--neg); border: 1px solid var(--neg); }
+  /* negative-result callout — refuted hypotheses stated plainly */
+  .negresult { border: 1px solid var(--border-strong); border-left: 3px solid var(--neg); background: var(--surface-sunken); padding: var(--sp-4) var(--sp-5); margin: var(--sp-6) 0; max-width: var(--measure); border-radius: var(--radius-2); }
+  .negresult .nb-kicker { color: var(--neg); display: block; margin-bottom: var(--sp-2); }
+  .negresult p { margin: 0; font-size: var(--fs-sm); line-height: 1.6; color: var(--text-dim); }
+  .nb-table td.first { color: var(--accent); font-weight: 500; }
+  @media (max-width: 760px) {
+    .col-side { grid-template-columns: 1fr; gap: var(--sp-5); }
+    .fig-desktop { display: none; }
+    .fig-mobile { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nb-nav">
+  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
+  <a href="#fell">The fall</a>
+  <a href="#bugs">Flipped bugs</a>
+  <a href="#stacking">Stacking</a>
+  <a href="#ushape">U-shaped layers</a>
+  <a href="#sigma">The Σα-law</a>
+  <span class="nb-nav__spacer"></span>
+  <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
+  <a href="#" data-theme-toggle>☼ Light</a>
+</nav>
+
+<main>
+  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · dense-model + steering branch · <em>addendum to the published Granite page</em></div>
+  <header class="nb-record">
+    <div class="nb-record__title">Granite — the champion fell, and what replaced it</div>
+    <div class="nb-record__grid">
+      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v">Granite 4.0 (dense, 40-layer) · no-CoT math / EQ / MC battery</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">addendum + correction spec · mechanism intact · leaderboard rebuilt</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Last revised</span><span class="nb-record__v">2026-06-21 (fair-battery v3 re-run)</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Source</span><span class="nb-record__v">rys_granite.md v5 · granite_nocot_v3_da50cdae_results.jsonl · 469-config sweep</span></div>
+      <div class="nb-record__field">
+        <span class="nb-record__k">Confidence</span>
+        <span class="nb-conf nb-conf--medium"><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span></span>medium — mechanism solid; the stacking <em>heuristic</em> is suggestive, the profile not yet held-out-validated</span>
+      </div>
+    </div>
+  </header>
+
+  <p class="dek">This is the page where I overturned my own headline. The Granite page shipped with a clean
+  champion; a better instrument erased it. The mechanism work survived untouched — and the constructive
+  findings that replaced the leaderboard are better than the one they lost, and they appear to generalize.</p>
+
+  <aside class="nb-correction">
+    <div class="nb-correction__head"><span>⌦ Correction</span><span class="nb-correction__disp">superseded — does not reproduce</span></div>
+    <div class="nb-correction__row"><span class="nb-correction__k">Headline claim</span><span class="nb-correction__b"><code>combo_10_38</code>, a cross-depth pair, is the champion: it boosts EQ to 0.769 (t +9.38) while holding multiple-choice <em>pristine</em> at 1.000 — Granite's "small change, broad capability" generalist, the best thing the 469-config sweep found.</span></div>
+    <div class="nb-correction__row"><span class="nb-correction__k">Why it looked true</span><span class="nb-correction__b">It was measured on a <em>half-saturated</em> battery: MC was ceilinged at 1.000 so it could only ever read "pristine," and EQ was measured with an un-primed prompt that left it bimodal. A saturated channel manufactures a clean result.</span></div>
+    <div class="nb-correction__row"><span class="nb-correction__k">Why it failed</span><span class="nb-correction__b">Re-run on the <em>fair</em> v3/v4 battery — balanced-key MC, in-band calibrated math, properly-primed EQ — <code>combo_10_38</code> came back at balanced <b>t = −3.05</b>, and <code>dup_10</code> (the single-layer version) went flat. Fix the instrument and the champion evaporates.</span></div>
+    <div class="nb-correction__row"><span class="nb-correction__k">Disposition</span><span class="nb-correction__b"><b>Leaderboard retired; mechanism kept.</b> The same lesson the <a href="hrm.html">HRM specimen</a> already carries, paid for a second time. Everything below is the constructive line that replaced it.</span></div>
+  </aside>
+
+  <section id="fell">
+    <h2><span class="num">§1</span>The mechanism wasn't the problem — the leaderboard was</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">The instrument-dependence cuts cleanly. What evaporated was the <em>leaderboard</em>
+        layer — which configs win, and why. What stands, because none of it was instrument-dependent, is the
+        whole mechanism stack: direction-is-read / magnitude-is-discarded, the U-shaped depth-vulnerability
+        curve, RYS-dup-as-power-iteration, the ~4-layer circuit-coherence length, the steering /
+        soft-abliteration results, the continuous-depth ODE framing. The page keeps every one of those.</p>
+        <p>So the page gets a walkback banner on <code>combo_10_38</code> — and, more usefully, it gets to tell
+        a <em>better</em> story than the one it lost. The real findings of the Granite line are constructive,
+        and they appear to generalize beyond it. The rest of this addendum is those four findings.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">Draft status</span>
+        This is an addendum + correction spec for the <em>already-published</em> <code>granite.html</code>, not
+        a new page. Whoever updates the page: diff this against the live page and the current
+        <code>rys_granite.md</code> first; numbers tagged <span class="vrfy">VERIFY</span> still want a pass.
+      </aside>
+    </div>
+  </section>
+
+  <section id="bugs">
+    <h2><span class="num">§2</span>Finding 1 — capability is a few flipped bugs, not a risen tide</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">This is the reframe that makes the rest legible. Granite's no-CoT arithmetic baseline
+        doesn't fail <em>randomly</em>; it fails <span class="hl-acc">deterministically</span>, in a handful of
+        specific, reproducible ways. <code>907 − 131</code> (= 776) never comes back right across 15 seeds — it
+        settles into one of <em>two</em> stable wrong answers, <b>676</b> (9/15, a hundreds-column slip) or
+        <b>131</b> (6/15, echoing the subtrahend): 0 of 15 correct, two error basins. A particular carry-drop on
+        an addition probe, likewise. I call these <b>metastable bugs</b> — <span class="olabel obs">obs</span>
+        the 0/15 reproducibility is what's measured; <span class="olabel inf">inf</span> "basin / attractor" is
+        the interpretation.</p>
+        <p>A "winning" surgery doesn't lift a diffuse competence — it <span class="hl-acc">flips a few of these
+        specific bugs to 12/12 right</span>. And here's the measurement trap: a balanced 49-probe average
+        <em>dilutes</em> a concentrated flip until it looks like a tiny effect. The small balanced t-stats badly
+        <em>understate</em> what's happening — and that's correct behaviour, not a measurement failure. The win
+        really is concentrated. The right lens is <b>per-probe</b>: which exact bug got fixed, and how many
+        configs reach it.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">Boarded live</span>
+        <span class="mono">monitor.py::swing_probes()</span> emits one row per metastable probe, naming its
+        single best fixer. Probe metastability is itself bimodal: across the 14 swing probes the split is clean
+        — 9 fixed by ≤21 configs, 5 by ≥87, nothing between. The rare-fix probes (e.g. <code>sub_d3_00</code>,
+        7 configs; <code>mul_2x1_02</code>, 3) are the genuine disjoint specialists — and they're what makes
+        constructive composition possible.</span>
+      </aside>
+    </div>
+
+    <figure class="figure" id="figA">
+      <p class="nb-plate__note">↳ the action is discrete bug-flips; the 49-probe average is exactly what hides it</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 480" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <rect x="0" y="0" width="720" height="480" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="34" font-size="18">Capability is a few flipped bugs, not a risen tide</text>
+  <text class="mut" x="40" y="52" font-size="10.5">Granite-4.1-3B · no-CoT math · strict per-probe success across seeds. The baseline fails certain probes</text>
+  <text class="mut" x="40" y="66" font-size="10.5">every run; a winning surgery flips a few of them. The 49-probe average dilutes each concentrated flip.</text>
+
+  <!-- ============ column headers ============ -->
+  <text x="40" y="100" class="ink2" font-size="11">probe</text>
+  <text x="297" y="100" class="ink2" font-size="11" text-anchor="middle">baseline ○ → best fixer ●  (strict success)</text>
+  <text x="565" y="100" class="ink2" font-size="11" text-anchor="middle"># configs that reach it</text>
+
+  <!-- success axis frame -->
+  <line x1="195" y1="112" x2="195" y2="320" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="400" y1="112" x2="400" y2="320" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="195" y="333">0%</text><text x="297" y="333">50%</text><text x="400" y="333">100%</text>
+  </g>
+
+  <!-- fix-count log axis gridlines (1 / 10 / 100) -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="2 3" opacity="0.6">
+    <line x1="440" y1="112" x2="440" y2="320"/>
+    <line x1="538" y1="112" x2="538" y2="320"/>
+    <line x1="637" y1="112" x2="637" y2="320"/>
+  </g>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="440" y="333">1</text><text x="538" y="333">10</text><text x="637" y="333">100</text>
+    <text x="565" y="346" letter-spacing="0.5">configs (log)</text>
+  </g>
+
+  <!-- ============ rows ============ -->
+  <!-- r1 add_d3_05  bl8/15 fix12/12 nfix197 -->
+  <g font-size="9.5">
+    <text x="40" y="135" class="mut">add_d3_05</text>
+    <line x1="304.3" y1="132" x2="395" y2="132" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="400,132 393,128.8 393,135.2" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="304.3" cy="132" r="3.4" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="400" cy="132" r="3.6" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="127.5" width="225" height="9" fill="var(--fourth,#6E92C4)" opacity="0.85"/>
+    <text x="670" y="135" class="mut">197</text>
+  </g>
+  <!-- r2 div_1x2_01 bl6/15 fix12/12 nfix87 -->
+  <g font-size="9.5">
+    <text x="40" y="160" class="mut">div_1x2_01</text>
+    <line x1="277" y1="157" x2="395" y2="157" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="400,157 393,153.8 393,160.2" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="277" cy="157" r="3.4" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="400" cy="157" r="3.6" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="152.5" width="191" height="9" fill="var(--fourth,#6E92C4)" opacity="0.85"/>
+    <text x="636" y="160" class="mut">87</text>
+  </g>
+  <!-- r3 div_1x2_06 bl0/15 fix11/12 nfix15 -->
+  <g font-size="9.5">
+    <text x="40" y="185" class="mut">div_1x2_06</text>
+    <line x1="200" y1="182" x2="377.8" y2="182" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="382.8,182 375.8,178.8 375.8,185.2" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="195" cy="182" r="3.4" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="382.8" cy="182" r="3.6" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="177.5" width="116" height="9" fill="var(--fourth,#6E92C4)" opacity="0.85"/>
+    <text x="561" y="185" class="mut">15</text>
+  </g>
+  <!-- r4 add_d3_02 bl0/15 fix11/12 nfix13 (carry-drop) -->
+  <g font-size="9.5">
+    <text x="40" y="210" class="mut">add_d3_02</text>
+    <line x1="200" y1="207" x2="377.8" y2="207" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="382.8,207 375.8,203.8 375.8,210.2" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="195" cy="207" r="3.4" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="382.8" cy="207" r="3.6" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="202.5" width="109" height="9" fill="var(--fourth,#6E92C4)" opacity="0.85"/>
+    <text x="554" y="210" class="mut">13</text>
+  </g>
+  <!-- r5 mul_2x1_06 bl0/15 fix11/12 nfix13 -->
+  <g font-size="9.5">
+    <text x="40" y="235" class="mut">mul_2x1_06</text>
+    <line x1="200" y1="232" x2="377.8" y2="232" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="382.8,232 375.8,228.8 375.8,235.2" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="195" cy="232" r="3.4" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="382.8" cy="232" r="3.6" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="227.5" width="109" height="9" fill="var(--fourth,#6E92C4)" opacity="0.85"/>
+    <text x="554" y="235" class="mut">13</text>
+  </g>
+  <!-- r6 sub_d3_00 bl0/15 fix12/12 nfix7  HEADLINE 907-131, specialist -->
+  <g font-size="9.5">
+    <text x="36" y="260" fill="var(--cause,#E3C24A)" text-anchor="end" font-size="9">◆</text>
+    <text x="40" y="260" fill="var(--ink2,#A4B0BC)">sub_d3_00</text>
+    <line x1="200" y1="257" x2="395" y2="257" stroke="var(--cause,#E3C24A)" stroke-width="1.6"/>
+    <polygon points="400,257 393,253.8 393,260.2" fill="var(--cause,#E3C24A)"/>
+    <circle cx="195" cy="257" r="3.6" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.8"/>
+    <circle cx="400" cy="257" r="4" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="252.5" width="83" height="9" fill="var(--cause,#E3C24A)" opacity="0.85"/>
+    <text x="528" y="260" fill="var(--cause,#E3C24A)">7</text>
+  </g>
+  <!-- r7 mul_2x1_02 bl0/15 fix8/12 nfix3 specialist -->
+  <g font-size="9.5">
+    <text x="36" y="285" fill="var(--cause,#E3C24A)" text-anchor="end" font-size="9">◆</text>
+    <text x="40" y="285" fill="var(--ink2,#A4B0BC)">mul_2x1_02</text>
+    <line x1="200" y1="282" x2="326.7" y2="282" stroke="var(--cause,#E3C24A)" stroke-width="1.6"/>
+    <polygon points="331.7,282 324.7,278.8 324.7,285.2" fill="var(--cause,#E3C24A)"/>
+    <circle cx="195" cy="282" r="3.6" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.8"/>
+    <circle cx="331.7" cy="282" r="4" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="277.5" width="47" height="9" fill="var(--cause,#E3C24A)" opacity="0.85"/>
+    <text x="492" y="285" fill="var(--cause,#E3C24A)">3</text>
+  </g>
+  <!-- r8 mul_2x2_01 (stretch) bl0/15 fix9/12 nfix2 specialist -->
+  <g font-size="9.5">
+    <text x="36" y="310" fill="var(--cause,#E3C24A)" text-anchor="end" font-size="9">◆</text>
+    <text x="40" y="310" fill="var(--ink2,#A4B0BC)">mul_2x2_01</text>
+    <text x="118" y="310" class="mut" font-size="7.5">(stretch)</text>
+    <line x1="200" y1="307" x2="343.8" y2="307" stroke="var(--cause,#E3C24A)" stroke-width="1.6"/>
+    <polygon points="348.8,307 341.8,303.8 341.8,310.2" fill="var(--cause,#E3C24A)"/>
+    <circle cx="195" cy="307" r="3.6" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.8"/>
+    <circle cx="348.8" cy="307" r="4" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="302.5" width="30" height="9" fill="var(--cause,#E3C24A)" opacity="0.85"/>
+    <text x="475" y="310" fill="var(--cause,#E3C24A)">2</text>
+  </g>
+
+  <!-- ◆ specialist bracket annotation -->
+  <text x="690" y="285" class="mut" font-size="8.5" text-anchor="end">◆ rare-fix</text>
+  <text x="690" y="296" class="mut" font-size="8.5" text-anchor="end">specialists</text>
+
+  <!-- ============ headline callout: the real 907−131 bug (row 6) ============ -->
+  <line x1="195" y1="257" x2="150" y2="370" stroke="var(--muted,#6F7C88)" stroke-width="1" stroke-dasharray="3 2" opacity="0.7"/>
+  <text x="40" y="383" class="ink2" font-size="10.5"><tspan font-family="var(--font-mono)">907 − 131 = 776</tspan>, but the baseline never reaches it:</text>
+  <text x="40" y="397" class="mut" font-size="10">it lands on <tspan fill="var(--neg,#B98AD6)">676</tspan> (9/15, hundreds-column slip) or <tspan fill="var(--neg,#B98AD6)">131</tspan></text>
+  <text x="40" y="411" class="mut" font-size="10">(6/15, echoes the subtrahend) — 0/15, two basins.</text>
+  <text x="40" y="425" class="mut" font-size="10"><tspan fill="var(--cause,#E3C24A)">dampall_a120</tspan> snaps it to 776 on 12/12.</text>
+
+  <!-- ============ caption (right) ============ -->
+  <text x="400" y="383" class="ink2" font-size="11">The action is discrete bug-flips, not a</text>
+  <text x="400" y="398" class="ink2" font-size="11">diffuse lift. Fix-counts are <tspan fill="var(--cause,#E3C24A)">bimodal</tspan>: of</text>
+  <text x="400" y="413" class="ink2" font-size="11">all 14 swing probes, 9 are easy (≤21</text>
+  <text x="400" y="428" class="ink2" font-size="11">configs) and 5 trivial (≥87) — nothing</text>
+  <text x="400" y="443" class="ink2" font-size="11">lands between. The rare-fix probes are</text>
+  <text x="400" y="458" class="ink2" font-size="11">the genuine disjoint specialists.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <rect x="0" y="0" width="400" height="720" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="18">Capability is a few flipped</text>
+  <text class="ttl" x="20" y="54" font-size="18">bugs, not a risen tide</text>
+  <text class="mut" x="20" y="74" font-size="9">Granite-4.1-3B · no-CoT math, strict per-probe success.</text>
+  <text class="mut" x="20" y="88" font-size="9">The baseline fails certain probes every run; a winning</text>
+  <text class="mut" x="20" y="102" font-size="9">surgery flips a few. The 49-probe average hides it.</text>
+
+  <!-- ============ PANEL 1: flip strip ============ -->
+  <text x="20" y="128" class="ink2" font-size="10.5">broken ○ → flipped ●  (strict success)</text>
+  <line x1="130" y1="140" x2="130" y2="298" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="300" y1="140" x2="300" y2="298" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>
+
+  <g font-size="9">
+    <!-- r1 add_d3_05 8/15 -> 12/12 -->
+    <text x="20" y="153" class="mut">add_d3_05</text>
+    <line x1="220.7" y1="150" x2="295" y2="150" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="300,150 293,147 293,153" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="220.7" cy="150" r="3.2" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="300" cy="150" r="3.4" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <!-- r2 div_1x2_01 6/15 -> 12/12 -->
+    <text x="20" y="173" class="mut">div_1x2_01</text>
+    <line x1="198" y1="170" x2="295" y2="170" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="300,170 293,167 293,173" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="198" cy="170" r="3.2" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="300" cy="170" r="3.4" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <!-- r3 div_1x2_06 0 -> 11/12 -->
+    <text x="20" y="193" class="mut">div_1x2_06</text>
+    <line x1="135" y1="190" x2="280.8" y2="190" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="285.8,190 278.8,187 278.8,193" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="130" cy="190" r="3.2" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="285.8" cy="190" r="3.4" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <!-- r4 add_d3_02 0 -> 11/12 -->
+    <text x="20" y="213" class="mut">add_d3_02</text>
+    <line x1="135" y1="210" x2="280.8" y2="210" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="285.8,210 278.8,207 278.8,213" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="130" cy="210" r="3.2" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="285.8" cy="210" r="3.4" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <!-- r5 mul_2x1_06 0 -> 11/12 -->
+    <text x="20" y="233" class="mut">mul_2x1_06</text>
+    <line x1="135" y1="230" x2="280.8" y2="230" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="285.8,230 278.8,227 278.8,233" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="130" cy="230" r="3.2" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="285.8" cy="230" r="3.4" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <!-- r6 sub_d3_00 0 -> 12/12 HEADLINE -->
+    <text x="18" y="253" fill="var(--cause,#E3C24A)" text-anchor="end" font-size="8.5">◆</text>
+    <text x="22" y="253" fill="var(--ink2,#A4B0BC)">sub_d3_00</text>
+    <line x1="135" y1="250" x2="295" y2="250" stroke="var(--cause,#E3C24A)" stroke-width="1.6"/>
+    <polygon points="300,250 293,247 293,253" fill="var(--cause,#E3C24A)"/>
+    <circle cx="130" cy="250" r="3.4" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.8"/>
+    <circle cx="300" cy="250" r="3.8" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <!-- r7 mul_2x1_02 0 -> 8/12 -->
+    <text x="18" y="273" fill="var(--cause,#E3C24A)" text-anchor="end" font-size="8.5">◆</text>
+    <text x="22" y="273" fill="var(--ink2,#A4B0BC)">mul_2x1_02</text>
+    <line x1="135" y1="270" x2="238.3" y2="270" stroke="var(--cause,#E3C24A)" stroke-width="1.6"/>
+    <polygon points="243.3,270 236.3,267 236.3,273" fill="var(--cause,#E3C24A)"/>
+    <circle cx="130" cy="270" r="3.4" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.8"/>
+    <circle cx="243.3" cy="270" r="3.8" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <!-- r8 mul_2x2_01 stretch 0 -> 9/12 -->
+    <text x="18" y="293" fill="var(--cause,#E3C24A)" text-anchor="end" font-size="8.5">◆</text>
+    <text x="22" y="293" fill="var(--ink2,#A4B0BC)">mul_2x2_01</text>
+    <text x="96" y="293" class="mut" font-size="7">str</text>
+    <line x1="135" y1="290" x2="252.5" y2="290" stroke="var(--cause,#E3C24A)" stroke-width="1.6"/>
+    <polygon points="257.5,290 250.5,287 250.5,293" fill="var(--cause,#E3C24A)"/>
+    <circle cx="130" cy="290" r="3.4" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.8"/>
+    <circle cx="257.5" cy="290" r="3.8" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+  </g>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="130" y="311">0%</text><text x="215" y="311">50%</text><text x="300" y="311">100%</text>
+  </g>
+
+  <!-- ============ PANEL 2: fix-count bars (log) ============ -->
+  <text x="20" y="346" class="ink2" font-size="10.5"># configs that reach it</text>
+  <g stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="2 3" opacity="0.6">
+    <line x1="130" y1="356" x2="130" y2="510"/>
+    <line x1="220.4" y1="356" x2="220.4" y2="510"/>
+    <line x1="310.8" y1="356" x2="310.8" y2="510"/>
+  </g>
+
+  <g font-size="9">
+    <!-- bars: start x130, height 8, rows step 19 from y364 -->
+    <text x="20" y="371" class="mut">add_d3_05</text>
+    <rect x="130" y="364.5" width="207.4" height="8" fill="var(--fourth,#6E92C4)" opacity="0.85"/><text x="342" y="372" class="mut">197</text>
+    <text x="20" y="390" class="mut">div_1x2_01</text>
+    <rect x="130" y="383.5" width="175.4" height="8" fill="var(--fourth,#6E92C4)" opacity="0.85"/><text x="310" y="391" class="mut">87</text>
+    <text x="20" y="409" class="mut">div_1x2_06</text>
+    <rect x="130" y="402.5" width="106.3" height="8" fill="var(--fourth,#6E92C4)" opacity="0.85"/><text x="241" y="410" class="mut">15</text>
+    <text x="20" y="428" class="mut">add_d3_02</text>
+    <rect x="130" y="421.5" width="100.7" height="8" fill="var(--fourth,#6E92C4)" opacity="0.85"/><text x="235" y="429" class="mut">13</text>
+    <text x="20" y="447" class="mut">mul_2x1_06</text>
+    <rect x="130" y="440.5" width="100.7" height="8" fill="var(--fourth,#6E92C4)" opacity="0.85"/><text x="235" y="448" class="mut">13</text>
+    <text x="22" y="466" fill="var(--ink2,#A4B0BC)">sub_d3_00</text><text x="18" y="466" fill="var(--cause,#E3C24A)" text-anchor="end" font-size="8.5">◆</text>
+    <rect x="130" y="459.5" width="76.4" height="8" fill="var(--cause,#E3C24A)" opacity="0.85"/><text x="211" y="467" fill="var(--cause,#E3C24A)">7</text>
+    <text x="22" y="485" fill="var(--ink2,#A4B0BC)">mul_2x1_02</text><text x="18" y="485" fill="var(--cause,#E3C24A)" text-anchor="end" font-size="8.5">◆</text>
+    <rect x="130" y="478.5" width="43.1" height="8" fill="var(--cause,#E3C24A)" opacity="0.85"/><text x="178" y="486" fill="var(--cause,#E3C24A)">3</text>
+    <text x="22" y="504" fill="var(--ink2,#A4B0BC)">mul_2x2_01</text><text x="18" y="504" fill="var(--cause,#E3C24A)" text-anchor="end" font-size="8.5">◆</text>
+    <rect x="130" y="497.5" width="27.2" height="8" fill="var(--cause,#E3C24A)" opacity="0.85"/><text x="162" y="505" fill="var(--cause,#E3C24A)">2</text>
+  </g>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="130" y="522">1</text><text x="220.4" y="522">10</text><text x="310.8" y="522">100</text>
+    <text x="240" y="534" letter-spacing="0.5">configs (log) · ◆ rare-fix specialist</text>
+  </g>
+
+  <!-- ============ headline callout: the real 907−131 bug ============ -->
+  <rect x="20" y="552" width="360" height="70" rx="4" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="32" y="572" class="ink2" font-size="10"><tspan font-family="var(--font-mono)">907 − 131 = 776</tspan>, but the baseline never reaches it:</text>
+  <text x="32" y="587" class="mut" font-size="9.5">it lands on <tspan fill="var(--neg,#B98AD6)">676</tspan> (9/15, hundreds-column slip) or <tspan fill="var(--neg,#B98AD6)">131</tspan> (6/15,</text>
+  <text x="32" y="601" class="mut" font-size="9.5">echoes the subtrahend) — 0/15 correct, two error basins.</text>
+  <text x="32" y="615" class="mut" font-size="9.5"><tspan fill="var(--cause,#E3C24A)">dampall_a120</tspan> snaps it to 776 on 12/12.</text>
+
+  <!-- caption -->
+  <text x="20" y="644" class="ink2" font-size="11">The action is discrete bug-flips, not a diffuse lift.</text>
+  <text x="20" y="660" class="ink2" font-size="11">Fix-counts are <tspan fill="var(--cause,#E3C24A)">bimodal</tspan>: of 14 swing probes, 9 are</text>
+  <text x="20" y="676" class="ink2" font-size="11">easy (≤21 configs) and 5 trivial (≥87) — nothing lands</text>
+  <text x="20" y="692" class="ink2" font-size="11">between. The rare-fix probes are the genuine disjoint</text>
+  <text x="20" y="708" class="ink2" font-size="11">specialists — what makes composition possible.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig A —</b> capability is a few flipped bugs, not a risen tide. Per-probe strip: each metastable math probe's baseline rate (stuck at 0/15 — deterministic failure) beside its best fixer's rate (12/12). <code>907−131→776</code> settles on two error basins (676 / 131). Row-aligned: a log bar of "# configs that fix this probe," showing the bimodal split — easy probes fixed by ~85–305 configs, rare-fix specialists by 2–7.</figcaption>
+      <div class="nb-prov"><span><b>source</b> swing_probes() board · 469-config sweep</span><span><b>type</b> data-grounded (15-seed reproducibility)</span><span><b>safety</b> specialists ◆+citron, baseline ○ vs fixer ● — shape, not red/green</span></div>
+    </figure>
+  </section>
+
+  <section id="stacking">
+    <h2><span class="num">§3</span>Finding 2 — separated treatments stack; proximate ones mask</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">Once you know wins are disjoint bug-fixes, composition has an apparent rule and a
+        non-obvious failure mode. <span class="olabel obs">obs</span> depth-separated treatments tend to stack;
+        same-region or redundant ones mask. I'm calling this a <b>heuristic, not a law</b> — earning the
+        stronger word would take a regression of effect against layer-distance plus an effect-size
+        distribution, and the margins below are thin.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">Metric note · 2026-06-21</span>
+        Confirmed against <code>granite_nocot_v3_da50cdae_results.jsonl</code>: the 0.570 headline and the
+        stack/mask ordering reproduce, but 21 of 49 battery probes sit on the floor and 21 on the ceiling — the
+        canary probes dilute every delta. The heuristic is clearest on the ~7 in-band probes and the gcore
+        (non-canary) set, not the raw 49-probe mean. Stated honestly: one combo marginally beats its best
+        component, one masks; the reading is suggestive, not established.
+      </aside>
+    </div>
+
+    <table class="nb-table" style="margin-top:var(--sp-5)">
+      <thead><tr><th>Pair</th><th>Depth gap</th><th>Result</th><th>Reading</th></tr></thead>
+      <tbody>
+        <tr><td class="first"><code>dampL5a130 + pr26</code></td><td>21 layers</td><td>math <b>0.570</b>, paired t +6.4 vs baseline</td><td>best math result of the entire sweep — edges <code>prune_26</code> alone (0.566). Compose without interfering.</td></tr>
+        <tr><td class="first"><code>dampL6a70 + pr26</code></td><td>20 layers</td><td>clears <code>prune_26</code> on core probes; a hair under on full 49</td><td>depth-separated, roughly additive — but the margin over its best component is inside the noise.</td></tr>
+        <tr><td><code>pr26 + dup16</code></td><td><em>near</em></td><td>falls <b>below</b> <code>prune_26</code> alone</td><td><span class="olabel obs">obs</span> combining loses ground. <span class="olabel inf">inf</span> overlapping fixers reach for the same bugs, don't compound.</td></tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top:var(--sp-5)">The recipe for a constructive profile: <b>compose per-layer treatments
+    that are (a) depth-separated AND (b) fix disjoint probes</b> — and the per-probe autopsy (Finding 1) is
+    exactly what tells you which fix which. This generalizes the Gemma cross-zone superadditivity (writer-zone ×
+    consumer-block) and, crucially, adds its <em>failure</em> mode, which Gemma never made explicit: redundancy
+    near in depth appears to dilute rather than compound. The emerging data-driven math profile that falls out:
+    <code>L5↑(α1.3) + L26↓(prune or α0.15) + L14↑(α1.8)</code>, all depth-separated, predicted to stack.
+    <span class="vrfy">VERIFY</span> — held-out-seed validation is the open next step; argmax off noisy
+    per-layer curves overfits, so the profile must be confirmed out-of-sample before it's a claim.</p>
+
+    <figure class="figure" id="figB">
+      <p class="nb-plate__note">↳ depth separation is the axis that decides whether two surgeries add or interfere</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 450" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <rect x="0" y="0" width="720" height="450" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="32" font-size="18">Depth separation decides: separated treatments stack, proximate ones mask</text>
+  <text class="mut" x="40" y="52" font-size="11">Granite, 40 layers. Two surgeries compose constructively only when they sit far apart in depth.</text>
+
+  <!-- ===== STACKS arc (above spine, cyan) ===== -->
+  <path d="M456.7,124 Q300,62 144.4,124" fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2"/>
+  <text x="300" y="74" text-anchor="middle" font-size="11" fill="var(--accent,#4FB2C2)">21 layers apart → STACKS</text>
+
+  <!-- ===== layer spine ===== -->
+  <line x1="70" y1="130" x2="650" y2="130" stroke="var(--rule2,#27323D)" stroke-width="2"/>
+  <text x="70" y="148" text-anchor="middle" class="mut" font-size="8.5">L0</text>
+  <text x="650" y="148" text-anchor="middle" class="mut" font-size="8.5">L39</text>
+
+  <!-- treatment sites -->
+  <circle cx="144.4" cy="130" r="5" fill="var(--bg2,#141D26)" stroke="var(--accent,#4FB2C2)" stroke-width="2"/>
+  <text x="144.4" y="116" text-anchor="middle" font-size="9.5" fill="var(--accent,#4FB2C2)">L5 ↑α1.3</text>
+  <circle cx="307.9" cy="130" r="5" fill="var(--bg2,#141D26)" stroke="var(--neg,#B98AD6)" stroke-width="2"/>
+  <text x="307.9" y="172" text-anchor="middle" font-size="9.5" fill="var(--neg,#B98AD6)">L16 dup</text>
+  <circle cx="456.7" cy="130" r="5" fill="var(--bg2,#141D26)" stroke="var(--cause,#E3C24A)" stroke-width="2"/>
+  <text x="456.7" y="116" text-anchor="middle" font-size="9.5" fill="var(--cause,#E3C24A)">L26 prune</text>
+
+  <!-- ===== MASKS arc (below spine, violet) ===== -->
+  <path d="M456.7,136 Q382,196 307.9,136" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="382" y="208" text-anchor="middle" font-size="11" fill="var(--neg,#B98AD6)">10 apart → MASKS</text>
+
+  <!-- ===== bar insets (zoomed, with noise whiskers) ===== -->
+  <!-- LEFT: STACKS data -->
+  <text x="180" y="246" text-anchor="middle" class="ink2" font-size="11">dampL5a130 + pr26  (far)</text>
+  <line x1="100" y1="356" x2="260" y2="356" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <!-- prune_26 bar 0.566 -->
+  <rect x="120" y="286.7" width="46" height="69.3" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.4"/>
+  <text x="143" y="372" text-anchor="middle" class="mut" font-size="8.5">pr26 .566</text>
+  <!-- combined bar 0.570 -->
+  <rect x="194" y="273.3" width="46" height="82.7" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8"/>
+  <text x="217" y="372" text-anchor="middle" font-size="8.5" fill="var(--accent,#4FB2C2)">combo .570</text>
+  <!-- noise whiskers -->
+  <line x1="143" y1="270" x2="143" y2="303.3" stroke="var(--muted,#6F7C88)" stroke-width="1"/>
+  <line x1="217" y1="256.7" x2="217" y2="290" stroke="var(--accent,#4FB2C2)" stroke-width="1"/>
+
+  <!-- RIGHT: MASKS data -->
+  <text x="500" y="246" text-anchor="middle" class="ink2" font-size="11">pr26 + dup16  (near)</text>
+  <line x1="420" y1="356" x2="580" y2="356" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <rect x="440" y="286.7" width="46" height="69.3" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.4"/>
+  <text x="463" y="372" text-anchor="middle" class="mut" font-size="8.5">pr26 .566</text>
+  <rect x="514" y="313.3" width="46" height="42.7" fill="var(--bg,#0E141A)" stroke="var(--neg,#B98AD6)" stroke-width="1.8"/>
+  <text x="537" y="372" text-anchor="middle" font-size="8.5" fill="var(--neg,#B98AD6)">combo ↓</text>
+  <line x1="463" y1="270" x2="463" y2="303.3" stroke="var(--muted,#6F7C88)" stroke-width="1"/>
+  <line x1="537" y1="296.7" x2="537" y2="330" stroke="var(--neg,#B98AD6)" stroke-width="1"/>
+
+  <!-- zoom axis note -->
+  <text x="284" y="300" text-anchor="middle" class="mut" font-size="8.5" transform="rotate(-90 284 300)">math, zoomed .55–.58</text>
+  <text x="604" y="300" text-anchor="middle" class="mut" font-size="8.5" transform="rotate(-90 604 300)">math, zoomed .55–.58</text>
+
+  <!-- caption -->
+  <text x="40" y="404" class="mut" font-size="10">Whiskers ≈ seed noise: the stacking margin (.570 vs .566) sits inside it — suggestive, not established. </text>
+  <text x="40" y="418" class="mut" font-size="10">The masking drop is the cleaner effect. On in-band/gcore probes, not the floored/ceilinged 49-mean.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <rect x="0" y="0" width="400" height="700" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="30" y="32" font-size="18">Depth separation decides</text>
+  <text class="mut" x="30" y="52" font-size="10">Granite, 40 layers. Two surgeries compose only when</text>
+  <text class="mut" x="30" y="66" font-size="10">they sit far apart in depth — separated stack, near mask.</text>
+
+  <!-- STACKS arc (above spine) -->
+  <path d="M253,134 Q167,86 81,134" fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2"/>
+  <text x="167" y="96" text-anchor="middle" font-size="10" fill="var(--accent,#4FB2C2)">21 apart → STACKS</text>
+
+  <!-- spine -->
+  <line x1="40" y1="140" x2="360" y2="140" stroke="var(--rule2,#27323D)" stroke-width="2"/>
+  <text x="40" y="158" text-anchor="middle" class="mut" font-size="8">L0</text>
+  <text x="360" y="158" text-anchor="middle" class="mut" font-size="8">L39</text>
+
+  <circle cx="81" cy="140" r="5" fill="var(--bg2,#141D26)" stroke="var(--accent,#4FB2C2)" stroke-width="2"/>
+  <text x="81" y="126" text-anchor="middle" font-size="9" fill="var(--accent,#4FB2C2)">L5 ↑</text>
+  <circle cx="171" cy="140" r="5" fill="var(--bg2,#141D26)" stroke="var(--neg,#B98AD6)" stroke-width="2"/>
+  <text x="171" y="182" text-anchor="middle" font-size="9" fill="var(--neg,#B98AD6)">L16 dup</text>
+  <circle cx="253" cy="140" r="5" fill="var(--bg2,#141D26)" stroke="var(--cause,#E3C24A)" stroke-width="2"/>
+  <text x="253" y="126" text-anchor="middle" font-size="9" fill="var(--cause,#E3C24A)">L26 prune</text>
+
+  <!-- MASKS arc (below spine) -->
+  <path d="M253,146 Q212,190 171,146" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="212" y="204" text-anchor="middle" font-size="10" fill="var(--neg,#B98AD6)">10 apart → MASKS</text>
+
+  <!-- ===== STACKS bar inset ===== -->
+  <text x="200" y="248" text-anchor="middle" class="ink2" font-size="11">far pair: dampL5a130 + pr26</text>
+  <line x1="120" y1="360" x2="280" y2="360" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <rect x="130" y="290" width="48" height="70" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.4"/>
+  <text x="154" y="376" text-anchor="middle" class="mut" font-size="9">pr26 .566</text>
+  <rect x="222" y="276" width="48" height="84" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8"/>
+  <text x="246" y="376" text-anchor="middle" font-size="9" fill="var(--accent,#4FB2C2)">combo .570</text>
+  <line x1="154" y1="272" x2="154" y2="308" stroke="var(--muted,#6F7C88)" stroke-width="1"/>
+  <line x1="246" y1="258" x2="246" y2="294" stroke="var(--accent,#4FB2C2)" stroke-width="1"/>
+  <text x="104" y="320" text-anchor="middle" class="mut" font-size="8" transform="rotate(-90 104 320)">math .55–.58</text>
+
+  <!-- ===== MASKS bar inset ===== -->
+  <text x="200" y="430" text-anchor="middle" class="ink2" font-size="11">near pair: pr26 + dup16</text>
+  <line x1="120" y1="540" x2="280" y2="540" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <rect x="130" y="470" width="48" height="70" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.4"/>
+  <text x="154" y="556" text-anchor="middle" class="mut" font-size="9">pr26 .566</text>
+  <rect x="222" y="497" width="48" height="43" fill="var(--bg,#0E141A)" stroke="var(--neg,#B98AD6)" stroke-width="1.8"/>
+  <text x="246" y="556" text-anchor="middle" font-size="9" fill="var(--neg,#B98AD6)">combo ↓</text>
+  <line x1="154" y1="452" x2="154" y2="488" stroke="var(--muted,#6F7C88)" stroke-width="1"/>
+  <line x1="246" y1="480" x2="246" y2="514" stroke="var(--neg,#B98AD6)" stroke-width="1"/>
+  <text x="104" y="500" text-anchor="middle" class="mut" font-size="8" transform="rotate(-90 104 500)">math .55–.58</text>
+
+  <!-- caption -->
+  <text x="30" y="600" class="mut" font-size="9.5">Whiskers ≈ seed noise. The stacking margin (.570 vs</text>
+  <text x="30" y="615" class="mut" font-size="9.5">.566) sits inside it — suggestive, not established.</text>
+  <text x="30" y="630" class="mut" font-size="9.5">The masking drop is the cleaner effect. Measured on</text>
+  <text x="30" y="645" class="mut" font-size="9.5">in-band / gcore probes, not the floored/ceilinged</text>
+  <text x="30" y="660" class="mut" font-size="9.5">49-probe mean.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig B —</b> separation makes treatments add; proximity makes them cancel. A 40-layer spine with treatment sites marked. The widely-separated pair (L5 ↔ L26, 21 apart) combines to exceed either alone — stacking. The closely-spaced pair (L16 ↔ L26) combines to fall below the better single treatment — masking. Markers and hatching carry the distinction, not colour.</figcaption>
+      <div class="nb-prov"><span><b>source</b> granite_nocot_v3_da50cdae_results.jsonl</span><span><b>type</b> schematic + data (in-band / gcore probes)</span><span><b>safety</b> STACKS / MASKS by arrow + label, not hue</span></div>
+    </figure>
+  </section>
+
+  <section id="ushape">
+    <h2><span class="num">§4</span>Finding 3 — the 3-point map lies; non-monotone layers need the fine grid</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">The published page reads layers through a prune/dup endpoint map. That skeleton is
+        blind to any layer with a U-shaped α-response — and Granite has them. <span class="hl-acc">L6 peaks at
+        α≈0.7</span> (+0.062 Δ-vs-baseline on the gcore in-band probes, n=348/point — the top single-site math
+        move) while <em>both</em> <code>prune_6</code> (α=0, removed outright) and <code>dup_6</code> (α=2,
+        −0.105) collapse it. A gentle damp is neither endpoint, so the 3-point map can't see it — it reads L6 as
+        "touch it and it dies," when in fact a <em>partial</em> damp is the single best thing you can do there.
+        L5 similarly peaks at α≈1.3.</p>
+        <p>This sorts the layers into two math populations: <b>damp-down layers</b> (L7/8/10/18/26/27 want
+        α&lt;0.5 — L26 is the "savant," optimum monotone toward zero, where a heavy partial damp ≈ pruning it
+        <em>without</em> removal) and <b>boost layers</b> (L9/14/15/16/19/21/22/24/29/34 want α&gt;1). Any
+        per-layer sensitivity claim needs the dense single-pass α grid (~0.5–1.5), not the dup/prune
+        endpoints.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">The cleanest methodological result on the page</span>
+        On L6 the dup/prune endpoints and the dense α-grid <em>disagree about the sign</em>: prune says bad, dup
+        says bad, a partial damp says best-on-the-board. A two-point instrument doesn't just lose precision here
+        — it returns the <em>wrong direction</em>. That directly falsifies the dup/prune-endpoint map as a
+        sensitivity instrument for non-monotone layers, which is most of the interesting ones.
+      </aside>
+    </div>
+
+    <div class="negresult">
+      <span class="nb-kicker">Negative result — k-splitting does not raise the per-layer ceiling</span>
+      <p>The boost layers cap at ~α1.5, and the obvious move to push past it is to spread the gain across
+      <em>k</em> damped passes. It fails: L22 and L34 each peak at single-pass α1.5, and spreading α&gt;1.5
+      across k passes <em>overshoots</em> rather than extending the ceiling (<code>sa22_S160_k6</code> d−0.022,
+      <code>sa34</code> d−0.07). The "k-split rescues α&gt;1.5" hypothesis is refuted at these sites — stated
+      plainly because it's the obvious thing to try.</p>
+    </div>
+
+    <figure class="figure" id="figC">
+      <p class="nb-plate__note">↳ the endpoints draw a falling line; the dense grid finds an interior peak the endpoints can't</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 520" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <rect x="0" y="0" width="720" height="520" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="34" font-size="18">The U-shaped layer the endpoint map can't see</text>
+  <text class="mut" x="40" y="52" font-size="10.5">Granite-4.1-3B · math Δ on the gcore in-band probes vs baseline 0.628 · x = α: 0 prune → 1 base → 2 dup.</text>
+  <text class="mut" x="40" y="66" font-size="10">Dense single-pass α-grid 0.5–1.5 (n=348/pt) is the measured curve; prune (α0) &amp; dup (α2) are structural endpoints.</text>
+
+  <!-- axes -->
+  <line x1="90" y1="100" x2="90" y2="320" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="90" y1="150" x2="662" y2="150" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 3"/>
+  <g class="mut" font-size="9" text-anchor="end">
+    <text x="84" y="119">+.05</text>
+    <text x="84" y="153">Δ 0</text>
+    <text x="84" y="187">−.05</text>
+    <text x="84" y="221">−.10</text>
+    <text x="84" y="289">−.20</text>
+  </g>
+
+  <!-- x ticks -->
+  <g class="mut" font-size="9.5" text-anchor="middle">
+    <text x="90" y="338">0</text><text x="230" y="338" font-size="8">0.5</text><text x="370" y="338">1</text><text x="510" y="338" font-size="8">1.5</text><text x="650" y="338">2</text>
+    <text x="90" y="351" font-size="8.5">prune</text><text x="370" y="351" font-size="8.5">baseline</text><text x="650" y="351" font-size="8.5">dup</text>
+    <text x="380" y="370" letter-spacing="1">α →</text>
+  </g>
+
+  <!-- ===== 3-point endpoint map (faint) ===== -->
+  <polyline points="370,150 650,221.4" fill="none" stroke="var(--muted,#6F7C88)" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.7"/>
+  <line x1="370" y1="150" x2="255" y2="321" stroke="var(--muted,#6F7C88)" stroke-width="1.6" stroke-dasharray="5 4" opacity="0.85"/>
+  <polygon points="251,328 254,313 262,318" fill="var(--muted,#6F7C88)"/>
+  <g fill="var(--muted,#6F7C88)">
+    <circle cx="370" cy="150" r="2.8"/><circle cx="650" cy="221.4" r="2.8"/>
+  </g>
+  <text x="650" y="237" text-anchor="middle" class="mut" font-size="8.5">dup_6 −.105</text>
+  <text x="184" y="298" class="mut" font-size="8.5">prune_6 → 0.00</text>
+  <text x="164" y="310" class="mut" font-size="8.5">Δ −0.63, off scale</text>
+
+  <!-- ===== L5 dense curve (slate, dashed, squares) ===== -->
+  <path d="M230.0,219.4 C248.7,206.9 267.3,193.3 286.0,182.0 C300.0,173.4 314.0,165.2 328.0,158.8 C337.3,154.6 346.7,151.6 356.0,148.6 C365.3,145.7 374.7,144.7 384.0,141.2 C393.3,137.6 402.7,131.0 412.0,127.6 C426.0,122.5 440.0,117.4 454.0,117.4 C472.7,117.4 491.3,126.4 510.0,131.0"
+        fill="none" stroke="var(--fourth,#6E92C4)" stroke-width="2" stroke-dasharray="7 4"/>
+  <g fill="var(--bg,#0E141A)" stroke="var(--fourth,#6E92C4)" stroke-width="1.5">
+    <rect x="226.8" y="216.2" width="6.4" height="6.4"/><rect x="282.8" y="178.8" width="6.4" height="6.4"/><rect x="324.8" y="155.6" width="6.4" height="6.4"/><rect x="352.8" y="145.4" width="6.4" height="6.4"/><rect x="380.8" y="138.0" width="6.4" height="6.4"/><rect x="408.8" y="124.4" width="6.4" height="6.4"/><rect x="506.8" y="127.8" width="6.4" height="6.4"/>
+  </g>
+  <rect x="450.4" y="113.8" width="7.2" height="7.2" fill="var(--bg,#0E141A)" stroke="var(--fourth,#6E92C4)" stroke-width="2"/>
+  <text x="468" y="113" font-size="9.5" fill="var(--fourth,#6E92C4)">L5 peaks α≈1.3 (+.048)</text>
+
+  <!-- ===== L6 dense curve (cyan, solid, circles) ===== -->
+  <path d="M230.0,143.2 C248.7,131.4 267.3,107.8 286.0,107.8 C300.0,107.8 314.0,117.5 328.0,123.5 C337.3,127.5 346.7,133.2 356.0,137.1 C365.3,140.9 374.7,146.6 384.0,146.6 C393.3,146.6 402.7,143.2 412.0,143.2 C426.0,143.2 440.0,143.2 454.0,164.3 C472.7,192.4 491.3,260.8 510.0,309.1"
+        fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2.6"/>
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8">
+    <circle cx="230" cy="143.2" r="3.2"/><circle cx="328" cy="123.5" r="3.2"/><circle cx="356" cy="137.1" r="3.2"/><circle cx="384" cy="146.6" r="3.2"/><circle cx="412" cy="143.2" r="3.2"/><circle cx="454" cy="164.3" r="3.2"/><circle cx="510" cy="309.1" r="3.2"/>
+  </g>
+  <!-- L6 peak marker (citron) + guide + callout (in the gap above the plot) -->
+  <line x1="286" y1="107.8" x2="286" y2="320" stroke="var(--cause,#E3C24A)" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.8"/>
+  <circle cx="286" cy="107.8" r="4.4" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+  <text x="286" y="86" text-anchor="middle" font-size="9" class="mut">top single-site math move</text>
+  <text x="286" y="99" text-anchor="middle" font-size="10.5" fill="var(--cause,#E3C24A)">α≈0.7 → +0.062</text>
+  <!-- α1.5 over-drive note -->
+  <text x="518" y="306" font-size="8.5" fill="var(--neg,#B98AD6)">α1.5: −.234 (over-drive)</text>
+
+  <!-- ===== FOOTER: caption column (left) + legend column (right) ===== -->
+  <text x="40" y="394" class="ink2" font-size="11">Endpoints and the dense grid <tspan fill="var(--cause,#E3C24A)">disagree about the</tspan></text>
+  <text x="40" y="409" class="ink2" font-size="11"><tspan fill="var(--cause,#E3C24A)">sign</tspan>. The 3-point prune/baseline/dup probe sees</text>
+  <text x="40" y="424" class="ink2" font-size="11">only collapse on both sides of baseline — it reads</text>
+  <text x="40" y="439" class="ink2" font-size="11">L6 as "touch it and it dies." The dense α-grid</text>
+  <text x="40" y="454" class="ink2" font-size="11">finds the opposite: a partial damp (α≈0.7) is the</text>
+  <text x="40" y="469" class="ink2" font-size="11">best single-site math move on the model.</text>
+  <text x="40" y="491" class="mut" font-size="10.5">A two-point instrument doesn't lose precision — it returns the wrong direction.</text>
+
+  <!-- legend (right column) -->
+  <g transform="translate(470,402)" font-size="10">
+    <line x1="0" y1="-3" x2="24" y2="-3" stroke="var(--accent,#4FB2C2)" stroke-width="2.6"/>
+    <circle cx="12" cy="-3" r="3.2" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8"/>
+    <text x="32" y="0" class="mut">L6 (● dense α-grid)</text>
+  </g>
+  <g transform="translate(470,424)" font-size="10">
+    <line x1="0" y1="-3" x2="24" y2="-3" stroke="var(--fourth,#6E92C4)" stroke-width="2" stroke-dasharray="7 4"/>
+    <rect x="8.4" y="-6.6" width="7.2" height="7.2" fill="var(--bg,#0E141A)" stroke="var(--fourth,#6E92C4)" stroke-width="1.5"/>
+    <text x="32" y="0" class="mut">L5 (■ peak α1.3)</text>
+  </g>
+  <g transform="translate(470,446)" font-size="10">
+    <line x1="0" y1="-3" x2="24" y2="-3" stroke="var(--muted,#6F7C88)" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="32" y="0" class="mut">3-pt map (endpoints only)</text>
+  </g>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 640" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <rect x="0" y="0" width="400" height="640" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="18">The U-shaped layer the</text>
+  <text class="ttl" x="20" y="54" font-size="18">endpoint map can't see</text>
+  <text class="mut" x="20" y="74" font-size="9">Granite. Math Δ on gcore in-band probes vs base 0.628.</text>
+  <text class="mut" x="20" y="88" font-size="9">x = α: 0 prune → 1 baseline → 2 dup. Dense α-grid</text>
+  <text class="mut" x="20" y="102" font-size="9">0.5–1.5 measured (n=348/pt); prune/dup structural.</text>
+
+  <!-- axes -->
+  <line x1="60" y1="150" x2="60" y2="340" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="60" y1="200" x2="372" y2="200" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 3"/>
+  <g class="mut" font-size="8.5" text-anchor="end">
+    <text x="54" y="175">+.05</text>
+    <text x="54" y="203">Δ0</text>
+    <text x="54" y="231">−.05</text>
+    <text x="54" y="259">−.10</text>
+    <text x="54" y="315">−.20</text>
+  </g>
+
+  <!-- x ticks -->
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="60" y="358">0</text><text x="135" y="358" font-size="7.5">0.5</text><text x="210" y="358">1</text><text x="285" y="358" font-size="7.5">1.5</text><text x="360" y="358">2</text>
+    <text x="60" y="370" font-size="8">prune</text><text x="210" y="370" font-size="8">base</text><text x="360" y="370" font-size="8">dup</text>
+    <text x="215" y="388" letter-spacing="1">α →</text>
+  </g>
+
+  <!-- ===== 3-point endpoint map (faint) ===== -->
+  <polyline points="210,200 360,258.8" fill="none" stroke="var(--muted,#6F7C88)" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.7"/>
+  <line x1="210" y1="200" x2="158" y2="344" stroke="var(--muted,#6F7C88)" stroke-width="1.6" stroke-dasharray="5 4" opacity="0.85"/>
+  <polygon points="156,348 157,335 164,338" fill="var(--muted,#6F7C88)"/>
+  <g fill="var(--muted,#6F7C88)">
+    <circle cx="210" cy="200" r="2.8"/><circle cx="360" cy="258.8" r="2.8"/>
+  </g>
+  <text x="356" y="270" text-anchor="end" class="mut" font-size="8">dup_6 −.105</text>
+  <text x="70" y="324" class="mut" font-size="8.5">prune_6 → 0.00</text>
+  <text x="70" y="336" class="mut" font-size="8.5">Δ−0.63, off scale</text>
+
+  <!-- ===== L5 dense curve (slate dashed) ===== -->
+  <path d="M135.0,257.1 C145.0,246.9 155.0,235.7 165.0,226.3 C172.5,219.3 180.0,212.6 187.5,207.3 C192.5,203.8 197.5,201.3 202.5,198.9 C207.5,196.5 212.5,195.6 217.5,192.7 C222.5,189.8 227.5,184.3 232.5,181.5 C240.0,177.3 247.5,173.1 255.0,173.1 C265.0,173.1 275.0,180.6 285.0,184.3"
+        fill="none" stroke="var(--fourth,#6E92C4)" stroke-width="2" stroke-dasharray="7 4"/>
+  <g fill="var(--bg,#0E141A)" stroke="var(--fourth,#6E92C4)" stroke-width="1.5">
+    <rect x="131.8" y="253.9" width="6.4" height="6.4"/><rect x="161.8" y="223.1" width="6.4" height="6.4"/><rect x="184.3" y="204.1" width="6.4" height="6.4"/><rect x="199.3" y="195.7" width="6.4" height="6.4"/><rect x="214.3" y="189.5" width="6.4" height="6.4"/><rect x="229.3" y="178.3" width="6.4" height="6.4"/><rect x="281.8" y="181.1" width="6.4" height="6.4"/>
+  </g>
+  <rect x="251.4" y="169.5" width="7.2" height="7.2" fill="var(--bg,#0E141A)" stroke="var(--fourth,#6E92C4)" stroke-width="2"/>
+  <text x="255" y="162" text-anchor="middle" font-size="9" fill="var(--fourth,#6E92C4)">L5 peak α≈1.3 (+.048)</text>
+
+  <!-- ===== L6 dense curve (cyan solid) ===== -->
+  <path d="M135.0,194.4 C145.0,184.7 155.0,165.3 165.0,165.3 C172.5,165.3 180.0,173.2 187.5,178.2 C192.5,181.5 197.5,186.2 202.5,189.4 C207.5,192.5 212.5,197.2 217.5,197.2 C222.5,197.2 227.5,194.4 232.5,194.4 C240.0,194.4 247.5,194.4 255.0,211.8 C265.0,234.9 275.0,291.3 285.0,331.0"
+        fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2.6"/>
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8">
+    <circle cx="135" cy="194.4" r="3"/><circle cx="187.5" cy="178.2" r="3"/><circle cx="202.5" cy="189.4" r="3"/><circle cx="217.5" cy="197.2" r="3"/><circle cx="232.5" cy="194.4" r="3"/><circle cx="255" cy="211.8" r="3"/><circle cx="285" cy="331" r="3"/>
+  </g>
+  <line x1="165" y1="165.3" x2="165" y2="340" stroke="var(--cause,#E3C24A)" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.8"/>
+  <circle cx="165" cy="165.3" r="4.2" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+  <text x="165" y="146" text-anchor="middle" font-size="10" fill="var(--cause,#E3C24A)">α≈0.7 → +0.062</text>
+  <text x="165" y="135" text-anchor="middle" font-size="8" class="mut">top single-site math move</text>
+  <text x="289" y="328" text-anchor="start" font-size="8" fill="var(--neg,#B98AD6)">α1.5: −.234</text>
+
+  <!-- caption -->
+  <text x="20" y="418" class="ink2" font-size="11">Endpoints and the dense grid <tspan fill="var(--cause,#E3C24A)">disagree on</tspan></text>
+  <text x="20" y="434" class="ink2" font-size="11"><tspan fill="var(--cause,#E3C24A)">the sign</tspan>. prune says dead, dup says bad — both</text>
+  <text x="20" y="450" class="ink2" font-size="11">below baseline — so a 3-point probe reads L6</text>
+  <text x="20" y="466" class="ink2" font-size="11">as "touch it and it dies." The dense grid finds</text>
+  <text x="20" y="482" class="ink2" font-size="11">the opposite: a partial damp at α≈0.7 is the</text>
+  <text x="20" y="498" class="ink2" font-size="11">best single-site math move on the model.</text>
+  <text x="20" y="520" class="mut" font-size="10">A two-point instrument doesn't lose precision —</text>
+  <text x="20" y="534" class="mut" font-size="10">it returns the wrong direction. Sensitivity needs</text>
+  <text x="20" y="548" class="mut" font-size="10">the dense single-pass grid, not dup/prune.</text>
+
+  <!-- legend -->
+  <g transform="translate(20,584)" font-size="9.5">
+    <line x1="0" y1="-3" x2="22" y2="-3" stroke="var(--accent,#4FB2C2)" stroke-width="2.6"/>
+    <circle cx="11" cy="-3" r="3.2" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8"/>
+    <text x="28" y="0" class="mut">L6 (● dense α-grid)</text>
+  </g>
+  <g transform="translate(20,606)" font-size="9.5">
+    <line x1="0" y1="-3" x2="22" y2="-3" stroke="var(--fourth,#6E92C4)" stroke-width="2" stroke-dasharray="7 4"/>
+    <rect x="7.4" y="-6.6" width="7.2" height="7.2" fill="var(--bg,#0E141A)" stroke="var(--fourth,#6E92C4)" stroke-width="1.5"/>
+    <text x="28" y="0" class="mut">L5 (■ peak α1.3)</text>
+  </g>
+  <g transform="translate(220,584)" font-size="9.5">
+    <line x1="0" y1="-3" x2="20" y2="-3" stroke="var(--muted,#6F7C88)" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="26" y="0" class="mut">3-pt map</text>
+  </g>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig C —</b> the U-shaped layer the endpoints hide. L6's α-response (x = α, 0 = prune → 1 = baseline → 2 = dup; y = math Δ): a clear inverted-U peaking at α≈0.7, with both endpoints below baseline. The faint overlay connects only α=0,1,2 — the "3-point map" — and would draw a declining line that misses the interior peak entirely. L5 (peak α1.3) is the second, differently-marked curve.</figcaption>
+      <div class="nb-prov"><span><b>source</b> dense single-pass α grid (n=348/point, gcore in-band)</span><span><b>type</b> data-grounded</span><span><b>safety</b> curves by marker + dash; endpoint-map faint, not red/green</span></div>
+    </figure>
+  </section>
+
+  <section id="sigma">
+    <h2><span class="num">§5</span>Finding 4 — the Σα-law transferred, with the predicted downshift</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">Granite was the cross-model confirmation of the Σα-law first found on
+        <a href="measuring.html">MiniCPM5</a>. The governing variable for a stacked/damped layer is
+        <b>Σα = the sum of all per-pass alphas</b>; k (copy count) scales the <em>magnitude</em>, Σα sets the
+        <em>sign</em>. On Granite the peak sits at <span class="hl-acc">Σα ≈ 0.75</span> versus MiniCPM's ≈1.25
+        — and that downshift was <em>named in advance</em>: the pre-run note (2026-06-12, before the
+        fair-battery run executed) flagged Granite's <code>residual_multiplier = 0.22</code> as the suspect, and
+        the run confirmed Σα≈0.75.</p>
+        <p><span class="olabel inf">inf</span> The working mechanism: a smaller per-layer residual write means a
+        lower cumulative-α budget before the residual leaves the norm band. Beyond peak: ≈2.0 fading, ≥3
+        cratering, the same one-death-two-doors collapse. <span class="olabel obs">obs</span> over-drive and
+        negative-α both produce digit / special-token / CJK leak; <span class="olabel inf">inf</span> residual-norm
+        corruption is the proposed cause. <code>dampall</code> is neutral-to-negative on Granite (it isn't a
+        collapsed model, so there's no pathology to relieve) — control behaviour consistent with MiniCPM's
+        <code>dampall</code> "wins" having been de-collapse, not capability.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">The strongest cross-model result the line has</span>
+        Two models, one shared variable, with a constant that moved in the direction <em>and</em> roughly the
+        amount the architecture would predict. A prediction registered before the run, confirmed by it. It
+        belongs on both pages with this shared figure.
+      </aside>
+    </div>
+
+    <figure class="figure" id="figD">
+      <p class="nb-plate__note">↳ the leftward shift of the peak is the whole visual argument — one law, two models</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 496" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <defs>
+    <pattern id="crater" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="var(--neg,#B98AD6)" stroke-width="1" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="720" height="496" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="32" font-size="18">One law, two models — the Σα peak shifts left, predicted in advance</text>
+  <text class="mut" x="40" y="52" font-size="11">x = Σα (cumulative per-pass damping dose) · y = math Δ vs baseline · identical axes</text>
+  <text class="mut" x="40" y="66" font-size="10">curve = response-law shape; the peak location and its leftward shift are the measured result</text>
+
+  <!-- plot body shifted down to open breathing room under the header -->
+  <g transform="translate(0,26)">
+
+  <!-- ============ LEFT PANEL: MiniCPM5 ============ -->
+  <text x="70" y="78" class="ink2" font-size="12" letter-spacing="0.5">MiniCPM5-1B · 24L dense</text>
+  <!-- crater zone Σα>=3 -->
+  <rect x="308.2" y="80" width="31.8" height="220" fill="url(#crater)"/>
+  <rect x="308.2" y="80" width="31.8" height="220" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <!-- baseline Δ=0 -->
+  <line x1="70" y1="190" x2="340" y2="190" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="66" y="193" text-anchor="end" class="mut" font-size="9">0</text>
+  <!-- y axis -->
+  <line x1="70" y1="80" x2="70" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <!-- x ticks -->
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="70" y="315">0</text><text x="149.4" y="315">1</text><text x="228.8" y="315">2</text><text x="308.2" y="315">3</text>
+    <text x="205" y="333" letter-spacing="1">Σα →</text>
+  </g>
+  <!-- peak guide -->
+  <line x1="169.3" y1="98.3" x2="169.3" y2="300" stroke="var(--cause,#E3C24A)" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>
+  <text x="169.3" y="95" text-anchor="middle" font-size="10.5" fill="var(--cause,#E3C24A)">Σα ≈ 1.25</text>
+  <!-- response curve: Catmull-Rom through the markers, horizontal apex -->
+  <path d="M70,190 C76.62,181.6 93.15,154.88 109.7,139.6 C126.25,124.32 149.45,98.3 169.3,98.3 C189.15,98.3 205.65,115.92 228.8,139.6 C251.95,163.28 289.67,218.25 308.2,240.4 C326.73,262.55 334.7,267.15 340,272.5"
+        fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2.4"/>
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8">
+    <circle cx="109.7" cy="139.6" r="3.2"/><circle cx="169.3" cy="98.3" r="3.6"/><circle cx="228.8" cy="139.6" r="3.2"/><circle cx="308.2" cy="240.4" r="3.2"/>
+  </g>
+  <text x="312" y="228" font-size="9" fill="var(--neg,#B98AD6)">craters ≥3</text>
+
+  <!-- ============ RIGHT PANEL: Granite ============ -->
+  <text x="420" y="78" class="ink2" font-size="12" letter-spacing="0.5">Granite-4.1-3B · 40L dense</text>
+  <rect x="658.2" y="80" width="31.8" height="220" fill="url(#crater)"/>
+  <rect x="658.2" y="80" width="31.8" height="220" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="420" y1="190" x2="690" y2="190" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="416" y="193" text-anchor="end" class="mut" font-size="9">0</text>
+  <line x1="420" y1="80" x2="420" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="420" y="315">0</text><text x="499.4" y="315">1</text><text x="578.8" y="315">2</text><text x="658.2" y="315">3</text>
+    <text x="555" y="333" letter-spacing="1">Σα →</text>
+  </g>
+  <!-- ghost guide at 1.25 to show the leftward move -->
+  <line x1="519.4" y1="120" x2="519.4" y2="300" stroke="var(--muted,#6F7C88)" stroke-width="1" stroke-dasharray="2 4" opacity="0.6"/>
+  <text x="519.4" y="118" text-anchor="middle" class="mut" font-size="8.5">MiniCPM peak (1.25)</text>
+  <!-- peak guide -->
+  <line x1="479.6" y1="133.2" x2="479.6" y2="300" stroke="var(--cause,#E3C24A)" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>
+  <text x="479.6" y="105" text-anchor="middle" font-size="10.5" fill="var(--cause,#E3C24A)">Σα ≈ 0.75</text>
+  <!-- leftward-shift arrow -->
+  <line x1="515" y1="132" x2="487" y2="132" stroke="var(--cause,#E3C24A)" stroke-width="1.3"/>
+  <polygon points="483,132 490,128.5 490,135.5" fill="var(--cause,#E3C24A)"/>
+  <!-- response curve: Catmull-Rom through the markers, dashed, horizontal apex -->
+  <path d="M420,190 C425.3,183.58 441.87,160.97 451.8,151.5 C461.73,142.03 463.72,133.2 479.6,133.2 C495.48,133.2 523.95,172.9 547.1,190 C570.25,207.1 594.68,222.82 618.5,235.8 C642.32,248.78 678.08,262.55 690,267.9"
+        fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2.4" stroke-dasharray="8 4"/>
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8">
+    <rect x="448.6" y="148.3" width="6.4" height="6.4"/><rect x="476.4" y="130" width="6.4" height="6.4"/><rect x="543.9" y="186.8" width="6.4" height="6.4"/><rect x="615.3" y="232.6" width="6.4" height="6.4"/>
+  </g>
+  <text x="662" y="248" font-size="9" fill="var(--neg,#B98AD6)">craters ≥3</text>
+  <!-- residual annotation: the named-in-advance cause -->
+  <text x="599" y="360" text-anchor="middle" font-size="10.5" fill="var(--cause,#E3C24A)">residual_multiplier = 0.22</text>
+  <text x="599" y="374" text-anchor="middle" class="mut" font-size="9">smaller per-pass dose → earlier peak</text>
+
+  <!-- caption -->
+  <text x="40" y="360" class="ink2" font-size="11">Same inverted-U law on both. The peak moves 1.25 → 0.75 —</text>
+  <text x="40" y="376" class="ink2" font-size="11">a leftward shift called in advance from Granite's</text>
+  <text x="40" y="392" class="ink2" font-size="11">smaller residual multiplier, before the sweep ran.</text>
+
+  <!-- legend -->
+  <g transform="translate(40,418)">
+    <line x1="0" y1="-3" x2="26" y2="-3" stroke="var(--accent,#4FB2C2)" stroke-width="2.4"/>
+    <circle cx="13" cy="-3" r="3.2" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8"/>
+    <text x="32" y="0" class="mut" font-size="9.5">MiniCPM (solid · ●)</text>
+    <line x1="150" y1="-3" x2="176" y2="-3" stroke="var(--accent,#4FB2C2)" stroke-width="2.4" stroke-dasharray="8 4"/>
+    <rect x="159.8" y="-6.2" width="6.4" height="6.4" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8"/>
+    <text x="182" y="0" class="mut" font-size="9.5">Granite (dashed · ■)</text>
+    <rect x="305" y="-9" width="14" height="12" fill="url(#crater)"/>
+    <text x="324" y="0" class="mut" font-size="9.5">Σα ≥ 3 crater zone</text>
+  </g>
+
+  </g>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <defs>
+    <pattern id="craterM" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="var(--neg,#B98AD6)" stroke-width="1" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="400" height="720" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="34" font-size="18">One law, two models — the Σα peak shifts left</text>
+  <text class="mut" x="20" y="52" font-size="10">x = Σα (cumulative per-pass damping dose)</text>
+  <text class="mut" x="20" y="66" font-size="10">y = math Δ vs baseline · identical axes</text>
+  <text class="mut" x="20" y="80" font-size="9">curve = law shape; peak + shift are the measured result</text>
+
+  <!-- ============ PANEL A: MiniCPM5 (top) ============ -->
+  <text x="50" y="115" class="ink2" font-size="12">MiniCPM5-1B · 24L dense</text>
+  <rect x="323.5" y="130" width="36.5" height="160" fill="url(#craterM)"/>
+  <rect x="323.5" y="130" width="36.5" height="160" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="50" y1="210" x2="360" y2="210" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="46" y="213" text-anchor="end" class="mut" font-size="9">0</text>
+  <line x1="50" y1="130" x2="50" y2="290" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="50" y="305">0</text><text x="141.2" y="305">1</text><text x="232.4" y="305">2</text><text x="323.5" y="305">3</text>
+    <text x="200" y="305">Σα →</text>
+  </g>
+  <line x1="164" y1="143.3" x2="164" y2="290" stroke="var(--cause,#E3C24A)" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>
+  <text x="164" y="135" text-anchor="middle" font-size="10.5" fill="var(--cause,#E3C24A)">Σα ≈ 1.25</text>
+  <path d="M50,210 C57.6,203.88 76.6,184.42 95.6,173.3 C114.6,162.18 141.2,143.3 164,143.3 C186.8,143.3 205.82,156.07 232.4,173.3 C258.98,190.53 302.23,230.58 323.5,246.7 C344.77,262.82 353.92,266.12 360,270"
+        fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2.4"/>
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8">
+    <circle cx="95.6" cy="173.3" r="3.2"/><circle cx="164" cy="143.3" r="3.6"/><circle cx="232.4" cy="173.3" r="3.2"/><circle cx="323.5" cy="246.7" r="3.2"/>
+  </g>
+  <text x="327" y="232" font-size="9" fill="var(--neg,#B98AD6)">≥3 craters</text>
+
+  <!-- ============ PANEL B: Granite (below) ============ -->
+  <text x="50" y="400" class="ink2" font-size="12">Granite-4.1-3B · 40L dense</text>
+  <rect x="323.5" y="410" width="36.5" height="160" fill="url(#craterM)"/>
+  <rect x="323.5" y="410" width="36.5" height="160" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="50" y1="490" x2="360" y2="490" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="46" y="493" text-anchor="end" class="mut" font-size="9">0</text>
+  <line x1="50" y1="410" x2="50" y2="570" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="50" y="585">0</text><text x="141.2" y="585">1</text><text x="232.4" y="585">2</text><text x="323.5" y="585">3</text>
+    <text x="200" y="585">Σα →</text>
+  </g>
+  <!-- ghost guide: where MiniCPM peaked -->
+  <line x1="164" y1="430" x2="164" y2="570" stroke="var(--muted,#6F7C88)" stroke-width="1" stroke-dasharray="2 4" opacity="0.6"/>
+  <text x="168" y="448" class="mut" font-size="8">← MiniCPM peak (1.25)</text>
+  <line x1="118.4" y1="448.6" x2="118.4" y2="570" stroke="var(--cause,#E3C24A)" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>
+  <text x="118.4" y="428" text-anchor="middle" font-size="10.5" fill="var(--cause,#E3C24A)">Σα ≈ 0.75</text>
+  <!-- shift arrow -->
+  <line x1="160" y1="448" x2="126" y2="448" stroke="var(--cause,#E3C24A)" stroke-width="1.3"/>
+  <polygon points="122,448 129,444.5 129,451.5" fill="var(--cause,#E3C24A)"/>
+  <path d="M50,490 C56.08,485.33 75.1,468.9 86.5,462 C97.9,455.1 100.17,448.6 118.4,448.6 C136.63,448.6 169.3,477.53 195.9,490 C222.5,502.47 250.65,513.95 278,523.4 C305.35,532.85 346.33,542.82 360,546.7"
+        fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2.4" stroke-dasharray="8 4"/>
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8">
+    <rect x="83.3" y="458.8" width="6.4" height="6.4"/><rect x="115.2" y="445.4" width="6.4" height="6.4"/><rect x="192.7" y="486.8" width="6.4" height="6.4"/><rect x="274.8" y="520.2" width="6.4" height="6.4"/>
+  </g>
+  <text x="327" y="522" font-size="9" fill="var(--neg,#B98AD6)">≥3 craters</text>
+  <text x="50" y="610" font-size="10" fill="var(--cause,#E3C24A)">residual_multiplier = 0.22</text>
+  <text x="50" y="624" class="mut" font-size="9">smaller per-pass dose → earlier peak (called before the sweep)</text>
+
+  <!-- legend -->
+  <g transform="translate(20,660)">
+    <line x1="0" y1="-3" x2="26" y2="-3" stroke="var(--accent,#4FB2C2)" stroke-width="2.4"/>
+    <circle cx="13" cy="-3" r="3.2" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8"/>
+    <text x="32" y="0" class="mut" font-size="9.5">MiniCPM (solid · ●)</text>
+  </g>
+  <g transform="translate(20,682)">
+    <line x1="0" y1="-3" x2="26" y2="-3" stroke="var(--accent,#4FB2C2)" stroke-width="2.4" stroke-dasharray="8 4"/>
+    <rect x="9.8" y="-6.2" width="6.4" height="6.4" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8"/>
+    <text x="32" y="0" class="mut" font-size="9.5">Granite (dashed · ■)</text>
+    <rect x="175" y="-9" width="14" height="12" fill="url(#craterM)"/>
+    <text x="194" y="0" class="mut" font-size="9.5">Σα ≥ 3 crater</text>
+  </g>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig D —</b> one law, two models, the predicted downshift. Two-panel Σα-response, MiniCPM5 (left) and Granite (right) on identical axes (x = Σα, 0 → 3; y = math Δ). Each an inverted-U; the peak is annotated — MiniCPM ≈1.25, Granite ≈0.75 — with a vertical guide at each so the leftward shift reads at a glance. Granite's panel carries <code>residual_multiplier = 0.22</code> as the named-in-advance cause; the shared ≥3 crater zone is marked.</figcaption>
+      <div class="nb-prov"><span><b>source</b> Granite v3 + MiniCPM5 Σα sweeps · pre-run note 2026-06-12</span><span><b>type</b> data-grounded; downshift predicted in advance</span><span><b>safety</b> models by hatch + shape, not colour</span></div>
+    </figure>
+  </section>
+
+  <section id="todo">
+    <h2><span class="num">§6</span>What to actually do to the page</h2>
+    <table class="nb-table" style="margin-top:var(--sp-4)">
+      <thead><tr><th>#</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td class="first">1</td><td>Add the <code>combo_10_38</code> walkback banner (text above). Keep the section, mark it superseded.</td></tr>
+        <tr><td class="first">2</td><td>Demote the eq/mc leaderboard to "old-battery, historical" + add the fair reading: Granite is balanced-<em>resistant</em> (nothing clears multiplicity), but channel <em>specialists</em> exist — interior damping for math, specific prunes for MC, EQ essentially unmovable (not collapsed → no headroom).</td></tr>
+        <tr><td class="first">3</td><td>Add the constructive section (Findings 1–3): metastable-bug repair, the combo-stacking heuristic, the fine-α / non-monotone layers. This is the new heart of the page.</td></tr>
+        <tr><td class="first">4</td><td>Add the shared Σα figure (Finding 4), cross-linked to the MiniCPM page — one law, two models, the predicted downshift.</td></tr>
+        <tr><td class="first">5</td><td>Keep all the mechanism sections unchanged — they were never the problem.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="caveats">
+    <div class="nb-limits">
+      <div class="nb-limits__head">
+        <span class="nb-limits__label">Caveats — the honest gaps</span>
+        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — these gate the constructive claims</span>
+      </div>
+      <ul>
+        <li><b>The constructive profile (<code>L5↑+L26↓+L14↑</code>) is not yet held-out-validated.</b> Present it as the emerging endgame, not a confirmed champion — argmax off noisy per-layer curves overfits.</li>
+        <li><b>The stacking heuristic lives on the in-band / gcore probes</b>, not the floored/ceilinged 49-probe mean. One combo marginally beats its best component, one masks — suggestive, not established. It's a <em>heuristic, not a law</em> until there's a regression of effect against layer-distance.</li>
+        <li><b>CoT remains unrun on Granite</b> (it decodes ~250 tok/s vs MiniCPM's ~1500 — an est. 10–20 h sweep, gated on a smoke test). The open question that would close the line: does reasoning fix the <em>same</em> metastable bugs the surgery does (redundant) or <em>different</em> ones (compound)? Compare fix-sets via the swing board.</li>
+        <li><b>Re-confirmed, with a caveat.</b> The combo numbers, the L6 α-peak, and the <code>combo_10_38</code> walkback were re-checked against <code>granite_nocot_v3_da50cdae_results.jsonl</code> on 2026-06-21. <span class="vrfy">VERIFY</span> any remaining v5/v6 figures still carried from memory against the same file before they ship.</li>
+      </ul>
+    </div>
+
+    <div class="nb-marginalia" style="margin-top:var(--sp-7)">
+      <div class="nb-marginalia__label">Colophon &amp; lineage</div>
+      <div class="nb-marginalia__body">
+        <p style="max-width:64ch">Granite is the dense-model + steering branch of the line. Cross-model
+        mechanism → <a href="measuring.html">mechanistic rules</a>; measurement → the
+        <a href="measuring.html">methods writeup</a>. The Σα-law it confirms was born on
+        <a href="measuring.html">MiniCPM5</a>. The "I overturned my own result" register is shared with the
+        <a href="hrm.html">HRM specimen</a>, which paid for the same instrument lesson first. Sibling specimens:
+        <a href="gemma.html">Gemma 4</a> (whose cross-zone superadditivity this generalizes),
+        <a href="/lab/08_moe_expert_surgery.html">the MoE fork</a>. Boards and raw data:
+        <span class="mono">monitor.py::swing_probes()</span>,
+        <span class="mono">granite_nocot_v3_da50cdae_results.jsonl</span>. Run locally on a 16&nbsp;GB Mac&nbsp;Mini.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer style="max-width:var(--page-max);margin:0 auto;padding:var(--sp-6) var(--gutter) var(--sp-9)">
+  <p style="font-family:var(--font-mono);font-size:var(--fs-micro);letter-spacing:.03em;color:var(--text-muted);line-height:1.7">© 2026 · The Vivisection Lab · exploratory research notes, provided as-is, no warranty · writeups &amp; figures CC&nbsp;BY · uses cookieless analytics, no personal data collected</p>
+</footer>
+
+<script src="/assets/nb.js"></script>
+</body>
+</html>

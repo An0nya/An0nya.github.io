@@ -1,0 +1,64 @@
+/* ============================================================================
+   BASE — minimal global resets + the brand's baseline body voice.
+   Kept deliberately small. Anything structural (nav, cards, grids) is a
+   component, not a global. This just makes a bare page already read as Notebook:
+   dark cream/slate ground, serif prose, mono fine-print, hairline rules.
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-serif);
+  font-weight: var(--w-reg);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-feature-settings: "kern" 1, "onum" 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+/* Links — quiet by default, underline on hover. No colour-shift dance. */
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
+
+/* Focus — always visible, accent ring, no removal anywhere. */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--r-1);
+}
+
+/* Headings inherit the serif display voice. */
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: var(--w-med);
+  color: var(--text);
+  margin: 0;
+  text-wrap: balance;
+}
+h1 { font-size: var(--fs-display); line-height: var(--lh-display); letter-spacing: var(--tk-display); }
+h2 { font-size: var(--fs-h2); line-height: var(--lh-tight); letter-spacing: -0.012em; }
+h3 { font-size: var(--fs-h3); line-height: var(--lh-tight); }
+em { font-style: italic; }
+b, strong { font-weight: var(--w-semi); }
+
+p { margin: 0 0 1.1rem; max-width: var(--measure); }
+p:last-child { margin-bottom: 0; }
+
+/* The mono "instrument" voice — every label uses it. */
+.mono { font-family: var(--font-mono); }
+.muted { color: var(--text-muted); }
+
+/* Hairline rule helpers. */
+hr, .rule {
+  border: 0;
+  height: 1px;
+  background: var(--border-strong);
+  margin: var(--sp-6) 0;
+}
+
+img, svg { max-width: 100%; }

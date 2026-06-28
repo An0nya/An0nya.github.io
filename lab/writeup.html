@@ -1,0 +1,154 @@
+<!-- @dsCard group="Portfolio Hub" viewport="1100x1100" name="Notebook writeup — specimen page" subtitle="Record header, correction card, scan-plates with provenance, known-limits" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gemma-4-12B, day zero — The Vivarium</title>
+<meta name="description" content="Six hidden-state probes run against Gemma-4-12B on its launch day, and the single mid-stack zone where all six independently find the meaning.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E141A'/%3E%3Cpath d='M6 16 H15' stroke='%236F7C88' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 9' stroke='%236FCBD8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 23' stroke='%23E3C24A' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='15' cy='16' r='2.6' fill='%23ECEFF3'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  main { max-width: var(--page-max); margin: 0 auto; padding: var(--sp-7) var(--gutter) var(--sp-9); }
+  section { padding: var(--sp-7) 0 0; }
+  .dek { font-family: var(--font-serif); font-style: italic; font-size: var(--fs-dek); line-height: 1.4; color: var(--text-dim); max-width: 60ch; margin: var(--sp-5) 0 0; }
+  h2 { font-size: var(--fs-h2); margin: 0 0 var(--sp-4); }
+  h2 .num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); letter-spacing: .1em; vertical-align: 0.7em; margin-right: var(--sp-3); }
+  .dropcap { max-width: var(--measure); }
+  .dropcap::first-letter { font-family: var(--font-serif); font-weight: 500; font-size: 3.4em; line-height: 0.82; float: left; padding: 0.04em 0.12em 0 0; color: var(--accent-bright); }
+  .col-side { display: grid; grid-template-columns: 1fr 260px; gap: var(--sp-7); align-items: start; }
+  .col-side .aside { font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); border-left: 1px solid var(--border-strong); padding-left: var(--sp-4); font-style: italic; }
+  .col-side .aside .nb-kicker { font-style: normal; display: block; margin-bottom: var(--sp-2); }
+  .hl-acc { color: var(--accent); font-weight: 500; }
+  .figure { margin: var(--sp-6) 0; }
+  @media (max-width: 760px) { .col-side { grid-template-columns: 1fr; gap: var(--sp-5); } }
+</style>
+</head>
+<body>
+
+<nav class="nb-nav">
+  <a class="nb-nav__home" href="/">THE VIVARIUM</a>
+  <a href="#scan">Geometry</a>
+  <a href="/">Vivisection Lab</a>
+  <a href="#methods">Methods</a>
+  <span class="nb-nav__spacer"></span>
+  <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
+  <a href="#" data-theme-toggle>☼ Light</a>
+</nav>
+
+<main>
+  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026</div>
+  <header class="nb-record">
+    <div class="nb-record__title">Gemma-4-12B, day zero</div>
+    <div class="nb-record__grid">
+      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v">Gemma-4-12B · 48L dense</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">live · launch-day scan</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Last revised</span><span class="nb-record__v">2026-06-02</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Battery</span><span class="nb-record__v">probes_meaning_v4 · 6 instruments</span></div>
+      <div class="nb-record__field">
+        <span class="nb-record__k">Confidence</span>
+        <span class="nb-conf nb-conf--medium"><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span></span>medium</span>
+      </div>
+    </div>
+  </header>
+
+  <p class="dek">Six hidden-state probes, run against a brand-new model while the bf16 conversion was still
+  writing to disk — and the single mid-stack zone where all six independently find the meaning.</p>
+
+  <aside class="nb-correction">
+    <div class="nb-correction__head"><span>⌦ Correction</span><span class="nb-correction__disp">retired</span></div>
+    <div class="nb-correction__row"><span class="nb-correction__k">Hypothesis</span><span class="nb-correction__b">The L47 cosine spike was the model "deciding" the answer at the last layer.</span></div>
+    <div class="nb-correction__row"><span class="nb-correction__k">Why it looked true</span><span class="nb-correction__b">It lined up cleanly with output token onset, and the heatmap was gorgeous.</span></div>
+    <div class="nb-correction__row"><span class="nb-correction__k">Why it failed</span><span class="nb-correction__b">It survived no control — a position-shuffle null reproduced the same spike. It's the last layer re-tooling for the <em>next</em> token, not a decision.</span></div>
+    <div class="nb-correction__row"><span class="nb-correction__k">Disposition</span><span class="nb-correction__b"><b>Retired.</b> The real finding (the L18–27 zone) is read against its control and survives.</span></div>
+  </aside>
+
+  <section id="scan">
+    <h2><span class="num">§1</span>The sleeper token</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">Take a sentence whose subject only resolves at the end — "the crane lifted its
+        long neck over the marsh" — and watch a single token's hidden state across the stack. At the input
+        it's just a string. Somewhere mid-stack it commits to <em>bird</em>, not <em>machine</em>, and you
+        can see exactly when.</p>
+        <p>The reading direction matches the computation: <span class="hl-acc">tokens across the top, depth
+        increasing downward</span>, so each column reads as a token falling through the stack. Identical
+        regions recede to the page ground; divergence ignites. The single injected/cause column ignites
+        citron, so cause and effect read as warm-versus-cool inside one chart.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">The question</span>
+        Not "can the model do this," but "<em>when</em> in the stack does it know?" Access and computation
+        turn out to be two independently gated things — which is the whole reason a scan beats a score here.
+      </aside>
+    </div>
+
+    <figure class="figure" style="margin:var(--sp-6) 0">
+      <p class="nb-plate__note">↳ commitment lags the cue — the band shaded L18–27</p>
+      <div class="nb-plate"><img src="/assets/figures/figConcept.svg" alt="Per-layer concept divergence: an identical token diverges mid-stack, not at lexical input; the L18–27 band is shaded."></div>
+      <figcaption class="nb-figcap"><b>Fig 1 —</b> concept divergence by depth. Quiet regions sit at the ground; the signal is the only thing that pops.</figcaption>
+      <div class="nb-prov"><span><b>source</b> results/gemma12b_concept_v4.jsonl</span><span><b>generated</b> 2026-06-02</span><span><b>battery</b> v4</span><span><b>n</b> 24</span></div>
+    </figure>
+
+    <blockquote class="nb-pull nb-pull--wide" style="max-width:var(--measure)">
+      Commitment lags the cue. The model knows the answer several layers before it is willing to say it.
+      <cite>The day-zero scan · §1 · read against a position-shuffle null</cite>
+    </blockquote>
+  </section>
+
+  <section>
+    <h2><span class="num">§2</span>Two gates, opening independently</h2>
+    <p style="max-width:var(--measure)">The long-range staircase separates <span class="hl-acc">access</span>
+    (can the model reach back to a distant token at all) from <span class="hl-acc">computation</span> (does
+    it do the depth-work once it has). They're gated at different layers — which means "it failed the task"
+    is at least two different failures, and the scan tells you which one.</p>
+
+    <figure class="figure" style="margin:var(--sp-6) 0">
+      <div class="nb-plate"><img src="/assets/figures/figStaircase.svg" alt="Two-gate staircase showing attention access and depth computation gating at different layers."></div>
+      <figcaption class="nb-figcap"><b>Fig 2 —</b> the staircase. Each step is a longer dependency; the two curves are the two gates.</figcaption>
+      <div class="nb-prov"><span><b>source</b> results/gemma12b_staircase_v4.jsonl</span><span><b>generated</b> 2026-06-02</span><span><b>battery</b> v4</span><span><b>n</b> 18</span></div>
+    </figure>
+
+    <table class="nb-table" style="margin-top:var(--sp-5)">
+      <thead><tr><th>Probe</th><th class="num">Peak layer</th><th class="num">Effect (d)</th><th>Survives control?</th></tr></thead>
+      <tbody>
+        <tr><td>paraphrase invariance</td><td class="num">L21</td><td class="num pos">0.94</td><td class="pos">yes</td></tr>
+        <tr><td>WiC word-sense</td><td class="num">L20</td><td class="num pos">0.81</td><td class="pos">yes</td></tr>
+        <tr><td>cross-lingual convergence</td><td class="num">L23</td><td class="num pos">0.77</td><td class="pos">yes</td></tr>
+        <tr><td>L47 "decision" spike</td><td class="num">L47</td><td class="num game">1.10</td><td class="neg">no — retired</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="methods">
+    <div class="nb-limits">
+      <div class="nb-limits__head">
+        <span class="nb-limits__label">Known limitations</span>
+        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low</span>
+      </div>
+      <ul>
+        <li>Single base model — no cross-architecture replication yet; "how transformers are" is a hypothesis, not a result.</li>
+        <li>Geometry read against a position-shuffle null only, not a baseline-model null. "Position-robust" ≠ "structure-sensitive."</li>
+        <li>Day-zero quant: I hit the hf→gguf conversion wall and fell back to Claude for the recipe — flagged as a friction point, not a clean solo run.</li>
+      </ul>
+    </div>
+
+    <div class="nb-marginalia" style="margin-top:var(--sp-7)">
+      <div class="nb-marginalia__label">Colophon &amp; method</div>
+      <div class="nb-marginalia__body">
+        <p style="max-width:64ch">Hidden states pulled via class-level <span class="mono">__call__</span> hooks, bf16→f32 cast,
+        centred cosine, difflib token alignment, last-token vs mean-pool both recorded. Built and run locally on a
+        16&nbsp;GB Mac Mini. The probe method owes its origin to David Ng's RYS line; the geometry read is mine.
+        Full instrument details → <a href="#">Methods</a>.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer style="max-width:var(--page-max);margin:0 auto;padding:var(--sp-6) var(--gutter) var(--sp-9)">
+  <p style="font-family:var(--font-mono);font-size:var(--fs-micro);letter-spacing:.03em;color:var(--text-muted);line-height:1.7">© 2026 · The Vivarium · exploratory research notes, provided as-is, no warranty · writeups &amp; figures CC&nbsp;BY · uses cookieless analytics, no personal data collected</p>
+</footer>
+
+<script src="/assets/nb.js"></script>
+</body>
+</html>

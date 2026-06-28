@@ -1,0 +1,68 @@
+/* ============================================================================
+   SPACING · LAYOUT · RADII · BORDERS · ELEVATION · MOTION
+   ----------------------------------------------------------------------------
+   The understated-engineer rules, encoded:
+     · Structure with RULES (hairlines), not shadows. Shadows are reserved for
+       things that genuinely float above the page (dialog, tooltip, menu).
+     · Corners are near-square. A 12px pill on a card is a SaaS tell; 2px reads
+       as print / a terminal window.
+     · Motion is low: short durations, opacity/colour/border shifts. No lift,
+       no bounce, no infinite decorative loops. Respect prefers-reduced-motion.
+   ========================================================================== */
+:root {
+  /* spacing scale (4px base) */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  24px;
+  --sp-6:  32px;
+  --sp-7:  48px;
+  --sp-8:  64px;
+  --sp-9:  96px;
+  --sp-10: 128px;
+
+  /* layout */
+  --page-max:   1060px;  /* article / hub column */
+  --page-wide:  1180px;  /* lab notebook wide column */
+  --gutter:     2rem;    /* page side padding (desktop) */
+  --gutter-sm:  1.2rem;  /* page side padding (mobile) */
+  --section-y:  3.6rem;  /* vertical rhythm between sections */
+
+  /* radii — deliberately small */
+  --r-0:     0;     /* @kind radius */
+  --r-1:     2px;   /* @kind radius */ /* default: cards, inputs, buttons, pills */
+  --r-2:     4px;   /* @kind radius */ /* slightly softened (figure plates) */
+  --r-round: 50%;   /* @kind radius */
+
+  /* borders */
+  --bw:        1px;
+  --bw-strong: 2px;
+
+  /* elevation — almost everything is flat=none; pop is for true overlays only */
+  --shadow-flat: none;
+  --shadow-pop:  0 8px 28px rgba(0,0,0,0.32), 0 2px 6px rgba(0,0,0,0.18);
+
+  /* motion */
+  --ease:     cubic-bezier(0.2, 0.6, 0.2, 1); /* @kind other */
+  --dur-fast: 0.12s; /* @kind other */
+  --dur:      0.2s;  /* @kind other */
+  --dur-slow: 0.32s; /* @kind other */
+
+  /* z-index ladder */
+  --z-nav:     40;  /* @kind other */
+  --z-tooltip: 50;  /* @kind other */
+  --z-panel:   60;  /* @kind other */
+  --z-dialog:  100; /* @kind other */
+}
+
+/* Smooth scroll, but never for users who asked motion off. */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

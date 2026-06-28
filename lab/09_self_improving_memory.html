@@ -1,0 +1,834 @@
+<!-- @dsCard group="Portfolio Hub" viewport="1100x1400" name="Writeup — Teaching an agent to read its own logs" subtitle="An offline map-reduce trawl over an AI agent's own session transcripts that surfaces recurring friction with confidence tiers and promotes the real patterns into the rules it runs on next session. Eval rigor — ground-truth verification, instrument-bias modelling, frequency-isn't-evidence — turned reflexively on the agent's own behaviour. Human holds the final pen." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teaching an agent to read its own logs — The Vivisection Lab</title>
+<meta name="description" content="A self-improving memory loop: an offline map-reduce trawl mines an AI coding agent's own session transcripts for recurring friction, tiers it by evidence, and promotes the real patterns into a leaner CLAUDE.md. The method is the transferable part — derive the behavioural rules that demonstrably matter to your workflow from your own record, instead of importing someone else's intuition. With the frequency trap, the UUID-confabulation fix, and a human holding the final pen.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E141A'/%3E%3Cpath d='M9 11 A8 8 0 1 1 8 17' stroke='%236FCBD8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M9 6 L9 12 L15 12' stroke='%236FCBD8' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='22' cy='22' r='2.4' fill='%23E3C24A'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  main { max-width: var(--page-max); margin: 0 auto; padding: var(--sp-7) var(--gutter) var(--sp-9); }
+  section { padding: var(--sp-7) 0 0; }
+  .dek { font-family: var(--font-serif); font-style: italic; font-size: var(--fs-dek); line-height: 1.4; color: var(--text-dim); max-width: 64ch; margin: var(--sp-5) 0 0; }
+  h2 { font-size: var(--fs-h2); margin: 0 0 var(--sp-4); }
+  h2 .num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); letter-spacing: .1em; vertical-align: 0.7em; margin-right: var(--sp-3); }
+  h3 { font-size: var(--fs-h3, 1.05rem); margin: var(--sp-6) 0 var(--sp-3); color: var(--text); }
+  p { max-width: var(--measure); }
+  .dropcap { max-width: var(--measure); }
+  .dropcap::first-letter { font-family: var(--font-serif); font-weight: 500; font-size: 3.4em; line-height: 0.82; float: left; padding: 0.04em 0.12em 0 0; color: var(--accent-bright); }
+  .col-side { display: grid; grid-template-columns: 1fr 260px; gap: var(--sp-7); align-items: start; }
+  .col-side .aside { font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); border-left: 1px solid var(--border-strong); padding-left: var(--sp-4); font-style: italic; }
+  .col-side .aside .nb-kicker { font-style: normal; display: block; margin-bottom: var(--sp-2); }
+  .hl-acc { color: var(--accent); font-weight: 500; }
+  .figure { margin: var(--sp-6) 0; }
+  .nb-plate svg { display: block; width: 100%; height: auto; }
+  .fig-mobile { display: none; }
+  /* code primitive blocks */
+  pre.code { font-family: var(--font-mono); font-size: 0.82em; line-height: 1.6; background: var(--surface-sunken); border: 1px solid var(--rule2,#27323D); border-left: 3px solid var(--accent); border-radius: var(--radius-2); padding: var(--sp-4) var(--sp-5); margin: var(--sp-5) 0; max-width: var(--measure); overflow-x: auto; color: var(--ink2,#A4B0BC); }
+  pre.code .cm { color: var(--muted); }
+  /* [VERIFY] markers — visible honesty flags, not hidden */
+  .vrfy { font-family: var(--font-mono); font-size: 0.72em; letter-spacing: .04em; color: var(--cause); border: 1px solid var(--cause); border-radius: 3px; padding: 0 .35em; opacity: .85; white-space: nowrap; vertical-align: 1px; }
+  /* observation / interpretation epistemic tags — slate vs violet, both protan-safe */
+  .olabel { font-family: var(--font-mono); font-size: 0.7em; letter-spacing: .06em; text-transform: uppercase; padding: 0 .3em; border-radius: 3px; vertical-align: 1px; }
+  .olabel.obs { color: var(--fourth); border: 1px solid var(--fourth); }
+  .olabel.inf { color: var(--neg); border: 1px solid var(--neg); }
+  /* negative-result callout — refuted hypotheses / hard lessons stated plainly */
+  .negresult { border: 1px solid var(--border-strong); border-left: 3px solid var(--neg); background: var(--surface-sunken); padding: var(--sp-4) var(--sp-5); margin: var(--sp-6) 0; max-width: var(--measure); border-radius: var(--radius-2); }
+  .negresult .nb-kicker { color: var(--neg); display: block; margin-bottom: var(--sp-2); }
+  .negresult p { margin: 0; font-size: var(--fs-sm); line-height: 1.6; color: var(--text-dim); }
+  /* figure placeholder — a deliberate stub, not a broken image */
+  .fig-stub { border: 1.5px dashed var(--border-strong); border-radius: var(--radius-2); background-color: var(--surface-sunken); background-image: repeating-linear-gradient(135deg, transparent 0 11px, var(--rule2,#27323D) 11px 12px); padding: var(--sp-5) var(--sp-5) var(--sp-5); margin: var(--sp-6) 0; max-width: var(--measure); }
+  .fig-stub__tag { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing:.14em; text-transform:uppercase; color: var(--fourth); border:1px solid var(--fourth); border-radius:3px; padding: .15em .5em; display:inline-block; background: var(--bg); }
+  .fig-stub__title { font-family: var(--font-serif); font-size: 1.05rem; color: var(--text); margin: var(--sp-3) 0 0; }
+  .fig-stub__spec { font-size: var(--fs-sm); line-height:1.6; color: var(--text-dim); background: var(--bg2,#141D26); padding: var(--sp-3) var(--sp-4); border-radius: var(--radius-2); margin: var(--sp-3) 0 0; }
+  .fig-stub__spec b { color: var(--text); }
+  .fig-stub__spec code { color: var(--accent); }
+  .fig-stub__data { font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--text-muted); margin-top: var(--sp-3); background: var(--bg2,#141D26); padding: .45em .6em; border-radius:3px; line-height:1.5; }
+  @media (max-width: 760px) {
+    .col-side { grid-template-columns: 1fr; gap: var(--sp-5); }
+    .fig-desktop { display: none; }
+    .fig-mobile { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nb-nav">
+  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
+  <a href="#problem">The problem</a>
+  <a href="#corpora">Two corpora</a>
+  <a href="#mapreduce">Map-reduce</a>
+  <a href="#confidence">Confidence</a>
+  <a href="#failure">The failure</a>
+  <a href="#promoted">What landed</a>
+  <span class="nb-nav__spacer"></span>
+  <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
+  <a href="#" data-theme-toggle>☼ Light</a>
+</nav>
+
+<main>
+  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Methods notebook · Anya · 2026 · the loop-closing branch · <em>eval rigor, turned reflexively on the agent's own behaviour</em></div>
+  <header class="nb-record">
+    <div class="nb-record__title">Teaching an agent to read its own logs</div>
+    <div class="nb-record__grid">
+      <div class="nb-record__field"><span class="nb-record__k">System</span><span class="nb-record__v">offline map-reduce trawl over an agent's own session transcripts → an evidence-based CLAUDE.md</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">Phase 1 shipped (single-summarizer, bias-screened) · Phase 2 multi-model panel designed &amp; deferred · human-in-the-loop by design</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Outcome</span><span class="nb-record__v">a rewritten lean CLAUDE.md, rules promoted from evidence rather than memory</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Source</span><span class="nb-record__v">project_claudemd_aggregation.md · the live CLAUDE.md · tools/trawl/</span></div>
+      <div class="nb-record__field">
+        <span class="nb-record__k">Confidence</span>
+        <span class="nb-conf nb-conf--medium"><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span></span>medium — the method is the durable artifact; specific promoted-rule counts tagged <span class="vrfy">VERIFY</span> against the ledger</span>
+      </div>
+    </div>
+  </header>
+
+  <p class="dek">Human memory over-weights the dramatic incident and forgets the papercut that happened twelve times.
+  The fix is the one you'd apply to any measurement problem: stop guessing and mine the record. A coding agent leaves
+  an extraordinarily complete one — so this is the project that reads it back to itself.</p>
+
+  <section id="problem">
+    <h2><span class="num">§0</span>The problem with writing your own rules from memory</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">An AI coding agent works better when it carries a file of behavioural rules — "surface a plan
+        before editing," "don't relaunch a failed agent without asking," "this Mac has no <code>python</code>, use
+        <code>python3</code>." The first version of mine was written the obvious way: I sat down with the agent and we
+        wrote the rules from intuition — from what <em>felt</em> like the recurring friction.</p>
+        <p>Human memory is a poor aggregator of recurring friction. You remember the dramatic incident and forget the
+        papercut that happened twelve times, so rules written from memory over-weight the memorable and miss the
+        chronic. It's a sampling failure more than a human one: <span class="hl-acc">people <em>and</em> models both miss
+        long-tail patterns</span> spread thin across many sessions, because no single session feels significant enough to
+        encode. And it happens a coding agent leaves an extraordinarily complete record — every session is a full
+        transcript, and a <a href="/lab/07_mem0_processor.html">separate pipeline</a> was already summarizing them. The raw material for
+        evidence-based rules was sitting in <code>~/.claude/</code> the whole time.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">The point isn't the rules</span>
+        There are a hundred "best CLAUDE.md you'll ever use" posts, and each is either generic or quietly fitted to its
+        author's stack. The point is the <em>method</em>: a way to derive the rules that demonstrably matter to <b>your</b>
+        workflow, from <b>your</b> own record. The rules below are mine; the machine that found them is the transferable
+        part.
+      </aside>
+    </div>
+    <p>The shape of the result: an offline, map-reduce trawl over the agent's own logs that surfaces recurring friction
+    with confidence tiers, and promotes the real patterns into the rules it runs on next session. A self-improving
+    memory loop, with a human holding the final pen.</p>
+  </section>
+
+  <section id="corpora">
+    <h2><span class="num">§1</span>Two corpora, because they catch different things</h2>
+    <p>The trawl reads two independent records of the same sessions, because they fail differently:</p>
+    <ul>
+      <li><b>Model-pipeline summaries</b> — local-LLM meta-audits of each session, written to a friction-focused schema
+      (<em>Competence &amp; Clarifications · Mistakes &amp; Overreach · Friction Points · Waste &amp; Efficiency</em>).
+      These are <em>opinionated</em>: a small model flagging where the agent overreached or wasted effort.</li>
+      <li><b>Claude Code compaction summaries</b> — the native format the agent emits when it compacts its own context
+      (<em>Primary Request · Errors and fixes · All user messages · Pending</em>). These are <em>factual</em>: the signal
+      lives in the verbatim user messages and the errors-and-fixes list.</li>
+    </ul>
+    <p>Reading both matters because the opinionated summaries surface friction the factual ones can't see (a model flags
+    "the agent moved too fast" where the compaction record just lists what got done), while the factual ones anchor the
+    opinionated ones (a friction claim is worth more when a verbatim user interruption backs it).
+    <span class="olabel inf">interpretation</span> Triangulation is the method.</p>
+  </section>
+
+  <section id="mapreduce">
+    <h2><span class="num">§2</span>Why map-reduce, and why map must not judge</h2>
+    <p>A hundred-plus summaries is, worst case, north of 800k tokens — you cannot read it in one context, and more
+    importantly you <em>shouldn't</em>: aggregating findings across a giant context is exactly where long-context
+    attention degrades. Many small readers, each given a clean batch, beat one model squinting at the whole pile. So the
+    architecture is deliberately split:</p>
+    <ul>
+      <li><b>Map</b> (per ~30-summary batch): extract a flat list of observations — <code>{session, type, one-line
+      description, evidence}</code>. The map agent does <b>not</b> tier and makes <b>no</b> cross-session claims.
+      Judgment-light, runs cheap (Haiku or a local model), batches in parallel.</li>
+      <li><b>Reduce</b>, itself split in two: a <em>mechanical</em> pass clusters semantically-similar observations and
+      counts distinct sessions per cluster (no judgment); a <em>judgment</em> pass — human + agent, in conversation —
+      assigns tiers, applies cross-model logic, and drafts the actual rules.</li>
+    </ul>
+    <p>The non-obvious constraint is <span class="hl-acc">why map must not tier</span>: a pattern that shows up once per
+    batch across six batches looks single-incident to <em>every</em> map agent. Only the post-aggregation global view
+    sees that it recurred. <span class="olabel obs">observation</span> Tiering before aggregation structurally cannot
+    work — so it's forbidden at the map step.</p>
+
+    <figure class="figure" id="fig1">
+      <p class="nb-plate__note">↳ one-way gates annotated: <em>map: no tiering</em> · <em>an LLM never hand-transcribes a UUID</em> (see §4)</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 860 420" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .stage{ fill: none; stroke: var(--rule2,#27323D); stroke-width: 1.4; }
+    .slab { fill: var(--bg,#0E141A); stroke: var(--rule2,#27323D); stroke-width: 1; }
+  </style>
+
+  <defs>
+    <marker id="fa" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="var(--accent,#4FB2C2)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="860" height="420" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="32" y="34" font-size="18">The pipeline — map-reduce over an agent's own session logs</text>
+  <text class="mut" x="32" y="55" font-size="11">Many small readers on clean batches beat one model squinting at 800k tokens. Judgment lives only at the end.</text>
+
+  <!-- ===== STAGE 1: corpus (two stacked sources) ===== -->
+  <text x="92" y="96" text-anchor="middle" class="ink2" font-size="11" letter-spacing="0.5">CORPUS</text>
+  <rect x="24" y="108" width="136" height="40" rx="3" class="slab"/>
+  <text x="92" y="126" text-anchor="middle" font-size="10">model summaries</text>
+  <text x="92" y="139" text-anchor="middle" class="mut" font-size="8.5">opinionated · biased</text>
+  <rect x="24" y="156" width="136" height="40" rx="3" class="slab"/>
+  <text x="92" y="174" text-anchor="middle" font-size="10">compaction summaries</text>
+  <text x="92" y="187" text-anchor="middle" class="mut" font-size="8.5">factual · neutral</text>
+
+  <line x1="160" y1="152" x2="196" y2="152" stroke="var(--accent,#4FB2C2)" stroke-width="2" marker-end="url(#fa)"/>
+
+  <!-- ===== STAGE 2: N parallel map agents ===== -->
+  <text x="270" y="96" text-anchor="middle" class="ink2" font-size="11" letter-spacing="0.5">MAP  ×N parallel</text>
+  <rect x="200" y="108" width="140" height="26" rx="3" class="slab"/>
+  <text x="270" y="125" text-anchor="middle" font-size="9.5">batch 1 → observations</text>
+  <rect x="200" y="138" width="140" height="26" rx="3" class="slab"/>
+  <text x="270" y="155" text-anchor="middle" font-size="9.5">batch 2 → observations</text>
+  <rect x="200" y="168" width="140" height="26" rx="3" class="slab"/>
+  <text x="270" y="185" text-anchor="middle" class="mut" font-size="9.5">… ~30 summaries each</text>
+  <!-- gate annotation -->
+  <text x="270" y="214" text-anchor="middle" font-size="9.5" fill="var(--cause,#E3C24A)">⊘ no tiering · no cross-session claims</text>
+
+  <line x1="346" y1="152" x2="382" y2="152" stroke="var(--accent,#4FB2C2)" stroke-width="2" marker-end="url(#fa)"/>
+
+  <!-- ===== STAGE 3: mechanical reduce ===== -->
+  <text x="455" y="96" text-anchor="middle" class="ink2" font-size="11" letter-spacing="0.5">REDUCE · mechanical</text>
+  <rect x="386" y="108" width="138" height="88" rx="3" class="stage"/>
+  <text x="455" y="132" text-anchor="middle" font-size="10">cluster similar</text>
+  <text x="455" y="148" text-anchor="middle" font-size="10">observations</text>
+  <text x="455" y="170" text-anchor="middle" font-size="10">count distinct</text>
+  <text x="455" y="186" text-anchor="middle" font-size="10">sessions / cluster</text>
+  <text x="455" y="214" text-anchor="middle" font-size="9" fill="var(--cause,#E3C24A)">an LLM never hand-copies a UUID</text>
+
+  <line x1="524" y1="152" x2="560" y2="152" stroke="var(--accent,#4FB2C2)" stroke-width="2" marker-end="url(#fa)"/>
+
+  <!-- ===== STAGE 4: judgment reduce ===== -->
+  <text x="632" y="96" text-anchor="middle" class="ink2" font-size="11" letter-spacing="0.5">REDUCE · judgment</text>
+  <rect x="564" y="108" width="138" height="88" rx="3" class="stage"/>
+  <text x="633" y="130" text-anchor="middle" font-size="10" fill="var(--accent,#4FB2C2)">human + agent</text>
+  <text x="633" y="150" text-anchor="middle" font-size="10">assign tiers</text>
+  <text x="633" y="166" text-anchor="middle" font-size="10">bias-screen</text>
+  <text x="633" y="182" text-anchor="middle" font-size="10">draft rules</text>
+  <text x="633" y="214" text-anchor="middle" font-size="9" fill="var(--cause,#E3C24A)">the only step allowed to judge</text>
+
+  <line x1="702" y1="152" x2="738" y2="152" stroke="var(--accent,#4FB2C2)" stroke-width="2" marker-end="url(#fa)"/>
+
+  <!-- ===== STAGE 5: output ===== -->
+  <text x="800" y="96" text-anchor="middle" class="ink2" font-size="11" letter-spacing="0.5">MEMORY</text>
+  <rect x="742" y="108" width="100" height="88" rx="3" fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="1.6"/>
+  <text x="792" y="146" text-anchor="middle" font-size="10" fill="var(--accent,#4FB2C2)">CLAUDE.md</text>
+  <text x="792" y="164" text-anchor="middle" font-size="10" fill="var(--accent,#4FB2C2)">+ memory</text>
+
+  <!-- one-way gate banner -->
+  <line x1="32" y1="250" x2="828" y2="250" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="32" y="278" class="ink2" font-size="11.5">The non-obvious constraint: <tspan fill="var(--cause,#E3C24A)">map must not tier.</tspan> A pattern that appears once per batch across six</text>
+  <text x="32" y="296" class="ink2" font-size="11.5">batches looks single-incident to every map agent — only the post-aggregation global view sees it recurred.</text>
+  <text x="32" y="314" class="mut" font-size="11">Tiering before aggregation structurally cannot work, so it is forbidden at the map step.</text>
+
+  <text x="32" y="348" class="ink2" font-size="11.5">And frequency is never trusted on its own: any high-count cluster matching the summarizer's known bias</text>
+  <text x="32" y="366" class="ink2" font-size="11.5">profile is <tspan fill="var(--neg,#B98AD6)">disqualified</tspan> until transcript-verified. User-action signals stay trusted regardless of who surfaced them.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .slab { fill: var(--bg,#0E141A); stroke: var(--rule2,#27323D); stroke-width: 1; }
+    .stage{ fill: none; stroke: var(--rule2,#27323D); stroke-width: 1.4; }
+  </style>
+
+  <defs>
+    <marker id="faM" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="var(--accent,#4FB2C2)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="400" height="720" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="18">The pipeline — map-reduce</text>
+  <text class="ttl" x="20" y="54" font-size="18">over your own session logs</text>
+  <text class="mut" x="20" y="72" font-size="10">Many small readers beat one squinting at 800k tokens.</text>
+
+  <!-- STAGE 1: corpus -->
+  <text x="36" y="100" class="ink2" font-size="10.5" letter-spacing="0.5">CORPUS</text>
+  <rect x="36" y="108" width="150" height="30" rx="3" class="slab"/>
+  <text x="111" y="123" text-anchor="middle" font-size="9.5">model summaries</text>
+  <text x="111" y="134" text-anchor="middle" class="mut" font-size="8">opinionated · biased</text>
+  <rect x="214" y="108" width="150" height="30" rx="3" class="slab"/>
+  <text x="289" y="123" text-anchor="middle" font-size="9.5">compaction summaries</text>
+  <text x="289" y="134" text-anchor="middle" class="mut" font-size="8">factual · neutral</text>
+  <line x1="200" y1="140" x2="200" y2="160" stroke="var(--accent,#4FB2C2)" stroke-width="2" marker-end="url(#faM)"/>
+
+  <!-- STAGE 2: map -->
+  <text x="36" y="180" class="ink2" font-size="10.5" letter-spacing="0.5">MAP ×N parallel</text>
+  <rect x="36" y="188" width="328" height="48" rx="3" class="stage"/>
+  <text x="200" y="208" text-anchor="middle" font-size="10">each agent reads ~30 summaries →</text>
+  <text x="200" y="222" text-anchor="middle" font-size="10">flat observations</text>
+  <text x="200" y="252" text-anchor="middle" font-size="9.5" fill="var(--cause,#E3C24A)">⊘ no tiering · no cross-session claims</text>
+  <line x1="200" y1="258" x2="200" y2="278" stroke="var(--accent,#4FB2C2)" stroke-width="2" marker-end="url(#faM)"/>
+
+  <!-- STAGE 3: mechanical reduce -->
+  <text x="36" y="298" class="ink2" font-size="10.5" letter-spacing="0.5">REDUCE · mechanical</text>
+  <rect x="36" y="306" width="328" height="44" rx="3" class="stage"/>
+  <text x="200" y="326" text-anchor="middle" font-size="10">cluster similar · count distinct sessions</text>
+  <text x="200" y="342" text-anchor="middle" font-size="9" fill="var(--cause,#E3C24A)">an LLM never hand-copies a UUID</text>
+  <line x1="200" y1="350" x2="200" y2="370" stroke="var(--accent,#4FB2C2)" stroke-width="2" marker-end="url(#faM)"/>
+
+  <!-- STAGE 4: judgment reduce -->
+  <text x="36" y="390" class="ink2" font-size="10.5" letter-spacing="0.5">REDUCE · judgment</text>
+  <rect x="36" y="398" width="328" height="48" rx="3" class="stage"/>
+  <text x="200" y="418" text-anchor="middle" font-size="10" fill="var(--accent,#4FB2C2)">human + agent: tier · bias-screen · draft</text>
+  <text x="200" y="434" text-anchor="middle" font-size="9.5" fill="var(--cause,#E3C24A)">the only step allowed to judge</text>
+  <line x1="200" y1="446" x2="200" y2="466" stroke="var(--accent,#4FB2C2)" stroke-width="2" marker-end="url(#faM)"/>
+
+  <!-- STAGE 5: memory -->
+  <rect x="120" y="468" width="160" height="34" rx="3" fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="1.6"/>
+  <text x="200" y="490" text-anchor="middle" font-size="11" fill="var(--accent,#4FB2C2)">CLAUDE.md + memory</text>
+
+  <!-- constraint note -->
+  <line x1="20" y1="528" x2="380" y2="528" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="20" y="552" class="ink2" font-size="10.5"><tspan fill="var(--cause,#E3C24A)">Map must not tier:</tspan> a pattern seen once per</text>
+  <text x="20" y="568" class="ink2" font-size="10.5">batch across six batches looks single-incident</text>
+  <text x="20" y="584" class="ink2" font-size="10.5">to every map agent — only the global view sees</text>
+  <text x="20" y="600" class="ink2" font-size="10.5">it recurred. So tiering is forbidden at map.</text>
+  <text x="20" y="624" class="ink2" font-size="10.5">And frequency is never trusted alone: a high-</text>
+  <text x="20" y="640" class="ink2" font-size="10.5">count cluster matching the summarizer's bias is</text>
+  <text x="20" y="656" class="ink2" font-size="10.5"><tspan fill="var(--neg,#B98AD6)">disqualified</tspan> until transcript-verified. User-</text>
+  <text x="20" y="672" class="ink2" font-size="10.5">action signals stay trusted regardless.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 1 —</b> the pipeline. Two corpora — opinionated model summaries and factual
+      compaction summaries — feed a row of parallel map agents that each read one ~30-summary batch and emit flat
+      observations. A <b>mechanical reduce</b> step clusters the observations and counts how many distinct sessions each
+      cluster spans. A final <b>human-plus-agent judgment</b> step assigns confidence tiers and writes the rules into the
+      agent's memory file. The one-way gates carry the discipline: map never tiers, and an LLM never hand-transcribes a
+      UUID.</figcaption>
+      <div class="nb-prov"><span><b>structure</b> map-reduce with a split (mechanical / judgment) reduce</span><span><b>type</b> architecture diagram</span><span><b>safety</b> flow reads off left-to-right structure, not colour</span></div>
+    </figure>
+  </section>
+
+  <section id="confidence">
+    <h2><span class="num">§3</span>The confidence discipline (the part that's actually the point)</h2>
+    <p class="dropcap"><span class="hl-acc">Frequency is not evidence.</span> This is the crux, and where the project
+    stops being a log-grep and starts being eval methodology.</p>
+    <p>The tiers: <b>Tier&nbsp;A</b> = a pattern in 2+ distinct sessions (deduped by session ID), not already covered →
+    candidate rule. <b>Tier&nbsp;B</b> = a <em>single</em> incident, but consequential — gated on demonstrated impact (a
+    real user interruption, a concrete catch, quantified waste), never a bare summarizer label. (Precedent: the "surface
+    a plan before editing" rule came from two single high-impact incidents, neither of which ever recurred — frequency
+    alone would have missed it.) <b>Evidence-base is a separate axis from severity</b>: a one-session incident can be
+    high-severity. Stated generally, a friction signal has <em>four</em> independent axes — <b>frequency</b> (how many
+    sessions), <b>severity</b> (how costly when it fires), <b>source</b> (a real user action vs. a summarizer's
+    assertion), and <b>observer-reliability</b> (does the reader carry a known bias?). Collapsing all four into a single
+    frequency count is exactly the mistake the next part is about.</p>
+
+    <div class="negresult">
+      <span class="nb-kicker">The frequency trap</span>
+      <p>Phase 1 ran on a <em>single</em> summarizer model. That model has a systematic editorial bias — it consistently
+      over-reports "the agent moved too fast" and "the agent was preachy," and invents narrative "detours." That bias
+      <b>recurs across sessions by construction</b>, so it clears the "2+ sessions" Tier-A bar <em>trivially</em>, looking
+      exactly like a real recurring pattern. <span class="olabel obs">observation</span> Frequency cannot tell a true
+      pattern from a biased reader repeating itself.</p>
+    </div>
+
+    <p>The defense: any Tier-A candidate that pattern-matches the known bias profile must be
+    <b>transcript-verified before promotion</b> — frequency is disqualified as evidence for it. Meanwhile,
+    <em>user-action</em> signals (a real interruption, an explicit correction) stay trustworthy regardless of which model
+    surfaced them, because they're grounded in what the human actually did, not what the summarizer asserted.
+    <span class="olabel inf">interpretation</span> Knowing your instrument's bias and routing around it is the whole game.</p>
+
+    <figure class="figure" id="fig2">
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 760 440" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="760" height="440" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="34" font-size="18">Frequency isn't evidence</text>
+<text class="mut" x="40" y="53" font-size="10">Friction clusters by distinct-session count · bar height ≠ trust</text>
+<line x1="60" y1="350" x2="392" y2="350" class="axis" stroke-width="1"/>
+<rect x="68" y="110.0" width="26" height="240.0" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/>
+<line x1="68" y1="110" x2="94" y2="136" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="117" x2="94" y2="143" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="124" x2="94" y2="150" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="131" x2="94" y2="157" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="138" x2="94" y2="164" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="145" x2="94" y2="171" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="152" x2="94" y2="178" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="159" x2="94" y2="185" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="166" x2="94" y2="192" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="173" x2="94" y2="199" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="180" x2="94" y2="206" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="187" x2="94" y2="213" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="194" x2="94" y2="220" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="201" x2="94" y2="227" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="208" x2="94" y2="234" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="215" x2="94" y2="241" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="222" x2="94" y2="248" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="229" x2="94" y2="255" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="236" x2="94" y2="262" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="243" x2="94" y2="269" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="250" x2="94" y2="276" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="257" x2="94" y2="283" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="264" x2="94" y2="290" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="271" x2="94" y2="297" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="278" x2="94" y2="304" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="285" x2="94" y2="311" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="292" x2="94" y2="318" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="299" x2="94" y2="325" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="306" x2="94" y2="332" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="313" x2="94" y2="339" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="320" x2="94" y2="346" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="327" x2="94" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="334" x2="94" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="341" x2="94" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="68" y1="348" x2="94" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<text x="81.0" y="96.0" text-anchor="middle" class="vio" font-size="8.5">⚑</text>
+<text x="81.0" y="106.0" text-anchor="middle" class="mut" font-size="8.5">9</text>
+<text x="81.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 81.0 364)">agent rushed</text>
+<rect x="104" y="136.7" width="26" height="213.3" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/>
+<line x1="104" y1="136" x2="130" y2="162" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="143" x2="130" y2="169" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="150" x2="130" y2="176" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="157" x2="130" y2="183" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="164" x2="130" y2="190" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="171" x2="130" y2="197" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="178" x2="130" y2="204" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="185" x2="130" y2="211" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="192" x2="130" y2="218" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="199" x2="130" y2="225" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="206" x2="130" y2="232" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="213" x2="130" y2="239" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="220" x2="130" y2="246" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="227" x2="130" y2="253" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="234" x2="130" y2="260" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="241" x2="130" y2="267" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="248" x2="130" y2="274" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="255" x2="130" y2="281" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="262" x2="130" y2="288" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="269" x2="130" y2="295" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="276" x2="130" y2="302" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="283" x2="130" y2="309" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="290" x2="130" y2="316" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="297" x2="130" y2="323" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="304" x2="130" y2="330" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="311" x2="130" y2="337" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="318" x2="130" y2="344" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="325" x2="130" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="332" x2="130" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="339" x2="130" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="104" y1="346" x2="130" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<text x="117.0" y="122.7" text-anchor="middle" class="vio" font-size="8.5">⚑</text>
+<text x="117.0" y="132.7" text-anchor="middle" class="mut" font-size="8.5">8</text>
+<text x="117.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 117.0 364)">too preachy</text>
+<rect x="140" y="190.0" width="26" height="160.0" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/>
+<line x1="140" y1="190" x2="166" y2="216" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="197" x2="166" y2="223" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="204" x2="166" y2="230" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="211" x2="166" y2="237" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="218" x2="166" y2="244" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="225" x2="166" y2="251" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="232" x2="166" y2="258" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="239" x2="166" y2="265" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="246" x2="166" y2="272" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="253" x2="166" y2="279" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="260" x2="166" y2="286" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="267" x2="166" y2="293" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="274" x2="166" y2="300" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="281" x2="166" y2="307" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="288" x2="166" y2="314" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="295" x2="166" y2="321" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="302" x2="166" y2="328" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="309" x2="166" y2="335" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="316" x2="166" y2="342" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="323" x2="166" y2="349" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="330" x2="166" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="337" x2="166" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="140" y1="344" x2="166" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<text x="153.0" y="176.0" text-anchor="middle" class="vio" font-size="8.5">⚑</text>
+<text x="153.0" y="186.0" text-anchor="middle" class="mut" font-size="8.5">6</text>
+<text x="153.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 153.0 364)">invented detour</text>
+<rect x="176" y="216.7" width="26" height="133.3" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+<text x="189.0" y="212.7" text-anchor="middle" class="mut" font-size="8.5">5</text>
+<text x="189.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 189.0 364)">grep-first</text>
+<rect x="212" y="216.7" width="26" height="133.3" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/>
+<line x1="212" y1="216" x2="238" y2="242" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="223" x2="238" y2="249" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="230" x2="238" y2="256" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="237" x2="238" y2="263" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="244" x2="238" y2="270" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="251" x2="238" y2="277" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="258" x2="238" y2="284" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="265" x2="238" y2="291" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="272" x2="238" y2="298" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="279" x2="238" y2="305" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="286" x2="238" y2="312" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="293" x2="238" y2="319" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="300" x2="238" y2="326" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="307" x2="238" y2="333" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="314" x2="238" y2="340" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="321" x2="238" y2="347" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="328" x2="238" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="335" x2="238" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="342" x2="238" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="212" y1="349" x2="238" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<text x="225.0" y="202.7" text-anchor="middle" class="vio" font-size="8.5">⚑</text>
+<text x="225.0" y="212.7" text-anchor="middle" class="mut" font-size="8.5">5</text>
+<text x="225.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 225.0 364)">over-formatted</text>
+<rect x="248" y="243.3" width="26" height="106.7" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+<text x="261.0" y="239.3" text-anchor="middle" class="mut" font-size="8.5">4</text>
+<text x="261.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 261.0 364)">verify premise</text>
+<rect x="284" y="243.3" width="26" height="106.7" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+<text x="297.0" y="239.3" text-anchor="middle" class="mut" font-size="8.5">4</text>
+<text x="297.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 297.0 364)">diagnostic≠directive</text>
+<rect x="320" y="270.0" width="26" height="80.0" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+<text x="333.0" y="266.0" text-anchor="middle" class="mut" font-size="8.5">3</text>
+<text x="333.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 333.0 364)">tool-trust gate</text>
+<rect x="356" y="270.0" width="26" height="80.0" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+<text x="369.0" y="266.0" text-anchor="middle" class="mut" font-size="8.5">3</text>
+<text x="369.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 369.0 364)">under-documented</text>
+<rect x="530" y="77" width="14" height="12" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/><text x="550" y="87" class="ink2" font-size="8.5">⚑ suspect — matches reader bias</text>
+<rect x="530" y="95" width="14" height="12" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/><text x="550" y="105" class="ink2" font-size="8.5">trusted — user-action backed</text>
+<line x1="40" y1="396" x2="720" y2="396" class="rule" stroke-width="1"/>
+<text x="40" y="414" class="ink2" font-size="11">The <tspan class="vio">tallest bars</tspan> are suspect (a biased reader repeating itself); some <tspan class="acc">short bars</tspan> are trusted.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="400" height="480" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="34" font-size="15">Frequency isn't evidence</text>
+<text class="mut" x="40" y="52" font-size="8">Friction clusters by distinct-session count · bar height ≠ trust</text>
+<line x1="40" y1="390" x2="282" y2="390" class="axis" stroke-width="1"/>
+<rect x="48" y="110.0" width="20" height="280.0" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/>
+<line x1="48" y1="110" x2="68" y2="130" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="117" x2="68" y2="137" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="124" x2="68" y2="144" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="131" x2="68" y2="151" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="138" x2="68" y2="158" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="145" x2="68" y2="165" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="152" x2="68" y2="172" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="159" x2="68" y2="179" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="166" x2="68" y2="186" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="173" x2="68" y2="193" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="180" x2="68" y2="200" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="187" x2="68" y2="207" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="194" x2="68" y2="214" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="201" x2="68" y2="221" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="208" x2="68" y2="228" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="215" x2="68" y2="235" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="222" x2="68" y2="242" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="229" x2="68" y2="249" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="236" x2="68" y2="256" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="243" x2="68" y2="263" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="250" x2="68" y2="270" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="257" x2="68" y2="277" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="264" x2="68" y2="284" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="271" x2="68" y2="291" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="278" x2="68" y2="298" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="285" x2="68" y2="305" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="292" x2="68" y2="312" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="299" x2="68" y2="319" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="306" x2="68" y2="326" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="313" x2="68" y2="333" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="320" x2="68" y2="340" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="327" x2="68" y2="347" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="334" x2="68" y2="354" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="341" x2="68" y2="361" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="348" x2="68" y2="368" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="355" x2="68" y2="375" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="362" x2="68" y2="382" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="369" x2="68" y2="389" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="376" x2="68" y2="390" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="48" y1="383" x2="68" y2="390" class="vios" stroke-width="0.6" opacity="0.5"/>
+<text x="58.0" y="96.0" text-anchor="middle" class="vio" font-size="7.5">⚑</text>
+<text x="58.0" y="106.0" text-anchor="middle" class="mut" font-size="7.5">9</text>
+<text x="58.0" y="404" text-anchor="middle" class="ink2" font-size="7.0" transform="rotate(35 58.0 404)">agent rushed</text>
+<rect x="74" y="141.1" width="20" height="248.9" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/>
+<line x1="74" y1="141" x2="94" y2="161" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="148" x2="94" y2="168" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="155" x2="94" y2="175" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="162" x2="94" y2="182" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="169" x2="94" y2="189" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="176" x2="94" y2="196" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="183" x2="94" y2="203" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="190" x2="94" y2="210" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="197" x2="94" y2="217" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="204" x2="94" y2="224" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="211" x2="94" y2="231" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="218" x2="94" y2="238" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="225" x2="94" y2="245" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="232" x2="94" y2="252" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="239" x2="94" y2="259" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="246" x2="94" y2="266" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="253" x2="94" y2="273" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="260" x2="94" y2="280" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="267" x2="94" y2="287" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="274" x2="94" y2="294" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="281" x2="94" y2="301" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="288" x2="94" y2="308" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="295" x2="94" y2="315" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="302" x2="94" y2="322" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="309" x2="94" y2="329" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="316" x2="94" y2="336" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="323" x2="94" y2="343" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="330" x2="94" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="337" x2="94" y2="357" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="344" x2="94" y2="364" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="351" x2="94" y2="371" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="358" x2="94" y2="378" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="365" x2="94" y2="385" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="372" x2="94" y2="390" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="379" x2="94" y2="390" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="74" y1="386" x2="94" y2="390" class="vios" stroke-width="0.6" opacity="0.5"/>
+<text x="84.0" y="127.1" text-anchor="middle" class="vio" font-size="7.5">⚑</text>
+<text x="84.0" y="137.1" text-anchor="middle" class="mut" font-size="7.5">8</text>
+<text x="84.0" y="404" text-anchor="middle" class="ink2" font-size="7.0" transform="rotate(35 84.0 404)">too preachy</text>
+<rect x="100" y="203.3" width="20" height="186.7" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/>
+<line x1="100" y1="203" x2="120" y2="223" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="210" x2="120" y2="230" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="217" x2="120" y2="237" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="224" x2="120" y2="244" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="231" x2="120" y2="251" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="238" x2="120" y2="258" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="245" x2="120" y2="265" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="252" x2="120" y2="272" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="259" x2="120" y2="279" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="266" x2="120" y2="286" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="273" x2="120" y2="293" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="280" x2="120" y2="300" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="287" x2="120" y2="307" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="294" x2="120" y2="314" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="301" x2="120" y2="321" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="308" x2="120" y2="328" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="315" x2="120" y2="335" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="322" x2="120" y2="342" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="329" x2="120" y2="349" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="336" x2="120" y2="356" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="343" x2="120" y2="363" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="350" x2="120" y2="370" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="357" x2="120" y2="377" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="364" x2="120" y2="384" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="371" x2="120" y2="390" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="378" x2="120" y2="390" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="100" y1="385" x2="120" y2="390" class="vios" stroke-width="0.6" opacity="0.5"/>
+<text x="110.0" y="189.3" text-anchor="middle" class="vio" font-size="7.5">⚑</text>
+<text x="110.0" y="199.3" text-anchor="middle" class="mut" font-size="7.5">6</text>
+<text x="110.0" y="404" text-anchor="middle" class="ink2" font-size="7.0" transform="rotate(35 110.0 404)">invented detour</text>
+<rect x="126" y="234.4" width="20" height="155.6" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+<text x="136.0" y="230.4" text-anchor="middle" class="mut" font-size="7.5">5</text>
+<text x="136.0" y="404" text-anchor="middle" class="ink2" font-size="7.0" transform="rotate(35 136.0 404)">grep-first</text>
+<rect x="152" y="234.4" width="20" height="155.6" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/>
+<line x1="152" y1="234" x2="172" y2="254" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="241" x2="172" y2="261" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="248" x2="172" y2="268" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="255" x2="172" y2="275" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="262" x2="172" y2="282" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="269" x2="172" y2="289" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="276" x2="172" y2="296" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="283" x2="172" y2="303" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="290" x2="172" y2="310" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="297" x2="172" y2="317" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="304" x2="172" y2="324" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="311" x2="172" y2="331" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="318" x2="172" y2="338" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="325" x2="172" y2="345" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="332" x2="172" y2="352" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="339" x2="172" y2="359" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="346" x2="172" y2="366" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="353" x2="172" y2="373" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="360" x2="172" y2="380" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="367" x2="172" y2="387" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="374" x2="172" y2="390" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="381" x2="172" y2="390" class="vios" stroke-width="0.6" opacity="0.5"/>
+<line x1="152" y1="388" x2="172" y2="390" class="vios" stroke-width="0.6" opacity="0.5"/>
+<text x="162.0" y="220.4" text-anchor="middle" class="vio" font-size="7.5">⚑</text>
+<text x="162.0" y="230.4" text-anchor="middle" class="mut" font-size="7.5">5</text>
+<text x="162.0" y="404" text-anchor="middle" class="ink2" font-size="7.0" transform="rotate(35 162.0 404)">over-formatted</text>
+<rect x="178" y="265.6" width="20" height="124.4" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+<text x="188.0" y="261.6" text-anchor="middle" class="mut" font-size="7.5">4</text>
+<text x="188.0" y="404" text-anchor="middle" class="ink2" font-size="7.0" transform="rotate(35 188.0 404)">verify premise</text>
+<rect x="204" y="265.6" width="20" height="124.4" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+<text x="214.0" y="261.6" text-anchor="middle" class="mut" font-size="7.5">4</text>
+<text x="214.0" y="404" text-anchor="middle" class="ink2" font-size="7.0" transform="rotate(35 214.0 404)">diagnostic≠directive</text>
+<rect x="230" y="296.7" width="20" height="93.3" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+<text x="240.0" y="292.7" text-anchor="middle" class="mut" font-size="7.5">3</text>
+<text x="240.0" y="404" text-anchor="middle" class="ink2" font-size="7.0" transform="rotate(35 240.0 404)">tool-trust gate</text>
+<rect x="256" y="296.7" width="20" height="93.3" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+<text x="266.0" y="292.7" text-anchor="middle" class="mut" font-size="7.5">3</text>
+<text x="266.0" y="404" text-anchor="middle" class="ink2" font-size="7.0" transform="rotate(35 266.0 404)">under-documented</text>
+<rect x="60" y="77" width="14" height="12" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/><text x="80" y="87" class="ink2" font-size="7.5">⚑ suspect — matches reader bias</text>
+<rect x="60" y="95" width="14" height="12" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/><text x="80" y="105" class="ink2" font-size="7.5">trusted — user-action backed</text>
+<line x1="40" y1="436" x2="360" y2="436" class="rule" stroke-width="1"/>
+<text x="40" y="454" class="ink2" font-size="9">The <tspan class="vio">tallest bars</tspan> are suspect (a biased reader repeating itself); some <tspan class="acc">short bars</tspan> are trusted.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 2 —</b> friction clusters ranked by how many sessions each spans. Some of the
+      tallest bars are flagged <em>suspect</em> — they match the summarizing model's known editorial bias and need
+      transcript verification; some shorter bars are <em>trusted</em> because a real user action backs them. Frequency and
+      trustworthiness are shown to be different axes.</figcaption>
+      <div class="nb-prov"><span><b>source</b> tools/trawl/ reduce output (clustered observations, distinct-session counts)</span><span><b>type</b> schematic — cluster counts representative; suspect = bias-profile match, pending ledger wire-up</span><span><b>safety</b> trusted vs suspect by hatch + flag glyph, not colour</span></div>
+    </figure>
+  </section>
+
+  <section id="failure">
+    <h2><span class="num">§4</span>The failure that taught the most</h2>
+    <p>The Phase-1 reduce agent failed, and the failure is more instructive than a success would have been. Two things
+    broke. First, the agent's <code>Write</code> was blocked by a permission scope it didn't have, so it was forced to
+    dump its report as chat text instead of a file. Second — and this is the keeper — <b>forced to emit the report
+    inline, the model confabulated session IDs.</b> It had correctly read all 24 observation files, but when it assembled
+    the clustered output it <em>invented</em> the per-cluster UUID lists: of ~30 IDs it cited, exactly one existed in the
+    real corpus; the rest resolved to nothing. <span class="olabel obs">observation</span></p>
+    <p>The lesson generalizes hard: <span class="hl-acc">an LLM must never hand-transcribe a unique identifier.</span>
+    Carrying 68 exact UUIDs verbatim through a clustering operation is precisely the long-context transcription task
+    models fabricate under. The fix is architectural, not a better prompt:</p>
+    <pre class="code"><span class="cm"># every observation gets a short stable tag</span>
+model clusters <span class="cm">by tag</span>        <span class="cm"># never touches a UUID</span>
+deterministic script: tag → session-count   <span class="cm"># resolved from ground truth</span></pre>
+    <p>(Fixing the <code>Write</code> permission alone would <em>not</em> have fixed the confabulation — they were
+    independent failures, and conflating them would have shipped a still-broken pipeline.) That's the kind of bug that
+    only shows up when you actually run the thing and then <em>check the output against ground truth</em> instead of
+    trusting it — the same discipline the whole eval line is built on, pointed at its own tooling.</p>
+  </section>
+
+  <section id="instruments">
+    <h2><span class="num">§5</span>Knowing your instruments</h2>
+    <div class="col-side">
+      <div>
+        <p>Phase 2 (deferred) uses a deliberately <b>temperament-diverse</b> panel of summarizer models, not repeat runs
+        of one — because the point is to catch where readers <em>disagree</em>. The panel was drawn from a 9-model
+        bake-off on a single ground-truthed session: a balanced anchor; a calm, well-calibrated reader that actively
+        <em>de-escalated</em> a false-positive the others flagged; a mechanically-precise one that caught concrete waste
+        the others underweighted; and a cheap wildcard that uniquely surfaces process-anxiety texture but hallucinates
+        (so it leads, never decides). Several models were explicitly <b>disqualified</b> — chronic under-flaggers that
+        inject false negatives, and one quant so aggressive it dropped an entire section.</p>
+        <p>The hardest task for all of them, measured: <span class="hl-acc">attribution</span> — deciding whether the
+        <em>user</em> or the <em>agent</em> owned an action, from casual indirect phrasing. That's the signal most worth a
+        human's judgment, so it's the one least outsourced.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">Why a panel, not a vote</span>
+        Repeat runs of one model amplify its bias; a temperament-diverse panel exposes it. The wildcard that hallucinates
+        still earns a seat — for <em>texture</em> no calibrated reader produces — on the condition it never decides.
+      </aside>
+    </div>
+  </section>
+
+  <section id="promoted">
+    <h2><span class="num">§6</span>What actually got promoted</h2>
+    <p>The trawl isn't theoretical — it produced a candidate ledger of evidence-backed rules, each with source sessions
+    and a destination, and the strong ones landed in a rewritten, lean CLAUDE.md. A sample of what the record surfaced
+    that intuition had missed <span class="vrfy">VERIFY · against the ledger</span>:</p>
+    <ul>
+      <li><b>Diagnostic phrases aren't directives.</b> "Check if running," "continue," "let's draft it" are ambient, not
+      action requests — surfaced from four sessions where they triggered unwanted action (one "check if running" killed
+      three processes; one "continue" launched an unrequested retrieval).</li>
+      <li><b>External-tool-output trust gate.</b> Three sessions where a scorer result or a diagnostic was accepted as
+      fact about the world without flagging its data quality.</li>
+      <li><b>Verify the premise before searching.</b> Sessions where the agent hunted for a log string or symbol the user
+      <em>described</em> but that didn't exist in the code — all-model agreement on that one.</li>
+      <li><b>Grep before reading whole files</b>; <b>structured-source-first</b> (query the registry, don't shell-parse
+      filenames); <b>surface documentation at natural pause points</b> (the user's own stated pattern: "chronic
+      under-documentation unless explicitly prompted").</li>
+    </ul>
+    <p>The outcome is a behavioural-rules file written from <em>evidence</em> — what demonstrably caused friction across
+    real sessions — rather than from what felt memorable. And the loop is closed: those rules load next session, so the
+    agent that helped mine its own friction is the one that stops repeating it.</p>
+
+    <h3>Why it's more than a log-grep</h3>
+    <ol>
+      <li><b>It's eval rigor applied reflexively.</b> Ground-truth verification, confidence tiers with evidence-base
+      separated from severity, two-tier filter-then-confirm, explicit instrument-bias modelling — the same toolkit the
+      <a href="/">layer-surgery lab</a> uses on models, turned on the agent's own behaviour.</li>
+      <li><b>It's honest about being human-in-the-loop.</b> Agents produce <em>reports</em>; no agent edits the rules file
+      autonomously. The judgment step is where the human's ground-truth context is irreplaceable, and pretending
+      otherwise is how you ship a confident wrong rule.</li>
+      <li><b>It caught its own confounds.</b> The frequency trap and the UUID-confabulation fix are the project noticing
+      where it would have fooled itself, and routing around it.</li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="nb-limits">
+      <div class="nb-limits__head">
+        <span class="nb-limits__label">Caveats &amp; status</span>
+        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — these bound the claims</span>
+      </div>
+      <ul>
+        <li><b>Human-in-the-loop by design</b> — decision-support, not an autonomous self-rewriting agent. An LLM
+        promoting its own behavioural rules unsupervised is how bias compounds.</li>
+        <li><b>Phase 1 was single-summarizer</b> — the multi-model panel (cross-model confidence) is designed and
+        deferred; the frequency trap is the explicit reason the single-summarizer results get bias-screened.</li>
+        <li><b>The summarizers are small local models</b> — they editorialize and occasionally fabricate; the whole
+        confidence discipline exists <em>because</em> the readers are imperfect.</li>
+        <li><b>The feeder pipeline is paused, not retired</b> — the <a href="/lab/07_mem0_processor.html">mem0-processor</a> that produces
+        the summaries is on hold; sessions after its last run have no summaries yet, so extending the trawl today means
+        reading raw transcripts directly. Either way the <em>method</em> is the durable artifact, not the running
+        service.</li>
+        <li><b>Promoted-rule specifics tagged <span class="vrfy">VERIFY</span></b> against the ledger and
+        <code>tools/trawl/</code> artifacts before they ship as counts.</li>
+      </ul>
+    </div>
+
+    <div class="nb-marginalia" style="margin-top:var(--sp-7)">
+      <div class="nb-marginalia__label">Colophon &amp; lineage</div>
+      <div class="nb-marginalia__body">
+        <p style="max-width:64ch">This is the loop-closing branch: the same measurement instinct as the
+        <a href="/">vivisection lab</a> — ground-truth verification, instrument-bias modelling, frequency-isn't-
+        evidence — applied this time to the agent doing the work. Companion: the <a href="/lab/07_mem0_processor.html">mem0-processor
+        pipeline</a> that produces the summaries this mines. Trawl infra: <span class="mono">tools/trawl/</span>
+        (<span class="mono">preprocess.py</span>, <span class="mono">agent1/agent2-map.md</span>, the tag-based reduce,
+        <span class="mono">trawl_reduce.py</span>). Map agents run as background subagents; the reduce is interactive.
+        Run locally on a 16&nbsp;GB Mac&nbsp;Mini.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer style="max-width:var(--page-max);margin:0 auto;padding:var(--sp-6) var(--gutter) var(--sp-9)">
+  <p style="font-family:var(--font-mono);font-size:var(--fs-micro);letter-spacing:.03em;color:var(--text-muted);line-height:1.7">© 2026 · The Vivisection Lab · exploratory research notes, provided as-is, no warranty · writeups &amp; figures CC&nbsp;BY · uses cookieless analytics, no personal data collected</p>
+</footer>
+
+<script src="/assets/nb.js"></script>
+</body>
+</html>

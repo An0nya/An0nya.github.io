@@ -1,0 +1,1833 @@
+<!-- @dsCard group="Portfolio Hub" viewport="1100x1400" name="Writeup — MiniCPM5 & the Σα-law (the husk)" subtitle="A specimen that produced no shippable model but built the instrument: continuous damping, a calibrated arithmetic ruler, and one empirical regularity — the Σα-law (R²=0.74) — that transferred to every later model. A methods notebook wearing a specimen's clothes." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MiniCPM5 — the husk, and the Σα-law — The Vivisection Lab</title>
+<meta name="description" content="MiniCPM5-1B produced nothing shippable — no capability win worth a GGUF — but the instrument was built on it: continuous inference-time damping, a calibrated arithmetic ruler, and the Σα-law, one dose-response regularity (R²=0.74) governing a layer's cumulative damping that recurred on every later model. Split-pass beats single-α because the gain lives off the layer's own update axis; channel divergence is exposure, not capability. A method and a regularity, honestly a husk of a model.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E141A'/%3E%3Cpath d='M5 25 Q12 6 16 6 Q20 6 27 25' stroke='%236FCBD8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='7' r='2.6' fill='%23E3C24A'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  main { max-width: var(--page-max); margin: 0 auto; padding: var(--sp-7) var(--gutter) var(--sp-9); }
+  section { padding: var(--sp-7) 0 0; }
+  .dek { font-family: var(--font-serif); font-style: italic; font-size: var(--fs-dek); line-height: 1.4; color: var(--text-dim); max-width: 64ch; margin: var(--sp-5) 0 0; }
+  h2 { font-size: var(--fs-h2); margin: 0 0 var(--sp-4); }
+  h2 .num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); letter-spacing: .1em; vertical-align: 0.7em; margin-right: var(--sp-3); }
+  h3 { font-size: var(--fs-h3, 1.05rem); margin: var(--sp-6) 0 var(--sp-3); color: var(--text); }
+  p { max-width: var(--measure); }
+  .dropcap { max-width: var(--measure); }
+  .dropcap::first-letter { font-family: var(--font-serif); font-weight: 500; font-size: 3.4em; line-height: 0.82; float: left; padding: 0.04em 0.12em 0 0; color: var(--accent-bright); }
+  .col-side { display: grid; grid-template-columns: 1fr 260px; gap: var(--sp-7); align-items: start; }
+  .col-side .aside { font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); border-left: 1px solid var(--border-strong); padding-left: var(--sp-4); font-style: italic; }
+  .col-side .aside .nb-kicker { font-style: normal; display: block; margin-bottom: var(--sp-2); }
+  .hl-acc { color: var(--accent); font-weight: 500; }
+  .figure { margin: var(--sp-6) 0; }
+  .nb-plate svg { display: block; width: 100%; height: auto; }
+  .fig-mobile { display: none; }
+  /* code primitive blocks */
+  pre.code { font-family: var(--font-mono); font-size: 0.82em; line-height: 1.6; background: var(--surface-sunken); border: 1px solid var(--rule2,#27323D); border-left: 3px solid var(--accent); border-radius: var(--radius-2); padding: var(--sp-4) var(--sp-5); margin: var(--sp-5) 0; max-width: var(--measure); overflow-x: auto; color: var(--ink2,#A4B0BC); }
+  pre.code .cm { color: var(--muted); }
+  /* foldout derivations */
+  details.nbdetails { max-width: var(--measure); margin: var(--sp-5) 0; border: 1px solid var(--border-strong); border-radius: var(--radius-2); background: var(--surface-sunken); padding: 0 var(--sp-5); }
+  details.nbdetails > summary { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--accent); cursor: pointer; padding: var(--sp-4) 0; letter-spacing: .02em; list-style: none; }
+  details.nbdetails > summary::-webkit-details-marker { display: none; }
+  details.nbdetails > summary::before { content: "▸ "; color: var(--muted); }
+  details.nbdetails[open] > summary::before { content: "▾ "; }
+  details.nbdetails[open] > summary { border-bottom: 1px solid var(--rule2,#27323D); margin-bottom: var(--sp-4); }
+  details.nbdetails p { font-size: var(--fs-sm); line-height: 1.6; color: var(--text-dim); }
+  details.nbdetails pre.code { margin: var(--sp-4) 0; }
+  /* [VERIFY] markers — visible honesty flags, not hidden */
+  .vrfy { font-family: var(--font-mono); font-size: 0.72em; letter-spacing: .04em; color: var(--cause); border: 1px solid var(--cause); border-radius: 3px; padding: 0 .35em; opacity: .85; white-space: nowrap; vertical-align: 1px; }
+  /* observation / interpretation epistemic tags — slate vs violet, both protan-safe */
+  .olabel { font-family: var(--font-mono); font-size: 0.7em; letter-spacing: .06em; text-transform: uppercase; padding: 0 .3em; border-radius: 3px; vertical-align: 1px; }
+  .olabel.obs { color: var(--fourth); border: 1px solid var(--fourth); }
+  .olabel.inf { color: var(--neg); border: 1px solid var(--neg); }
+  /* negative-result callout — refuted hypotheses stated plainly */
+  .negresult { border: 1px solid var(--border-strong); border-left: 3px solid var(--neg); background: var(--surface-sunken); padding: var(--sp-4) var(--sp-5); margin: var(--sp-6) 0; max-width: var(--measure); border-radius: var(--radius-2); }
+  .negresult .nb-kicker { color: var(--neg); display: block; margin-bottom: var(--sp-2); }
+  .negresult p { margin: 0; font-size: var(--fs-sm); line-height: 1.6; color: var(--text-dim); }
+  .nb-table td.first { color: var(--accent); font-weight: 500; }
+  .nb-table td .flat { color: var(--accent); } .nb-table td .dead { color: var(--neg); }
+  @media (max-width: 760px) {
+    .col-side { grid-template-columns: 1fr; gap: var(--sp-5); }
+    .fig-desktop { display: none; }
+    .fig-mobile { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nb-nav">
+  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
+  <a href="#patient">The patient</a>
+  <a href="#lever">The lever</a>
+  <a href="#split">Split-pass</a>
+  <a href="#sigma">The Σα-law</a>
+  <a href="#exposure">Exposure</a>
+  <a href="#methods">Methods</a>
+  <span class="nb-nav__spacer"></span>
+  <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
+  <a href="#" data-theme-toggle>☼ Light</a>
+</nav>
+
+<main>
+  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · continuous-damping branch · <em>a methods notebook wearing a specimen's clothes</em></div>
+  <header class="nb-record">
+    <div class="nb-record__title">MiniCPM5-1B — the husk, and the Σα-law it left behind</div>
+    <div class="nb-record__grid">
+      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v">MiniCPM5-1B · 24-layer dense Llama (GQA) · no-CoT math / EQ / MC battery</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">closed out · no shippable model win · the ruler + the Σα-law <em>are</em> the deliverable</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Last revised</span><span class="nb-record__v">2026-06-13 (closed out)</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Source</span><span class="nb-record__v">rys_minicpm5_damping.md · rys_minicpm5_1b.md · project_mlx_sweep_minicpm.md</span></div>
+      <div class="nb-record__field">
+        <span class="nb-record__k">Confidence</span>
+        <span class="nb-conf nb-conf--medium"><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span></span>medium — the Σα-law graduated (R²=0.74 + Granite transfer); its peak is a channel-dependent <em>ridge</em>, not a constant</span>
+      </div>
+    </div>
+  </header>
+
+  <p class="dek">The model was the test subject; the <em>method</em> was the result. This specimen produced almost
+  nothing shippable — no capability win worth a GGUF — but the instrument was built here, and one empirical
+  regularity, the Σα-law, held up across every later model. Read it for the ruler, not the result.</p>
+
+  <section id="patient">
+    <h2><span class="num">§0</span>The patient</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap"><a href="https://huggingface.co/openbmb/MiniCPM5-1B">MiniCPM5-1B</a> is the small, honest
+        one. The OG release — not a conversion — and the config doesn't lie about what it is: it dropped the old
+        muP machinery and genuinely declares <code>LlamaForCausalLM</code>, <code>model_type: llama</code>. A plain
+        Llama derivative — 24 dense GQA layers, untied embeddings, none of the muP <code>scale_emb</code> /
+        <code>scale_depth</code> scaffolding. That matters downstream: everything here is plain-Llama behaviour, and
+        the residual-norm pathology this model wears so openly is the textbook Llama one.</p>
+        <p>It is also the model where <span class="hl-acc">the engine changed</span>. Every earlier specimen was cut
+        with llama.cpp on a static GGUF — you can duplicate or delete whole blocks, but you can't turn a layer's
+        contribution down to 60%. The interesting surgery on MiniCPM5 is <em>continuous</em>, so the whole sweep
+        moved into a live MLX process where the model's own Python objects get patched between forward passes. That
+        sounds like a footnote. It's the reason this page exists.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">The frame</span>
+        The network runs a narrow, high-norm representational cone — the residual norm climbs ~66× across the 24
+        layers, with one or two dimensions hogging the energy at the ends. Layer 1 lives at the bottom of that climb
+        and turns out to be the layer holding the residual inside the band the downstream layernorms expect. Bruise
+        it and the whole stack leaks.
+      </aside>
+    </div>
+
+    <figure class="figure" id="fig1">
+      <p class="nb-plate__note">↳ the massive activation is <em>created by layer 0</em> — the embedding is diffuse; the spike is born, not carried</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .normlab { fill: var(--accent,#4FB2C2); }
+    .enlab   { fill: var(--cause,#E3C24A); }
+    .normline { stroke: var(--accent,#4FB2C2); fill: none; }
+    .normdot  { fill: var(--accent,#4FB2C2); }
+    .enline   { stroke: var(--cause,#E3C24A); fill: none; }
+    .endot    { fill: var(--cause,#E3C24A); }
+  </style>
+
+  <rect x="0" y="0" width="720" height="500" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="30" font-size="18">The residual-norm highway</text>
+  <text class="mut" x="40" y="49" font-size="10">MiniCPM5-1B &#183; last-token residual &#183; norm log-climb (left) + top-1 energy share (right) &#183; 4 crosslang probes avg</text>
+
+  <!-- gridlines (norm decades) -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="70" y1="80" x2="640" y2="80"/>
+    <line x1="70" y1="162.5" x2="640" y2="162.5"/>
+    <line x1="70" y1="245" x2="640" y2="245"/>
+    <line x1="70" y1="327.5" x2="640" y2="327.5"/>
+  </g>
+
+  <!-- left (norm) axis -->
+  <line x1="70" y1="80" x2="70" y2="410" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="normlab" font-size="9" text-anchor="end">
+    <text x="64" y="83">316</text><text x="64" y="165.5">100</text><text x="64" y="248">32</text><text x="64" y="330.5">10</text><text x="64" y="413">3</text>
+  </g>
+  <text x="26" y="245" transform="rotate(-90 26 245)" text-anchor="middle" class="normlab" font-size="10">residual L2 norm &#8212; log</text>
+
+  <!-- right (energy) axis -->
+  <line x1="640" y1="80" x2="640" y2="410" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="enlab" font-size="9" text-anchor="start">
+    <text x="646" y="108">0.6</text><text x="646" y="210">0.4</text><text x="646" y="311.5">0.2</text><text x="646" y="413">0</text>
+  </g>
+  <text x="706" y="245" transform="rotate(90 706 245)" text-anchor="middle" class="enlab" font-size="10">top-1 single-dim energy share</text>
+
+  <!-- x axis -->
+  <line x1="70" y1="410" x2="640" y2="410" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="90" y="425">emb</text><text x="112" y="425">L0</text><text x="203.8" y="425">L4</text><text x="295.7" y="425">L8</text><text x="387.5" y="425">L12</text><text x="479.3" y="425">L16</text><text x="571.1" y="425">L20</text><text x="640" y="425">L23</text>
+  </g>
+  <text x="355" y="441" text-anchor="middle" class="mut" font-size="10">layer index (residual leaving layer i)</text>
+
+  <!-- L1 marker: this page's layer -->
+  <line x1="134.96" y1="80" x2="134.96" y2="410" stroke="var(--ink2,#A4B0BC)" stroke-width="0.8" stroke-dasharray="2 3"/>
+  <text class="ink2" x="138" y="90" font-size="8.5">L1 &#8212; this page&#8217;s layer</text>
+
+  <!-- NORM series: cyan solid + circles -->
+  <polyline class="normline" stroke-width="2"
+    points="112.00,399.08 134.96,376.07 157.91,347.71 180.87,323.74 203.83,313.21 226.78,297.83 249.74,290.79 272.70,269.83 295.65,271.7 318.61,254.95 341.57,240.42 364.52,232.37 387.48,218.82 410.43,208.3 433.39,196.43 456.35,182.99 479.30,167.5 502.26,155.43 525.22,141.79 548.17,130.96 571.13,124.16 594.09,111.48 617.04,103.28 640.00,98.27"/>
+  <g class="normdot">
+    <circle cx="112.00" cy="399.08" r="2.2"/><circle cx="134.96" cy="376.07" r="2.2"/><circle cx="157.91" cy="347.71" r="2.2"/><circle cx="180.87" cy="323.74" r="2.2"/><circle cx="203.83" cy="313.21" r="2.2"/><circle cx="226.78" cy="297.83" r="2.2"/><circle cx="249.74" cy="290.79" r="2.2"/><circle cx="272.70" cy="269.83" r="2.2"/><circle cx="295.65" cy="271.7" r="2.2"/><circle cx="318.61" cy="254.95" r="2.2"/><circle cx="341.57" cy="240.42" r="2.2"/><circle cx="364.52" cy="232.37" r="2.2"/><circle cx="387.48" cy="218.82" r="2.2"/><circle cx="410.43" cy="208.3" r="2.2"/><circle cx="433.39" cy="196.43" r="2.2"/><circle cx="456.35" cy="182.99" r="2.2"/><circle cx="479.30" cy="167.5" r="2.2"/><circle cx="502.26" cy="155.43" r="2.2"/><circle cx="525.22" cy="141.79" r="2.2"/><circle cx="548.17" cy="130.96" r="2.2"/><circle cx="571.13" cy="124.16" r="2.2"/><circle cx="594.09" cy="111.48" r="2.2"/><circle cx="617.04" cy="103.28" r="2.2"/><circle cx="640.00" cy="98.27" r="2.2"/>
+  </g>
+
+  <!-- ENERGY series: citron dashed + squares -->
+  <polyline class="enline" stroke-width="2" stroke-dasharray="6 4"
+    points="112.00,104.62 134.96,168.69 157.91,189.97 180.87,212.0 203.83,263.99 226.78,315.16 249.74,387.71 272.70,361.26 295.65,368.57 318.61,351.36 341.57,352.33 364.52,341.21 387.48,373.9 410.43,365.32 433.39,352.63 456.35,322.47 479.30,291.25 502.26,311.15 525.22,289.47 548.17,264.8 571.13,249.32 594.09,213.78 617.04,213.12 640.00,328.72"/>
+  <g class="endot">
+    <rect x="110.00" y="102.62" width="4" height="4"/><rect x="132.96" y="166.69" width="4" height="4"/><rect x="155.91" y="187.97" width="4" height="4"/><rect x="178.87" y="210.00" width="4" height="4"/><rect x="201.83" y="261.99" width="4" height="4"/><rect x="224.78" y="313.16" width="4" height="4"/><rect x="247.74" y="385.71" width="4" height="4"/><rect x="270.70" y="359.26" width="4" height="4"/><rect x="293.65" y="366.57" width="4" height="4"/><rect x="316.61" y="349.36" width="4" height="4"/><rect x="339.57" y="350.33" width="4" height="4"/><rect x="362.52" y="339.21" width="4" height="4"/><rect x="385.48" y="371.90" width="4" height="4"/><rect x="408.43" y="363.32" width="4" height="4"/><rect x="431.39" y="350.63" width="4" height="4"/><rect x="454.35" y="320.47" width="4" height="4"/><rect x="477.30" y="289.25" width="4" height="4"/><rect x="500.26" y="309.15" width="4" height="4"/><rect x="523.22" y="287.47" width="4" height="4"/><rect x="546.17" y="262.80" width="4" height="4"/><rect x="569.13" y="247.32" width="4" height="4"/><rect x="592.09" y="211.78" width="4" height="4"/><rect x="615.04" y="211.12" width="4" height="4"/><rect x="638.00" y="326.72" width="4" height="4"/>
+  </g>
+
+  <!-- emb energy point + leap connector to L0 (the corrected thesis) -->
+  <defs>
+    <marker id="up" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--cause,#E3C24A)"/>
+    </marker>
+  </defs>
+  <line x1="90" y1="402.84" x2="110" y2="112" class="enline" stroke-width="1.3" stroke-dasharray="3 3" marker-end="url(#up)"/>
+  <rect class="endot" x="88" y="400.84" width="4" height="4"/>
+  <text class="enlab" x="84" y="398" font-size="8.5" text-anchor="end">0.01</text>
+  <text class="enlab" x="118" y="103" font-size="9">0.60 &#8212; massive activation born at L0</text>
+
+  <!-- norm climb annotation -->
+  <text class="normlab" x="300" y="120" font-size="9.5">norm: 3.7 &#8594; 245 over L0&#8594;L23</text>
+  <text class="normlab" x="300" y="133" font-size="9.5">&#8776; 66&#215;, near-log-linear climb</text>
+
+  <!-- massive-activation dim switch -->
+  <text class="mut" x="256" y="334" font-size="8">top dim 745&#8594;288 @ L7</text>
+
+  <!-- energy floor + re-concentration -->
+  <text class="enlab" x="252" y="402" font-size="8" text-anchor="middle">floor 0.04 @ L6</text>
+  <text class="enlab" x="600" y="200" font-size="8">re-conc. &#8594; 0.39 @L22</text>
+
+  <!-- L23 output gate -->
+  <text class="normlab" x="636" y="92" font-size="9" text-anchor="end">L23 output &#183; &#916;/resid 0.96</text>
+
+  <!-- legend -->
+  <g font-size="9">
+    <line x1="430" y1="383" x2="456" y2="383" class="normline" stroke-width="2"/>
+    <circle cx="443" cy="383" r="2.2" class="normdot"/>
+    <text x="462" y="386" class="ink2">residual L2 norm (log, left axis)</text>
+    <line x1="430" y1="399" x2="456" y2="399" class="enline" stroke-width="2" stroke-dasharray="6 4"/>
+    <rect x="441" y="397" width="4" height="4" class="endot"/>
+    <text x="462" y="402" class="ink2">top-1 energy share (right axis)</text>
+  </g>
+
+  <!-- takeaway -->
+  <line x1="40" y1="458" x2="680" y2="458" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="40" y="478" class="ink2" font-size="11">A vanilla-Llama highway: residual norm climbs <tspan class="normlab">~66&#215;</tspan> (3.7&#8594;245); one dim holds <tspan class="enlab">60%</tspan> of L0&#8217;s energy.</text>
+  <text x="40" y="493" class="ink2" font-size="11">The embedding is diffuse (0.01) &#8212; the massive activation is <tspan class="enlab">born at layer 0</tspan>, not carried in the embedding.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .normlab { fill: var(--accent,#4FB2C2); }
+    .enlab   { fill: var(--cause,#E3C24A); }
+    .normline { stroke: var(--accent,#4FB2C2); fill: none; }
+    .normdot  { fill: var(--accent,#4FB2C2); }
+    .enline   { stroke: var(--cause,#E3C24A); fill: none; }
+    .endot    { fill: var(--cause,#E3C24A); }
+  </style>
+
+  <rect x="0" y="0" width="400" height="700" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="22" y="34" font-size="18">The residual-norm highway</text>
+  <text class="mut" x="22" y="52" font-size="9">MiniCPM5-1B &#183; last-token residual stream</text>
+  <text class="mut" x="22" y="64" font-size="9">norm log-climb (left) + top-1 energy share (right) &#183; 4 probes</text>
+
+  <!-- gridlines -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="58" y1="130" x2="348" y2="130"/>
+    <line x1="58" y1="215" x2="348" y2="215"/>
+    <line x1="58" y1="300" x2="348" y2="300"/>
+    <line x1="58" y1="385" x2="348" y2="385"/>
+  </g>
+
+  <!-- left (norm) axis -->
+  <line x1="58" y1="130" x2="58" y2="470" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="normlab" font-size="8.5" text-anchor="end">
+    <text x="52" y="133">316</text><text x="52" y="218">100</text><text x="52" y="303">32</text><text x="52" y="388">10</text><text x="52" y="473">3</text>
+  </g>
+  <text x="16" y="300" transform="rotate(-90 16 300)" text-anchor="middle" class="normlab" font-size="9.5">residual L2 norm &#8212; log</text>
+
+  <!-- right (energy) axis -->
+  <line x1="348" y1="130" x2="348" y2="470" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="enlab" font-size="8.5" text-anchor="start">
+    <text x="354" y="159">0.6</text><text x="354" y="264">0.4</text><text x="354" y="368">0.2</text><text x="354" y="473">0</text>
+  </g>
+  <text x="388" y="300" transform="rotate(90 388 300)" text-anchor="middle" class="enlab" font-size="9.5">top-1 energy share</text>
+
+  <!-- x axis -->
+  <line x1="58" y1="470" x2="348" y2="470" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="middle">
+    <text x="40" y="485">emb</text><text x="58" y="485">L0</text><text x="108.4" y="485">L4</text><text x="158.9" y="485">L8</text><text x="209.3" y="485">L12</text><text x="259.7" y="485">L16</text><text x="310.2" y="485">L20</text><text x="348" y="485">L23</text>
+  </g>
+  <text x="200" y="500" text-anchor="middle" class="mut" font-size="9">layer index (residual leaving layer i)</text>
+
+  <!-- L1 marker -->
+  <line x1="70.61" y1="130" x2="70.61" y2="470" stroke="var(--ink2,#A4B0BC)" stroke-width="0.8" stroke-dasharray="2 3"/>
+  <text class="ink2" x="73" y="142" font-size="8">L1</text>
+
+  <!-- NORM series -->
+  <polyline class="normline" stroke-width="1.8"
+    points="58.00,458.75 70.61,435.05 83.22,405.83 95.83,381.13 108.43,370.28 121.04,354.43 133.65,347.18 146.26,325.59 158.87,327.51 171.48,310.25 184.09,295.28 196.70,286.99 209.30,273.03 221.91,262.19 234.52,249.96 247.13,236.11 259.74,220.15 272.35,207.72 284.96,193.67 297.57,182.51 310.17,175.5 322.78,162.44 335.39,153.98 348.00,148.82"/>
+  <g class="normdot">
+    <circle cx="58.00" cy="458.75" r="2"/><circle cx="70.61" cy="435.05" r="2"/><circle cx="83.22" cy="405.83" r="2"/><circle cx="95.83" cy="381.13" r="2"/><circle cx="108.43" cy="370.28" r="2"/><circle cx="121.04" cy="354.43" r="2"/><circle cx="133.65" cy="347.18" r="2"/><circle cx="146.26" cy="325.59" r="2"/><circle cx="158.87" cy="327.51" r="2"/><circle cx="171.48" cy="310.25" r="2"/><circle cx="184.09" cy="295.28" r="2"/><circle cx="196.70" cy="286.99" r="2"/><circle cx="209.30" cy="273.03" r="2"/><circle cx="221.91" cy="262.19" r="2"/><circle cx="234.52" cy="249.96" r="2"/><circle cx="247.13" cy="236.11" r="2"/><circle cx="259.74" cy="220.15" r="2"/><circle cx="272.35" cy="207.72" r="2"/><circle cx="284.96" cy="193.67" r="2"/><circle cx="297.57" cy="182.51" r="2"/><circle cx="310.17" cy="175.5" r="2"/><circle cx="322.78" cy="162.44" r="2"/><circle cx="335.39" cy="153.98" r="2"/><circle cx="348.00" cy="148.82" r="2"/>
+  </g>
+
+  <!-- ENERGY series -->
+  <polyline class="enline" stroke-width="1.8" stroke-dasharray="5 3"
+    points="58.00,155.37 70.61,221.38 83.22,243.3 95.83,266.0 108.43,319.56 121.04,372.29 133.65,447.04 146.26,419.78 158.87,427.32 171.48,409.58 184.09,410.58 196.70,399.12 209.30,432.81 221.91,423.97 234.52,410.89 247.13,379.82 259.74,347.65 272.35,368.16 284.96,345.82 297.57,320.4 310.17,304.45 322.78,267.83 335.39,267.15 348.00,386.26"/>
+  <g class="endot">
+    <rect x="56.20" y="153.57" width="3.6" height="3.6"/><rect x="68.81" y="219.58" width="3.6" height="3.6"/><rect x="81.42" y="241.50" width="3.6" height="3.6"/><rect x="94.03" y="264.20" width="3.6" height="3.6"/><rect x="106.63" y="317.76" width="3.6" height="3.6"/><rect x="119.24" y="370.49" width="3.6" height="3.6"/><rect x="131.85" y="445.24" width="3.6" height="3.6"/><rect x="144.46" y="417.98" width="3.6" height="3.6"/><rect x="157.07" y="425.52" width="3.6" height="3.6"/><rect x="169.68" y="407.78" width="3.6" height="3.6"/><rect x="182.29" y="408.78" width="3.6" height="3.6"/><rect x="194.90" y="397.32" width="3.6" height="3.6"/><rect x="207.50" y="431.01" width="3.6" height="3.6"/><rect x="220.11" y="422.17" width="3.6" height="3.6"/><rect x="232.72" y="409.09" width="3.6" height="3.6"/><rect x="245.33" y="378.02" width="3.6" height="3.6"/><rect x="257.94" y="345.85" width="3.6" height="3.6"/><rect x="270.55" y="366.36" width="3.6" height="3.6"/><rect x="283.16" y="344.02" width="3.6" height="3.6"/><rect x="295.77" y="318.60" width="3.6" height="3.6"/><rect x="308.37" y="302.65" width="3.6" height="3.6"/><rect x="320.98" y="266.03" width="3.6" height="3.6"/><rect x="333.59" y="265.35" width="3.6" height="3.6"/><rect x="346.20" y="384.46" width="3.6" height="3.6"/>
+  </g>
+
+  <!-- emb energy point + leap connector -->
+  <defs>
+    <marker id="upm" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--cause,#E3C24A)"/>
+    </marker>
+  </defs>
+  <line x1="44" y1="462.62" x2="56" y2="162" class="enline" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#upm)"/>
+  <rect class="endot" x="42" y="460.82" width="3.6" height="3.6"/>
+  <text class="enlab" x="40" y="458" font-size="8" text-anchor="end">.01</text>
+
+  <!-- annotations -->
+  <text class="enlab" x="64" y="150" font-size="8.5">0.60 &#8212; born at L0</text>
+  <text class="normlab" x="150" y="178" font-size="8.5">norm: 3.7&#8594;245</text>
+  <text class="normlab" x="150" y="190" font-size="8.5">&#8776; 66&#215; climb</text>
+  <text class="normlab" x="346" y="142" font-size="8.5" text-anchor="end">L23 &#183; &#916;/resid .96</text>
+  <text class="mut" x="150" y="352" font-size="7.5">top dim 745&#8594;288 @L7</text>
+  <text class="enlab" x="133" y="460" font-size="7.5" text-anchor="middle">floor .04</text>
+
+  <!-- legend -->
+  <g font-size="9">
+    <line x1="22" y1="522" x2="46" y2="522" class="normline" stroke-width="2"/>
+    <circle cx="34" cy="522" r="2" class="normdot"/>
+    <text x="52" y="525" class="ink2">residual L2 norm (log, left)</text>
+    <line x1="22" y1="540" x2="46" y2="540" class="enline" stroke-width="2" stroke-dasharray="5 3"/>
+    <rect x="32" y="538" width="3.6" height="3.6" class="endot"/>
+    <text x="52" y="543" class="ink2">top-1 energy share (right)</text>
+  </g>
+
+  <!-- takeaway -->
+  <line x1="22" y1="562" x2="378" y2="562" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="22" y="582" class="ink2" font-size="10.5">Vanilla-Llama highway: residual norm climbs</text>
+  <text x="22" y="597" class="ink2" font-size="10.5"><tspan class="normlab">~66&#215;</tspan> (3.7&#8594;245) down the 24 layers, and one</text>
+  <text x="22" y="612" class="ink2" font-size="10.5">dimension holds <tspan class="enlab">60%</tspan> of the energy at L0.</text>
+  <text x="22" y="633" class="ink2" font-size="10.5">But the embedding is diffuse (0.01): the massive</text>
+  <text x="22" y="648" class="ink2" font-size="10.5">activation is <tspan class="enlab">born at layer 0</tspan>, not in the</text>
+  <text x="22" y="663" class="ink2" font-size="10.5">embedding &#8212; it then spreads, then re-concentrates.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 1 —</b> the residual-norm highway (the stage). Last-token residual down layers
+      L0→L23: the L2 norm climbs <b>~66× (3.7 → 245)</b>, near-log-linear, while the top-1 single-dimension energy
+      share starts at <b>0.60 at L0</b>, collapses to a <b>0.04 floor by L6</b>, then re-concentrates to <b>~0.39 by
+      L22</b> before the L23 output rewrite redistributes it. The raw embedding is diffuse (energy 0.01, norm 0.9) —
+      the massive activation is <em>made at layer 0</em>, the textbook Sun&nbsp;et&nbsp;al.&nbsp;2024 pattern. L1 (the
+      layer this whole page is about) and L23 are marked.</figcaption>
+      <div class="nb-prov"><span><b>source</b> residual_highway.json · 4 crosslang probes, last-token</span><span><b>type</b> data-grounded (single-pass instrumentation)</span><span><b>safety</b> norm vs energy by line-style + axis, not colour</span></div>
+    </figure>
+  </section>
+
+  <section id="lever">
+    <h2><span class="num">§1</span>The lever — continuous damping, not duplication</h2>
+    <p>Duplication and pruning are discrete — a layer is either in the stack or out. Damping makes layer surgery
+    <em>continuous</em>: you can turn a layer's contribution down to 60% instead of all-or-nothing. That's what
+    needed the live MLX engine, and it's what the rest of this page is about. The surgery primitive is one line:</p>
+
+    <pre class="code"><span class="cm"># ScaledLayer.__call__</span>
+out = x + α · (block(x) − x)   =   x + α·Δ</pre>
+
+    <p><code>Δ</code> is the layer's residual contribution. <code>α = 1</code> is the untouched model.
+    <code>0 &lt; α &lt; 1</code> damps the layer — it still computes, but writes a fraction of its update into the
+    stream. <code>α = 0</code> is a clean skip (identity). <code>α &gt; 1</code> over-amplifies. And
+    <code>α &lt; 0</code> is an <em>anti-update</em> — push the stream the opposite way the layer wanted — which is
+    <b>not</b> a functional inverse, because the block is nonlinear; it's a controlled way to ask "what does fighting
+    this layer do?"</p>
+
+    <p>Configs are composed in original-layer-index space, applied in the order <b>prune → blocks → dups → damp</b>.
+    A single layer can be duplicated <code>k</code> times, each copy given its own α, and the original pass damped
+    too. That composition is the entire experimental vocabulary: a <b>split-pass</b> duplicates L and damps both the
+    original and the copy; a <b>stack</b> is <code>k</code> copies with a per-copy α profile; everything else (ramps,
+    triples, multi-site chains) is the same trick with more knobs. Nothing here is trainable — it's all
+    inference-time. The question every config asks is the lab's usual one: <em>did capability move, or did the grader
+    just get fooled?</em></p>
+  </section>
+
+  <section id="ruler">
+    <h2><span class="num">§2</span>Building the ruler before trusting it</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">The first honest finding had nothing to do with surgery. <span class="hl-acc">The base
+        model has a cliff.</span> On the original wide math set, ~50% of items floored to 0.0 and ~24% saturated to
+        1.0 — only ~8% sat in a band where a score could <em>move</em>. Baseline 0.33, no resolution. A sweep run on
+        that ruler measures mostly nothing, precisely.</p>
+        <p>So the ruler got calibrated. A difficulty ladder — 16 items per rung, both operands controlled, 8 seeds,
+        baseline-only — mapped where each operation breaks. The packed in-band set (<code>load_math_inband</code>, 48
+        items) all sits at p&nbsp;∈&nbsp;0.28–0.72, baseline ≈ 0.48: headroom in both directions, so a config can win
+        <em>or</em> lose visibly.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">Why this is §0 of every later sweep</span>
+        You cannot read a surgery off a saturated ruler. Half the wide set was floored or ceilinged — exactly the
+        instrument failure that, on <a href="/lab/05_granite.html">Granite</a>, manufactured a phantom champion. Calibrate
+        first; the calibration is the transferable part.
+      </aside>
+    </div>
+
+    <table class="nb-table" style="margin-top:var(--sp-5)">
+      <thead><tr><th>op</th><th>easy → hard (strict rate)</th><th>usable band</th></tr></thead>
+      <tbody>
+        <tr><td class="first">add</td><td>d2 1.00 → d5 <b>0.48</b> → d7 0.22</td><td>smooth; bullseye at d5</td></tr>
+        <tr><td class="first">sub</td><td>d2 0.89 → d3 0.60 → d4 0.30 → d5 0.17</td><td>controlled-borrow, near-monotone</td></tr>
+        <tr><td class="first">mul</td><td>2×2 0.80 → <b>3×2 0.49</b> → 3×3 0.04</td><td>razor-thin; only 3×2 usable</td></tr>
+        <tr><td class="first">div</td><td>1×2 0.98 → 2×2 0.72 → 2×3 0.28</td><td>the rich, controllable channel</td></tr>
+      </tbody>
+    </table>
+
+    <figure class="figure" id="fig2">
+      <p class="nb-plate__note">↳ a shaded band marks the 0.3–0.7 region where a score can actually move — most of the wide set sat outside it</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 450" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .ln   { fill: none; stroke: var(--accent,#4FB2C2); stroke-width: 2; }
+    .mk   { fill: var(--bg,#0E141A); stroke: var(--accent,#4FB2C2); stroke-width: 1.8; }
+  </style>
+
+  <rect x="0" y="0" width="720" height="450" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="32" font-size="18">The arithmetic cliff — where each operation breaks</text>
+  <text class="mut" x="40" y="53" font-size="11">Baseline strict-correct rate vs difficulty. Shaded = the 0.3–0.7 band where a score can actually move.</text>
+
+  <!-- shared y guide labels (panel A only) -->
+  <g class="mut" font-size="9" text-anchor="end">
+    <text x="44" y="93">1.0</text><text x="44" y="198">0.5</text><text x="44" y="303">0</text>
+  </g>
+
+  <!-- ============ PANEL A: add (circles) ============ -->
+  <g>
+    <rect x="50" y="153" width="130" height="84" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+    <line x1="50" y1="90" x2="50" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <line x1="50" y1="300" x2="180" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <text x="115" y="80" text-anchor="middle" class="ink2" font-size="12">add · gentle slope</text>
+    <polyline class="ln" points="65,90 115,199.2 165,253.8"/>
+    <circle class="mk" cx="65" cy="90" r="3.6"/>
+    <circle cx="115" cy="199.2" r="4.6" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+    <circle class="mk" cx="165" cy="253.8" r="3.6"/>
+    <g class="mut" font-size="9" text-anchor="middle">
+      <text x="65" y="315">d2</text><text x="115" y="315">d5</text><text x="165" y="315">d7</text>
+    </g>
+    <text x="115" y="333" text-anchor="middle" font-size="8.5" fill="var(--cause,#E3C24A)">◦ bullseye d5 = 0.48</text>
+  </g>
+
+  <!-- ============ PANEL B: sub (squares) ============ -->
+  <g>
+    <rect x="220" y="153" width="130" height="84" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+    <line x1="220" y1="90" x2="220" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <line x1="220" y1="300" x2="350" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <text x="285" y="80" text-anchor="middle" class="ink2" font-size="12">sub · near-monotone</text>
+    <polyline class="ln" points="235,113.1 268,174 301,237 334,264.3"/>
+    <g class="mk">
+      <rect x="231.6" y="109.5" width="7.2" height="7.2"/><rect x="264.4" y="170.4" width="7.2" height="7.2"/><rect x="297.4" y="233.4" width="7.2" height="7.2"/><rect x="330.4" y="260.7" width="7.2" height="7.2"/>
+    </g>
+    <g class="mut" font-size="9" text-anchor="middle">
+      <text x="235" y="315">d2</text><text x="268" y="315">d3</text><text x="301" y="315">d4</text><text x="334" y="315">d5</text>
+    </g>
+  </g>
+
+  <!-- ============ PANEL C: mul (triangles) ============ -->
+  <g>
+    <rect x="390" y="153" width="130" height="84" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+    <line x1="390" y1="90" x2="390" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <line x1="390" y1="300" x2="520" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <text x="455" y="80" text-anchor="middle" class="ink2" font-size="12">mul · the razor cliff</text>
+    <polyline class="ln" points="405,132 455,197.1 505,291.6"/>
+    <polygon class="mk" points="405,127.4 401,135 409,135"/>
+    <polygon points="455,191.5 450.4,200.7 459.6,200.7" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+    <polygon class="mk" points="505,287 501,294.6 509,294.6"/>
+    <g class="mut" font-size="9" text-anchor="middle">
+      <text x="405" y="315">2×2</text><text x="455" y="315">3×2</text><text x="505" y="315">3×3</text>
+    </g>
+    <text x="455" y="333" text-anchor="middle" font-size="8.5" fill="var(--cause,#E3C24A)">▿ only 3×2 = 0.49 usable</text>
+  </g>
+
+  <!-- ============ PANEL D: div (diamonds) ============ -->
+  <g>
+    <rect x="560" y="153" width="130" height="84" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+    <line x1="560" y1="90" x2="560" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <line x1="560" y1="300" x2="690" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <text x="625" y="80" text-anchor="middle" class="ink2" font-size="12">div · broad channel</text>
+    <polyline class="ln" points="575,94.2 625,148.8 675,241.2"/>
+    <polygon class="mk" points="575,89.6 570.4,94.2 575,98.8 579.6,94.2"/>
+    <polygon class="mk" points="625,144.2 620.4,148.8 625,153.4 629.6,148.8"/>
+    <polygon class="mk" points="675,236.6 670.4,241.2 675,245.8 679.6,241.2"/>
+    <g class="mut" font-size="9" text-anchor="middle">
+      <text x="575" y="315">1×2</text><text x="625" y="315">2×2</text><text x="675" y="315">2×3</text>
+    </g>
+  </g>
+
+  <!-- caption -->
+  <text x="40" y="372" class="ink2" font-size="11">The packed in-band set (mul 3×2, add d5/d6, sub d3/d4, div 2×2/2×3) all sit at p ∈ 0.28–0.72,</text>
+  <text x="40" y="388" class="ink2" font-size="11">baseline ≈ 0.48 — a ruler with headroom both ways, so a config can win <tspan font-style="italic">or</tspan> lose visibly.</text>
+  <text x="40" y="412" class="mut" font-size="10">Marker = operation (● add · ■ sub · ▲ mul · ◆ div). Lesson: n=4 per rung is a lottery; ≥12, all operands controlled.</text>
+
+  <!-- legend -->
+  <g transform="translate(40,432)" font-size="9.5">
+    <circle cx="6" cy="-3" r="3.6" class="mk"/><text x="16" y="0" class="mut">add</text>
+    <rect x="62" y="-6.6" width="7.2" height="7.2" class="mk"/><text x="76" y="0" class="mut">sub</text>
+    <polygon points="126,-7 122,0 130,0" class="mk"/><text x="136" y="0" class="mut">mul</text>
+    <polygon points="186,-7 181.4,-3 186,1 190.6,-3" class="mk"/><text x="198" y="0" class="mut">div</text>
+    <rect x="244" y="-9" width="14" height="11" fill="var(--accent,#4FB2C2)" opacity="0.10"/><text x="264" y="0" class="mut">usable band 0.3–0.7</text>
+    <circle cx="426" cy="-3" r="4" fill="none" stroke="var(--cause,#E3C24A)" stroke-width="2"/><text x="436" y="0" class="mut">bullseye (best-resolution rung)</text>
+  </g>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .ln   { fill: none; stroke: var(--accent,#4FB2C2); stroke-width: 2; }
+    .mk   { fill: var(--bg,#0E141A); stroke: var(--accent,#4FB2C2); stroke-width: 1.8; }
+  </style>
+
+  <rect x="0" y="0" width="400" height="720" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="18">The arithmetic cliff —</text>
+  <text class="ttl" x="20" y="54" font-size="18">where each operation breaks</text>
+  <text class="mut" x="20" y="74" font-size="10">Baseline strict-correct vs difficulty. Shaded = 0.3–0.7 band.</text>
+
+  <!-- ===== ROW 1 ===== -->
+  <!-- PANEL add (TL) -->
+  <g>
+    <rect x="50" y="162" width="130" height="56" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+    <line x1="50" y1="120" x2="50" y2="260" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <line x1="50" y1="260" x2="180" y2="260" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <text x="115" y="112" text-anchor="middle" class="ink2" font-size="11">add · gentle</text>
+    <g class="mut" font-size="8" text-anchor="end"><text x="46" y="123">1</text><text x="46" y="193">.5</text><text x="46" y="263">0</text></g>
+    <polyline class="ln" points="65,120 115,192.8 165,229.2"/>
+    <circle class="mk" cx="65" cy="120" r="3.4"/>
+    <circle cx="115" cy="192.8" r="4.4" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+    <circle class="mk" cx="165" cy="229.2" r="3.4"/>
+    <g class="mut" font-size="8.5" text-anchor="middle"><text x="65" y="275">d2</text><text x="115" y="275">d5</text><text x="165" y="275">d7</text></g>
+  </g>
+  <!-- PANEL sub (TR) -->
+  <g>
+    <rect x="220" y="162" width="130" height="56" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+    <line x1="220" y1="120" x2="220" y2="260" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <line x1="220" y1="260" x2="350" y2="260" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <text x="285" y="112" text-anchor="middle" class="ink2" font-size="11">sub · monotone</text>
+    <polyline class="ln" points="235,135.4 268,176 301,218 334,236.2"/>
+    <g class="mk"><rect x="231.6" y="131.8" width="6.8" height="6.8"/><rect x="264.6" y="172.6" width="6.8" height="6.8"/><rect x="297.6" y="214.6" width="6.8" height="6.8"/><rect x="330.6" y="232.8" width="6.8" height="6.8"/></g>
+    <g class="mut" font-size="8.5" text-anchor="middle"><text x="235" y="275">d2</text><text x="268" y="275">d3</text><text x="301" y="275">d4</text><text x="334" y="275">d5</text></g>
+  </g>
+
+  <!-- ===== ROW 2 ===== -->
+  <!-- PANEL mul (BL) -->
+  <g>
+    <rect x="50" y="402" width="130" height="56" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+    <line x1="50" y1="360" x2="50" y2="500" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <line x1="50" y1="500" x2="180" y2="500" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <text x="115" y="352" text-anchor="middle" class="ink2" font-size="11">mul · razor cliff</text>
+    <g class="mut" font-size="8" text-anchor="end"><text x="46" y="363">1</text><text x="46" y="433">.5</text><text x="46" y="503">0</text></g>
+    <polyline class="ln" points="65,388 115,431.4 165,494.4"/>
+    <polygon class="mk" points="65,383.4 61,391 69,391"/>
+    <polygon points="115,425.8 110.4,435 119.6,435" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+    <polygon class="mk" points="165,489.8 161,497.4 169,497.4"/>
+    <g class="mut" font-size="8.5" text-anchor="middle"><text x="65" y="515">2×2</text><text x="115" y="515">3×2</text><text x="165" y="515">3×3</text></g>
+  </g>
+  <!-- PANEL div (BR) -->
+  <g>
+    <rect x="220" y="402" width="130" height="56" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+    <line x1="220" y1="360" x2="220" y2="500" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <line x1="220" y1="500" x2="350" y2="500" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <text x="285" y="352" text-anchor="middle" class="ink2" font-size="11">div · broad</text>
+    <polyline class="ln" points="235,362.8 285,399.2 335,460.8"/>
+    <polygon class="mk" points="235,358.2 230.4,362.8 235,367.4 239.6,362.8"/>
+    <polygon class="mk" points="285,394.6 280.4,399.2 285,403.8 289.6,399.2"/>
+    <polygon class="mk" points="335,456.2 330.4,460.8 335,465.4 339.6,460.8"/>
+    <g class="mut" font-size="8.5" text-anchor="middle"><text x="235" y="515">1×2</text><text x="285" y="515">2×2</text><text x="335" y="515">2×3</text></g>
+  </g>
+
+  <!-- caption -->
+  <text x="20" y="560" text-anchor="start" font-size="9" fill="var(--cause,#E3C24A)">◦ bullseye = best-resolution rung (add d5, mul 3×2)</text>
+  <text x="20" y="586" class="ink2" font-size="10.5">In-band set sits at p 0.28–0.72, baseline ≈ 0.48 —</text>
+  <text x="20" y="602" class="ink2" font-size="10.5">a ruler that can win or lose visibly.</text>
+  <text x="20" y="624" class="mut" font-size="9.5">Lesson: n=4 per rung is a lottery; use ≥12,</text>
+  <text x="20" y="639" class="mut" font-size="9.5">all operands controlled.</text>
+
+  <!-- legend -->
+  <g transform="translate(20,672)" font-size="9.5">
+    <circle cx="6" cy="-3" r="3.4" class="mk"/><text x="16" y="0" class="mut">add</text>
+    <rect x="58" y="-6.4" width="6.8" height="6.8" class="mk"/><text x="72" y="0" class="mut">sub</text>
+    <polygon points="116,-7 112,0 120,0" class="mk"/><text x="128" y="0" class="mut">mul</text>
+    <polygon points="172,-7 167.4,-3 172,1 176.6,-3" class="mk"/><text x="184" y="0" class="mut">div</text>
+  </g>
+  <g transform="translate(20,696)" font-size="9.5">
+    <rect x="0" y="-9" width="14" height="11" fill="var(--accent,#4FB2C2)" opacity="0.10"/><text x="20" y="0" class="mut">usable band 0.3–0.7</text>
+  </g>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 2 —</b> the arithmetic cliff and the band carved out of it. One small-multiple
+      panel per operation: baseline strict-correct rate vs difficulty rung, with the usable ~0.3–0.7 band shaded.
+      Addition declines gently; multiplication falls almost vertically (2×2 0.80 → 3×3 ≈ 0, leaving a single usable
+      rung); division declines broadly. Bullseyes (<code>add_d5</code>, <code>mul_3×2</code>) marked. Operation by
+      marker shape, not colour.</figcaption>
+      <div class="nb-prov"><span><b>source</b> difficulty-ladder sweep · 16 items/rung · 8 seeds · baseline-only</span><span><b>type</b> data-grounded calibration</span><span><b>safety</b> ops by marker shape; band by shading</span></div>
+    </figure>
+
+    <p>Two methodology lessons fell out of building this, and they generalise to every model in the lab.
+    <b>(1) n=4 items per rung is a lottery.</b> A famous <code>sub_d4 = 0.03</code> "dip" turned out to be an artifact
+    of 4-item sampling <em>plus</em> a generator bug (only the minuend's digits were controlled, so each rung was a
+    difficulty grab-bag). Control all operands; ≥12 items per rung; the dip vanished. <b>(2) The cell cache had a
+    contamination bug.</b> The harness keyed result cells on <code>(config_id, probe_name, seed)</code> with no content
+    check — change a probeset while keeping the names (items-per-rung 4→16 shifts the RNG stream, so
+    <code>cal_sub_d4_i00</code> is now a <em>different</em> problem) and it silently resumed over stale cells. The fix:
+    content-hash the battery into the results filename, so any change auto-forks a fresh file. Neither is glamorous;
+    both would have quietly poisoned every number after them.</p>
+  </section>
+
+  <section id="split">
+    <h2><span class="num">§3</span>Split-pass — damping <em>both</em> copies is a real mechanism</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">The first thing that actually moved the needle: take a layer, duplicate it, and damp
+        <b>both</b> the original pass and the copy. On <b>L1 and L10 specifically</b> — not the "refine zone" L5–12 we'd
+        guessed — this buys <span class="hl-acc">+0.11–0.12 strict math</span>, confirmed at 24 seeds, t ≈ +6.
+        <span class="vrfy">VERIFY</span> <code>split_1_a50_a70 = 0.53 strict, t +6.2</code>.</p>
+        <p>Don't apply the layer's contribution in one go. Apply a <em>scaled-back</em> version, let the residual
+        stream move, then run the layer <em>again</em> on that moved stream and apply another scaled-back version —
+        two gentle nudges instead of one shove. The thing that makes this its own mechanism: on the second nudge the
+        layer re-evaluates from the stream's <em>new</em> position, so it contributes a fresh opinion, not a scaled
+        copy of its first.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">The geography is sharp</span>
+        It beats its own controls — <code>split</code> (both damped) &gt; <code>dupdamp</code> (copy damped, original
+        plain) &gt; <code>damp</code> (single lever). So it isn't "L1 likes being damped"; it's that distributing a
+        reduced update across two re-evaluated passes does something one pass can't. L0 split is catastrophic (the
+        embedding-adjacent layer detonates when doubled); L2 and L11 do nothing.
+      </aside>
+    </div>
+
+    <details class="nbdetails">
+      <summary>The arithmetic, precisely — why split ≠ a stronger single pass</summary>
+      <p>α is the per-pass damping and Δ(x) = block(x) − x the layer's residual contribution. A single damped pass
+      computes the update <b>once</b>, at the original input <code>x</code>. A split pass computes it <b>twice</b>, and
+      the second time the block sees the already-moved stream:</p>
+      <pre class="code"><span class="cm"># single:</span>  x + α·Δ(x)
+
+<span class="cm"># split:</span>   x₁ = x + α₀·Δ(x)      <span class="cm">← first nudge, evaluated at x</span>
+          x₂ = x₁ + α₁·Δ(x₁)    <span class="cm">← second nudge, re-evaluated at x₁</span></pre>
+      <p>Because the block is nonlinear, Δ(x₁) ≠ Δ(x). So <code>x + α₀·Δ(x) + α₁·Δ(x₁)</code> is <em>not</em> the vector
+      <code>x + (α₀+α₁)·Δ(x)</code> — which is all a single pass at strength α₀+α₁ could produce. One Euler step versus
+      two half-steps: the second corrects for where the first landed.</p>
+    </details>
+
+    <figure class="figure" id="fig3">
+      <p class="nb-plate__note">↳ the layer rotates its opinion 42° between sub-steps — a fresh read, not a scaled copy</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .k2 { stroke: var(--accent,#4FB2C2); fill: var(--accent,#4FB2C2); }
+    .k3 { stroke: var(--neg,#B98AD6);   fill: var(--neg,#B98AD6); }
+    .k4 { stroke: var(--fourth,#6E92C4);fill: var(--fourth,#6E92C4); }
+    .k6 { stroke: var(--cause,#E3C24A); fill: var(--cause,#E3C24A); }
+  </style>
+  <defs>
+    <marker id="cvah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink2,#A4B0BC)"/>
+    </marker>
+    <pattern id="s10Hatch" width="5" height="5" patternUnits="userSpaceOnUse">
+      <rect width="5" height="5" fill="var(--accent,#4FB2C2)" opacity="0.14"/>
+      <path d="M0,5 L5,0" stroke="var(--accent,#4FB2C2)" stroke-width="1.2"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="720" height="440" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="26" font-size="17">A single pass and a split pass at equal &#931;&#945; do not coincide</text>
+  <text class="mut" x="40" y="44" font-size="10">MiniCPM5-1B &#183; L1 residual at the answer token (probe &#8220;4827 + 3596&#8221;, &#931;&#945;=1.5) &#183; the split re-evaluates the layer between sub-steps</text>
+
+  <!-- ===================== PANEL A: trajectory (PCA top-2, 99.6% var) ===================== -->
+  <text class="ink2" x="40" y="72" font-size="10">&#9312; one shove vs split</text>
+  <text class="mut"  x="40" y="84" font-size="8.5">L1 residual, PC1/PC2 &#183; &#931;&#945;=1.5</text>
+  <!-- L-frame -->
+  <line x1="48" y1="100" x2="48" y2="250" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="48" y1="250" x2="245" y2="250" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="146" y="263" text-anchor="middle" class="mut" font-size="8.5">PC1 (residual at answer token)</text>
+  <text x="40" y="175" transform="rotate(-90 40 175)" text-anchor="middle" class="mut" font-size="8.5">PC2</text>
+
+  <!-- single shove: gray dashed arrow origin -> single_end, with hollow triangle endpoint -->
+  <line x1="51.4" y1="165.7" x2="223.7" y2="227.5" stroke="var(--ink2,#A4B0BC)" stroke-width="1.6"
+        stroke-dasharray="5 3" marker-end="url(#cvah)"/>
+  <!-- split paths -->
+  <polyline class="k4" style="fill:none" stroke-width="1.6" points="51.4,165.7 94.4,181.2 137.1,178.5 183.3,162.8 237.4,133.7"/>
+  <polyline class="k3" style="fill:none" stroke-width="1.6" points="51.4,165.7 109.1,186.3 165.5,176.4 229.6,146.3"/>
+  <polyline class="k2" style="fill:none" stroke-width="1.6" points="51.4,165.7 137.7,196.6 222.8,166.1"/>
+  <!-- substep markers -->
+  <g class="k2"><circle cx="137.7" cy="196.6" r="2.4"/></g>
+  <g class="k3"><rect x="106.1" y="183.3" width="6" height="6"/><rect x="162.5" y="173.4" width="6" height="6"/></g>
+  <g class="k4"><polygon points="94.4,177.2 90.4,184.2 98.4,184.2"/><polygon points="137.1,174.5 133.1,181.5 141.1,181.5"/><polygon points="183.3,158.8 179.3,165.8 187.3,165.8"/></g>
+  <!-- endpoints: hollow rings in series colour -->
+  <circle cx="222.8" cy="166.1" r="4" fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="1.6"/>
+  <rect x="225.6" y="142.3" width="8" height="8" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="1.6"/>
+  <polygon points="237.4,128.7 231.4,137.7 243.4,137.7" fill="none" stroke="var(--fourth,#6E92C4)" stroke-width="1.6"/>
+  <!-- origin (x) + baseline (alpha=1) -->
+  <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.6">
+    <line x1="47.4" y1="161.7" x2="55.4" y2="169.7"/><line x1="55.4" y1="161.7" x2="47.4" y2="169.7"/>
+  </g>
+  <text class="ink2" x="58" y="160" font-size="8">x (L1 in)</text>
+  <g stroke="var(--muted,#6F7C88)" stroke-width="1.4">
+    <line x1="162.4" y1="206.9" x2="170.4" y2="206.9"/><line x1="166.4" y1="202.9" x2="166.4" y2="210.9"/>
+  </g>
+  <text class="mut" x="150" y="220" font-size="8">baseline &#945;=1</text>
+  <polygon points="223.7,231.5 219.7,224.5 227.7,224.5" fill="none" stroke="var(--ink2,#A4B0BC)" stroke-width="1.4"/>
+  <text class="ink2" x="200" y="240" font-size="8" text-anchor="middle">single &#945;=1.5</text>
+
+  <!-- ===================== PANEL B: opinion rotation cos(Di,D0) ===================== -->
+  <text class="ink2" x="278" y="72" font-size="10">&#9313; opinion rotates per step</text>
+  <text class="mut"  x="278" y="84" font-size="8.5">cos(&#916;&#7522;, &#916;&#8320;) &#183; &#931;&#945;=1.5</text>
+  <text class="mut"  x="458" y="112" text-anchor="end" font-size="8">avg cos(&#916;&#8321;,&#916;&#8320;) = 0.745</text>
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="290" y1="138.3" x2="460" y2="138.3"/>
+    <line x1="290" y1="170.2" x2="460" y2="170.2"/>
+    <line x1="290" y1="202.1" x2="460" y2="202.1"/>
+    <line x1="290" y1="234.0" x2="460" y2="234.0"/>
+  </g>
+  <line x1="290" y1="100" x2="290" y2="250" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="290" y1="250" x2="460" y2="250" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="286" y="109">1.0</text><text x="286" y="141">0.9</text><text x="286" y="173">0.8</text><text x="286" y="205">0.7</text><text x="286" y="237">0.6</text>
+  </g>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="290" y="262">0</text><text x="324" y="262">1</text><text x="358" y="262">2</text><text x="392" y="262">3</text><text x="426" y="262">4</text><text x="460" y="262">5</text>
+  </g>
+  <text x="375" y="276" text-anchor="middle" class="mut" font-size="8.5">sub-step i</text>
+  <!-- curves -->
+  <polyline class="k6" style="fill:none" stroke-width="1.6" points="290,106.4 324,121.1 358,147.5 392,176.9 426,207.5 460,236.9"/>
+  <polyline class="k4" style="fill:none" stroke-width="1.6" points="290,106.4 324,135.1 358,175.6 392,214.9"/>
+  <polyline class="k3" style="fill:none" stroke-width="1.6" points="290,106.4 324,151.1 358,199.6"/>
+  <polyline class="k2" style="fill:none" stroke-width="1.6" points="290,106.4 324,182.3"/>
+  <g class="k2"><circle cx="290" cy="106.4" r="2.4"/><circle cx="324" cy="182.3" r="2.4"/></g>
+  <g class="k3"><rect x="287" y="103.4" width="6" height="6"/><rect x="321" y="148.1" width="6" height="6"/><rect x="355" y="196.6" width="6" height="6"/></g>
+  <g class="k4"><polygon points="324,131.1 320,138.1 328,138.1"/><polygon points="358,171.6 354,178.6 362,178.6"/><polygon points="392,210.9 388,217.9 396,217.9"/></g>
+  <g class="k6"><polygon points="324,117.1 328,121.1 324,125.1 320,121.1"/><polygon points="358,143.5 362,147.5 358,151.5 354,147.5"/><polygon points="392,172.9 396,176.9 392,180.9 388,176.9"/><polygon points="426,203.5 430,207.5 426,211.5 422,207.5"/><polygon points="460,232.9 464,236.9 460,240.9 456,236.9"/></g>
+
+  <!-- ===================== PANEL C: gap_frac vs k, two doses ===================== -->
+  <text class="ink2" x="498" y="72" font-size="10">&#9314; gap grows with splitting</text>
+  <text class="mut"  x="498" y="84" font-size="8.5">gap_frac &#183; avg over 4 probes</text>
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="510" y1="200" x2="680" y2="200"/>
+    <line x1="510" y1="150" x2="680" y2="150"/>
+    <line x1="510" y1="100" x2="680" y2="100"/>
+  </g>
+  <line x1="510" y1="100" x2="510" y2="250" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="510" y1="250" x2="680" y2="250" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="506" y="253">0</text><text x="506" y="203">.2</text><text x="506" y="153">.4</text><text x="506" y="103">.6</text>
+  </g>
+  <!-- bars: Sigma1.0 cyan hatch (left), Sigma1.5 cyan solid (right) -->
+  <rect x="524" y="183"    width="15" height="67"    fill="url(#s10Hatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <rect x="541" y="160.25" width="15" height="89.75" fill="var(--accent,#4FB2C2)"/>
+  <rect x="584" y="164.25" width="15" height="85.75" fill="url(#s10Hatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <rect x="601" y="134.75" width="15" height="115.25" fill="var(--accent,#4FB2C2)"/>
+  <rect x="644" y="154.25" width="15" height="95.75" fill="url(#s10Hatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <rect x="661" y="117"    width="15" height="133"    fill="var(--accent,#4FB2C2)"/>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="540" y="262">k=2</text><text x="600" y="262">k=3</text><text x="660" y="262">k=4</text>
+  </g>
+  <!-- panel C inline legend -->
+  <rect x="516" y="108" width="11" height="9" fill="url(#s10Hatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <text x="531" y="116" class="ink2" font-size="8">&#931;&#945;=1.0</text>
+  <rect x="572" y="108" width="11" height="9" fill="var(--accent,#4FB2C2)"/>
+  <text x="587" y="116" class="ink2" font-size="8">&#931;&#945;=1.5</text>
+
+  <!-- ===================== closed-form note + legend + takeaway ===================== -->
+  <text x="40" y="300" class="mut" font-size="9">The endpoint gap has a closed form &#8212; <tspan class="ink2">single &#8722; split = (&#931;&#945;/k)&#183;&#931;&#7522;(&#916;(x) &#8722; &#916;(x&#7522;))</tspan> &#8212; which held numerically to <tspan class="ink2">1.6%</tspan>.</text>
+
+  <line x1="40" y1="318" x2="680" y2="318" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <!-- shared k-series legend -->
+  <g font-size="9">
+    <circle cx="46" cy="338" r="2.6" class="k2" stroke="none"/><text x="54" y="341" class="ink2">k=2</text>
+    <rect x="92" y="335" width="6" height="6" class="k3" stroke="none"/><text x="104" y="341" class="ink2">k=3</text>
+    <polygon points="146,335 142,342 150,342" class="k4" stroke="none"/><text x="154" y="341" class="ink2">k=4</text>
+    <polygon points="196,335 200,339 196,343 192,339" class="k6" stroke="none"/><text x="206" y="341" class="ink2">k=6</text>
+    <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.4"><line x1="250" y1="338" x2="266" y2="338" stroke-dasharray="5 3"/></g>
+    <polygon points="266,341 262,335 270,335" fill="none" stroke="var(--ink2,#A4B0BC)" stroke-width="1.2"/>
+    <text x="276" y="341" class="ink2">single shove (&#931;&#945;=1.5)</text>
+    <g stroke="var(--muted,#6F7C88)" stroke-width="1.4"><line x1="430" y1="338" x2="438" y2="338"/><line x1="434" y1="334" x2="434" y2="342"/></g>
+    <text x="446" y="341" class="ink2">baseline (&#945;=1)</text>
+  </g>
+
+  <text x="40" y="372" class="ink2" font-size="11">A single damped pass can only slide the residual along the &#916;(x) line; the split steps off it.</text>
+  <text x="40" y="388" class="ink2" font-size="11">The effect is the layer re-reading the moved stream &#8212; more sub-steps, the further from a single shove.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .k2 { stroke: var(--accent,#4FB2C2); fill: var(--accent,#4FB2C2); }
+    .k3 { stroke: var(--neg,#B98AD6);   fill: var(--neg,#B98AD6); }
+    .k4 { stroke: var(--fourth,#6E92C4);fill: var(--fourth,#6E92C4); }
+    .k6 { stroke: var(--cause,#E3C24A); fill: var(--cause,#E3C24A); }
+  </style>
+  <defs>
+    <marker id="cvahM" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink2,#A4B0BC)"/>
+    </marker>
+    <pattern id="s10HatchM" width="5" height="5" patternUnits="userSpaceOnUse">
+      <rect width="5" height="5" fill="var(--accent,#4FB2C2)" opacity="0.14"/>
+      <path d="M0,5 L5,0" stroke="var(--accent,#4FB2C2)" stroke-width="1.2"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="400" height="700" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="16" y="24" font-size="15">One pass and a split pass</text>
+  <text class="ttl" x="16" y="42" font-size="15">at equal &#931;&#945; don&#8217;t coincide</text>
+  <text class="mut" x="16" y="58" font-size="8.5">MiniCPM5-1B &#183; L1 residual at the answer token</text>
+  <text class="mut" x="16" y="69" font-size="8.5">probe &#8220;4827 + 3596&#8221; &#183; &#931;&#945;=1.5 &#183; split re-evaluates per step</text>
+
+  <!-- ===================== PANEL A: trajectory ===================== -->
+  <text class="ink2" x="16" y="90" font-size="10">&#9312; one shove vs split &#8212; the paths peel apart</text>
+  <line x1="48" y1="100" x2="48" y2="255" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="48" y1="255" x2="335" y2="255" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="190" y="268" text-anchor="middle" class="mut" font-size="8.5">PC1 (residual at answer token)</text>
+  <text x="40" y="177" transform="rotate(-90 40 177)" text-anchor="middle" class="mut" font-size="8.5">PC2</text>
+
+  <line x1="52.1" y1="161.5" x2="302.4" y2="251.2" stroke="var(--ink2,#A4B0BC)" stroke-width="1.6"
+        stroke-dasharray="5 3" marker-end="url(#cvahM)"/>
+  <polyline class="k4" style="fill:none" stroke-width="1.6" points="52.1,161.5 114.6,183.9 176.5,180.0 243.6,157.2 322.3,115.1"/>
+  <polyline class="k3" style="fill:none" stroke-width="1.6" points="52.1,161.5 135.8,191.4 217.8,177.0 310.9,133.2"/>
+  <polyline class="k2" style="fill:none" stroke-width="1.6" points="52.1,161.5 177.4,206.4 301.1,162.1"/>
+  <g class="k2"><circle cx="177.4" cy="206.4" r="2.6"/></g>
+  <g class="k3"><rect x="132.8" y="188.4" width="6" height="6"/><rect x="214.8" y="174.0" width="6" height="6"/></g>
+  <g class="k4"><polygon points="114.6,179.9 110.6,186.9 118.6,186.9"/><polygon points="176.5,176.0 172.5,183.0 180.5,183.0"/><polygon points="243.6,153.2 239.6,160.2 247.6,160.2"/></g>
+  <circle cx="301.1" cy="162.1" r="4.2" fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="1.6"/>
+  <rect x="307.4" y="129.7" width="8" height="8" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="1.6"/>
+  <polygon points="322.3,110.1 316.3,119.1 328.3,119.1" fill="none" stroke="var(--fourth,#6E92C4)" stroke-width="1.6"/>
+  <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.6">
+    <line x1="48.1" y1="157.5" x2="56.1" y2="165.5"/><line x1="56.1" y1="157.5" x2="48.1" y2="165.5"/>
+  </g>
+  <text class="ink2" x="58" y="155" font-size="8">x (L1 in)</text>
+  <g stroke="var(--muted,#6F7C88)" stroke-width="1.4">
+    <line x1="215.1" y1="221.3" x2="223.1" y2="221.3"/><line x1="219.1" y1="217.3" x2="219.1" y2="225.3"/>
+  </g>
+  <text class="mut" x="226" y="224" font-size="8">baseline &#945;=1</text>
+  <polygon points="302.4,255.2 296.4,248.2 308.4,248.2" fill="none" stroke="var(--ink2,#A4B0BC)" stroke-width="1.4"/>
+  <text class="ink2" x="298" y="245" font-size="8" text-anchor="end">single &#945;=1.5</text>
+
+  <!-- ===================== PANEL B: opinion rotation ===================== -->
+  <text class="ink2" x="16" y="284" font-size="10">&#9313; opinion rotates per sub-step</text>
+  <text class="mut" x="378" y="314" text-anchor="end" font-size="8">avg cos(&#916;&#8321;,&#916;&#8320;) = 0.745</text>
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="55" y1="321.7" x2="380" y2="321.7"/>
+    <line x1="55" y1="349.8" x2="380" y2="349.8"/>
+    <line x1="55" y1="377.8" x2="380" y2="377.8"/>
+    <line x1="55" y1="405.9" x2="380" y2="405.9"/>
+  </g>
+  <line x1="55" y1="293" x2="55" y2="420" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="55" y1="420" x2="380" y2="420" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="51" y="296.6">1.0</text><text x="51" y="324.7">0.9</text><text x="51" y="352.8">0.8</text><text x="51" y="380.8">0.7</text><text x="51" y="408.9">0.6</text>
+  </g>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="55" y="432">0</text><text x="120" y="432">1</text><text x="185" y="432">2</text><text x="250" y="432">3</text><text x="315" y="432">4</text><text x="380" y="432">5</text>
+  </g>
+  <text x="217" y="444" text-anchor="middle" class="mut" font-size="8.5">sub-step i</text>
+
+  <polyline class="k6" style="fill:none" stroke-width="1.6" points="55,293.6 120,306.5 185,329.8 250,355.7 315,382.6 380,408.5"/>
+  <polyline class="k4" style="fill:none" stroke-width="1.6" points="55,293.6 120,318.9 185,354.6 250,389.1"/>
+  <polyline class="k3" style="fill:none" stroke-width="1.6" points="55,293.6 120,332.9 185,375.6"/>
+  <polyline class="k2" style="fill:none" stroke-width="1.6" points="55,293.6 120,360.5"/>
+  <g class="k2"><circle cx="55" cy="293.6" r="2.6"/><circle cx="120" cy="360.5" r="2.6"/></g>
+  <g class="k3"><rect x="52" y="290.6" width="6" height="6"/><rect x="117" y="329.9" width="6" height="6"/><rect x="182" y="372.6" width="6" height="6"/></g>
+  <g class="k4"><polygon points="120,314.9 116,321.9 124,321.9"/><polygon points="185,350.6 181,357.6 189,357.6"/><polygon points="250,385.1 246,392.1 254,392.1"/></g>
+  <g class="k6"><polygon points="120,302.5 124,306.5 120,310.5 116,306.5"/><polygon points="185,325.8 189,329.8 185,333.8 181,329.8"/><polygon points="250,351.7 254,355.7 250,359.7 246,355.7"/><polygon points="315,378.6 319,382.6 315,386.6 311,382.6"/><polygon points="380,404.5 384,408.5 380,412.5 376,408.5"/></g>
+
+  <!-- ===================== PANEL C: gap_frac bars ===================== -->
+  <text class="ink2" x="16" y="450" font-size="10">&#9314; gap grows with splitting</text>
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="55" y1="526" x2="380" y2="526"/>
+    <line x1="55" y1="492" x2="380" y2="492"/>
+    <line x1="55" y1="458" x2="380" y2="458"/>
+  </g>
+  <line x1="55" y1="458" x2="55" y2="560" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="55" y1="560" x2="380" y2="560" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="51" y="563">0</text><text x="51" y="529">.2</text><text x="51" y="495">.4</text><text x="51" y="461">.6</text>
+  </g>
+  <rect x="97"  y="514.4" width="22" height="45.6" fill="url(#s10HatchM)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <rect x="121" y="499"   width="22" height="61"   fill="var(--accent,#4FB2C2)"/>
+  <rect x="187" y="501.7" width="22" height="58.3" fill="url(#s10HatchM)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <rect x="211" y="481.6" width="22" height="78.4" fill="var(--accent,#4FB2C2)"/>
+  <rect x="277" y="494.9" width="22" height="65.1" fill="url(#s10HatchM)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <rect x="301" y="469.6" width="22" height="90.4" fill="var(--accent,#4FB2C2)"/>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="120" y="574">k=2</text><text x="210" y="574">k=3</text><text x="300" y="574">k=4</text>
+  </g>
+  <rect x="246" y="451.5" width="11" height="9" fill="url(#s10HatchM)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <text x="261" y="459.5" class="ink2" font-size="8">&#931;&#945;=1.0</text>
+  <rect x="312" y="451.5" width="11" height="9" fill="var(--accent,#4FB2C2)"/>
+  <text x="327" y="459.5" class="ink2" font-size="8">&#931;&#945;=1.5</text>
+
+  <!-- ===================== legend + takeaway ===================== -->
+  <text x="16" y="596" class="mut" font-size="8">closed form: single &#8722; split = (&#931;&#945;/k)&#183;&#931;&#7522;(&#916;(x)&#8722;&#916;(x&#7522;)) &#8212; held to 1.6%</text>
+  <line x1="16" y1="608" x2="384" y2="608" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <g font-size="8.5">
+    <circle cx="22" cy="626" r="2.6" class="k2" stroke="none"/><text x="30" y="629" class="ink2">k2</text>
+    <rect x="58" y="623" width="6" height="6" class="k3" stroke="none"/><text x="70" y="629" class="ink2">k3</text>
+    <polygon points="104,623 100,630 108,630" class="k4" stroke="none"/><text x="112" y="629" class="ink2">k4</text>
+    <polygon points="148,623 152,627 148,631 144,627" class="k6" stroke="none"/><text x="158" y="629" class="ink2">k6</text>
+    <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.4"><line x1="196" y1="626" x2="210" y2="626" stroke-dasharray="5 3"/></g>
+    <polygon points="210,629 206,623 214,623" fill="none" stroke="var(--ink2,#A4B0BC)" stroke-width="1.2"/>
+    <text x="220" y="629" class="ink2">single shove</text>
+    <g stroke="var(--muted,#6F7C88)" stroke-width="1.4"><line x1="304" y1="626" x2="312" y2="626"/><line x1="308" y1="622" x2="308" y2="630"/></g>
+    <text x="318" y="629" class="ink2">baseline &#945;=1</text>
+  </g>
+  <text x="16" y="654" class="ink2" font-size="9.5">A single damped pass can only slide the residual along</text>
+  <text x="16" y="668" class="ink2" font-size="9.5">&#916;(x); the split steps off it &#8212; the layer re-reads the</text>
+  <text x="16" y="682" class="ink2" font-size="9.5">moved stream, landing further off with every sub-step.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 3 —</b> split-pass curvature (the geometry). The L1 residual at one answer token.
+      <b>(a)</b> the one-shot α=1.5 pass and the split paths at the <em>same</em> Σα peel apart — the split re-evaluates
+      between sub-steps and lands elsewhere; <b>(b)</b> the opinion rotates each sub-step, <b>cos(Δ₁,Δ₀)&nbsp;=&nbsp;0.745
+      at k=2 (≈42°)</b>; <b>(c)</b> the split-vs-single gap grows with k and Σα. The endpoint gap has a closed form,
+      <code>single − split = (Σα/k)·Σᵢ(Δ(x) − Δ(xᵢ))</code>, which held numerically to <b>1.6%</b> — the divergence is
+      provably nothing but the layer's change of opinion.</figcaption>
+      <div class="nb-prov"><span><b>source</b> split_curvature_probe.npz · L1 residual vectors</span><span><b>type</b> data-grounded; gap closed-form to 1.6%</span><span><b>safety</b> paths by curvature + marker; no red/green</span></div>
+    </figure>
+
+    <p>And it isn't only those three controls. We swept a <em>single</em> damped pass of L1 across the whole
+    single-knob range — α = 0.5 → 1.5, the entire envelope a single α can reach. It tops out at <b>+0.028</b> (α ≈ 0.6)
+    and craters under amplification (α = 1.5 → <b>−0.115</b>); it never clears baseline by more than noise. The best
+    split/stack sits at <b>+0.153</b>. No single α comes close — a <b>+0.125</b> gap, ~5×. The sharpest cut: at the
+    <em>same</em> total dose <b>Σα = 1.5</b>, one pass scores −0.115 and the split scores +0.153, a <b>0.27 swing</b>
+    that is pure re-evaluation. (Cross-checked across two independent sweep files — L1 at α = 1.30 gives Δ −0.080 in
+    <em>both</em> to four decimals — so the comparison rides on Δ-vs-baseline, where the constant harness offset
+    cancels.)</p>
+
+    <div class="negresult">
+      <span class="nb-kicker">Where single-α is trapped — the off-axis claim</span>
+      <p><span class="olabel obs">obs</span> a single α on L1 buys at most +0.03 and is actively harmful when amplified;
+      the split at identical Σα buys +0.15. <span class="olabel inf">inf</span> a single α can only slide the residual
+      along the Δ(x) line, and that line never gets above baseline — the gain lives <em>off-axis</em>, where only the
+      re-evaluating split can reach. The split isn't a tidier route to a place single-α could reach; it reaches a place
+      single-α can't. This is the behavioural face of the geometry in Fig 1.</p>
+    </div>
+
+    <figure class="figure" id="fig4">
+      <p class="nb-plate__note">↳ same knob budget, opposite outcomes — the split stays above the single at every dose</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .obs  { stroke: var(--accent,#4FB2C2); fill: var(--accent,#4FB2C2); }
+    .foil { stroke: var(--cause,#E3C24A); fill: var(--cause,#E3C24A); }
+    .stk  { stroke: var(--neg,#B98AD6); fill: var(--neg,#B98AD6); }
+  </style>
+
+  <rect x="0" y="0" width="720" height="500" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="30" font-size="18">One pass can&#8217;t buy what splitting buys</text>
+  <text class="mut" x="40" y="49" font-size="10">MiniCPM5-1B &#183; L1 &#183; &#916; strict-math vs own baseline &#183; 18 shared math probes &#183; each config against its own file baseline</text>
+
+  <!-- gridlines -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="70" y1="102" x2="660" y2="102"/>
+    <line x1="70" y1="157" x2="660" y2="157"/>
+    <line x1="70" y1="212" x2="660" y2="212"/>
+    <line x1="70" y1="322" x2="660" y2="322"/>
+    <line x1="70" y1="377" x2="660" y2="377"/>
+  </g>
+
+  <!-- y axis + labels -->
+  <line x1="70" y1="80" x2="70" y2="410" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="9" text-anchor="end">
+    <text x="64" y="105">+.15</text><text x="64" y="160">+.10</text><text x="64" y="215">+.05</text>
+    <text x="64" y="270">0</text><text x="64" y="325">&#8722;.05</text><text x="64" y="380">&#8722;.10</text>
+  </g>
+  <text x="26" y="245" transform="rotate(-90 26 245)" text-anchor="middle" class="mut" font-size="10">&#916; strict-math vs baseline</text>
+
+  <!-- baseline zero (meaningful) -->
+  <line x1="70" y1="267" x2="660" y2="267" stroke="var(--ink2,#A4B0BC)" stroke-width="1.2" stroke-dasharray="3 3"/>
+  <text class="mut" x="656" y="263" text-anchor="end" font-size="8.5">baseline (&#916; = 0)</text>
+
+  <!-- x axis + labels -->
+  <line x1="70" y1="410" x2="660" y2="410" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="101" y="425">0.5</text><text x="256.3" y="425">1.0</text><text x="411.6" y="425">1.5</text><text x="566.8" y="425">2.0</text>
+  </g>
+  <text x="365" y="441" text-anchor="middle" class="mut" font-size="10">&#931;&#945;  (cumulative alpha on L1)</text>
+
+  <!-- single damped pass (foil): citron dashed, hollow circles -->
+  <polyline class="foil" style="fill:none" stroke-width="2" stroke-dasharray="6 4"
+    points="101.05,270.85 132.1,236.4 163.2,240.3 194.2,255.5 225.3,251.7 256.3,270.85 287.4,301.4 349.5,354.9 411.6,393.0"/>
+  <g class="foil">
+    <circle cx="101.05" cy="270.85" r="2.6"/><circle cx="132.1" cy="236.4" r="2.6"/><circle cx="163.2" cy="240.3" r="2.6"/><circle cx="194.2" cy="255.5" r="2.6"/><circle cx="225.3" cy="251.7" r="2.6"/><circle cx="256.3" cy="270.85" r="2.6"/><circle cx="287.4" cy="301.4" r="2.6"/><circle cx="349.5" cy="354.9" r="2.6"/><circle cx="411.6" cy="393.0" r="2.6"/>
+  </g>
+  <text class="foil" x="132.1" y="228" text-anchor="middle" font-size="8.5" stroke="none">+.028</text>
+
+  <!-- split k=2 (hero): cyan solid, filled circles -->
+  <polyline class="obs" style="fill:none" stroke-width="2"
+    points="194.2,171.5 225.3,167.7 256.3,167.7 287.4,163.8 318.4,160.1 334.0,171.5 349.5,171.5 380.5,175.4 411.6,186.8 442.6,202.1 473.7,202.1 489.2,205.8 504.7,209.7 535.8,251.7 566.8,263.2 597.9,282.3 628.9,331.9"/>
+  <g class="obs">
+    <circle cx="194.2" cy="171.5" r="2.6"/><circle cx="225.3" cy="167.7" r="2.6"/><circle cx="256.3" cy="167.7" r="2.6"/><circle cx="287.4" cy="163.8" r="2.6"/><circle cx="318.4" cy="160.1" r="2.6"/><circle cx="334.0" cy="171.5" r="2.6"/><circle cx="349.5" cy="171.5" r="2.6"/><circle cx="380.5" cy="175.4" r="2.6"/><circle cx="411.6" cy="186.8" r="2.6"/><circle cx="442.6" cy="202.1" r="2.6"/><circle cx="473.7" cy="202.1" r="2.6"/><circle cx="489.2" cy="205.8" r="2.6"/><circle cx="504.7" cy="209.7" r="2.6"/><circle cx="535.8" cy="251.7" r="2.6"/><circle cx="566.8" cy="263.2" r="2.6"/><circle cx="597.9" cy="282.3" r="2.6"/><circle cx="628.9" cy="331.9" r="2.6"/>
+  </g>
+
+  <!-- stacks (violet, marker-only, shape-coded) -->
+  <g class="stk" stroke="none">
+    <!-- k=3 square @ S1.5 -->
+    <rect x="407.6" y="163.7" width="8" height="8"/>
+    <!-- k=4 triangle @ S1.25 and S1.5 -->
+    <polygon points="334,118.65 328,130.65 340,130.65"/>
+    <polygon points="411.6,91.9 405.6,103.9 417.6,103.9"/>
+    <!-- k=6 diamond @ S1.25 -->
+    <polygon points="334,99.6 341,106.6 334,113.6 327,106.6"/>
+  </g>
+
+  <!-- same-dose swing arrow @ Sigma 1.5 -->
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink2,#A4B0BC)"/>
+    </marker>
+  </defs>
+  <line x1="411.6" y1="98.9" x2="411.6" y2="393.0" stroke="var(--ink2,#A4B0BC)" stroke-width="1.3"
+        marker-start="url(#ah)" marker-end="url(#ah)"/>
+  <text class="ink2" x="424" y="234" font-size="9.5">same &#931;&#945; = 1.5</text>
+  <text class="ink2" x="424" y="247" font-size="9.5">&#916;-swing <tspan class="obs" stroke="none">+0.27</tspan></text>
+  <text class="mut" x="424" y="290" font-size="8">single &#8722;.115 &#8594; split +.153</text>
+
+  <!-- legend (lower-left, empty quadrant) -->
+  <g font-size="9">
+    <line x1="92" y1="318" x2="118" y2="318" class="foil" stroke-width="2" stroke-dasharray="6 4"/>
+    <circle cx="105" cy="318" r="2.6" class="foil" stroke="none"/>
+    <text x="124" y="321" class="ink2">single damped pass (&#931;&#945; = &#945;)</text>
+    <line x1="92" y1="334" x2="118" y2="334" class="obs" stroke-width="2"/>
+    <circle cx="105" cy="334" r="2.6" class="obs" stroke="none"/>
+    <text x="124" y="337" class="ink2">split, k = 2 (&#931;&#945; sweep)</text>
+    <g class="stk" stroke="none">
+      <rect x="98" y="346" width="8" height="8"/>
+      <polygon points="148,346 143,355 153,355"/>
+      <polygon points="190,350.5 195,346 200,350.5 195,355"/>
+    </g>
+    <text x="124" y="353" class="ink2" font-size="8.5">k3</text>
+    <text x="171" y="353" class="ink2" font-size="8.5">k4</text>
+    <text x="206" y="353" class="ink2" font-size="8.5">k6 (stacks)</text>
+  </g>
+
+  <!-- takeaway -->
+  <line x1="40" y1="458" x2="680" y2="458" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="40" y="478" class="ink2" font-size="11">Same budget, opposite outcomes. A single &#945; buys at most +0.03 and turns <tspan class="foil" stroke="none">harmful</tspan> when amplified.</text>
+  <text x="40" y="493" class="ink2" font-size="11">Splitting the same &#931;&#945; across re-evaluated passes <tspan class="obs" stroke="none">holds +0.15</tspan> &#8212; a place a single &#945; can&#8217;t reach.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .obs  { stroke: var(--accent,#4FB2C2); fill: var(--accent,#4FB2C2); }
+    .foil { stroke: var(--cause,#E3C24A); fill: var(--cause,#E3C24A); }
+    .stk  { stroke: var(--neg,#B98AD6); fill: var(--neg,#B98AD6); }
+  </style>
+  <defs>
+    <marker id="ahM" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink2,#A4B0BC)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="400" height="700" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="16" y="24" font-size="15">One pass can&#8217;t buy</text>
+  <text class="ttl" x="16" y="42" font-size="15">what splitting buys</text>
+  <text class="mut" x="16" y="58" font-size="8.5">MiniCPM5-1B &#183; L1 &#183; &#916; strict-math vs own baseline</text>
+  <text class="mut" x="16" y="69" font-size="8.5">18 shared math probes &#183; each config vs its own file</text>
+
+  <!-- gridlines -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="48" y1="174.7" x2="384" y2="174.7"/>
+    <line x1="48" y1="211.3" x2="384" y2="211.3"/>
+    <line x1="48" y1="272" x2="384" y2="272"/>
+    <line x1="48" y1="421.3" x2="384" y2="421.3"/>
+    <line x1="48" y1="483" x2="384" y2="483"/>
+  </g>
+
+  <!-- y axis + labels -->
+  <line x1="48" y1="150" x2="48" y2="520" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="44" y="177">+.15</text><text x="44" y="214">+.10</text><text x="44" y="275">+.05</text>
+    <text x="44" y="362">0</text><text x="44" y="424">&#8722;.05</text><text x="44" y="486">&#8722;.10</text>
+  </g>
+  <text x="20" y="335" transform="rotate(-90 20 335)" text-anchor="middle" class="mut" font-size="8">&#916; strict-math vs baseline</text>
+
+  <!-- baseline zero -->
+  <line x1="48" y1="359.7" x2="384" y2="359.7" stroke="var(--ink2,#A4B0BC)" stroke-width="1.2" stroke-dasharray="3 3"/>
+  <text class="mut" x="384" y="354" text-anchor="end" font-size="8">&#916; = 0</text>
+
+  <!-- x axis + labels -->
+  <line x1="48" y1="520" x2="384" y2="520" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="65.7" y="535">0.5</text><text x="154.1" y="535">1.0</text><text x="242.5" y="535">1.5</text><text x="330.9" y="535">2.0</text>
+  </g>
+  <text x="216" y="551" text-anchor="middle" class="mut" font-size="8.5">&#931;&#945;  (cumulative alpha on L1)</text>
+
+  <!-- single damped pass (foil): citron dashed -->
+  <polyline class="foil" style="fill:none" stroke-width="2" stroke-dasharray="6 4"
+    points="65.7,364.0 83.4,325.4 101.1,329.7 118.8,346.8 136.4,342.5 154.1,364.0 171.8,398.2 207.1,458.2 242.5,501.0"/>
+  <g class="foil">
+    <circle cx="65.7" cy="364.0" r="2.5"/><circle cx="83.4" cy="325.4" r="2.5"/><circle cx="101.1" cy="329.7" r="2.5"/><circle cx="118.8" cy="346.8" r="2.5"/><circle cx="136.4" cy="342.5" r="2.5"/><circle cx="154.1" cy="364.0" r="2.5"/><circle cx="171.8" cy="398.2" r="2.5"/><circle cx="207.1" cy="458.2" r="2.5"/><circle cx="242.5" cy="501.0" r="2.5"/>
+  </g>
+  <text class="foil" x="83.4" y="318" text-anchor="middle" font-size="8" stroke="none">+.028</text>
+
+  <!-- split k=2 (hero): cyan solid -->
+  <polyline class="obs" style="fill:none" stroke-width="2"
+    points="118.8,252.6 136.4,248.3 154.1,248.3 171.8,244.0 189.5,239.8 198.3,252.6 207.1,252.6 224.8,256.9 242.5,269.7 260.2,286.9 277.8,286.9 286.7,291.1 295.5,295.4 313.2,342.5 330.9,355.3 348.5,376.8 366.3,432.4"/>
+  <g class="obs">
+    <circle cx="118.8" cy="252.6" r="2.5"/><circle cx="136.4" cy="248.3" r="2.5"/><circle cx="154.1" cy="248.3" r="2.5"/><circle cx="171.8" cy="244.0" r="2.5"/><circle cx="189.5" cy="239.8" r="2.5"/><circle cx="198.3" cy="252.6" r="2.5"/><circle cx="207.1" cy="252.6" r="2.5"/><circle cx="224.8" cy="256.9" r="2.5"/><circle cx="242.5" cy="269.7" r="2.5"/><circle cx="260.2" cy="286.9" r="2.5"/><circle cx="277.8" cy="286.9" r="2.5"/><circle cx="286.7" cy="291.1" r="2.5"/><circle cx="295.5" cy="295.4" r="2.5"/><circle cx="313.2" cy="342.5" r="2.5"/><circle cx="330.9" cy="355.3" r="2.5"/><circle cx="348.5" cy="376.8" r="2.5"/><circle cx="366.3" cy="432.4" r="2.5"/>
+  </g>
+
+  <!-- stacks (violet, shape-coded) -->
+  <g class="stk" stroke="none">
+    <rect x="238.5" y="244.3" width="8" height="8"/>
+    <polygon points="198.3,195.2 193.3,205.2 203.3,205.2"/>
+    <polygon points="242.5,165.2 237.5,175.2 247.5,175.2"/>
+    <polygon points="198.3,173.8 204.3,179.8 198.3,185.8 192.3,179.8"/>
+  </g>
+
+  <!-- same-dose swing @ Sigma 1.5 -->
+  <line x1="242.5" y1="171.2" x2="242.5" y2="501.0" stroke="var(--ink2,#A4B0BC)" stroke-width="1.2"
+        marker-start="url(#ahM)" marker-end="url(#ahM)"/>
+  <text class="ink2" x="252" y="208" font-size="8.5">same &#931;&#945; = 1.5</text>
+  <text class="ink2" x="252" y="220" font-size="8.5">swing <tspan class="obs" stroke="none">+0.27</tspan></text>
+
+  <!-- legend (lower-left empty quadrant) -->
+  <g font-size="8.5">
+    <line x1="56" y1="446" x2="78" y2="446" class="foil" stroke-width="2" stroke-dasharray="6 4"/>
+    <circle cx="67" cy="446" r="2.5" class="foil" stroke="none"/>
+    <text x="84" y="449" class="ink2">single damped pass (&#931;&#945; = &#945;)</text>
+    <line x1="56" y1="462" x2="78" y2="462" class="obs" stroke-width="2"/>
+    <circle cx="67" cy="462" r="2.5" class="obs" stroke="none"/>
+    <text x="84" y="465" class="ink2">split, k = 2 (&#931;&#945; sweep)</text>
+    <g class="stk" stroke="none">
+      <rect x="62" y="474" width="8" height="8"/>
+      <polygon points="112,474 107,483 117,483"/>
+      <polygon points="154,478.5 159,474 164,478.5 159,483"/>
+    </g>
+    <text x="84" y="481" class="ink2" font-size="8">k3</text>
+    <text x="135" y="481" class="ink2" font-size="8">k4</text>
+    <text x="170" y="481" class="ink2" font-size="8">k6 (stacks)</text>
+  </g>
+
+  <!-- takeaway -->
+  <line x1="16" y1="572" x2="384" y2="572" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="16" y="590" class="ink2" font-size="9">Same budget, opposite outcomes. A single &#945; buys</text>
+  <text x="16" y="603" class="ink2" font-size="9">at most +0.03 and turns <tspan class="foil" stroke="none">harmful</tspan> when amplified.</text>
+  <text x="16" y="616" class="ink2" font-size="9">Splitting the same &#931;&#945; across re-evaluated passes</text>
+  <text x="16" y="629" class="ink2" font-size="9"><tspan class="obs" stroke="none">holds +0.15</tspan> &#8212; a place a single &#945; can&#8217;t reach.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 4 —</b> single-α vs split, on the 18 shared math probes (each config against its
+      own baseline). The single-pass curve humps to +0.028 near α 0.6, crosses zero at α 1.0, and falls to −0.115 by
+      Σα 1.5; the split k=2 curve sweeps Σα alongside and stays <em>above</em> the single at every dose, while high-k
+      stacks (k=3–6) sit higher still near the peak. The arrow marks the same-dose 0.27 swing at Σα = 1.5.</figcaption>
+      <div class="nb-prov"><span><b>source</b> single_alpha_vs_split_math18.json · Δ vs own-file baseline</span><span><b>type</b> data-grounded; two-file cross-check</span><span><b>safety</b> series by line-style + marker; no red/green</span></div>
+    </figure>
+  </section>
+
+  <section id="sigma">
+    <h2><span class="num">§4</span>The Σα-law</h2>
+    <p>Take layer L, give it <code>k</code> passes with a profile of alphas, and define <code>Σα</code> = the sum of all
+    per-pass alphas on that layer.</p>
+
+    <blockquote class="nb-pull nb-pull--wide"><b>The claim: Σα is the governing variable</b> — not the copy count, not
+    the ramp shape, not which particular pass carries which α. The <em>cumulative</em> alpha sets the score.</blockquote>
+
+    <div class="col-side">
+      <div>
+        <p class="dropcap">A caveat on the word "law." This is an empirical regularity, not a theorem — strong enough to
+        name, not proven universal. It earns the name here: the pooled regression (§6) fits it at R² = 0.74, and the
+        same Σα-governance recurs on Granite. But it's one layer of one 1B model plus a cross-model echo; the crest
+        drifts by channel; nothing here derives it from first principles. That's the bar this lab holds — Σα
+        <em>graduated</em> to a named law on the strength of the regression and the transfer, where Granite's weaker
+        combo-stacking pattern stayed a "depth-separation heuristic" precisely because it hadn't.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">k is gain, Σα is sign</span>
+        Below the peak, k ≥ 3 unlocks the top tier (L1 at Σα 1.25: k2 → +7.6, k3 → +9.3, k4–6 plateau ~+9.7).
+        <em>Above</em> the peak, k deepens the crater (L11 at Σα 2.0: k2 → −9.5, k3 → −17.9). The brain-death record —
+        <code>sa12_S200_k3</code>, 0.094 strict, t −24.6 — is k-multiplier × over-drive × a fragile deep layer, all
+        stacked.
+      </aside>
+    </div>
+
+    <table class="nb-table" style="margin-top:var(--sp-5)">
+      <thead><tr><th>config (L1 stack-ramp)</th><th>profile</th><th>Σα</th><th>math</th></tr></thead>
+      <tbody>
+        <tr><td class="first">stack_1_k2…k8 (conserve)</td><td>[1/k] × k</td><td><b>1.0</b></td><td><span class="flat">0.52–0.55 — flat across k=2→8</span></td></tr>
+        <tr><td class="first">stack_1_k5decay</td><td>[1, .5, .25, .125, .06]</td><td>1.94</td><td>0.44 (n.s.) — survives</td></tr>
+        <tr><td class="first">stack_1_k8decay</td><td>[1, .5, …]</td><td>1.99</td><td>0.44 (n.s.) — survives</td></tr>
+        <tr><td class="first">stack_1_k5dec</td><td>[1, .8, .6, .4, .2]</td><td>3.0</td><td>0.26 — cratering</td></tr>
+        <tr><td class="first">stack_1_k5inc</td><td>[.2, .4, .6, .8, 1]</td><td>3.0</td><td>0.16 — worse (back-loaded)</td></tr>
+        <tr><td class="first">stack_1_k8dec / k8inc</td><td>linspace</td><td>4.8</td><td><span class="dead">0.000 — dead</span></td></tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top:var(--sp-5)">Read down the Σα column and the score tracks it, not the shape. The conserve row
+    (Σα = 1) is <em>flat from k=2 to k=8</em> — once total update is fixed, adding copies does nothing. A fine scan then
+    sharpened it: the peak isn't at Σα = 1 (just the lowest densely-sampled cell). On L1 it sits at <b>Σα ≈ 1.25</b>, on
+    a broad 1.1–1.5 ridge, fading by ~2.0, cratering by ~3, and reaching full residual-norm collapse around
+    <b>Σα ≈ 4.8</b>.</p>
+
+    <figure class="figure" id="fig5">
+      <p class="nb-plate__note">↳ the signature plot — k spreads the curve <em>vertically</em> (gain), it does not move the peak horizontally</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 520" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <defs>
+    <pattern id="craterC" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="var(--neg,#B98AD6)" stroke-width="1" opacity="0.45"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="720" height="520" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="42" font-size="18">The Σα-law — one dose-response governs the whole specimen</text>
+  <text class="mut" x="40" y="62" font-size="11">Layer 1 of MiniCPM5-1B. x = Σα (cumulative per-pass damping).</text>
+  <text class="mut" x="40" y="75" font-size="11">y = strict-math Δ vs baseline (v3, base 0.417).</text>
+
+  <!-- crater zone Σα>=3 -->
+  <rect x="403" y="106" width="267" height="254" fill="url(#craterC)"/>
+  <rect x="403" y="106" width="267" height="254" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+
+  <!-- axes -->
+  <line x1="70" y1="106" x2="70" y2="350" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="70" y1="172.5" x2="670" y2="172.5" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="64" y="175" text-anchor="end" class="mut" font-size="9">Δ 0</text>
+  <text x="64" y="121" text-anchor="end" class="mut" font-size="9">+.13</text>
+  <text x="64" y="241" text-anchor="end" class="mut" font-size="9">−.16</text>
+  <text x="64" y="349" text-anchor="end" class="mut" font-size="9">−.42</text>
+
+  <!-- x ticks -->
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="136.7" y="376">1</text><text x="270" y="376">2</text><text x="403.3" y="376">3</text><text x="536.7" y="376">4</text><text x="643.3" y="376">5</text>
+    <text x="370" y="394" letter-spacing="1">Σα →</text>
+  </g>
+
+  <!-- regime separators + labels -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="2 4" opacity="0.7">
+    <line x1="150" y1="112" x2="150" y2="360"/><line x1="203.3" y1="112" x2="203.3" y2="360"/>
+  </g>
+  <g font-size="8.5" text-anchor="middle" class="mut">
+    <text x="110" y="160">conserve</text>
+    <text x="177" y="160" fill="var(--accent,#4FB2C2)">repair</text>
+    <text x="303" y="160">over-drive</text>
+    <text x="537" y="160" fill="var(--neg,#B98AD6)">norm-collapse</text>
+  </g>
+
+  <!-- peak guide -->
+  <line x1="170" y1="118.3" x2="170" y2="360" stroke="var(--cause,#E3C24A)" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>
+  <text x="170" y="105" text-anchor="middle" font-size="10.5" fill="var(--cause,#E3C24A)">Σα ≈ 1.25 ridge (1.1–1.5)</text>
+
+  <!-- death floor marker -->
+  <line x1="643.3" y1="340" x2="643.3" y2="344" stroke="var(--neg,#B98AD6)" stroke-width="1"/>
+  <text x="566" y="336" text-anchor="end" font-size="9" fill="var(--neg,#B98AD6)">Σα ≈ 4.8:  </text>
+  <text x="616" y="348" text-anchor="end" font-size="9" fill="var(--neg,#B98AD6)">residual-norm floor, score 0.0</text>
+
+  <!-- response curve -->
+  <path d="M70,170 C81.12,162.88 120.03,135.92 136.7,127.3 C153.37,118.68 160,118.3 170,118.3 C190.88,118.3 223.12,142.97 262,162.9 C300.88,182.83 339.75,207.33 403.3,237.9 C466.85,268.47 598.85,326.28 643.3,346.3 L670,358"
+        fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2.4"/>
+
+  <!-- real markers from the §4 origin table -->
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8">
+    <circle cx="136.7" cy="127.3" r="3.4"/>
+    <circle cx="262" cy="162.9" r="3.4"/>
+    <circle cx="403.3" cy="237.9" r="3.4"/>
+    <circle cx="643.3" cy="346.3" r="3.4"/>
+  </g>
+  <!-- peak marker -->
+  <circle cx="170" cy="118.3" r="4.2" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+  <!-- back-loaded outlier (same Σα 3, worse) -->
+  <circle cx="403.3" cy="279.6" r="3.4" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="1.6" stroke-dasharray="2 2"/>
+  <text x="252" y="283" font-size="8.5" fill="var(--neg,#B98AD6)">same Σα, back-loaded → worse</text>
+
+  <!-- k-multiplier callout -->
+  <rect x="470" y="403" width="220" height="82" rx="4" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="482" y="420" class="ink2" font-size="10">k is a gain multiplier,</text>
+  <text x="482" y="435" class="ink2" font-size="10">Σα is the sign:</text>
+  <text x="482" y="449" class="mut" font-size="9">below peak  k2 → k6 lifts +7.6 → +9.7</text>
+  <text x="482" y="462" class="mut" font-size="9">above peak  k deepens the crater</text>
+  <text x="482" y="475" class="mut" font-size="9">(L11 @ Σα 2:  k2 −9.5 → k3 −17.9)</text>
+
+  <!-- caption -->
+  <text x="40" y="426" class="ink2" font-size="11">Read down the Σα axis and the score tracks it, not the </text>
+  <text x="40" y="442" class="ink2" font-size="11">copy count or ramp shape. Pooled regression over 35 L1 configs</text>
+  <text x="40" y="458" class="ink2" font-size="11"> fits the hump at R² = 0.74; a concentration penalty (Σa²)  </text>
+  <text x="40" y="474" class="ink2" font-size="11">explains why flat beats ramp and k6 beats k4 at the same dose.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 580" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <defs>
+    <pattern id="craterCm" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="var(--neg,#B98AD6)" stroke-width="1" opacity="0.45"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="400" height="580" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="18">The Σα-law — one</text>
+  <text class="ttl" x="20" y="54" font-size="18">dose-response governs all</text>
+  <text class="mut" x="20" y="72" font-size="10">Layer 1 of MiniCPM5-1B. x = Σα (cumulative damping).</text>
+  <text class="mut" x="20" y="86" font-size="10">y = strict-math Δ vs baseline (v3, base 0.417).</text>
+
+  <!-- crater zone Σα>=3 -->
+  <rect x="232.2" y="120" width="138" height="220" fill="url(#craterCm)"/>
+  <rect x="232.2" y="120" width="138" height="220" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+
+  <!-- axes -->
+  <line x1="60" y1="120" x2="60" y2="340" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="60" y1="177.3" x2="370" y2="177.3" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="54" y="180" text-anchor="end" class="mut" font-size="8.5">Δ0</text>
+  <text x="54" y="133" text-anchor="end" class="mut" font-size="8.5">+.13</text>
+  <text x="54" y="237" text-anchor="end" class="mut" font-size="8.5">−.16</text>
+  <text x="54" y="332" text-anchor="end" class="mut" font-size="8.5">−.42</text>
+
+  <!-- x ticks -->
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="94.4" y="356">1</text><text x="163.4" y="356">2</text><text x="232.2" y="356">3</text><text x="301.1" y="356">4</text><text x="356.1" y="356">5</text>
+    <text x="215" y="372" letter-spacing="1">Σα →</text>
+  </g>
+
+  <!-- peak guide -->
+  <line x1="111.7" y1="130" x2="111.7" y2="340" stroke="var(--cause,#E3C24A)" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>
+  <text x="111.7" y="110" text-anchor="middle" font-size="9.5" fill="var(--cause,#E3C24A)">Σα ≈ 1.25</text>
+  <text x="111.7" y="121" text-anchor="middle" font-size="8" class="mut">ridge 1.1–1.5</text>
+
+  <!-- regime labels -->
+  <g font-size="8" text-anchor="middle" class="mut">
+    <text x="82" y="168">conserve</text>
+    <text x="200" y="168">over-drive</text>
+    <text x="300" y="168" fill="var(--neg,#B98AD6)">norm-collapse</text>
+  </g>
+
+  <!-- response curve -->
+  <path d="M60,162 C65.73,157.4 85.78,139.73 94.4,134.4 C103.02,129.07 106.5,130 111.7,130 C122.5,130 139.12,151.5 159.2,168.9 C179.28,186.3 199.38,207.73 232.2,234.4 C265.02,261.07 333.13,312.97 356.1,328.9 L370,330"
+        fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2.4"/>
+
+  <!-- markers -->
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8">
+    <circle cx="94.4" cy="134.4" r="3.2"/>
+    <circle cx="159.2" cy="168.9" r="3.2"/>
+    <circle cx="232.2" cy="234.4" r="3.2"/>
+    <circle cx="356.1" cy="328.9" r="3.2"/>
+  </g>
+  <circle cx="111.7" cy="130" r="4" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+  <circle cx="232.2" cy="270.7" r="3.2" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="1.6" stroke-dasharray="2 2"/>
+
+  <text x="325" y="320" text-anchor="end" font-size="8.5" fill="var(--neg,#B98AD6)">Σα 4.8: floor</text>
+  <text x="325" y="330" text-anchor="end" font-size="8.5" fill="var(--neg,#B98AD6)">score 0.0</text>
+
+  <!-- k callout -->
+  <rect x="20" y="392" width="360" height="80" rx="4" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="34" y="412" class="ink2" font-size="10.5">k is a gain multiplier, Σα is the sign:</text>
+  <text x="34" y="432" class="mut" font-size="9.5">below peak  k2 → k6 lifts  +7.6 → +9.7</text>
+  <text x="34" y="444" class="mut" font-size="9.5">above peak  k deepens the crater</text>
+  <text x="34" y="456" class="mut" font-size="8.5">(L11 @ Σα 2:  k2 −9.5 → k3 −17.9 · back-loaded ∘ = worse)</text>
+
+  <!-- caption -->
+  <text x="20" y="494" class="ink2" font-size="11">Score tracks the Σα axis, not the copy count or</text>
+  <text x="20" y="510" class="ink2" font-size="11">ramp shape. Pooled regression over 35 L1 configs</text>
+  <text x="20" y="526" class="ink2" font-size="11">fits the hump at R² = 0.74; a concentration penalty</text>
+  <text x="20" y="542" class="ink2" font-size="11">(Σa²) explains why flat beats ramp and k6 beats k4</text>
+  <text x="20" y="558" class="ink2" font-size="11">at the same dose.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 5 —</b> the Σα curve (the signature plot of the whole specimen). X = Σα on L1,
+      Y = strict-math Δ vs baseline. One smooth dose-response hump: rising from below 1, peaking in the ~1.25–1.5 ridge,
+      decaying through ~2, crossing zero, then plunging into the crater and flattening at the ~4.8 death floor.
+      Overlaid k=2 / k=4 / k=6 series show k spreading the curve <em>vertically</em> — helpful below the peak, harmful
+      above it — without moving the peak. The four regimes annotated: conserve / repair / over-drive /
+      norm-collapse.</figcaption>
+      <div class="nb-prov"><span><b>source</b> fig_sigma_law.json + sigma_kfill.py · in-band ruler, Δ vs own baseline</span><span><b>type</b> data-grounded dose-response</span><span><b>safety</b> k-series by marker shape; regimes labelled in text</span></div>
+    </figure>
+
+    <p><b>Honesty about the peak.</b> "Σα ≈ 1.25" is the L1 finescan answer, but it's not clean across the board. A
+    separate distributed sweep found Σ1.50 k6 stacks beating the Σ1.25 band at the very top
+    (<span class="vrfy">VERIFY</span> champion <code>shp1_S150_k6_flat</code>, t +7.33), and the pooled regression put
+    the <em>math</em> optimum nearer Σα ≈ 1.65 versus ~1.5 for the balanced battery. So the truthful statement is:
+    <b>a broad peak in the ~1.25–1.65 region, drifting higher for the narrow math channel</b> — not a single magic
+    constant. The ridge is real; its exact crest is channel-dependent. That tension is in the data and stays in the
+    writeup.</p>
+  </section>
+
+  <section id="death">
+    <h2><span class="num">§5</span>One death, two doors</h2>
+    <p>Over-drive (Σα ≫ 1) and negative-α reversal converge on the <b>same</b> failure. Grade the verbatim generations
+    along the Σα climb and you watch the model die the same way each time: at <b>Σα = 1</b> clean; at <b>Σα ≈ 2</b>
+    coherent but with arithmetic slips plus de-narration derail (the model wandering into MMLU-style narration); at
+    <b>Σα = 3</b> wounded (operand echo, CJK script leaking); at <b>Σα ≈ 4.8</b> dead — <code>500000…0</code>
+    digit-repetition, special tokens, random scripts.</p>
+
+    <div class="negresult">
+      <span class="nb-kicker">Refuted — "the stack absorbs divergence"</span>
+      <p><span class="olabel obs">obs</span> a divergence sandwich <code>diverge_567</code> (+.7 / −.5 / +.8 on L5/6/7)
+      collapses to 0.00, while the control (+.7 / +.5 / +.8) holds at 0.27. <span class="olabel inf">inf</span> it's the
+      <em>negation</em>, not the perturbation, that kills it — and the bracketing positive layers do <b>not</b> absorb
+      a reversed middle layer. The verbatim of the collapsed run shows the same <code>0.0000…0</code> norm-collapse
+      signature as over-drive: the two doors open onto the same room.</p>
+    </div>
+
+    <p>The mechanistic reading, consistent with Fig 1: <b>L1's job is keeping the residual inside the norm band the
+    downstream layernorms expect.</b> You can break that from either side — pour too much in (over-drive) or push it
+    backwards (negation) — and either way the stream walks out of the band, the late layernorms see a vector they were
+    never trained on, and the output head spills digits, special tokens, and whatever script is nearest in embedding
+    space. L1 is simultaneously the most <em>split-helpful</em> layer and the most <em>negation-fragile</em> one (at
+    α = −0.1, L1 → 0.03 vs L5 → 0.12). The leverage cuts both ways because it's the same leverage.</p>
+  </section>
+
+  <section id="exposure">
+    <h2><span class="num">§6</span>The degeneration rate — exposure, not capability</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">Here's the result I'm fondest of, and it cost no compute — a metric computed over generations
+        that were already stored. Different probe channels disagreed about whether a config was good: math liked
+        high-k; the emotional-intelligence (eq) channel hated it. <span class="olabel obs">obs</span> diffing the
+        verbatim responses showed the disagreement is about length — math answers are ~16 tokens, eq answers ~96.
+        <span class="olabel inf">inf</span> the explanation is not "math and eq need different surgery"; it's
+        <b>exposure</b>: a low per-token derailment probability is invisible in 16 tokens and <em>compounds</em> into a
+        visible loss across 96.</p>
+        <p>So define a <b>degeneration rate</b>: the fraction of stored responses that derail (special-token leak +
+        name:number line-loops — the same crater signature, appearing subclinically). It's monotone in both knobs: in
+        k (0 → 5.0% from k4 → k12 at S150) and in Σα (0.8 → 11.7% from S150 → S250 at k6). Math sits near 0% — its
+        short answers just don't expose the risk.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">A candidate standard metric</span>
+        The responses are already on disk; the detector is a special-token + line-loop scan. It separates "this config
+        is worse" from "this config is <em>riskier per token</em>" — a distinction the aggregate score actively hides.
+        Practical corollary: the optimal config is generation-length-dependent, and a sampler-level repetition penalty
+        + special-token ban might suppress the derailments outright. (Untested. Cheap. Worth a run.)
+      </aside>
+    </div>
+
+    <p>And then the clincher. Take the eq channel, throw out only the derailed responses, and score the <em>clean</em>
+    ones (conditional mean): at k10/k12 the clean-only eq is <b>≥ baseline</b> (0.478 / 0.475 vs 0.472).
+    <span class="hl-acc">The clean responses hold at or above baseline on every channel</span> — including the one whose
+    aggregate score the surgery tanked. What the surgery costs isn't content quality; it's the <em>probability</em> of
+    derailing. The "eq champion" of the early board, <code>dampall_a65</code>, turns out to be a 14.6% derailment
+    machine; the genuine stable champion, <code>shp1_S150_k6_flat</code>, degenerates 0.4% of the time — <em>more stable
+    than baseline's own 2.1%.</em></p>
+
+    <figure class="figure" id="fig6">
+      <p class="nb-plate__note">↳ throw out the derailed responses and the clean ones sit at/above baseline — the cost is risk, not quality</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .obs  { stroke: var(--accent,#4FB2C2); fill: var(--accent,#4FB2C2); }
+  </style>
+  <defs>
+    <pattern id="cleanHatch" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect width="6" height="6" fill="var(--accent,#4FB2C2)" opacity="0.16"/>
+      <path d="M0,6 L6,0" stroke="var(--accent,#4FB2C2)" stroke-width="1.4"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="720" height="500" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="30" font-size="18">Derailment is a probability tax, not a capability loss</text>
+  <text class="mut" x="40" y="49" font-size="10">MiniCPM5-1B &#183; L1 split-pass damping &#183; eq channel (96-tok) &#183; &#8220;derail&#8221; = special-token leak or repeated-line loop</text>
+
+  <!-- ======================= LEFT: two stacked mini-panels (shared degen% y, 0-12) ======================= -->
+  <!-- shared y axis label -->
+  <text x="24" y="222" transform="rotate(-90 24 222)" text-anchor="middle" class="mut" font-size="10">degeneration rate (%)</text>
+
+  <!-- Mini-A: derail vs k -->
+  <text class="ink2" x="80" y="78" font-size="10">&#9312; rises with copy-count k <tspan class="mut">(&#931;&#945; fixed 1.5)</tspan></text>
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="80" y1="158.3" x2="330" y2="158.3"/>
+    <line x1="80" y1="121.7" x2="330" y2="121.7"/>
+  </g>
+  <line x1="80" y1="85" x2="80" y2="195" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="80" y1="195" x2="330" y2="195" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="76" y="198">0</text><text x="76" y="161">4</text><text x="76" y="125">8</text><text x="76" y="88">12</text>
+  </g>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="80" y="207">4</text><text x="142.5" y="207">6</text><text x="205" y="207">8</text><text x="267.5" y="207">10</text><text x="330" y="207">12</text>
+  </g>
+  <text x="205" y="220" text-anchor="middle" class="mut" font-size="9">copies k</text>
+  <polyline class="obs" style="fill:none" stroke-width="2"
+    points="80,195 142.5,187.4 205,175.9 267.5,164.5 330,149.2"/>
+  <g class="obs" stroke="none">
+    <circle cx="80" cy="195" r="3"/><circle cx="142.5" cy="187.4" r="3"/><circle cx="205" cy="175.9" r="3"/><circle cx="267.5" cy="164.5" r="3"/><circle cx="330" cy="149.2" r="3"/>
+  </g>
+  <text class="ink2" x="330" y="143" font-size="9" text-anchor="end">5.0%</text>
+
+  <!-- Mini-B: derail vs Sigma-alpha -->
+  <text class="ink2" x="80" y="243" font-size="10">&#9313; rises with dose &#931;&#945; <tspan class="mut">(k fixed 6)</tspan></text>
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="80" y1="323.3" x2="330" y2="323.3"/>
+    <line x1="80" y1="286.7" x2="330" y2="286.7"/>
+  </g>
+  <line x1="80" y1="250" x2="80" y2="360" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="80" y1="360" x2="330" y2="360" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="76" y="363">0</text><text x="76" y="326">4</text><text x="76" y="290">8</text><text x="76" y="253">12</text>
+  </g>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="80" y="372">1.5</text><text x="142.5" y="372">1.75</text><text x="205" y="372">2.0</text><text x="267.5" y="372">2.25</text><text x="330" y="372">2.5</text>
+  </g>
+  <text x="205" y="385" text-anchor="middle" class="mut" font-size="9">cumulative &#931;&#945;</text>
+  <polyline class="obs" style="fill:none" stroke-width="2" stroke-dasharray="6 4"
+    points="80,352.4 142.5,333.2 205,318 267.5,287.4 330,253"/>
+  <g class="obs" stroke="none">
+    <rect x="77" y="349.4" width="6" height="6"/><rect x="139.5" y="330.2" width="6" height="6"/><rect x="202" y="315" width="6" height="6"/><rect x="264.5" y="284.4" width="6" height="6"/><rect x="327" y="250" width="6" height="6"/>
+  </g>
+  <text class="ink2" x="330" y="247" font-size="9" text-anchor="end">11.7%</text>
+
+  <!-- ======================= RIGHT: eq score Delta-from-baseline, agg vs clean ======================= -->
+  <text class="ink2" x="398" y="78" font-size="10">&#9314; eq score, change from baseline (per copy-count k)</text>
+
+  <!-- zero (baseline) gridline + ticks -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="398" y1="173.6" x2="690" y2="173.6"/>
+    <line x1="398" y1="330.7" x2="690" y2="330.7"/>
+  </g>
+  <line x1="398" y1="95" x2="398" y2="370" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="394" y="98">+.020</text><text x="394" y="176.6">+.010</text><text x="394" y="333.7">&#8722;.010</text>
+  </g>
+  <!-- baseline zero line (prominent) -->
+  <line x1="398" y1="252.1" x2="690" y2="252.1" stroke="var(--ink2,#A4B0BC)" stroke-width="1.4" stroke-dasharray="2 2"/>
+  <text class="ink2" x="694" y="255" font-size="8.5">baseline (.472)</text>
+
+  <!-- bars: agg solid citron, clean cyan hatch. width 16, agg left / clean right of center -->
+  <!-- base c422 -->
+  <rect x="406" y="260.0" width="16" height="-7.9" fill="var(--cause,#E3C24A)"/>
+  <rect x="424" y="252.1" width="16" height="0" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <!-- k4 c468 -->
+  <rect x="452" y="181.4" width="16" height="70.7" fill="var(--cause,#E3C24A)"/>
+  <rect x="470" y="181.4" width="16" height="70.7" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <!-- k6 c514 -->
+  <rect x="498" y="142.1" width="16" height="110.0" fill="var(--cause,#E3C24A)"/>
+  <rect x="516" y="110.7" width="16" height="141.4" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <!-- k8 c560 (agg negative) -->
+  <rect x="544" y="252.1" width="16" height="39.3" fill="var(--cause,#E3C24A)"/>
+  <rect x="562" y="228.6" width="16" height="23.5" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <!-- k10 c606 (agg negative) -->
+  <rect x="590" y="252.1" width="16" height="78.6" fill="var(--cause,#E3C24A)"/>
+  <rect x="608" y="205.0" width="16" height="47.1" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <!-- k12 c652 (agg negative) -->
+  <rect x="636" y="252.1" width="16" height="94.3" fill="var(--cause,#E3C24A)"/>
+  <rect x="654" y="228.6" width="16" height="23.5" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+
+  <!-- x labels + degen% under each group -->
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="422" y="384">base</text><text x="468" y="384">k4</text><text x="514" y="384">k6</text><text x="560" y="384">k8</text><text x="606" y="384">k10</text><text x="652" y="384">k12</text>
+  </g>
+  <g class="mut" font-size="7.5" text-anchor="middle">
+    <text x="422" y="394">0.8%</text><text x="468" y="394">0%</text><text x="514" y="394">0.8%</text><text x="560" y="394">2.1%</text><text x="606" y="394">3.3%</text><text x="652" y="394">5.0%</text>
+  </g>
+  <text x="544" y="406" text-anchor="middle" class="mut" font-size="8">copies k  (with derail rate)</text>
+
+  <!-- callouts -->
+  <text class="ink2" x="688" y="150" text-anchor="end" font-size="9.5">clean-only stays</text>
+  <text class="ink2" x="688" y="162" text-anchor="end" font-size="9.5">&#8805; baseline at every k</text>
+  <text class="mut" x="688" y="300" text-anchor="end" font-size="8.5">aggregate dips below:</text>
+  <text class="mut" x="688" y="311" text-anchor="end" font-size="8.5">the derail tax</text>
+
+  <!-- legend -->
+  <rect x="406" y="100" width="14" height="11" fill="var(--cause,#E3C24A)"/>
+  <text x="424" y="109" class="ink2" font-size="9">aggregate (all responses)</text>
+  <rect x="406" y="116" width="14" height="11" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <text x="424" y="125" class="ink2" font-size="9">clean-only (derails dropped)</text>
+
+  <!-- ======================= takeaway ======================= -->
+  <line x1="40" y1="432" x2="680" y2="432" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="40" y="453" class="ink2" font-size="11">Past the k6 peak the aggregate eq score falls &#8212; but the non-derailed responses hold at baseline. The model isn&#8217;t getting</text>
+  <text x="40" y="470" class="ink2" font-size="11">dumber as you stack copies; it&#8217;s derailing more often. The cost is <tspan class="obs" fill="var(--accent,#4FB2C2)">exposure</tspan>, not capability &#8212; and a special-token ban would buy it back.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .obs  { stroke: var(--accent,#4FB2C2); fill: var(--accent,#4FB2C2); }
+  </style>
+  <defs>
+    <pattern id="cleanHatchM" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect width="6" height="6" fill="var(--accent,#4FB2C2)" opacity="0.16"/>
+      <path d="M0,6 L6,0" stroke="var(--accent,#4FB2C2)" stroke-width="1.4"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="400" height="700" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="16" y="24" font-size="15">Derailment is a probability tax,</text>
+  <text class="ttl" x="16" y="42" font-size="15">not a capability loss</text>
+  <text class="mut" x="16" y="58" font-size="8.5">MiniCPM5-1B &#183; L1 split-pass damping &#183; eq channel (96-tok)</text>
+  <text class="mut" x="16" y="69" font-size="8.5">&#8220;derail&#8221; = special-token leak or repeated-line loop</text>
+
+  <!-- Mini-A: derail vs k -->
+  <text class="ink2" x="16" y="79" font-size="9.5">&#9312; derail % rises with copy-count k <tspan class="mut">(&#931;&#945; 1.5)</tspan></text>
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="55" y1="151.3" x2="360" y2="151.3"/>
+    <line x1="55" y1="122.7" x2="360" y2="122.7"/>
+  </g>
+  <line x1="55" y1="94" x2="55" y2="180" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="55" y1="180" x2="360" y2="180" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="50" y="183">0</text><text x="50" y="154">4</text><text x="50" y="126">8</text><text x="50" y="97">12</text>
+  </g>
+  <text x="34" y="137" transform="rotate(-90 34 137)" text-anchor="middle" class="mut" font-size="8">derail %</text>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="55" y="192">4</text><text x="131.2" y="192">6</text><text x="207.5" y="192">8</text><text x="283.8" y="192">10</text><text x="360" y="192">12</text>
+  </g>
+  <text x="207.5" y="204" text-anchor="middle" class="mut" font-size="8.5">copies k</text>
+  <polyline class="obs" style="fill:none" stroke-width="2"
+    points="55,180 131.2,174.1 207.5,165.1 283.8,156.1 360,144.2"/>
+  <g class="obs" stroke="none">
+    <circle cx="55" cy="180" r="2.8"/><circle cx="131.2" cy="174.1" r="2.8"/><circle cx="207.5" cy="165.1" r="2.8"/><circle cx="283.8" cy="156.1" r="2.8"/><circle cx="360" cy="144.2" r="2.8"/>
+  </g>
+  <text class="ink2" x="358" y="138" font-size="8.5" text-anchor="end">5.0%</text>
+
+  <!-- Mini-B: derail vs Sigma-alpha -->
+  <text class="ink2" x="16" y="225" font-size="9.5">&#9313; derail % rises with dose &#931;&#945; <tspan class="mut">(k 6)</tspan></text>
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="55" y1="297.3" x2="360" y2="297.3"/>
+    <line x1="55" y1="264.7" x2="360" y2="264.7"/>
+  </g>
+  <line x1="55" y1="232" x2="55" y2="330" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="55" y1="330" x2="360" y2="330" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="50" y="333">0</text><text x="50" y="300">4</text><text x="50" y="268">8</text><text x="50" y="235">12</text>
+  </g>
+  <text x="32" y="281" transform="rotate(-90 32 281)" text-anchor="middle" class="mut" font-size="8">derail %</text>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="55" y="342">1.5</text><text x="131.2" y="342">1.75</text><text x="207.5" y="342">2.0</text><text x="283.8" y="342">2.25</text><text x="360" y="342">2.5</text>
+  </g>
+  <text x="207.5" y="354" text-anchor="middle" class="mut" font-size="8.5">cumulative &#931;&#945;</text>
+  <polyline class="obs" style="fill:none" stroke-width="2" stroke-dasharray="6 4"
+    points="55,323.2 131.2,306.2 207.5,292.6 283.8,265.3 360,234.7"/>
+  <g class="obs" stroke="none">
+    <rect x="52" y="320.2" width="6" height="6"/><rect x="128.2" y="303.2" width="6" height="6"/><rect x="204.5" y="289.6" width="6" height="6"/><rect x="280.8" y="262.3" width="6" height="6"/><rect x="357" y="231.7" width="6" height="6"/>
+  </g>
+  <text class="ink2" x="358" y="229" font-size="8.5" text-anchor="end">11.7%</text>
+
+  <!-- Bars: eq score Delta from baseline -->
+  <text class="ink2" x="16" y="386" font-size="9.5">&#9314; eq score &#8212; change from baseline, per k</text>
+  <rect x="16" y="392" width="13" height="10" fill="var(--cause,#E3C24A)"/>
+  <text x="33" y="400" class="ink2" font-size="8.5">aggregate</text>
+  <rect x="110" y="392" width="13" height="10" fill="url(#cleanHatchM)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <text x="127" y="400" class="ink2" font-size="8.5">clean-only (derails dropped)</text>
+
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="55" y1="449.3" x2="385" y2="449.3"/>
+    <line x1="55" y1="537.9" x2="385" y2="537.9"/>
+  </g>
+  <line x1="55" y1="405" x2="55" y2="560" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="7.5" text-anchor="end">
+    <text x="50" y="408">+.020</text><text x="50" y="452">+.010</text><text x="50" y="540">&#8722;.010</text>
+  </g>
+  <!-- baseline zero line -->
+  <line x1="55" y1="493.6" x2="385" y2="493.6" stroke="var(--ink2,#A4B0BC)" stroke-width="1.4" stroke-dasharray="2 2"/>
+  <text class="ink2" x="55" y="575" font-size="8">dashed = baseline eq (.472)</text>
+
+  <!-- bars (agg solid / clean hatch), width 12, agg left clean right of center -->
+  <!-- base c65 -->
+  <rect x="51" y="493.6" width="12" height="4.4" fill="var(--cause,#E3C24A)"/>
+  <rect x="65" y="493.6" width="12" height="0" fill="url(#cleanHatchM)"/>
+  <!-- k4 c123 -->
+  <rect x="109" y="453.7" width="12" height="39.9" fill="var(--cause,#E3C24A)"/>
+  <rect x="123" y="453.7" width="12" height="39.9" fill="url(#cleanHatchM)" stroke="var(--accent,#4FB2C2)" stroke-width="0.7"/>
+  <!-- k6 c181 -->
+  <rect x="167" y="431.6" width="12" height="62.0" fill="var(--cause,#E3C24A)"/>
+  <rect x="181" y="413.9" width="12" height="79.7" fill="url(#cleanHatchM)" stroke="var(--accent,#4FB2C2)" stroke-width="0.7"/>
+  <!-- k8 c239 agg dn -->
+  <rect x="225" y="493.6" width="12" height="22.1" fill="var(--cause,#E3C24A)"/>
+  <rect x="239" y="480.3" width="12" height="13.3" fill="url(#cleanHatchM)" stroke="var(--accent,#4FB2C2)" stroke-width="0.7"/>
+  <!-- k10 c297 agg dn -->
+  <rect x="283" y="493.6" width="12" height="44.3" fill="var(--cause,#E3C24A)"/>
+  <rect x="297" y="467.0" width="12" height="26.6" fill="url(#cleanHatchM)" stroke="var(--accent,#4FB2C2)" stroke-width="0.7"/>
+  <!-- k12 c355 agg dn -->
+  <rect x="341" y="493.6" width="12" height="53.1" fill="var(--cause,#E3C24A)"/>
+  <rect x="355" y="480.3" width="12" height="13.3" fill="url(#cleanHatchM)" stroke="var(--accent,#4FB2C2)" stroke-width="0.7"/>
+
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="65" y="600">base</text><text x="123" y="600">k4</text><text x="181" y="600">k6</text><text x="239" y="600">k8</text><text x="297" y="600">k10</text><text x="355" y="600">k12</text>
+  </g>
+  <g class="mut" font-size="7" text-anchor="middle">
+    <text x="65" y="610">0.8%</text><text x="123" y="610">0%</text><text x="181" y="610">0.8%</text><text x="239" y="610">2.1%</text><text x="297" y="610">3.3%</text><text x="355" y="610">5.0%</text>
+  </g>
+  <text x="220" y="622" text-anchor="middle" class="mut" font-size="8">copies k (derail rate under each)</text>
+
+  <!-- takeaway -->
+  <line x1="16" y1="644" x2="384" y2="644" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="16" y="662" class="ink2" font-size="9">Past k6 the aggregate eq score falls &#8212; but the clean</text>
+  <text x="16" y="674" class="ink2" font-size="9">responses hold at baseline. Not dumber, just derailing</text>
+  <text x="16" y="686" class="ink2" font-size="9">more. The cost is <tspan class="obs" fill="var(--accent,#4FB2C2)">exposure</tspan>, not capability.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 6 —</b> exposure, not capability. <b>Left:</b> degeneration rate (%) rising
+      monotonically with both copy count (at fixed Σα) and Σα (at fixed k). <b>Right:</b> the conditional-mean reveal —
+      for the eq channel, the aggregate score falls with k, but scoring only the non-derailed responses holds flat at
+      or above the untouched-model baseline (dashed). The surgery improves content quality and only costs derailment
+      probability.</figcaption>
+      <div class="nb-prov"><span><b>source</b> stored generations · special-token + line-loop detector</span><span><b>type</b> data-grounded; zero added compute (regrade)</span><span><b>safety</b> series by hatch/marker; baseline dashed</span></div>
+    </figure>
+  </section>
+
+  <section id="regression">
+    <h2><span class="num">§7</span>It's all one cost surface</h2>
+    <p>The separate observations — flat-beats-ramp, k6-beats-k4 below peak, the dose hump — are not separate. Pool
+    <b>all</b> 35 L1 finescan configs (flats, ramps, k-ladders) and fit:</p>
+
+    <pre class="code">math  =  β₀ + β₁·Σα + β₂·Σα² + β₃·Σα²(profile)
+      →  R² = 0.74,   β₃ = −0.041 ± 0.009  (t −4.9)</pre>
+
+    <p>The Σα² term gives the dose parabola (peak ≈ 1.65 for math); the <em>profile</em>-curvature term, Σa² summed
+    over the per-pass alphas, is a penalty for <b>concentration</b> — spreading the same Σα across flatter, smaller
+    passes costs less than dumping it into one big pass. "Flat beats ramp" and "k6 beats k4" are the same phenomenon:
+    both lower Σa² at fixed Σα. One surface, two knobs.</p>
+
+    <p>Where the regression <em>fails</em> is itself informative: the residual-norm wall is not smooth. A k1→k2 rescue
+    at Σ1.5 was observed at <b>+0.252</b> against a quadratic prediction of ~+0.05 — a single concentrated pass breaks
+    <em>beyond</em> what smooth curvature predicts. The model is approximately additive inside its trained envelope and
+    catastrophically nonlinear at the norm walls: a regime-linear residual stream, polite in the middle, lethal at the
+    edges. Per-layer the additivity has a spectrum — <b>L0</b> is an extreme outlier (−0.19; it wants <em>one
+    concentrated write</em>, corroborating its amplification-site identity), <b>L1 (+0.035) and L23 (+0.049)</b> are the
+    only saturating layers (splitting the dose helps — exactly why L1 rewards high k, a suggestive bookend symmetry),
+    and the mid-stack is near-additive.</p>
+  </section>
+
+  <section id="measured">
+    <h2><span class="num">§8</span>What did it actually measure?</h2>
+    <p>Mostly not new capability. The throughline of the whole MiniCPM5 board is that the gains are <b>de-collapse /
+    compliance relief</b> — surgery unclogs a model that was strangling its own output on a stalled valve, rather than
+    teaching it arithmetic it didn't know. The overall v3-battery champ, <code>damp5_a80_damp23_a80</code> (L5 semantic
+    entry + L23 output gate, both α0.8, bal t +4.12), is an additivity bet that paid off — but it's relieving pathology,
+    not adding a skill. The multiple-choice "winners" (<code>dampall_a64/65/66</code>) are pure A-attractor de-collapse:
+    the model stops defaulting to answer A.</p>
+    <p>This is why the next fork was built to <em>falsify</em> the capability story — a chain-of-thought battery. If a
+    config's win survives when the model is actually reasoning step-by-step, it's capability; if it evaporates, it was
+    compliance relief. That fork is built but not fully run. The one suggestive smoke result is worth flagging as a
+    <em>hypothesis, not a finding</em>: <span class="olabel obs">obs</span> <code>dampall_a90</code> beat baseline in
+    CoT smoke (0.074 vs 0.046). <span class="olabel inf">inf</span> if a 1B can't sustain chain-of-thought
+    <em>because</em> it collapses into loops, then de-collapse surgery might be a <b>reasoning prosthesis</b> — not a
+    capability test but a capability <em>enabler</em>. Unproven. The most interesting thread left on the table when the
+    model was closed out.</p>
+  </section>
+
+  <section id="methods">
+    <h2><span class="num">§9</span>Methodology lessons (the durable part)</h2>
+    <p>Read these before adding runs to any model, not just this one.</p>
+    <table class="nb-table" style="margin-top:var(--sp-4)">
+      <thead><tr><th>#</th><th>Lesson</th></tr></thead>
+      <tbody>
+        <tr><td class="first">1</td><td><b>Content-hash the battery into the results filename.</b> Cell caches keyed on <code>(config, probe, seed)</code> silently resume over stale cells when a probeset changes under a stable name. Auto-fork on content change.</td></tr>
+        <tr><td class="first">2</td><td><b>Cap batch width explicitly (<code>max_batch_rows</code>).</b> Short uniform prompts (math ~15 tok) balloon to ~500-wide under a token-based cap, past MLX's ~256-row decode knee → throughput collapse. The cap only bites the short channels.</td></tr>
+        <tr><td class="first">3</td><td><b>≥12 items per rung, all operands controlled.</b> Small rungs are hostage to one derail-prone item; uncontrolled generators turn a difficulty rung into a grab-bag.</td></tr>
+        <tr><td class="first">4</td><td><b><code>r</code> is a std-dev ratio, invariant to N.</b> Persistent seed-sensitivity (r = std(per-seed Δ) / std(baseline noise) &gt; 1) is real effect-heterogeneity, not low power — more seeds sharpen the mean (t↑) but don't drop r. Stop chasing r &lt; 1 on the math channel; report the means.</td></tr>
+        <tr><td class="first">5</td><td><b>The de-narration derail is the irreducible floor.</b> <code>"Question: In the following…"</code> appears in <em>every</em> config including healthy ones; surgery modulates how much, never eliminates it — the same collapse the project studies, subclinical.</td></tr>
+        <tr><td class="first">6</td><td><b>Greedy n=1 fabricates false positives</b> (carried from HRM, re-confirmed here). Always sample, always multi-seed.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="caveats">
+    <div class="nb-limits">
+      <div class="nb-limits__head">
+        <span class="nb-limits__label">Caveats — the honest gaps</span>
+        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — these bound the claims</span>
+      </div>
+      <ul>
+        <li><b>No shippable model win.</b> The honest headline is a husk: the best math specialist (<code>split_1_a50_a70</code>) loses overall to a de-collapse config, and even that is pathology relief. Don't read a capability claim into this page; read a method and a regularity.</li>
+        <li><b>The peak is a ridge, channel-dependent</b> (§4). Anyone quoting "Σα = 1.25" without the 1.25–1.65 range and the math-vs-balanced drift is over-claiming.</li>
+        <li><b>The CoT prosthesis hypothesis is a smoke-test hunch</b> (§8), not a result — flagged because it's the most promising unfinished thread, not because it's settled.</li>
+        <li><b>eq is a null-rate gauge, not a ranker</b> on the v4 battery (r &gt; 1, low signal); use it for derailment exposure, not leaderboards.</li>
+        <li><b>Numbers tagged <span class="vrfy">VERIFY</span></b> (<code>split_1_a50_a70</code>, <code>shp1_S150_k6_flat</code>) want a glance at the results JSONL before they ship.</li>
+      </ul>
+    </div>
+
+    <div class="nb-marginalia" style="margin-top:var(--sp-7)">
+      <div class="nb-marginalia__label">Colophon &amp; lineage</div>
+      <div class="nb-marginalia__body">
+        <p style="max-width:64ch">MiniCPM5 is the continuous-damping branch of the line — the model where the engine
+        moved from llama.cpp static GGUFs to live MLX in-process patching, which is what made everything above possible.
+        The Σα-law born here transferred, with a predicted downshift, to <a href="/lab/05_granite.html">Granite</a>; the
+        "I built the ruler before trusting it" lesson is shared across the lab. Engine: MLX in-process patching,
+        <span class="mono">mlx-zaya</span> venv, mlx-lm 0.31.3. Surgery primitive <span class="mono">ScaledLayer</span>
+        + <span class="mono">apply_config</span> in <span class="mono">shared/mlx_sweep_harness.py</span>; batteries
+        <span class="mono">probes_combined_v3</span> / <span class="mono">probes_math_wide</span>
+        (<span class="mono">load_math_inband</span>) / <span class="mono">probes_eq_bench_v4</span>; all generations
+        stored for regrade. Technique credit and the grader-gaming taxonomy live on the shared
+        <a href="measuring.html">Methods &amp; references</a> page. Sibling specimens:
+        <a href="gemma.html">Gemma 4</a>, <a href="/lab/05_granite.html">Granite</a>, <a href="hrm.html">HRM</a>. Run locally
+        on a 16&nbsp;GB Mac&nbsp;Mini.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer style="max-width:var(--page-max);margin:0 auto;padding:var(--sp-6) var(--gutter) var(--sp-9)">
+  <p style="font-family:var(--font-mono);font-size:var(--fs-micro);letter-spacing:.03em;color:var(--text-muted);line-height:1.7">© 2026 · The Vivisection Lab · exploratory research notes, provided as-is, no warranty · writeups &amp; figures CC&nbsp;BY · uses cookieless analytics, no personal data collected</p>
+</footer>
+
+<script src="/assets/nb.js"></script>
+</body>
+</html>

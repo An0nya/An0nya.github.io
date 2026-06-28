@@ -1,0 +1,799 @@
+<!-- @dsCard group="Portfolio Hub" viewport="1100x1400" name="Writeup — How to measure a layer-surgery sweep you can trust" subtitle="The methods flagship. The surgery is trivial to do; the measurement is the whole contribution. Four confounds — seed luck, lenient grading, multiplicity, exposure — each manufacture fake results and each has a fingerprint you can subtract. The seed is the unit of replication; pairing is what lets you trust a config whose scores overlap the baseline's. The inferential layer the RYS literature lacks, bolted onto David Ng's probe design." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to measure a layer-surgery sweep you can trust — The Vivisection Lab</title>
+<meta name="description" content="The methods flagship of the vivisection lab. Layer surgery is trivial to do; the measurement is the whole contribution. Four distinct confounds — seed noise, lenient grading, multiplicity, exposure — each manufacture fake leaderboard results, and each has a characteristic fingerprint you can subtract. The seed is the unit of replication; per-seed pairing cancels common-mode noise and reverses the most common wrong call in the field; quantization and sampler choice cancel in the pairing unless an interaction distorts the ranking. The inferential layer bolted onto David Ng's probe design.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E141A'/%3E%3Cline x1='6' y1='8' x2='6' y2='24' stroke='%236FCBD8' stroke-width='2.4' stroke-linecap='round'/%3E%3Cline x1='6' y1='10' x2='10' y2='10' stroke='%236FCBD8' stroke-width='2' stroke-linecap='round'/%3E%3Cline x1='6' y1='16' x2='12' y2='16' stroke='%236FCBD8' stroke-width='2' stroke-linecap='round'/%3E%3Cline x1='6' y1='22' x2='10' y2='22' stroke='%236FCBD8' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='21' cy='13' r='2.4' fill='%23E3C24A'/%3E%3Ccircle cx='24' cy='20' r='2.4' fill='%23B98AD6'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  main { max-width: var(--page-max); margin: 0 auto; padding: var(--sp-7) var(--gutter) var(--sp-9); }
+  section { padding: var(--sp-7) 0 0; }
+  .dek { font-family: var(--font-serif); font-style: italic; font-size: var(--fs-dek); line-height: 1.4; color: var(--text-dim); max-width: 64ch; margin: var(--sp-5) 0 0; }
+  h2 { font-size: var(--fs-h2); margin: 0 0 var(--sp-4); }
+  h2 .num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); letter-spacing: .1em; vertical-align: 0.7em; margin-right: var(--sp-3); }
+  h3 { font-size: var(--fs-h3, 1.05rem); margin: var(--sp-6) 0 var(--sp-3); color: var(--text); }
+  p { max-width: var(--measure); }
+  .dropcap { max-width: var(--measure); }
+  .dropcap::first-letter { font-family: var(--font-serif); font-weight: 500; font-size: 3.4em; line-height: 0.82; float: left; padding: 0.04em 0.12em 0 0; color: var(--accent-bright); }
+  .col-side { display: grid; grid-template-columns: 1fr 260px; gap: var(--sp-7); align-items: start; }
+  .col-side .aside { font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); border-left: 1px solid var(--border-strong); padding-left: var(--sp-4); font-style: italic; }
+  .col-side .aside .nb-kicker { font-style: normal; display: block; margin-bottom: var(--sp-2); }
+  .hl-acc { color: var(--accent); font-weight: 500; }
+  .figure { margin: var(--sp-6) 0; }
+  .nb-plate svg { display: block; width: 100%; height: auto; }
+  .fig-mobile { display: none; }
+  pre.code { font-family: var(--font-mono); font-size: 0.82em; line-height: 1.6; background: var(--surface-sunken); border: 1px solid var(--rule2,#27323D); border-left: 3px solid var(--accent); border-radius: var(--radius-2); padding: var(--sp-4) var(--sp-5); margin: var(--sp-5) 0; max-width: var(--measure); overflow-x: auto; color: var(--ink2,#A4B0BC); }
+  pre.code .cm { color: var(--muted); }
+  pre.code .hl { color: var(--accent); }
+  .vrfy { font-family: var(--font-mono); font-size: 0.72em; letter-spacing: .04em; color: var(--cause); border: 1px solid var(--cause); border-radius: 3px; padding: 0 .35em; opacity: .85; white-space: nowrap; vertical-align: 1px; }
+  .olabel { font-family: var(--font-mono); font-size: 0.7em; letter-spacing: .06em; text-transform: uppercase; padding: 0 .3em; border-radius: 3px; vertical-align: 1px; }
+  .olabel.obs { color: var(--fourth); border: 1px solid var(--fourth); }
+  .olabel.inf { color: var(--neg); border: 1px solid var(--neg); }
+  .negresult { border: 1px solid var(--border-strong); border-left: 3px solid var(--neg); background: var(--surface-sunken); padding: var(--sp-4) var(--sp-5); margin: var(--sp-6) 0; max-width: var(--measure); border-radius: var(--radius-2); }
+  .negresult .nb-kicker { color: var(--neg); display: block; margin-bottom: var(--sp-2); }
+  .negresult p { margin: 0; font-size: var(--fs-sm); line-height: 1.6; color: var(--text-dim); }
+  .nb-table td.first { color: var(--accent); font-weight: 500; }
+  /* figure placeholder — a deliberate stub, not a broken image */
+  .fig-stub { border: 1.5px dashed var(--border-strong); border-radius: var(--radius-2); background-color: var(--surface-sunken); background-image: repeating-linear-gradient(135deg, transparent 0 11px, var(--rule2,#27323D) 11px 12px); padding: var(--sp-5); margin: var(--sp-6) 0; max-width: var(--measure); }
+  .fig-stub__tag { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing:.14em; text-transform:uppercase; color: var(--fourth); border:1px solid var(--fourth); border-radius:3px; padding: .15em .5em; display:inline-block; background: var(--bg); }
+  .fig-stub__title { font-family: var(--font-serif); font-size: 1.05rem; color: var(--text); margin: var(--sp-3) 0 0; }
+  .fig-stub__spec { font-size: var(--fs-sm); line-height:1.6; color: var(--text-dim); background: var(--bg2,#141D26); padding: var(--sp-3) var(--sp-4); border-radius: var(--radius-2); margin: var(--sp-3) 0 0; }
+  .fig-stub__spec b { color: var(--text); }
+  .fig-stub__spec code { color: var(--accent); }
+  .fig-stub__data { font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--text-muted); margin-top: var(--sp-3); background: var(--bg2,#141D26); padding: .45em .6em; border-radius:3px; line-height:1.5; }
+  @media (max-width: 760px) {
+    .col-side { grid-template-columns: 1fr; gap: var(--sp-5); }
+    .fig-desktop { display: none; }
+    .fig-mobile { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nb-nav">
+  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
+  <a href="#problem">The one problem</a>
+  <a href="#grader">Phantom: grader</a>
+  <a href="#pairing">Pairing</a>
+  <a href="#multiplicity">Multiplicity</a>
+  <a href="#baseline">The baseline</a>
+  <a href="#coda">Belief vs behaviour</a>
+  <span class="nb-nav__spacer"></span>
+  <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
+  <a href="#" data-theme-toggle>☼ Light</a>
+</nav>
+
+<main>
+  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Methods notebook · Anya · 2026 · the inferential layer · <em>the surgery is the easy part; the measurement is the contribution</em></div>
+  <header class="nb-record">
+    <div class="nb-record__title">How to measure a layer-surgery sweep you can trust</div>
+    <div class="nb-record__grid">
+      <div class="nb-record__field"><span class="nb-record__k">Subject</span><span class="nb-record__v">the measurement methodology shared across every specimen — cross-model, longform companion to the terse glossary</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Contribution</span><span class="nb-record__v">the inferential layer the RYS literature lacks — seeds, pairing, multiplicity, exposure — bolted onto David Ng's probe design</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Stance</span><span class="nb-record__v">"I add the statistics," never "they're sloppy" — Ng's probe design is elegant and gets explicit credit; the strict regrade <em>extends</em> it</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Source</span><span class="nb-record__v">rys_methodology_stats.md · rys_mechanistic_rules.md · the per-model results JSONL</span></div>
+      <div class="nb-record__field">
+        <span class="nb-record__k">Confidence</span>
+        <span class="nb-conf nb-conf--high"><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot on"></span><span class="nb-conf__dot on"></span></span>high — these rules were each earned on a specific model and are now run by default across the lab</span>
+      </div>
+    </div>
+  </header>
+
+  <p class="dek">The surgery is almost suspiciously easy to <em>do</em> — duplicate a block, delete one, turn one down to
+  60% strength, seconds per edit. That last step, reading the number and declaring a winner, is where everything goes
+  wrong, and it goes wrong the same way for everyone. This is the layer that catches it.</p>
+
+  <section id="establishes">
+    <h3 style="margin-top:0">What this page establishes</h3>
+    <ul>
+      <li>The surgery is trivial to <em>do</em>; the <b>measurement</b> is the whole contribution. Four distinct
+      confounds — seed luck, lenient grading, multiplicity, exposure — each manufacture fake results, and each has a
+      characteristic fingerprint you can subtract.</li>
+      <li><b>The seed is the unit of replication.</b> No seeds means no paired test, no effect size, no confidence
+      interval. That missing layer is exactly what published RYS work lacks.</li>
+      <li><b>Pairing is what lets you trust a config whose scores overlap the baseline's.</b> The per-seed
+      <em>difference</em> is the test, not the spread — and that single idea reverses the most common wrong call in the
+      field.</li>
+      <li>Most of what people fear about local-model evals — quantization, sampler choice — <b>cancels</b> in that
+      pairing. Only an <em>interaction</em> can distort a ranking, and you can test for one directly.</li>
+    </ul>
+  </section>
+
+  <section id="problem">
+    <h2><span class="num">§0</span>The one hard problem</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">Layer surgery is almost suspiciously easy to <em>do</em>. Duplicate a transformer block, or
+        delete one, or — once you're in a live process instead of a static file — turn one down to 60% strength. No
+        training, seconds per edit. Re-run a benchmark, read the number, declare a winner.</p>
+        <p>That last step is where everything goes wrong, and it goes wrong the same way for everyone. The number moved.
+        But a benchmark number on a perturbed model moves for at least four reasons, and only one is the one you want:</p>
+        <ol>
+          <li><b>The model genuinely got better (or worse)</b> at the thing you measured.</li>
+          <li><b>Seed noise</b> — you happened to sample a luckier set of generations.</li>
+          <li><b>A generous grader</b> rewarded the <em>form</em> of the output, not its correctness.</li>
+          <li><b>Multiplicity</b> — you tried 300 configs, so ~15 cleared p&lt;0.05 by chance alone, and you're looking at
+          one of those.</li>
+        </ol>
+        <p>Every rule below exists to subtract (2), (3), and (4) so that what's left is (1). This is the entire
+        methodological content of the lab. <span class="hl-acc">The surgery is the easy part; the measurement is the
+        contribution.</span> (And underneath all four sits a fifth, quieter choice — whether you're measuring what the
+        model <em>believes</em> or what it <em>does</em> — which the last section comes back to.)</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">Credit, precisely</span>
+        Layer duplication isn't new — frankenmerges got there in 2023. What David Ng (<span class="mono">dnhkng</span>)
+        discovered is what <em>selective</em> duplication exposes: a functional anatomy you can target one block at a
+        time ("Repeat Your Self"). The probe design this lab still uses is his — no-CoT, tiny outputs, partial-credit —
+        sidestepping three confounds at once. This page doesn't correct his method. It bolts the statistics on.
+      </aside>
+    </div>
+    <p>What he doesn't report — what <em>nobody</em> in published RYS practice reports — is seeds. And without seeds
+    there's no replication unit: no paired test, no effect size, no confidence interval, no multiplicity correction. The
+    reason is structural, not careless — the implicit model treats each generation as one independent draw from the
+    truth, so why would you repeat it? The work below is the layer that assumption skips over.</p>
+    <blockquote class="nb-pull nb-pull--wide">It isn't a correction of his method. <b>It's the statistics bolted onto
+    it.</b></blockquote>
+  </section>
+
+  <section id="grader">
+    <h2><span class="num">§1</span>Phantom #1: the grader (every model's first leaderboard is partly fake)</h2>
+    <p class="dropcap">Run any model's first sweep and you get a leaderboard. Some fraction of it is hallucinated, and the
+    mechanism is always identical: <span class="hl-acc">a lenient grader scores output form</span> — well-shaped,
+    right-magnitude, compliant — instead of correctness. I've watched it manufacture champions on every model in the lab,
+    in three distinct flavours. The worst one hid in plain sight.</p>
+
+    <h3>Echo contamination</h3>
+    <p>This one cost a full overnight. A naive integer parser grabs the <em>last</em> number in a response; when the model
+    just echoes the question back — "What is 4,318 plus 2,901?" — the parser scores partial credit on the <em>input</em>
+    numbers. On Nanbeige, <b>66% of one overnight run was echo-only.</b> Here's the twist: when you de-contaminate —
+    blocklist each prompt's own integers — the real RYS effect <em>grew</em>, from +0.21 to +0.32.
+    <span class="olabel inf">interpretation</span> The baseline had been quietly scoring on echo too, so cleaning it up
+    widened the gap. The signal was hiding under the baseline's own cheating.</p>
+
+    <h3>Partial-credit inflation</h3>
+    <p>A digit-overlap or magnitude-plausibility scorer gives a close-but-wrong tidy number ~0.99. On Gemma-E4B,
+    <code>combo_2_36_39</code> scored <b>+6.11 on partial credit and −0.82 on strict</b> (paired <em>t</em> vs baseline) —
+    a top-of-board "champion" that was, in fact, slightly worse than baseline once you demanded the right answer. A
+    simpler config on the same model, <code>prune_16</code>, did the same: +3.45 on partial, a flat <b>strict-zero</b> —
+    every "win" was magnitude-plausible garbage, not one exactly-right answer. The fix is a strict-equality regrade, and
+    the <em>diagnostic</em> is the partial-minus-strict gap — sort the configs by that gap and the biggest gappers are
+    exactly your phantoms.</p>
+
+    <h3>Compliance, not capability</h3>
+    <p>Pruning a layer can unclog a stalled output valve — the model that was looping <code>"Answer: Answer:"</code> or
+    stuck on a dangling colon finally emits one clean token. A partial grader reads that as a win. Whether it <em>is</em>
+    a win depends entirely on whether the knowledge was already there: on multiple-choice factual recall, unclogging the
+    valve surfaces a real answer the model knew (genuine gain); on 16-digit arithmetic it knew no answer to, unclogging
+    just produces confident, well-formatted garbage (the strict phantom). <span class="hl-acc">Same mechanism, opposite
+    verdict, decided by whether the capability was latent.</span></p>
+
+    <div class="negresult">
+      <span class="nb-kicker">A landmine in the regrade itself — it bites both directions</span>
+      <p>The <em>right</em> integer to extract is the first non-operand one for blurt-first prompts, but the <em>last</em>
+      one for narrate-last prompts. Regrade an old sweep with the wrong convention and you manufacture a <b>new</b>
+      phantom while removing the old one. The robust fix is <b>operand-aware any-match</b>: drop the operand integers,
+      score 1.0 if the correct answer appears anywhere in the response. It sidesteps the direction problem entirely. Use
+      it everywhere.</p>
+    </div>
+
+    <figure class="figure" id="fig1">
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 470" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="720" height="470" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="34" font-size="18">The phantom-mover plot</text>
+<text class="mut" x="40" y="52" font-size="10">Gemma-E4B · one point per config · partial vs strict t vs baseline</text>
+<circle cx="470" cy="96" r="3.4" class="acc"/><text x="478" y="99" class="ink2" font-size="9">honest (near diagonal)</text>
+<polygon points="620,100.2 616.346,93.9 623.654,93.9" class="vio"/><text x="630" y="99" class="ink2" font-size="9">phantom</text>
+<line x1="22" y1="426" x2="698" y2="426" class="rule" stroke-width="1"/>
+<text x="22" y="444" class="ink2" font-size="11">Points far <tspan class="vio">below the diagonal</tspan> are phantoms: high partial credit, strict near or below zero.</text>
+<line x1="70" y1="120" x2="70" y2="380" class="axis" stroke-width="1"/>
+<line x1="70" y1="302.0" x2="690" y2="302.0" class="rule" stroke-width="1"/>
+<line x1="147.5" y1="120" x2="147.5" y2="380" class="rule" stroke-width="1"/>
+<line x1="70.0" y1="328.0" x2="690.0" y2="120.0" class="accs" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.8"/>
+<text x="566.0" y="142.0" class="acc" font-size="9" transform="rotate(-32 566.0 146.0)">y = x · honest</text>
+<circle cx="231.9" cy="263.8" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="142.3" cy="290.0" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="307.5" cy="251.0" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="297.4" cy="248.7" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="129.9" cy="312.0" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="148.8" cy="299.7" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="267.8" cy="258.8" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="196.1" cy="291.0" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="340.2" cy="222.8" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="257.9" cy="269.9" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="464.5" cy="173.5" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="219.7" cy="271.1" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="167.9" cy="287.7" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="407.4" cy="208.0" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="180.9" cy="305.3" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="249.3" cy="276.1" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="311.8" cy="243.1" r="3.0" class="acc" opacity="0.85"/>
+<circle cx="189.9" cy="286.2" r="3.0" class="acc" opacity="0.85"/>
+<polygon points="453.25548620714704,322.4485702933399 449.775486207147,316.4485702933399 456.73548620714706,316.4485702933399" class="vio"/>
+<polygon points="610.4931771259078,329.3006748967365 607.0131771259078,323.3006748967365 613.9731771259078,323.3006748967365" class="vio"/>
+<polygon points="471.7381042480019,320.4383844597275 468.25810424800187,314.4383844597275 475.2181042480019,314.4383844597275" class="vio"/>
+<polygon points="364.03805958963767,325.93305107775655 360.55805958963765,319.93305107775655 367.5180595896377,319.93305107775655" class="vio"/>
+<polygon points="512.4084165122492,305.47128368054746 508.9284165122492,299.47128368054746 515.8884165122493,299.47128368054746" class="vio"/>
+<polygon points="333.8666417883871,341.1123880809346 330.38664178838707,335.1123880809346 337.3466417883871,335.1123880809346" class="vio"/>
+<polygon points="332.71595661915546,304.25787789806947 329.23595661915544,298.25787789806947 336.1959566191555,298.25787789806947" class="vio"/>
+<polygon points="533.588374306868,360.15111151227524 530.108374306868,354.15111151227524 537.068374306868,354.15111151227524" class="vio"/>
+<polygon points="629.8159574811929,292.9656335340587 626.3359574811928,286.9656335340587 633.2959574811929,286.9656335340587" class="vio"/>
+<polygon points="520.4196843001523,318.38703510668006 516.9396843001523,312.38703510668006 523.8996843001523,312.38703510668006" class="vio"/>
+<polygon points="354.98490720545914,362.10794635006874 351.5049072054591,356.10794635006874 358.46490720545916,356.10794635006874" class="vio"/>
+<polygon points="621.025,327.32 617.545,321.32 624.505,321.32" class="vio"/>
+<polygon points="414.875,306.0 411.395,300.0 418.355,300.0" class="vio"/>
+<circle cx="621.0" cy="323.3" r="6" class="vios" stroke-width="1.4"/>
+<text x="621.0" y="341.3" text-anchor="end" class="vio" font-size="9">combo_2_36_39 · 6.11 / −0.82</text>
+<circle cx="414.9" cy="302.0" r="6" class="vios" stroke-width="1.4"/>
+<text x="414.9" y="320.0" text-anchor="middle" class="vio" font-size="9">prune_16 · 3.45 / 0.00</text>
+<text x="147.5" y="396" text-anchor="middle" class="mut" font-size="9">0</text>
+<text x="302.5" y="396" text-anchor="middle" class="mut" font-size="9">2</text>
+<text x="457.5" y="396" text-anchor="middle" class="mut" font-size="9">4</text>
+<text x="612.5" y="396" text-anchor="middle" class="mut" font-size="9">6</text>
+<text x="64" y="357.0" text-anchor="end" class="mut" font-size="9">-2</text>
+<text x="64" y="305.0" text-anchor="end" class="mut" font-size="9">0</text>
+<text x="64" y="253.0" text-anchor="end" class="mut" font-size="9">2</text>
+<text x="64" y="201.0" text-anchor="end" class="mut" font-size="9">4</text>
+<text x="64" y="149.0" text-anchor="end" class="mut" font-size="9">6</text>
+<text x="380" y="414" text-anchor="middle" class="acc" font-size="10">partial-credit t (form looks right)</text>
+<text x="22" y="250" transform="rotate(-90 22 250)" text-anchor="middle" class="acc" font-size="10">strict t (actually correct)</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 520" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="400" height="520" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="22" y="34" font-size="16">The phantom-mover plot</text>
+<text class="mut" x="22" y="50" font-size="8.5">Gemma-E4B · one point per config · partial vs strict t vs baseline</text>
+<circle cx="60" cy="70" r="3.4" class="acc"/><text x="68" y="73" class="ink2" font-size="8">honest (near diagonal)</text>
+<polygon points="60,92.2 56.346000000000004,85.9 63.653999999999996,85.9" class="vio"/><text x="68" y="91" class="ink2" font-size="8">phantom</text>
+<line x1="22" y1="476" x2="378" y2="476" class="rule" stroke-width="1"/>
+<text x="22" y="494" class="ink2" font-size="9.5">Points far <tspan class="vio">below the diagonal</tspan> are phantoms: high partial credit, strict near or below zero.</text>
+<line x1="70" y1="150" x2="70" y2="430" class="axis" stroke-width="1"/>
+<line x1="70" y1="346.0" x2="370" y2="346.0" class="rule" stroke-width="1"/>
+<line x1="107.5" y1="150" x2="107.5" y2="430" class="rule" stroke-width="1"/>
+<line x1="70.0" y1="374.0" x2="370.0" y2="150.0" class="accs" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.8"/>
+<text x="310.0" y="174.0" class="acc" font-size="8" transform="rotate(-32 310.0 178.0)">y = x · honest</text>
+<circle cx="148.4" cy="304.8" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="105.0" cy="333.0" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="184.9" cy="291.1" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="180.0" cy="288.6" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="99.0" cy="356.8" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="108.1" cy="343.6" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="165.7" cy="299.5" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="131.0" cy="334.2" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="200.7" cy="260.7" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="160.9" cy="311.4" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="260.9" cy="207.6" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="142.5" cy="312.7" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="117.4" cy="330.6" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="233.3" cy="244.8" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="123.7" cy="349.6" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="156.7" cy="318.1" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="187.0" cy="282.6" r="2.4" class="acc" opacity="0.85"/>
+<circle cx="128.0" cy="329.0" r="2.4" class="acc" opacity="0.85"/>
+<polygon points="255.44620300345824,366.91384493128913 252.66220300345825,362.1138449312891 258.23020300345826,362.1138449312891" class="vio"/>
+<polygon points="331.52895667382637,374.2930345041778 328.7449566738264,369.4930345041778 334.31295667382636,369.4930345041778" class="vio"/>
+<polygon points="264.38940528129126,364.74902941816805 261.60540528129127,359.94902941816804 267.17340528129125,359.94902941816804" class="vio"/>
+<polygon points="212.27648044659887,370.66636269912243 209.49248044659888,365.8663626991224 215.06048044659886,365.8663626991224" class="vio"/>
+<polygon points="284.06858863495927,348.63061319443574 281.2845886349593,343.8306131944357 286.85258863495926,343.8306131944357" class="vio"/>
+<polygon points="197.67740731696148,387.0133410102372 194.8934073169615,382.2133410102372 200.46140731696147,382.2133410102372" class="vio"/>
+<polygon points="197.1206241705591,347.32386850561323 194.3366241705591,342.5238685056132 199.9046241705591,342.5238685056132" class="vio"/>
+<polygon points="294.3169553097748,407.51658162860406 291.5329553097748,402.71658162860405 297.1009553097748,402.71658162860405" class="vio"/>
+<polygon points="340.87868910380297,335.1629899597556 338.094689103803,330.36298995975557 343.66268910380296,330.36298995975557" class="vio"/>
+<polygon points="287.9450085323318,362.53988396104006 285.16100853233183,357.73988396104005 290.7290085323318,357.73988396104005" class="vio"/>
+<polygon points="207.8959228413512,409.62394222315095 205.1119228413512,404.82394222315094 210.67992284135119,404.82394222315094" class="vio"/>
+<polygon points="336.625,372.15999999999997 333.841,367.35999999999996 339.409,367.35999999999996" class="vio"/>
+<polygon points="236.875,349.2 234.091,344.4 239.659,344.4" class="vio"/>
+<circle cx="336.6" cy="369.0" r="6" class="vios" stroke-width="1.4"/>
+<text x="336.6" y="387.0" text-anchor="end" class="vio" font-size="8">combo_2_36_39 · 6.11 / −0.82</text>
+<circle cx="236.9" cy="346.0" r="6" class="vios" stroke-width="1.4"/>
+<text x="236.9" y="364.0" text-anchor="middle" class="vio" font-size="8">prune_16 · 3.45 / 0.00</text>
+<text x="107.5" y="446" text-anchor="middle" class="mut" font-size="8">0</text>
+<text x="182.5" y="446" text-anchor="middle" class="mut" font-size="8">2</text>
+<text x="257.5" y="446" text-anchor="middle" class="mut" font-size="8">4</text>
+<text x="332.5" y="446" text-anchor="middle" class="mut" font-size="8">6</text>
+<text x="64" y="405.0" text-anchor="end" class="mut" font-size="8">-2</text>
+<text x="64" y="349.0" text-anchor="end" class="mut" font-size="8">0</text>
+<text x="64" y="293.0" text-anchor="end" class="mut" font-size="8">2</text>
+<text x="64" y="237.0" text-anchor="end" class="mut" font-size="8">4</text>
+<text x="64" y="181.0" text-anchor="end" class="mut" font-size="8">6</text>
+<text x="220" y="464" text-anchor="middle" class="acc" font-size="9">partial-credit t (form looks right)</text>
+<text x="22" y="290" transform="rotate(-90 22 290)" text-anchor="middle" class="acc" font-size="9">strict t (actually correct)</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 1 —</b> a scatter of configurations, partial-credit score against strict
+      score, with the equality diagonal drawn. Honest configurations cluster near the diagonal; a cloud of phantom
+      configurations sits far below it — high partial-credit scores with strict scores near or below zero. The labelled
+      champion <code>combo_2_36_39</code> sits at the bottom right. <em>(E4B; every config carries both axes in one
+      already-materialized file.)</em></figcaption>
+      <div class="nb-prov"><span><b>source</b> gemma/results/regrade_strict.jsonl (partial_t × strict_exact_t)</span><span><b>type</b> schematic — the two annotated points are real (combo_2_36_39 6.11/−0.82, prune_16 3.45/0.00); cloud representative, pending data wire-up</span><span><b>safety</b> honest vs phantom by marker shape, not colour</span></div>
+    </figure>
+  </section>
+
+  <section id="single">
+    <h2><span class="num">§2</span>Phantom #2: the single draw (greedy n=1 fabricates results)</h2>
+    <p>A champion that scored <b>0/3 on the retest</b> — worse than baseline — on a config an overnight sweep had crowned
+    with a beautiful, theoretically-motivated story. That's the most seductive failure mode, because the fake result is
+    <em>clean</em>.</p>
+    <p>The lab has it written up as a cautionary tale — the <a href="hrm.html">HRM specimen</a>. An overnight sweep,
+    scored greedily and once per item, produced a gorgeous champion ("duplicate the renderer module and multi-hop
+    reasoning improves"), corroborated by an elegant geometric metric. Then the verification pass — sampling at
+    temperature, three draws per item instead of one — put the champion at 0/3, and showed the base model already solved
+    the puzzle ~70% of the time on its own. <span class="olabel obs">observation</span> The greedy sweep had been
+    measuring <em>which single draw got lucky</em>, not capability. The corroborating geometry turned out to be decoupled
+    from the outcome it seemed to confirm.</p>
+    <p>The rule that fell out is absolute: <span class="hl-acc">greedy / temperature-0 / n=1 fabricates false positives
+    on this entire research line.</span> HRM, Gemma, and Nanbeige were all bitten. Use a fixed, low-variance
+    <em>sampling</em> sampler (temp ~0.3 plus engine defaults), seed-controlled, and average over many seeds. Greedy is
+    fine for <em>characterizing</em> a baseline — where there's no knife-edge config comparison — and nowhere else. This
+    is why <b>the seed is the unit of replication</b>, and why everything statistical below is built on seeds. No seeds,
+    no test.</p>
+  </section>
+
+  <section id="pairing">
+    <h2><span class="num">§3</span>Pairing: why "the ranges overlap" is not "it's noise"</h2>
+    <p class="dropcap">Here's the most common way a careful person still gets it wrong. You compute a config's mean score,
+    the baseline's mean score, you notice their <em>ranges overlap</em>, and you conclude the difference is noise. That
+    conclusion is unjustified, and seeing why is the whole game.</p>
+    <p>Every config is scored against the baseline <b>on the same seeds</b>. Think of each seed as a fixed exam paper
+    handed to both students. If seed 7 is a hard paper, it's hard for the config <em>and</em> the baseline — so the gap
+    between them on seed 7 has that shared difficulty subtracted out. The marginal spread of either score is dominated by
+    which papers got drawn; the thing you actually care about is how the config did <em>relative to baseline on the same
+    paper</em>:</p>
+
+    <pre class="code"><span class="hl">paired Cohen's d</span>  =  mean(per-seed diffs) / std(per-seed diffs)</pre>
+
+    <p><code>d</code> is <b>seed-count-independent</b> — an effect size, not a test statistic. The test statistic
+    <code>t ≈ d·√n</code> grows with the number of seeds; <code>d</code> doesn't. So a real-but-underpowered config shows
+    up as <b>high d, low t</b> — worth spending more seeds on, not yet proven — and you rank your retest queue by exactly
+    that signature. A second number tells you whether to trust <code>d</code> over the eyeball test — the ratio of the
+    paired-difference noise to the baseline's own seed noise:</p>
+
+    <pre class="code"><span class="hl">r</span>  =  std(per-seed Δ) / std(baseline seed-noise)</pre>
+
+    <ul>
+      <li><b>r &lt; 1</b> → pairing is cancelling common-mode seed noise. Trust <code>d</code> <em>even when the config's
+      raw mean sits inside the baseline's spread.</em> The overlapping ranges are not the test; the paired diff is. This
+      is the case people misread as "noise."</li>
+      <li><b>r ≳ 1.4 (≈√2)</b> → the difference noise is seed-independent; pairing buys you nothing and more seeds won't
+      rescue it. This config is riding the discovery noise floor.</li>
+    </ul>
+    <p>And this gives a budgeting rule that's the <em>opposite</em> of the naive one. You don't spend seeds where the
+    variance is highest — you spend them on the <b>seed-independent channel</b>, the high-r one, because that's where
+    pairing <em>can't</em> already cancel the noise for you. Empirically, no-CoT math is the high-r channel (so it eats
+    the seed budget and needs sign-consistency checks — a high-d config with scattered diff signs is a magnitude mirage,
+    drop it); multiple-choice and EQ are low-r. <span class="olabel inf">interpretation</span> Seeds are precision; probes
+    are coverage; they're orthogonal, and bulking seeds on a thin battery just makes it <em>precisely narrow.</em></p>
+
+    <figure class="figure" id="fig2">
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="720" height="460" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="32" font-size="18">Pairing cancels common-mode noise</text>
+<text class="mut" x="40" y="51" font-size="10">Same config, two views · left: marginal spread · right: per-seed paired difference</text>
+<text x="200" y="78" text-anchor="middle" class="ink2" font-size="11">looks like noise</text>
+<line x1="60" y1="250" x2="340" y2="250" class="axis" stroke-width="1"/>
+<polyline points="60.0,245.0 64.7,243.6 69.3,241.9 74.0,239.7 78.7,237.1 83.3,234.1 88.0,230.5 92.7,226.4 97.3,221.6 102.0,216.3 106.7,210.4 111.3,203.9 116.0,197.0 120.7,189.6 125.3,181.8 130.0,173.9 134.7,165.9 139.3,158.0 144.0,150.4 148.7,143.3 153.3,136.9 158.0,131.3 162.7,126.7 167.3,123.2 172.0,121.0 176.7,120.0 181.3,120.4 186.0,122.1 190.7,125.1 195.3,129.3 200.0,134.5 204.7,140.7 209.3,147.5 214.0,154.9 218.7,162.7 223.3,170.7 228.0,178.7 232.7,186.5 237.3,194.1 242.0,201.2 246.7,207.9 251.3,214.0 256.0,219.6 260.7,224.5 265.3,228.9 270.0,232.7 274.7,236.0 279.3,238.7 284.0,241.0 288.7,243.0 293.3,244.5 298.0,245.8 302.7,246.8 307.3,247.6 312.0,248.2 316.7,248.7 321.3,249.0 326.0,249.3 330.7,249.5 335.3,249.6 340.0,249.7" class="slas" stroke-width="2" stroke-dasharray="6 4"/>
+<polyline points="60.0,249.7 64.7,249.6 69.3,249.5 74.0,249.3 78.7,249.0 83.3,248.7 88.0,248.2 92.7,247.6 97.3,246.8 102.0,245.8 106.7,244.5 111.3,243.0 116.0,241.0 120.7,238.7 125.3,236.0 130.0,232.7 134.7,228.9 139.3,224.5 144.0,219.6 148.7,214.0 153.3,207.9 158.0,201.2 162.7,194.1 167.3,186.5 172.0,178.7 176.7,170.7 181.3,162.7 186.0,154.9 190.7,147.5 195.3,140.7 200.0,134.5 204.7,129.3 209.3,125.1 214.0,122.1 218.7,120.4 223.3,120.0 228.0,121.0 232.7,123.2 237.3,126.7 242.0,131.3 246.7,136.9 251.3,143.3 256.0,150.4 260.7,158.0 265.3,165.9 270.0,173.9 274.7,181.8 279.3,189.6 284.0,197.0 288.7,203.9 293.3,210.4 298.0,216.3 302.7,221.6 307.3,226.4 312.0,230.5 316.7,234.1 321.3,237.1 326.0,239.7 330.7,241.9 335.3,243.6 340.0,245.0" class="accs" stroke-width="2" />
+<text x="110" y="130" class="sla" font-size="9">baseline</text>
+<text x="245" y="118" class="acc" font-size="9">config</text>
+<text x="200" y="272" text-anchor="middle" class="mut" font-size="9">score →</text>
+<text x="555" y="78" text-anchor="middle" class="ink2" font-size="11">the actual test</text>
+<line x1="430" y1="95" x2="430" y2="250" class="axis" stroke-width="1"/>
+<line x1="430" y1="172.5" x2="680" y2="172.5" class="rule" stroke-width="1"/>
+<text x="424" y="175.5" text-anchor="end" class="mut" font-size="9">0</text>
+<line x1="438.9" y1="172.5" x2="438.9" y2="123.2" class="accs" stroke-width="1"/>
+<circle cx="438.9" cy="123.2" r="2.6" class="acc"/>
+<line x1="456.8" y1="172.5" x2="456.8" y2="113.2" class="accs" stroke-width="1"/>
+<circle cx="456.8" cy="113.2" r="2.6" class="acc"/>
+<line x1="474.6" y1="172.5" x2="474.6" y2="132.2" class="accs" stroke-width="1"/>
+<circle cx="474.6" cy="132.2" r="2.6" class="acc"/>
+<line x1="492.5" y1="172.5" x2="492.5" y2="115.4" class="accs" stroke-width="1"/>
+<circle cx="492.5" cy="115.4" r="2.6" class="acc"/>
+<line x1="510.4" y1="172.5" x2="510.4" y2="126.3" class="accs" stroke-width="1"/>
+<circle cx="510.4" cy="126.3" r="2.6" class="acc"/>
+<line x1="528.2" y1="172.5" x2="528.2" y2="126.3" class="accs" stroke-width="1"/>
+<circle cx="528.2" cy="126.3" r="2.6" class="acc"/>
+<line x1="546.1" y1="172.5" x2="546.1" y2="107.5" class="accs" stroke-width="1"/>
+<circle cx="546.1" cy="107.5" r="2.6" class="acc"/>
+<line x1="563.9" y1="172.5" x2="563.9" y2="122.7" class="accs" stroke-width="1"/>
+<circle cx="563.9" cy="122.7" r="2.6" class="acc"/>
+<line x1="581.8" y1="172.5" x2="581.8" y2="124.4" class="accs" stroke-width="1"/>
+<circle cx="581.8" cy="124.4" r="2.6" class="acc"/>
+<line x1="599.6" y1="172.5" x2="599.6" y2="117.7" class="accs" stroke-width="1"/>
+<circle cx="599.6" cy="117.7" r="2.6" class="acc"/>
+<line x1="617.5" y1="172.5" x2="617.5" y2="114.2" class="accs" stroke-width="1"/>
+<circle cx="617.5" cy="114.2" r="2.6" class="acc"/>
+<line x1="635.4" y1="172.5" x2="635.4" y2="124.3" class="accs" stroke-width="1"/>
+<circle cx="635.4" cy="124.3" r="2.6" class="acc"/>
+<line x1="653.2" y1="172.5" x2="653.2" y2="118.9" class="accs" stroke-width="1"/>
+<circle cx="653.2" cy="118.9" r="2.6" class="acc"/>
+<line x1="671.1" y1="172.5" x2="671.1" y2="132.6" class="accs" stroke-width="1"/>
+<circle cx="671.1" cy="132.6" r="2.6" class="acc"/>
+<text x="555" y="272" text-anchor="middle" class="mut" font-size="9">seed index · every Δ &gt; 0</text>
+<rect x="588" y="99" width="88" height="30" fill="var(--bg,#0E141A)" class="rule" stroke-width="1"/>
+<text x="632" y="118" text-anchor="middle" class="cit" font-size="11">r ≈ 0.7 &lt; 1</text>
+<line x1="40" y1="420" x2="680" y2="420" class="rule" stroke-width="1"/>
+<text x="40" y="440" class="ink2" font-size="11">Overlapping ranges (left) are common-mode seed difficulty. The <tspan class="acc">per-seed difference</tspan> (right) is decisive.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 470" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="400" height="470" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="22" y="30" font-size="15">Pairing cancels noise</text>
+<text x="200" y="58" text-anchor="middle" class="ink2" font-size="10">looks like noise</text>
+<line x1="50" y1="150" x2="350" y2="150" class="axis" stroke-width="1"/>
+<polyline points="50.0,146.7 55.0,145.7 60.0,144.6 65.0,143.2 70.0,141.5 75.0,139.6 80.0,137.3 85.0,134.7 90.0,131.8 95.0,128.5 100.0,124.8 105.0,120.8 110.0,116.5 115.0,112.0 120.0,107.3 125.0,102.4 130.0,97.6 135.0,92.8 140.0,88.3 145.0,84.0 150.0,80.1 155.0,76.8 160.0,74.0 165.0,71.9 170.0,70.6 175.0,70.0 180.0,70.3 185.0,71.3 190.0,73.1 195.0,75.6 200.0,78.7 205.0,82.4 210.0,86.5 215.0,91.0 220.0,95.7 225.0,100.5 230.0,105.4 235.0,110.1 240.0,114.7 245.0,119.1 250.0,123.2 255.0,127.0 260.0,130.5 265.0,133.6 270.0,136.3 275.0,138.7 280.0,140.8 285.0,142.6 290.0,144.1 295.0,145.3 300.0,146.3 305.0,147.1 310.0,147.8 315.0,148.3 320.0,148.7 325.0,149.1 330.0,149.3 335.0,149.5 340.0,149.6 345.0,149.7 350.0,149.8" class="slas" stroke-width="1.8" stroke-dasharray="5 3"/>
+<polyline points="50.0,149.8 55.0,149.7 60.0,149.6 65.0,149.5 70.0,149.3 75.0,149.1 80.0,148.7 85.0,148.3 90.0,147.8 95.0,147.1 100.0,146.3 105.0,145.3 110.0,144.1 115.0,142.6 120.0,140.8 125.0,138.7 130.0,136.3 135.0,133.6 140.0,130.5 145.0,127.0 150.0,123.2 155.0,119.1 160.0,114.7 165.0,110.1 170.0,105.4 175.0,100.5 180.0,95.7 185.0,91.0 190.0,86.5 195.0,82.4 200.0,78.7 205.0,75.6 210.0,73.1 215.0,71.3 220.0,70.3 225.0,70.0 230.0,70.6 235.0,71.9 240.0,74.0 245.0,76.8 250.0,80.1 255.0,84.0 260.0,88.3 265.0,92.8 270.0,97.6 275.0,102.4 280.0,107.3 285.0,112.0 290.0,116.5 295.0,120.8 300.0,124.8 305.0,128.5 310.0,131.8 315.0,134.7 320.0,137.3 325.0,139.6 330.0,141.5 335.0,143.2 340.0,144.6 345.0,145.7 350.0,146.7" class="accs" stroke-width="1.8" />
+<text x="50" y="80" class="sla" font-size="8.5">baseline</text><text x="310" y="72" class="acc" font-size="8.5">config</text>
+<text x="200" y="210" text-anchor="middle" class="ink2" font-size="10">the actual test</text>
+<line x1="50" y1="230" x2="50" y2="410" class="axis" stroke-width="1"/>
+<line x1="50" y1="320.0" x2="350" y2="320.0" class="rule" stroke-width="1"/>
+<text x="45" y="323.0" text-anchor="end" class="mut" font-size="8">0</text>
+<line x1="62.5" y1="320.0" x2="62.5" y2="262.8" class="accs" stroke-width="1"/><circle cx="62.5" cy="262.8" r="2.4" class="acc"/>
+<line x1="87.5" y1="320.0" x2="87.5" y2="251.1" class="accs" stroke-width="1"/><circle cx="87.5" cy="251.1" r="2.4" class="acc"/>
+<line x1="112.5" y1="320.0" x2="112.5" y2="273.2" class="accs" stroke-width="1"/><circle cx="112.5" cy="273.2" r="2.4" class="acc"/>
+<line x1="137.5" y1="320.0" x2="137.5" y2="253.7" class="accs" stroke-width="1"/><circle cx="137.5" cy="253.7" r="2.4" class="acc"/>
+<line x1="162.5" y1="320.0" x2="162.5" y2="266.4" class="accs" stroke-width="1"/><circle cx="162.5" cy="266.4" r="2.4" class="acc"/>
+<line x1="187.5" y1="320.0" x2="187.5" y2="266.4" class="accs" stroke-width="1"/><circle cx="187.5" cy="266.4" r="2.4" class="acc"/>
+<line x1="212.5" y1="320.0" x2="212.5" y2="244.5" class="accs" stroke-width="1"/><circle cx="212.5" cy="244.5" r="2.4" class="acc"/>
+<line x1="237.5" y1="320.0" x2="237.5" y2="262.2" class="accs" stroke-width="1"/><circle cx="237.5" cy="262.2" r="2.4" class="acc"/>
+<line x1="262.5" y1="320.0" x2="262.5" y2="264.2" class="accs" stroke-width="1"/><circle cx="262.5" cy="264.2" r="2.4" class="acc"/>
+<line x1="287.5" y1="320.0" x2="287.5" y2="256.4" class="accs" stroke-width="1"/><circle cx="287.5" cy="256.4" r="2.4" class="acc"/>
+<line x1="312.5" y1="320.0" x2="312.5" y2="252.3" class="accs" stroke-width="1"/><circle cx="312.5" cy="252.3" r="2.4" class="acc"/>
+<line x1="337.5" y1="320.0" x2="337.5" y2="264.1" class="accs" stroke-width="1"/><circle cx="337.5" cy="264.1" r="2.4" class="acc"/>
+<text x="200" y="430" text-anchor="middle" class="mut" font-size="8">seed · every Δ &gt; 0</text>
+<rect x="272" y="232" width="76" height="26" fill="var(--bg,#0E141A)" class="rule" stroke-width="1"/><text x="310" y="249" text-anchor="middle" class="cit" font-size="10">r ≈ 0.7</text>
+<line x1="22" y1="430" x2="378" y2="430" class="rule" stroke-width="1"/>
+<text x="22" y="448" class="ink2" font-size="9.5">The <tspan class="acc">paired diff</tspan> is decisive where overlap looks null.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 2 —</b> left, two broad, heavily overlapping score distributions for a config
+      and the baseline — visually indistinguishable. Right, the same comparison as per-seed differences, where nearly
+      every seed shows the config above baseline by a consistent margin in a tight band. The overlap on the left is
+      common-mode seed difficulty that the pairing on the right cancels out.</figcaption>
+      <div class="nb-prov"><span><b>source</b> shared/monitor.py _paired_d / _pair_ratio · minicpm5 finescan (r<1 config)</span><span><b>type</b> schematic — teaching illustration of the marginal-vs-paired view</span><span><b>safety</b> baseline vs config by line-style; Δ sign reads off position</span></div>
+    </figure>
+  </section>
+
+  <section id="multiplicity">
+    <h2><span class="num">§4</span>Phantom #3: the multiplicity budget</h2>
+    <p>A sweep is a multiple-comparisons machine. The intuition is the lottery: buy 300 tickets and one of them winning
+    tells you nothing about your skill at picking numbers — somebody had to win. Run ~150–500 config×channel tests and
+    <span class="hl-acc">you should expect ~25 false positives at p&lt;0.05 by chance alone.</span> So a lone discovery
+    sitting at t ≈ 1.7–2.3 is not a finding — it's exactly at the look-elsewhere floor, indistinguishable from the noise
+    you <em>expect</em> a sweep that size to throw up.</p>
+    <p>A result clears the bar only if it (a) beats the multiplicity budget outright, or (b) is corroborated on an
+    independent axis — a second channel, a second seed batch, a mechanistic prediction that came true. A single t in the
+    2s, standing alone, is a candidate, not a conclusion. The discipline is cheap to state and expensive to hold to,
+    because the seductive result is <em>always</em> the lone one: the config nothing else corroborates is the config you
+    most want to be real.</p>
+    <p>This is why the lab's structure is <b>two-tier</b>. A cheap, narrow battery (the no-CoT delta-detector, 2–3 seeds)
+    <em>ranks</em> all configs — explicitly not ground truth, just an intuition delta-detector. Then a richer, slower
+    eval (more probes plus a real generation task, ≥5 seeds, with the wide-variance configs re-run) runs on the
+    <b>winner shortlist only</b>. Round-1 sorts; round-2 confirms. Never make a public claim off the thin battery.
+    (xpressai learned this the hard way and said so: their small internal probe reported a RYS config had <em>lower</em>
+    EQ; their larger held-out probe said <em>higher</em>. "Small-probe variance was misleading us." Same lesson, paid for
+    independently.)</p>
+  </section>
+
+  <section id="baseline">
+    <h2><span class="num">§5</span>Read the baseline before you trust any config</h2>
+    <h3>First, profile what the baseline leaves room to measure</h3>
+    <p>A channel can only measure what its baseline leaves room to measure, so you profile the baseline's per-channel
+    saturation and per-seed variance <em>first</em>. Picture each channel as a ruler with a usable middle and two dead
+    ends — push the baseline against either end and there's no room for a config to register. The recurring profile across
+    dense models at aggressive quant:</p>
+    <ul>
+      <li><b>math-strict is floored</b> — huge no-CoT arithmetic is impossible, the column is near-dead, zero
+      discriminative power. Only <em>easy</em> math (baseline 0.2–0.8) gives a live strict signal.</li>
+      <li><b>multiple-choice is ceilinged</b> — bare-letter MMLU sits near 1.0, so it's a <em>downside-only</em> damage
+      detector. It maps which layers are load-bearing for retrieval; it structurally can't show an improvement.</li>
+      <li><b>EQ is the bidirectional channel</b> — real two-sided headroom — <em>but</em> often the dirtiest. On
+      Gemma-31B the EQ standard deviation was 0.277, per-seed values swinging 0.00↔0.80; every EQ "leader" sat inside
+      baseline noise. The bimodality turned out to be a missing answer-priming suffix (<code>"\n&lt;emotion&gt;:"</code>),
+      not signal. <b>A channel's t-stats are noise until you understand its variance.</b></li>
+    </ul>
+    <p>A related subtlety: no-CoT math is not binary. On Gemma-31B (n=4896), strict was 0.44 and partial 0.76 — 43.6%
+    both-correct, 48.7% a smooth near-miss continuum, only 7.7% outright junk. <span class="vrfy">VERIFY · n=4896 vs the
+    chosen 31b file's cell counts</span> The partial scorer is capturing a <em>real</em> second axis — magnitude/shape
+    closeness — so a config can tighten sub-threshold near-misses without moving strict at all. That's why partial stays
+    an <em>annotation</em> on the strict leaders, never folded into the headline: it's real information about a different
+    capability, and it's also the exact thing that inflates phantoms. Both, at once.</p>
+
+    <h3>Then calibrate the channel before you spend compute</h3>
+    <p>The usable middle of the ruler is <b>40–70% baseline pass</b>. Above ~80% is ceilinged (no variance to move);
+    below ~20% is floored (can't detect improvement). If a channel is out of band, recenter the <em>probes</em> — smaller
+    operands, not new problem types — to land the baseline mid-band <b>before</b> you reseed. Reseeding a ceilinged or
+    floored or bimodal channel just measures the artifact at higher resolution: wasted compute. The sequencing rule, in
+    order: <span class="hl-acc">fix the probe / grader / suffix first, reseed second.</span></p>
+
+    <figure class="figure" id="fig3">
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="720" height="420" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="34" font-size="18">The baseline saturation map</text>
+<text class="mut" x="40" y="53" font-size="10">A channel can only measure what its baseline leaves room to measure</text>
+<rect x="392.0" y="84" width="144.0" height="250" fill="var(--accent,#4FB2C2)" opacity="0.08"/>
+<text x="464.0" y="78" text-anchor="middle" class="acc" font-size="10">usable band 0.4–0.7</text>
+<line x1="200" y1="110" x2="680" y2="110" class="rule" stroke-width="1"/>
+<text x="190" y="114" text-anchor="end" class="ink2" font-size="11">math-strict</text>
+<circle cx="219.2" cy="110" r="5.5" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+<text x="231.2" y="114" text-anchor="start" class="mut" font-size="9.5">0.04 · floored — dead</text>
+<line x1="200" y1="176" x2="680" y2="176" class="rule" stroke-width="1"/>
+<text x="190" y="180" text-anchor="end" class="ink2" font-size="11">multiple-choice</text>
+<circle cx="665.6" cy="176" r="5.5" fill="var(--bg,#0E141A)" stroke="var(--neg,#B98AD6)" stroke-width="2.2"/>
+<text x="653.6" y="180" text-anchor="end" class="mut" font-size="9.5">0.97 · ceilinged — damage only</text>
+<line x1="200" y1="242" x2="680" y2="242" class="rule" stroke-width="1"/>
+<text x="190" y="246" text-anchor="end" class="ink2" font-size="11">EQ</text>
+<line x1="297.4" y1="242" x2="563.4" y2="242" class="vios" stroke-width="2.4" opacity="0.8"/>
+<line x1="297.4" y1="237" x2="297.4" y2="247" class="vios" stroke-width="1.6"/><line x1="563.4" y1="237" x2="563.4" y2="247" class="vios" stroke-width="1.6"/>
+<polygon points="430.4,237 435.4,242 430.4,247 425.4,242" class="vio"/>
+<text x="571.4" y="246" class="vio" font-size="9.5">σ=0.277 · live but dirtiest</text>
+<line x1="200" y1="308" x2="680" y2="308" class="rule" stroke-width="1"/>
+<text x="190" y="312" text-anchor="end" class="ink2" font-size="11">easy-math</text>
+<circle cx="430.4" cy="308" r="5.5" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="2.2"/>
+<text x="442.4" y="312" text-anchor="start" class="mut" font-size="9.5">0.48 · the usable channel</text>
+<line x1="200" y1="352" x2="680" y2="352" class="axis" stroke-width="1"/>
+<text x="200.0" y="368" text-anchor="middle" class="mut" font-size="10">0.0</text>
+<text x="440.0" y="368" text-anchor="middle" class="mut" font-size="10">0.5</text>
+<text x="680.0" y="368" text-anchor="middle" class="mut" font-size="10">1.0</text>
+<text x="440" y="384" text-anchor="middle" class="ink2" font-size="10">baseline pass-rate</text>
+<line x1="40" y1="380" x2="680" y2="380" class="rule" stroke-width="1"/>
+<text x="40" y="398" class="ink2" font-size="11">Only <tspan class="acc">EQ &amp; easy-math</tspan> sit where a score can move — strict is floored, MC ceilinged.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 430" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="400" height="430" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="34" font-size="15">The baseline saturation map</text>
+<text class="mut" x="40" y="52" font-size="8">A channel can only measure what its baseline leaves room to measure</text>
+<rect x="216.0" y="64" width="72.0" height="286" fill="var(--accent,#4FB2C2)" opacity="0.08"/>
+<text x="252.0" y="58" text-anchor="middle" class="acc" font-size="8.5">usable band 0.4–0.7</text>
+<line x1="120" y1="90" x2="360" y2="90" class="rule" stroke-width="1"/>
+<text x="110" y="94" text-anchor="end" class="ink2" font-size="9.5">math-strict</text>
+<circle cx="129.6" cy="90" r="5.5" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+<text x="141.6" y="94" text-anchor="start" class="mut" font-size="8.0">0.04 · floored — dead</text>
+<line x1="120" y1="168" x2="360" y2="168" class="rule" stroke-width="1"/>
+<text x="110" y="172" text-anchor="end" class="ink2" font-size="9.5">multiple-choice</text>
+<circle cx="352.8" cy="168" r="5.5" fill="var(--bg,#0E141A)" stroke="var(--neg,#B98AD6)" stroke-width="2.2"/>
+<text x="340.8" y="172" text-anchor="end" class="mut" font-size="8.0">0.97 · ceilinged — damage only</text>
+<line x1="120" y1="246" x2="360" y2="246" class="rule" stroke-width="1"/>
+<text x="110" y="250" text-anchor="end" class="ink2" font-size="9.5">EQ</text>
+<line x1="168.7" y1="246" x2="301.7" y2="246" class="vios" stroke-width="2.4" opacity="0.8"/>
+<line x1="168.7" y1="241" x2="168.7" y2="251" class="vios" stroke-width="1.6"/><line x1="301.7" y1="241" x2="301.7" y2="251" class="vios" stroke-width="1.6"/>
+<polygon points="235.2,241 240.2,246 235.2,251 230.2,246" class="vio"/>
+<text x="309.7" y="250" class="vio" font-size="8.0">σ=0.277 · live but dirtiest</text>
+<line x1="120" y1="324" x2="360" y2="324" class="rule" stroke-width="1"/>
+<text x="110" y="328" text-anchor="end" class="ink2" font-size="9.5">easy-math</text>
+<circle cx="235.2" cy="324" r="5.5" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="2.2"/>
+<text x="247.2" y="328" text-anchor="start" class="mut" font-size="8.0">0.48 · the usable channel</text>
+<line x1="120" y1="368" x2="360" y2="368" class="axis" stroke-width="1"/>
+<text x="120.0" y="384" text-anchor="middle" class="mut" font-size="8.5">0.0</text>
+<text x="240.0" y="384" text-anchor="middle" class="mut" font-size="8.5">0.5</text>
+<text x="360.0" y="384" text-anchor="middle" class="mut" font-size="8.5">1.0</text>
+<text x="240" y="400" text-anchor="middle" class="ink2" font-size="8.5">baseline pass-rate</text>
+<line x1="40" y1="390" x2="360" y2="390" class="rule" stroke-width="1"/>
+<text x="40" y="408" class="ink2" font-size="9">Only <tspan class="acc">EQ &amp; easy-math</tspan> sit where a score can move — strict is floored, MC ceilinged.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 3 —</b> each evaluation channel's baseline pass-rate against a shaded usable
+      band from 0.4 to 0.7. Strict math sits at the floor near zero, multiple-choice at the ceiling near one, and
+      emotional-intelligence in the middle but with a very large variance bar. Only the middle, mid-difficulty region
+      lets a configuration's effect show up at all.</figcaption>
+      <div class="nb-prov"><span><b>source</b> gemma_31b_v2_base baseline row · monitor.py _null_stats / eq_null_seed_band / mc_distribution</span><span><b>type</b> representative — channel positions illustrative; EQ σ=0.277 is the real measured band</span><span><b>safety</b> regime by marker outline + position, not colour</span></div>
+    </figure>
+  </section>
+
+  <section id="metrics">
+    <h2><span class="num">§6</span>The metrics that earned their place across models</h2>
+    <p>Four measurement habits generalized off specific models and are now run by default.</p>
+    <p><b>Degeneration rate</b> (from <a href="/lab/01_minicpm5_sigma_alpha.html">MiniCPM5</a> and
+    <a href="/lab/05_granite.html">Granite</a>). A zero-compute count over <em>already-stored</em> responses: how often a
+    generation derails — special-token leaks (<code>&lt;|fim_prefix|&gt;</code>), name:number line-loops, digit
+    repetition. It's monotone in both surgery knobs (copy count and cumulative-α), and it turns out to be the <em>real</em>
+    cost axis. The clincher: throw out only the derailed responses and score the clean ones, and <b>the surgery improves
+    content quality on every channel — the only thing it costs is derailment probability.</b> That reframes a lot of
+    apparent "EQ craters" as a single mechanism: <span class="hl-acc">channel divergence ≈ exposure divergence.</span> A
+    short channel (~16-token math) barely gives a low per-token derailment risk room to fire; a long channel (~96-token
+    EQ) rolls the dice five times as often. The "EQ crater" isn't lost competence — it's the same small risk, exposed
+    longer. Put a degen-% column on every report.</p>
+    <p><b>The fine-α grid is mandatory; the 3-point map lies.</b> A prune(α=0)/baseline(α=1)/dup(α=2) skeleton is
+    invisible to any layer with a U-shaped α-response — Granite's L6 <em>peaks</em> at α≈0.7 while both prune and dup
+    collapse it. Any per-layer sensitivity claim needs the dense single-pass α grid (~0.5–1.5), not the dup/prune
+    endpoints.</p>
+    <p>The other two are ranking hygiene, stated briefly. <b>Rank by balanced-t, and treat no t as a p-value:</b> the
+    harness "strict t" pools every (probe×seed) cell, over-weighting whichever channel has the most cells; the monitor
+    "balanced t" gives one vote per channel. Rank by the latter, read both as ordering devices only. <b>Per-probe autopsy
+    is a lens, never the rank target:</b> a balanced 49-probe average dilutes concentrated capability flips, and often
+    that's the real win — Granite's deterministic borrow/carry errors were wrong the same way on every seed, and the
+    winning config flipped them 12 of 12. Read per-probe to <em>see which bug got fixed</em>; never rank by
+    max-over-probes, which just rewards a lucky single tip.</p>
+  </section>
+
+  <section id="cancels">
+    <h2><span class="num">§7</span>What cancels, and what doesn't</h2>
+    <p>A recurring worry on local-model work is that aggressive quantization or sampler choice contaminates everything.
+    The seed-paired design dissolves most of it, and the precise version tells you exactly which worry survives.</p>
+    <p>A uniform sampler setting, a uniform quant level, even the engine's own nondeterminism — each is a <b>constant
+    offset</b> that applies equally to the config and the baseline on a fixed seed, so it <b>cancels in the paired
+    difference.</b> Same exam paper, same handicap on both students. The only thing that can distort a <em>ranking</em>
+    (as opposed to an effect-size <em>magnitude</em>) is an <em>interaction</em>: a sampler×config or quant×surgery
+    effect, where the offset differs across configs. And a baseline-only ladder structurally cannot detect an
+    interaction — you need ≥2 configs across the ladder to see one.</p>
+    <p>So the honest scope statement is: <span class="hl-acc">quant noise is real, and it degrades the precision
+    tails</span> — exact multi-digit arithmetic, tool-call and structured tokens, long-context, strict
+    instruction-following — which is exactly where production agentic use breaks even when broad-strokes sweep capability
+    doesn't. But it is <em>not</em> a blocker for what a sweep measures, and it never touches rank or direction. The clean
+    way to <em>settle</em> this rather than argue it is a 3-point quant ladder — IQ2 / IQ4_XS / Q8 — on baseline plus a
+    few standouts, reading the <em>shape</em> of per-config Δ across the three: flat = pure offset, monotone = graded but
+    rank-preserving, a threshold flip = the worry vindicated and the cliff located.</p>
+  </section>
+
+  <section id="coda">
+    <h2><span class="num">§8</span>Coda: belief versus behaviour</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">There's a more elegant solution to sampling noise than the one this lab uses, and it's worth
+        sitting with because the difference is conceptual, not just engineering. Ng reads the model's <em>logit
+        distribution</em> over the answer tokens and computes the expected score — <code>E[score] = Σ p(token)·score</code>
+        — directly from one forward pass. No sampling, no seeds, zero sampling variance, removed at the source. This lab
+        does the opposite: it <em>characterizes and averages over</em> the sampling variance, with temp-0.3 and many
+        paired seeds.</p>
+        <p>Neither is strictly better; they measure different things. His is cheaper and lower-variance, but it measures
+        <b>belief</b> — what the model assigns probability to — and would therefore <em>hide</em> the very pathologies
+        this lab is built to catch: the seed-1 letter-collapse, the commit/no-commit bimodality, the derailment exposure.
+        This lab measures <b>sampled behaviour</b>, which is noisier but is what a deployed model actually does at the
+        API.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">The real axis</span>
+        If you want to know what the model <em>knows</em>, read the logits. If you want to know what it'll <em>do</em>
+        when someone runs it, you have to sample it — and then you have to do the statistics. This whole writeup is the
+        statistics.
+      </aside>
+    </div>
+  </section>
+
+  <section id="caveats">
+    <div class="nb-limits">
+      <div class="nb-limits__head">
+        <span class="nb-limits__label">Scope &amp; credit</span>
+        <span class="nb-conf nb-conf--medium"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span></span>medium — these frame the contribution</span>
+      </div>
+      <ul>
+        <li><b>The contribution is the inferential layer, not the surgery.</b> Ng's probe design (no-CoT, tiny outputs,
+        partial-credit) is genuinely elegant and gets explicit credit; the strict regrade and the statistics
+        <em>extend</em> it, they don't refute it. Frame: "I add the statistics," never "they're sloppy."</li>
+        <li><b>No t is a p-value here.</b> Every t-statistic in this lab is an ordering device read against a multiplicity
+        budget, not a significance test reported in isolation.</li>
+        <li><b>Numbers tagged <span class="vrfy">VERIFY</span></b> (the n=4896 EQ/strict/partial figures) want a
+        recompute from the chosen 31b file via <code>monitor.py</code> null-stats before they caption a figure.</li>
+        <li><b>The figures here are pending</b> — the prose carries each one's intended argument and data source in the
+        meantime, so the methodology reads complete even before the plots are drawn.</li>
+      </ul>
+    </div>
+
+    <div class="nb-marginalia" style="margin-top:var(--sp-7)">
+      <div class="nb-marginalia__label">Colophon &amp; lineage</div>
+      <div class="nb-marginalia__body">
+        <p style="max-width:64ch">This is the longform companion to the terse <a href="methods.html">Methods &amp;
+        references</a> glossary that every specimen links to — the story of how each rule got earned. Specimen pages
+        applying all of it: <a href="gemma.html">Gemma 4</a>, <a href="/lab/05_granite.html">Granite</a>,
+        <a href="hrm.html">HRM</a>, <a href="/lab/01_minicpm5_sigma_alpha.html">MiniCPM5</a>. Stat engine:
+        <span class="mono">shared/monitor.py</span> (<span class="mono">_paired_d</span>,
+        <span class="mono">_pair_ratio</span>, <span class="mono">_null_stats</span>); strict regrade
+        <span class="mono">regrade_strict.py</span> + de-echo <span class="mono">regrade_no_echo.py</span>. Technique and
+        probe-design credit: David Ng (<span class="mono">dnhkng</span>). Run locally on a 16&nbsp;GB Mac&nbsp;Mini.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer style="max-width:var(--page-max);margin:0 auto;padding:var(--sp-6) var(--gutter) var(--sp-9)">
+  <p style="font-family:var(--font-mono);font-size:var(--fs-micro);letter-spacing:.03em;color:var(--text-muted);line-height:1.7">© 2026 · The Vivisection Lab · exploratory research notes, provided as-is, no warranty · writeups &amp; figures CC&nbsp;BY · uses cookieless analytics, no personal data collected</p>
+</footer>
+
+<script src="/assets/nb.js"></script>
+</body>
+</html>

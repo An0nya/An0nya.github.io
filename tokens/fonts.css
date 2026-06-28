@@ -1,0 +1,17 @@
+/* ============================================================================
+   FONTS — Newsreader (serif) + JetBrains Mono
+   ----------------------------------------------------------------------------
+   Loaded from Google Fonts, matching the live notebooks' own setup. The @font-face
+   rules in the imported sheet point at fonts.gstatic.com and ship to consumers.
+   Newsreader is loaded with optical-size + italic axes (drop-caps, deks, quotes
+   all rely on the true italic, not a synthesised slant).
+
+   NOTE: these are CDN webfonts, not vendored binaries. If you need a fully
+   offline / self-hosted build, download Newsreader + JetBrains Mono and replace
+   this import with local @font-face rules — flagged in the README.
+
+   Atkinson Hyperlegible (Braille Institute) ships for the accessibility toggle:
+   set `html.a11y-font` to swap the serif body to a high-legibility sans for
+   dyslexic / low-vision readers. The mono "instrument" voice is unaffected.
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@400;500;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap');

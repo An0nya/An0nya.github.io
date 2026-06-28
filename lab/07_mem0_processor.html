@@ -1,0 +1,460 @@
+<!-- @dsCard group="Portfolio Hub" viewport="1100x1400" name="Writeup — mem0-processor (the z-score harness)" subtitle="Set out to build agent memory, built a summarization-eval harness instead — and why raw averages lie" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mem0-processor — The Vivisection Lab</title>
+<meta name="description" content="I set out to build agent memory and built a model-evaluation harness instead. The ETL inversion, decision-attribution as the hard task, and why ranking small local models needs per-session z-scores.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E141A'/%3E%3Cpath d='M6 16 H15' stroke='%236F7C88' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 9' stroke='%236FCBD8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 23' stroke='%23E3C24A' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='15' cy='16' r='2.6' fill='%23ECEFF3'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  main { max-width: var(--page-max); margin: 0 auto; padding: var(--sp-7) var(--gutter) var(--sp-9); }
+  section { padding: var(--sp-7) 0 0; }
+  .dek { font-family: var(--font-serif); font-style: italic; font-size: var(--fs-dek); line-height: 1.4; color: var(--text-dim); max-width: 62ch; margin: var(--sp-5) 0 0; }
+  h2 { font-size: var(--fs-h2); margin: 0 0 var(--sp-4); }
+  h2 .num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); letter-spacing: .1em; vertical-align: 0.7em; margin-right: var(--sp-3); }
+  p { max-width: var(--measure); }
+  .dropcap { max-width: var(--measure); }
+  .dropcap::first-letter { font-family: var(--font-serif); font-weight: 500; font-size: 3.4em; line-height: 0.82; float: left; padding: 0.04em 0.12em 0 0; color: var(--accent-bright); }
+  .col-side { display: grid; grid-template-columns: 1fr 260px; gap: var(--sp-7); align-items: start; }
+  .col-side .aside { font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); border-left: 1px solid var(--border-strong); padding-left: var(--sp-4); font-style: italic; }
+  .col-side .aside .nb-kicker { font-style: normal; display: block; margin-bottom: var(--sp-2); }
+  .hl-acc { color: var(--accent); font-weight: 500; }
+  .figure { margin: var(--sp-6) 0; }
+  .nb-plate svg { display: block; width: 100%; height: auto; }
+  .fig-mobile { display: none; }
+  /* the ETL pipeline, as a flat greppable diagram */
+  .pipe { font-family: var(--font-mono); font-size: var(--fs-sm); line-height: 1.5; color: var(--text-dim); background: var(--surface-sunken); border: 1px solid var(--rule); border-left: 2px solid var(--accent); border-radius: var(--radius-2, 6px); padding: var(--sp-5); overflow-x: auto; margin: var(--sp-5) 0; white-space: pre; }
+  .pipe b { color: var(--accent); font-weight: 500; }
+  .pipe .gloss { color: var(--text-muted); }
+  /* the worked-example scoreboard table fork-marks */
+  .score td.tier { font-family: var(--font-mono); text-align: center; white-space: nowrap; }
+  .score .miss { color: var(--neg); }
+  .score .hit  { color: var(--accent); }
+  @media (max-width: 760px) {
+    .col-side { grid-template-columns: 1fr; gap: var(--sp-5); }
+    .fig-desktop { display: none; }
+    .fig-mobile { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nb-nav">
+  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
+  <a href="#thesis">The inversion</a>
+  <a href="#harness">The harness</a>
+  <a href="#worked">Worked example</a>
+  <a href="#zscore">Why averages lie</a>
+  <span class="nb-nav__spacer"></span>
+  <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
+  <a href="#" data-theme-toggle>☼ Light</a>
+</nav>
+
+<main>
+  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · tooling branch</div>
+  <header class="nb-record">
+    <div class="nb-record__title">mem0-processor</div>
+    <div class="nb-record__grid">
+      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v">119 local models · summarization eval</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">pipeline working daily · backend mid-migration</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Last revised</span><span class="nb-record__v">2026-06-21</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Battery</span><span class="nb-record__v">831 summaries · 23 ground-truthed sessions · z-scored</span></div>
+      <div class="nb-record__field">
+        <span class="nb-record__k">Confidence</span>
+        <span class="nb-conf nb-conf--medium"><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span></span>medium — methodology solid, model counts point-in-time</span>
+      </div>
+    </div>
+  </header>
+
+  <p class="dek">I set out to build agent memory and built a model-evaluation harness instead. The memory is
+  the use-case it was born from; the eval layer is the part that's reusable — and it surfaced a finding the
+  pipeline was never built to look for.</p>
+
+  <section id="thesis">
+    <h2><span class="num">§1</span>One inversion is the whole architecture</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">Ask an agent to write its own memories <em>during</em> a conversation and the
+        memory-writing competes with the user's task for the model's attention. On every turn the model
+        splits effort between answering you and persisting state, and persistence is the lower-urgency job —
+        so in practice it gets a perfunctory sentence or gets skipped. <span class="hl-acc">So invert it:
+        don't instrument the live session — mine the logs offline.</span></p>
+        <p>Claude Code already writes complete JSONL transcripts of every session it runs. After the fact, a
+        local model batch-summarizes those transcripts, the summaries are scored against ground truth, and
+        the survivors are uploaded as searchable memory. ETL, not live-write. That single inversion is the
+        entire architecture; everything else is making it reliable.</p>
+        <p>The appeal: the source of truth is data you <em>already have</em> and never had to contaminate the
+        live interaction to collect. The cost: you've now made writing good memory into a
+        <em>summarization-quality</em> problem — which means you have to know which local model actually
+        summarizes well, and that turned out to be a real question with no published answer. That cost is the
+        pivot. Chasing "which model summarizes well" turned mem0-processor into a model-evaluation system that
+        happens to emit memories as its output.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">No impossibility proof</span>
+        There's no controlled online-vs-offline comparison here. Decoupling memory from the live session is
+        the engineering motivation, not a claim that in-session memory <em>can't</em> work.
+      </aside>
+    </div>
+
+    <div class="pipe" aria-label="The offline ETL pipeline, four stages">
+<b>~/.claude/projects/**/*.jsonl</b>        <span class="gloss">raw session transcripts — the source of truth</span>
+      │  parse + segment             <span class="gloss">lib/transcript.mjs</span>
+      ▼
+<b>local-LLM summarization</b>              <span class="gloss">llama-server, per-model from a ~145-entry registry</span>
+      │
+      ▼
+<b>scoring + ranking</b>                    <span class="gloss">hand-written ground-truth fact sets; z-score across sessions</span>
+      │
+      ▼
+<b>memory backend</b>                       <span class="gloss">searchable, deduped by session id (Mem0 today)</span>
+    </div>
+  </section>
+
+  <section id="harness">
+    <h2><span class="num">§2</span>The core system: a summarization eval harness</h2>
+    <p>Picking which 1–9B local model writes your memories is a model-selection problem, so the pipeline grew
+    a benchmark, and the benchmark grew teeth. It carries <span class="hl-acc">119 models scored</span> (62 in
+    the quality tier, 31 with enough shared sessions to rank head-to-head), evaluated on the exact task they'd
+    be used for — not MMLU, not vibes, but "did the summary capture the facts this session actually
+    established." Three disciplines do the work:</p>
+    <ul>
+      <li><b>Ground truth is hand-written fact sets</b>, per reference session. A summary is scored on fact
+      recall against a human-authored list of what the session genuinely contained — so the metric rewards
+      <em>capturing the thing</em>, not producing fluent prose about it. The recurring failure it catches: the
+      model that writes a beautiful, confident summary of facts that were never in the transcript.</li>
+      <li><b>Ranking is by z-score across sessions, not raw averages.</b> Session mixes differ wildly in how
+      much there is to capture, so a raw mean over a model's sessions isn't comparable to another model's raw
+      mean over a <em>different</em> set. Z-normalizing per session first makes the comparison legitimate. (The
+      same "raw averages aren't comparable across different mixes" correction the RYS work makes with
+      channel-balanced aggregates — identical bias, identical fix.)</li>
+      <li><b>Sampler/config provenance is tracked.</b> "Model X is good at this" without sampler provenance
+      doesn't replicate — the same claim at a different temperature can flip. The registry
+      (<code>config/models-registry.json</code>, ~145 entries) carries the launch flags, chat-template fixes,
+      and per-architecture reasoning-budget defaults that were each learned the hard way, so a result is
+      reproducible from the registry key alone. The registry may outlive the pipeline.</li>
+    </ul>
+  </section>
+
+  <section id="worked">
+    <h2><span class="num">§3</span>What "capturing the facts" actually means</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">The scored target is not the shape of the session or its headline events. Those are
+        close to free — Claude Code's own Haiku compaction pass already emits a high-quality summary of
+        <em>what happened</em>. What this benchmark scores is the layer above that:
+        <span class="hl-acc">decision attribution</span> — who made each call, who caught what, and whether a
+        decision was contested or silently assumed. That's the layer later sessions actually need (the
+        <em>why</em> outlives the <em>what</em>), and the layer models fall down on.</p>
+        <p>Session <code>2503c51c</code> is the canonical hard case: three distractors wrapped around one real
+        bug. Mid-session, Claude proposed <code>new Date()</code> for a summary's timestamp header; the user
+        read the code and caught that this stamps <em>processing time</em> rather than <em>session time</em>,
+        and redirected the fix to pull <code>startedAt</code> from the transcript JSONL. The bug never threw —
+        it would have silently corrupted the timestamp on every future summary, undetectable until someone ran
+        temporal analysis. The two nearby exchanges are traps: a double-timestamp worry and a timezone
+        question were both cases where the <em>user</em> misunderstood and Claude was correct. A model that
+        pattern-matches "user raised a concern → there was a bug" inverts all three.</p>
+        <p>A summary scores well here only if it gets the attribution right, not the content: <b>Claude</b> was
+        wrong, the <b>user</b> caught it <em>by reviewing code</em>, and the failure mode was <em>silent
+        corruption</em>. That last clause is second-order — it requires reasoning about a downstream failure
+        that never visibly happened — and it was hit by <span class="hl-acc">0 of 232</span> local-model runs
+        as of the 2026-04 scoring epoch.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">Extract vs restate</span>
+        <em>Extracting</em> a contested decision from raw interaction is the hard task; <em>restating</em> one
+        already distilled into a compaction note is not. A benchmark that scores fluent restatement measures
+        the wrong thing.
+      </aside>
+    </div>
+
+    <p style="margin-top:var(--sp-5)">The cliff is not a small-vs-large one. Scored on the same segment, real
+    frontier models fared no better — and the one that got it right only did so when fed a summary that had
+    <em>already</em> extracted the decision:</p>
+
+    <table class="nb-table score" style="margin-top:var(--sp-5)">
+      <thead><tr><th>Run</th><th>What its summary did with the catch</th><th>Tier</th></tr></thead>
+      <tbody>
+        <tr><td>232 local-model runs</td><td>none surfaced the silent-corruption risk (0 hits)</td><td class="tier miss">✗ T4</td></tr>
+        <tr><td>Haiku 4.5</td><td>asserts the timestamp work was "already completed"</td><td class="tier miss">✗ T4</td></tr>
+        <tr><td>Claude Sonnet 4.6</td><td>treats the timestamp work as skipped</td><td class="tier miss">✗ T4</td></tr>
+        <tr><td>Sonnet 4.6 · <em>continuation</em></td><td>inherits a compaction note → relays the catch + corruption risk correctly</td><td class="tier hit">✓ restated</td></tr>
+      </tbody>
+    </table>
+    <div class="nb-prov" style="margin-top:var(--sp-3)">
+      <span><b>sourced</b> Haiku/Sonnet T4 reproduced on-disk via the session scorer</span>
+      <span><b>draft flag</b> a fuller frontier gradient (Gemini/ChatGPT also missing it, Opus 4.6 clearing both) is recollection — pull the cloud-scoring record before publishing beyond Haiku/Sonnet</span>
+    </div>
+  </section>
+
+  <section id="zscore">
+    <h2><span class="num">§4</span>Why raw averages lie</h2>
+    <p>What this catches isn't hypothetical. In the current dataset, ranking by raw fact-recall puts
+    <code>qwen35-9b-os-auto-thinking</code> <span class="hl-acc">4th</span> — but it only drew a handful of
+    easy sessions (n=7), and per-session z-scoring drops it to <span class="hl-acc">26th</span>. The mirror
+    case is a 2-bit quant, <code>qwen3-6-27b-iq2-m</code>: <span class="hl-acc">15th</span> on raw average,
+    <span class="hl-acc">2nd</span> on z-score, because it happened to be tested on harder sessions where its
+    real margin showed. Raw and normalized rankings here don't just shift — they invert, and the 2-bit model
+    outranks the raw-average favorite once difficulty is normalized out.</p>
+
+    <figure class="figure" id="fig1">
+      <p class="nb-plate__note">↳ the left chart is the one people publish; the right chart is the one that's true</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 600" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <rect x="0" y="0" width="720" height="600" fill="var(--bg2,#141D26)"/>
+
+  <!-- title + dek -->
+  <text class="ttl" x="40" y="34" font-size="18">Raw averages lie: the ranking reorders once difficulty is normalized</text>
+  <text class="mut" x="40" y="55" font-size="11">31 rank-eligible summarizers · left rail = raw mean fact-recall · right rail = per-session z-score</text>
+
+  <!-- rails -->
+  <line x1="210" y1="78" x2="210" y2="552" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="510" y1="78" x2="510" y2="552" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="210" y="72" text-anchor="middle" class="ink2" font-size="10.5" letter-spacing="1.2">RANKED BY RAW MEAN</text>
+  <text x="510" y="72" text-anchor="middle" class="ink2" font-size="10.5" letter-spacing="1.2">RANKED BY z-SCORE</text>
+  <text x="210" y="568" text-anchor="middle" class="mut" font-size="9" letter-spacing="0.5">the chart people publish</text>
+  <text x="510" y="568" text-anchor="middle" class="mut" font-size="9" letter-spacing="0.5">the one that's true</text>
+
+  <!-- muted connectors (29 of 31) -->
+  <g stroke="var(--muted,#6F7C88)" stroke-width="1" opacity="0.30" fill="none">
+    <line x1="210" y1="105" x2="510" y2="120"/>
+    <line x1="210" y1="120" x2="510" y2="150"/>
+    <line x1="210" y1="150" x2="510" y2="195"/>
+    <line x1="210" y1="165" x2="510" y2="135"/>
+    <line x1="210" y1="180" x2="510" y2="225"/>
+    <line x1="210" y1="195" x2="510" y2="165"/>
+    <line x1="210" y1="210" x2="510" y2="180"/>
+    <line x1="210" y1="225" x2="510" y2="270"/>
+    <line x1="210" y1="240" x2="510" y2="210"/>
+    <line x1="210" y1="255" x2="510" y2="255"/>
+    <line x1="210" y1="270" x2="510" y2="525"/>
+    <line x1="210" y1="285" x2="510" y2="315"/>
+    <line x1="210" y1="315" x2="510" y2="285"/>
+    <line x1="210" y1="330" x2="510" y2="390"/>
+    <line x1="210" y1="345" x2="510" y2="300"/>
+    <line x1="210" y1="360" x2="510" y2="330"/>
+    <line x1="210" y1="375" x2="510" y2="345"/>
+    <line x1="210" y1="390" x2="510" y2="405"/>
+    <line x1="210" y1="405" x2="510" y2="375"/>
+    <line x1="210" y1="420" x2="510" y2="435"/>
+    <line x1="210" y1="435" x2="510" y2="420"/>
+    <line x1="210" y1="450" x2="510" y2="510"/>
+    <line x1="210" y1="465" x2="510" y2="480"/>
+    <line x1="210" y1="480" x2="510" y2="240"/>
+    <line x1="210" y1="495" x2="510" y2="495"/>
+    <line x1="210" y1="510" x2="510" y2="360"/>
+    <line x1="210" y1="525" x2="510" y2="540"/>
+    <line x1="210" y1="540" x2="510" y2="450"/>
+  </g>
+
+  <!-- rail nodes -->
+  <g fill="var(--muted,#6F7C88)">
+    <circle cx="210" cy="90" r="1.6"/><circle cx="210" cy="105" r="1.6"/><circle cx="210" cy="120" r="1.6"/><circle cx="210" cy="135" r="1.6"/><circle cx="210" cy="150" r="1.6"/><circle cx="210" cy="165" r="1.6"/><circle cx="210" cy="180" r="1.6"/><circle cx="210" cy="195" r="1.6"/><circle cx="210" cy="210" r="1.6"/><circle cx="210" cy="225" r="1.6"/><circle cx="210" cy="240" r="1.6"/><circle cx="210" cy="255" r="1.6"/><circle cx="210" cy="270" r="1.6"/><circle cx="210" cy="285" r="1.6"/><circle cx="210" cy="300" r="1.6"/><circle cx="210" cy="315" r="1.6"/><circle cx="210" cy="330" r="1.6"/><circle cx="210" cy="345" r="1.6"/><circle cx="210" cy="360" r="1.6"/><circle cx="210" cy="375" r="1.6"/><circle cx="210" cy="390" r="1.6"/><circle cx="210" cy="405" r="1.6"/><circle cx="210" cy="420" r="1.6"/><circle cx="210" cy="435" r="1.6"/><circle cx="210" cy="450" r="1.6"/><circle cx="210" cy="465" r="1.6"/><circle cx="210" cy="480" r="1.6"/><circle cx="210" cy="495" r="1.6"/><circle cx="210" cy="510" r="1.6"/><circle cx="210" cy="525" r="1.6"/><circle cx="210" cy="540" r="1.6"/>
+    <circle cx="510" cy="90" r="1.6"/><circle cx="510" cy="105" r="1.6"/><circle cx="510" cy="120" r="1.6"/><circle cx="510" cy="135" r="1.6"/><circle cx="510" cy="150" r="1.6"/><circle cx="510" cy="165" r="1.6"/><circle cx="510" cy="180" r="1.6"/><circle cx="510" cy="195" r="1.6"/><circle cx="510" cy="210" r="1.6"/><circle cx="510" cy="225" r="1.6"/><circle cx="510" cy="240" r="1.6"/><circle cx="510" cy="255" r="1.6"/><circle cx="510" cy="270" r="1.6"/><circle cx="510" cy="285" r="1.6"/><circle cx="510" cy="300" r="1.6"/><circle cx="510" cy="315" r="1.6"/><circle cx="510" cy="330" r="1.6"/><circle cx="510" cy="345" r="1.6"/><circle cx="510" cy="360" r="1.6"/><circle cx="510" cy="375" r="1.6"/><circle cx="510" cy="390" r="1.6"/><circle cx="510" cy="405" r="1.6"/><circle cx="510" cy="420" r="1.6"/><circle cx="510" cy="435" r="1.6"/><circle cx="510" cy="450" r="1.6"/><circle cx="510" cy="465" r="1.6"/><circle cx="510" cy="480" r="1.6"/><circle cx="510" cy="495" r="1.6"/><circle cx="510" cy="510" r="1.6"/><circle cx="510" cy="525" r="1.6"/><circle cx="510" cy="540" r="1.6"/>
+  </g>
+
+  <!-- TOP anchor: #1 -> #1 stable -->
+  <line x1="210" y1="90" x2="510" y2="90" stroke="var(--cause,#E3C24A)" stroke-width="1.5" opacity="0.75" stroke-dasharray="2 3"/>
+  <text x="516" y="93" class="mut" font-size="9">#1 → #1  top stays put</text>
+
+  <!-- PLUNGE: os-auto-thinking  raw#4 -> z#26 (violet, dashed, circle markers) -->
+  <line x1="210" y1="135" x2="510" y2="465" stroke="var(--neg,#B98AD6)" stroke-width="2.6" stroke-dasharray="7 4"/>
+  <circle cx="210" cy="135" r="4.6" fill="var(--bg,#0E141A)" stroke="var(--neg,#B98AD6)" stroke-width="2"/>
+  <circle cx="510" cy="465" r="4.6" fill="var(--bg,#0E141A)" stroke="var(--neg,#B98AD6)" stroke-width="2"/>
+  <text x="201" y="132" text-anchor="end" font-size="11" fill="var(--neg,#B98AD6)">qwen35-9b-os-auto-thinking</text>
+  <text x="201" y="146" text-anchor="end" class="mut" font-size="9">#4 raw · n=7, easy mix</text>
+  <text x="519" y="463" font-size="13" fill="var(--neg,#B98AD6)">#26 z</text>
+  <text x="519" y="476" class="mut" font-size="9">difficulty normalized out</text>
+
+  <!-- CLIMB: iq2-m  raw#15 -> z#2 (cyan, solid, triangle markers) -->
+  <line x1="210" y1="300" x2="510" y2="105" stroke="var(--accent,#4FB2C2)" stroke-width="2.6"/>
+  <polygon points="210,294.5 205.2,303 214.8,303" fill="var(--accent,#4FB2C2)"/>
+  <polygon points="510,99.5 505.2,108 514.8,108" fill="var(--accent,#4FB2C2)"/>
+  <text x="201" y="297" text-anchor="end" font-size="11" fill="var(--accent,#4FB2C2)">qwen3-6-27b-iq2-m</text>
+  <text x="201" y="311" text-anchor="end" class="mut" font-size="9">#15 raw · n=10, harder mix · 2-bit</text>
+  <text x="519" y="103" font-size="13" fill="var(--accent,#4FB2C2)">#2 z</text>
+  <text x="519" y="116" class="mut" font-size="9">real margin shows on hard sessions</text>
+
+  <!-- takeaway -->
+  <text x="40" y="588" class="ink2" font-size="10.5">Crossing lines are rank inversions — the steeper the cross, the more the raw average was lying.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 730" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <rect x="0" y="0" width="400" height="730" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="17">Raw averages lie: the ranking</text>
+  <text class="ttl" x="20" y="52" font-size="17">reorders once you normalize</text>
+  <text class="mut" x="20" y="70" font-size="10">31 rank-eligible summarizers · same models, both rails</text>
+
+  <!-- rails -->
+  <line x1="120" y1="118" x2="120" y2="612" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="280" y1="118" x2="280" y2="612" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="120" y="108" text-anchor="middle" class="ink2" font-size="10" letter-spacing="0.5">BY RAW MEAN</text>
+  <text x="280" y="108" text-anchor="middle" class="ink2" font-size="10" letter-spacing="0.5">BY z-SCORE</text>
+
+  <!-- muted connectors (28) -->
+  <g stroke="var(--muted,#6F7C88)" stroke-width="1" opacity="0.30" fill="none">
+    <line x1="120" y1="165" x2="280" y2="180"/>
+    <line x1="120" y1="180" x2="280" y2="210"/>
+    <line x1="120" y1="210" x2="280" y2="255"/>
+    <line x1="120" y1="225" x2="280" y2="195"/>
+    <line x1="120" y1="240" x2="280" y2="285"/>
+    <line x1="120" y1="255" x2="280" y2="225"/>
+    <line x1="120" y1="270" x2="280" y2="240"/>
+    <line x1="120" y1="285" x2="280" y2="330"/>
+    <line x1="120" y1="300" x2="280" y2="270"/>
+    <line x1="120" y1="315" x2="280" y2="315"/>
+    <line x1="120" y1="330" x2="280" y2="585"/>
+    <line x1="120" y1="345" x2="280" y2="375"/>
+    <line x1="120" y1="375" x2="280" y2="345"/>
+    <line x1="120" y1="390" x2="280" y2="450"/>
+    <line x1="120" y1="405" x2="280" y2="360"/>
+    <line x1="120" y1="420" x2="280" y2="390"/>
+    <line x1="120" y1="435" x2="280" y2="405"/>
+    <line x1="120" y1="450" x2="280" y2="465"/>
+    <line x1="120" y1="465" x2="280" y2="435"/>
+    <line x1="120" y1="480" x2="280" y2="495"/>
+    <line x1="120" y1="495" x2="280" y2="480"/>
+    <line x1="120" y1="510" x2="280" y2="570"/>
+    <line x1="120" y1="525" x2="280" y2="540"/>
+    <line x1="120" y1="540" x2="280" y2="300"/>
+    <line x1="120" y1="555" x2="280" y2="555"/>
+    <line x1="120" y1="570" x2="280" y2="420"/>
+    <line x1="120" y1="585" x2="280" y2="600"/>
+    <line x1="120" y1="600" x2="280" y2="510"/>
+  </g>
+
+  <!-- rail nodes -->
+  <g fill="var(--muted,#6F7C88)">
+    <circle cx="120" cy="150" r="1.6"/><circle cx="120" cy="165" r="1.6"/><circle cx="120" cy="180" r="1.6"/><circle cx="120" cy="195" r="1.6"/><circle cx="120" cy="210" r="1.6"/><circle cx="120" cy="225" r="1.6"/><circle cx="120" cy="240" r="1.6"/><circle cx="120" cy="255" r="1.6"/><circle cx="120" cy="270" r="1.6"/><circle cx="120" cy="285" r="1.6"/><circle cx="120" cy="300" r="1.6"/><circle cx="120" cy="315" r="1.6"/><circle cx="120" cy="330" r="1.6"/><circle cx="120" cy="345" r="1.6"/><circle cx="120" cy="360" r="1.6"/><circle cx="120" cy="375" r="1.6"/><circle cx="120" cy="390" r="1.6"/><circle cx="120" cy="405" r="1.6"/><circle cx="120" cy="420" r="1.6"/><circle cx="120" cy="435" r="1.6"/><circle cx="120" cy="450" r="1.6"/><circle cx="120" cy="465" r="1.6"/><circle cx="120" cy="480" r="1.6"/><circle cx="120" cy="495" r="1.6"/><circle cx="120" cy="510" r="1.6"/><circle cx="120" cy="525" r="1.6"/><circle cx="120" cy="540" r="1.6"/><circle cx="120" cy="555" r="1.6"/><circle cx="120" cy="570" r="1.6"/><circle cx="120" cy="585" r="1.6"/><circle cx="120" cy="600" r="1.6"/>
+    <circle cx="280" cy="150" r="1.6"/><circle cx="280" cy="165" r="1.6"/><circle cx="280" cy="180" r="1.6"/><circle cx="280" cy="195" r="1.6"/><circle cx="280" cy="210" r="1.6"/><circle cx="280" cy="225" r="1.6"/><circle cx="280" cy="240" r="1.6"/><circle cx="280" cy="255" r="1.6"/><circle cx="280" cy="270" r="1.6"/><circle cx="280" cy="285" r="1.6"/><circle cx="280" cy="300" r="1.6"/><circle cx="280" cy="315" r="1.6"/><circle cx="280" cy="330" r="1.6"/><circle cx="280" cy="345" r="1.6"/><circle cx="280" cy="360" r="1.6"/><circle cx="280" cy="375" r="1.6"/><circle cx="280" cy="390" r="1.6"/><circle cx="280" cy="405" r="1.6"/><circle cx="280" cy="420" r="1.6"/><circle cx="280" cy="435" r="1.6"/><circle cx="280" cy="450" r="1.6"/><circle cx="280" cy="465" r="1.6"/><circle cx="280" cy="480" r="1.6"/><circle cx="280" cy="495" r="1.6"/><circle cx="280" cy="510" r="1.6"/><circle cx="280" cy="525" r="1.6"/><circle cx="280" cy="540" r="1.6"/><circle cx="280" cy="555" r="1.6"/><circle cx="280" cy="570" r="1.6"/><circle cx="280" cy="585" r="1.6"/><circle cx="280" cy="600" r="1.6"/>
+  </g>
+
+  <!-- TOP anchor: #1 -> #1 -->
+  <line x1="120" y1="150" x2="280" y2="150" stroke="var(--cause,#E3C24A)" stroke-width="1.5" opacity="0.75" stroke-dasharray="2 3"/>
+  <text x="286" y="153" class="mut" font-size="8.5">#1→#1</text>
+
+  <!-- PLUNGE: os-auto-thinking #4 -> #26 -->
+  <line x1="120" y1="195" x2="280" y2="525" stroke="var(--neg,#B98AD6)" stroke-width="2.6" stroke-dasharray="7 4"/>
+  <circle cx="120" cy="195" r="4.6" fill="var(--bg,#0E141A)" stroke="var(--neg,#B98AD6)" stroke-width="2"/>
+  <circle cx="280" cy="525" r="4.6" fill="var(--bg,#0E141A)" stroke="var(--neg,#B98AD6)" stroke-width="2"/>
+  <text x="112" y="198" text-anchor="end" font-size="11" fill="var(--neg,#B98AD6)">#4</text>
+  <text x="288" y="528" font-size="11" fill="var(--neg,#B98AD6)">#26</text>
+
+  <!-- CLIMB: iq2-m #15 -> #2 -->
+  <line x1="120" y1="360" x2="280" y2="165" stroke="var(--accent,#4FB2C2)" stroke-width="2.6"/>
+  <polygon points="120,354.5 115.2,363 124.8,363" fill="var(--accent,#4FB2C2)"/>
+  <polygon points="280,159.5 275.2,168 284.8,168" fill="var(--accent,#4FB2C2)"/>
+  <text x="112" y="363" text-anchor="end" font-size="11" fill="var(--accent,#4FB2C2)">#15</text>
+  <text x="288" y="168" font-size="11" fill="var(--accent,#4FB2C2)">#2</text>
+
+  <!-- callout (names out of the gutters) -->
+  <g transform="translate(20,648)">
+    <line x1="0" y1="-3" x2="24" y2="-3" stroke="var(--neg,#B98AD6)" stroke-width="2.4" stroke-dasharray="7 4"/>
+    <circle cx="12" cy="-3" r="4" fill="var(--bg,#0E141A)" stroke="var(--neg,#B98AD6)" stroke-width="2"/>
+    <text x="32" y="0" font-size="9.5" fill="var(--neg,#B98AD6)">qwen35-9b-os-auto-thinking</text>
+    <text x="32" y="12" class="mut" font-size="9">#4 → #26 · n=7, easy mix</text>
+  </g>
+  <g transform="translate(20,684)">
+    <line x1="0" y1="-3" x2="24" y2="-3" stroke="var(--accent,#4FB2C2)" stroke-width="2.4"/>
+    <polygon points="12,-8 7.2,0 16.8,0" fill="var(--accent,#4FB2C2)"/>
+    <text x="32" y="0" font-size="9.5" fill="var(--accent,#4FB2C2)">qwen3-6-27b-iq2-m</text>
+    <text x="32" y="12" class="mut" font-size="9">#15 → #2 · n=10, harder mix · 2-bit</text>
+  </g>
+
+  <text x="20" y="712" class="ink2" font-size="9.5">Bigger cross = the raw average was lying harder.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 1 —</b> why raw averages lie. Ranked by raw mean fact-recall (left), the order is muddy with overlapping error bars because each model saw a different, differently-hard session mix. Ranked by per-session z-score (right), which normalizes out session difficulty, the ranking sharpens and reorders — the two hardest-crossing connectors are <code>os-auto-thinking</code> (raw #4 → z #26) and <code>iq2-m</code> (raw #15 → z #2).</figcaption>
+      <div class="nb-prov"><span><b>source</b> dataset.db → score_normed_quality, rank-eligible n≥5</span><span><b>type</b> fully data-grounded</span><span><b>safety</b> viridis + markers, no red/green; the crossing is dash + marker coded</span></div>
+    </figure>
+
+    <blockquote class="nb-pull nb-pull--wide" style="max-width:var(--measure)">
+      There is no stable ranking of small local models for summarization without controlling for sampler config and session difficulty. That was an accidental result — the pipeline was built to <em>pick</em> a summarizer, not to study model evaluation — but it's the transferable one.
+      <cite>The headline the benchmark produced · §4</cite>
+    </blockquote>
+
+    <p style="margin-top:var(--sp-6)">The benchmark is, quietly, the more broadly useful half of the project.
+    "Which small local model should write structured summaries" is a question a lot of people building local
+    agent tooling have, and there's very little measured data on it — same gap as the
+    <a href="measuring.html">quant benchmark</a>, same reason (nobody runs the equal-environment harness). The
+    dataset (<code>dataset.db</code>, SQLite) and the scoring code stand on their own, independent of whether
+    you ever upload a memory.</p>
+  </section>
+
+  <section id="status">
+    <h2><span class="num">§5</span>Status — the honest version</h2>
+    <div class="col-side">
+      <div>
+        <p>Working daily: transcript discovery, llama-server orchestration from the registry, summarization,
+        scoring, the upload, and session-id dedupe. In progress: a sampler-config schema (v9.4) and dataset
+        epoch tagging. Planned: a migration <em>off</em> the current Mem0 backend to an AWS-native one
+        (DynamoDB&nbsp;+&nbsp;Lambda) — because Mem0's search reliability is the pipeline's weakest link
+        (retrieval is unreliable enough that the practical workaround is fetching memories by direct UUID
+        rather than trusting search).</p>
+        <p>The architecture — the ETL inversion and the eval layer — is the stable part; the memory
+        <em>backend</em> is explicitly the swappable part, and is being swapped. That's worth stating plainly
+        rather than hiding, because the weakness <em>is</em> the roadmap: the project knows its retrieval layer
+        is the soft spot, has diagnosed why, and has a concrete migration that addresses it.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">Why it sits next to the lab</span>
+        Same engineering instinct twice: <em>take a measurement seriously enough that the result replicates.</em>
+        The RYS work won't trust a leaderboard until it's seed-paired and strict-regraded; this pipeline won't
+        trust a "good summarizer" until it's z-scored against hand-written ground truth with the sampler
+        logged. Both refuse the easy version of the metric.
+      </aside>
+    </div>
+  </section>
+
+  <section id="methods">
+    <div class="nb-limits">
+      <div class="nb-limits__head">
+        <span class="nb-limits__label">Caveats &amp; reproduction</span>
+        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — this is an engineering notebook, not a product page</span>
+      </div>
+      <ul>
+        <li><b>Model count and version numbers are point-in-time</b> but re-confirmed 2026-06-21 by a fresh <code>tools/build-dataset.py</code> run: registry <b>145 entries</b>; <b>119 models scored</b>, <b>62</b> in the quality tier (avg ≥0.45), <b>31</b> with ≥5 shared sessions to rank head-to-head; 831 summaries across 23 ground-truthed sessions. The v9.4/v12 status still needs confirming against the repo before quoting.</li>
+        <li><b>This is infrastructure, not a product</b> — keep it in the engineering-notebook register; no "self-maintaining AI memory solution" framing. The defensible claims are the ETL inversion and the eval methodology; "it just works" is not one of them.</li>
+        <li>Stack: Mac&nbsp;Mini M4 (16&nbsp;GB), llama.cpp / LM&nbsp;Studio for inference, Node for the pipeline, SQLite for the dataset, Mem0 (current) → DynamoDB+Lambda (planned) for the store. The eval/scoring path (<code>scoring/</code>, <code>tools/</code>) runs without the upload path.</li>
+      </ul>
+    </div>
+
+    <div class="nb-marginalia" style="margin-top:var(--sp-7)">
+      <div class="nb-marginalia__label">Colophon &amp; method</div>
+      <div class="nb-marginalia__body">
+        <p style="max-width:64ch">The z-score discipline here is the same one that keeps the
+        <a href="/">layer-surgery lab</a>'s leaderboards honest — refuse the raw average, normalize
+        the mix, log the config. Same reflex, different substrate: see also the
+        <a href="measuring.html">quant benchmark</a> and <a href="/lab/06_duologue.html">duologue</a>. Built and run
+        locally on a 16&nbsp;GB Mac&nbsp;Mini; harness in <span class="mono">scoring/</span> +
+        <span class="mono">tools/</span>, dataset in <span class="mono">dataset.db</span>.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer style="max-width:var(--page-max);margin:0 auto;padding:var(--sp-6) var(--gutter) var(--sp-9)">
+  <p style="font-family:var(--font-mono);font-size:var(--fs-micro);letter-spacing:.03em;color:var(--text-muted);line-height:1.7">© 2026 · The Vivisection Lab · exploratory research notes, provided as-is, no warranty · writeups &amp; figures CC&nbsp;BY · uses cookieless analytics, no personal data collected</p>
+</footer>
+
+<script src="/assets/nb.js"></script>
+</body>
+</html>

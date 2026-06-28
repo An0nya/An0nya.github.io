@@ -1,0 +1,375 @@
+/* ============================================================================
+   COMPONENTS — Notebook Design System
+   ----------------------------------------------------------------------------
+   Class-backed styles for the React primitives in components/**. Shipped to
+   consumers via styles.css so :hover / :focus / :disabled all work. Components'
+   .jsx files are thin: they emit these classNames and pass content through.
+
+   Tone: hairline rules over shadows, near-square corners, quiet hover (border
+   or colour shift — never a lift), low-motion transitions. This is the
+   deliberate toning-down of the prototype's SaaS-flavoured card behaviour.
+   ========================================================================== */
+
+/* ─────────────────────────────  Kicker / label  ───────────────────────── */
+.nb-kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-kicker);
+  font-weight: var(--w-med);
+  letter-spacing: var(--tk-kicker);
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0;
+}
+.nb-kicker--muted { color: var(--text-muted); }
+
+/* ─────────────────────────────────  Button  ───────────────────────────── */
+.nb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: var(--tk-nav);
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 0.62em 1.05em;
+  border: var(--bw) solid var(--border-strong);
+  border-radius: var(--r-1);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease),
+              background var(--dur-fast) var(--ease);
+}
+.nb-btn:hover { color: var(--accent); border-color: var(--accent); text-decoration: none; }
+.nb-btn:disabled, .nb-btn[aria-disabled="true"] {
+  opacity: 0.45; cursor: not-allowed; color: var(--text-muted); border-color: var(--border);
+}
+/* primary = filled accent, paper-coloured text */
+.nb-btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--surface);
+  font-weight: var(--w-med);
+}
+.nb-btn--primary:hover {
+  background: var(--accent-bright);
+  border-color: var(--accent-bright);
+  color: var(--surface);
+}
+/* ghost = no border, just text */
+.nb-btn--ghost { border-color: transparent; padding-left: 0.4em; padding-right: 0.4em; }
+.nb-btn--ghost:hover { border-color: transparent; }
+.nb-btn--sm { font-size: 0.66rem; padding: 0.5em 0.85em; }
+
+/* ──────────────────────────────  Tag / pill  ──────────────────────────── */
+.nb-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: var(--tk-label);
+  text-transform: uppercase;
+  color: var(--text-dim);
+  border: var(--bw) solid var(--border-strong);
+  border-radius: var(--r-1);
+  padding: 0.34em 0.6em;
+  background: transparent;
+}
+.nb-tag .nb-tag__sw {
+  width: 9px; height: 9px; border-radius: var(--r-1); flex: none;
+  background: var(--accent);
+}
+/* legend variant: no border, just swatch + label */
+.nb-tag--legend { border: 0; padding: 0; }
+
+/* ─────────────────────────────  Badge / status  ───────────────────────── */
+.nb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: var(--tk-label);
+  text-transform: uppercase;
+  padding: 0.4em 0.7em;
+  border: var(--bw) solid currentColor;
+  border-radius: var(--r-1);
+  color: var(--accent);
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+.nb-badge--pos { color: var(--pos); }
+.nb-badge--neg { color: var(--neg); }
+.nb-badge--caution { color: var(--caution); }
+.nb-badge--muted { color: var(--text-muted); }
+.nb-badge__dot { width: 6px; height: 6px; border-radius: var(--r-round); background: currentColor; flex: none; }
+
+/* ───────────────────────────────  Spec card  ──────────────────────────── */
+/* The project / specimen card. Toned down: no translateY lift, no drop-shadow.
+   Hover = border goes accent + a hairline top accent. That's it. */
+.nb-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-card);
+  border: var(--bw) solid var(--border-strong);
+  border-radius: var(--r-1);
+  color: var(--text);
+  text-decoration: none;
+  padding: var(--sp-5) var(--sp-5) var(--sp-5);
+  position: relative;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+a.nb-card:hover { text-decoration: none; border-color: var(--accent); }
+a.nb-card:hover .nb-card__go { color: var(--accent-bright); }
+.nb-card--draft { border-style: dashed; }
+.nb-card__tag {
+  display: flex; justify-content: space-between; gap: 12px;
+  font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: var(--tk-label);
+  text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--sp-3);
+}
+.nb-card__tag .st { color: var(--accent); }
+.nb-card__tag .st--draft { color: var(--caution); }
+.nb-card h3 { font-size: 1.4rem; line-height: 1.08; margin: 0 0 var(--sp-2); font-weight: var(--w-med); }
+.nb-card__dek { font-style: italic; color: var(--text-dim); font-size: var(--fs-sm); line-height: 1.45; margin: 0 0 var(--sp-4); }
+.nb-card__find {
+  font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.5; color: var(--text-dim);
+  border-top: var(--bw) solid var(--border); padding-top: var(--sp-3); margin-top: auto;
+}
+.nb-card__find b { color: var(--text); font-weight: var(--w-semi); }
+.nb-card__go {
+  font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: var(--tk-label);
+  text-transform: uppercase; color: var(--accent); margin-top: var(--sp-4);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+/* ───────────────────────────────  Stat strip  ─────────────────────────── */
+.nb-stats {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  border-top: var(--bw) solid var(--border-strong);
+  border-bottom: var(--bw) solid var(--border-strong);
+}
+.nb-stat { padding: var(--sp-4) var(--sp-4); border-right: var(--bw) solid var(--border); }
+.nb-stat:last-child { border-right: 0; }
+.nb-stat__num {
+  font-family: var(--font-serif); font-weight: var(--w-reg); font-size: 2.1rem; line-height: 1;
+  letter-spacing: -0.02em; color: var(--text); display: block; margin-bottom: 6px;
+  font-feature-settings: "onum" 1;
+}
+.nb-stat__num small { font-size: 0.9rem; color: var(--text-muted); font-style: italic; }
+.nb-stat__label {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: var(--tk-label);
+  text-transform: uppercase; color: var(--text-muted); line-height: 1.4;
+}
+@media (max-width: 720px) {
+  .nb-stats { grid-auto-flow: row; grid-auto-columns: auto; }
+  .nb-stat { border-right: 0; border-bottom: var(--bw) solid var(--border); }
+  .nb-stat:last-child { border-bottom: 0; }
+}
+
+/* ───────────────────────────────  Marginalia  ─────────────────────────── */
+.nb-marginalia {
+  display: grid; grid-template-columns: 8.5rem 1fr; gap: 0 var(--sp-6);
+  align-items: start; border-top: var(--bw) solid var(--border);
+  padding-top: var(--sp-5);
+}
+.nb-marginalia__label {
+  font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--tk-label);
+  text-transform: uppercase; color: var(--text-muted); padding-top: 0.2rem;
+}
+.nb-marginalia__body { max-width: var(--measure); }
+@media (max-width: 720px) {
+  .nb-marginalia { grid-template-columns: 1fr; gap: var(--sp-2) 0; }
+}
+
+/* ───────────────────────────────  Pull-quote  ─────────────────────────── */
+.nb-pull {
+  font-family: var(--font-serif); font-style: italic; font-weight: var(--w-reg);
+  font-size: 1.55rem; line-height: 1.24; letter-spacing: -0.005em; color: var(--text);
+  border-top: var(--bw) solid var(--border); border-bottom: var(--bw) solid var(--border);
+  padding: var(--sp-5) 0; margin: var(--sp-6) 0; text-wrap: balance; max-width: 28ch;
+}
+.nb-pull--wide { max-width: var(--measure); }
+.nb-pull cite {
+  display: block; font-style: normal; font-family: var(--font-mono);
+  font-size: 0.66rem; letter-spacing: var(--tk-label); text-transform: uppercase;
+  color: var(--text-muted); margin-top: var(--sp-3);
+}
+
+/* ───────────────────────────────  Scan-plate  ─────────────────────────── */
+.nb-plate {
+  background: var(--surface-sunken);
+  border: var(--bw) solid var(--border-strong);
+  border-radius: var(--r-2);
+  padding: var(--sp-4);
+}
+.nb-plate img, .nb-plate svg { display: block; width: 100%; height: auto; }
+.nb-plate__note {
+  font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: var(--tk-label);
+  text-transform: uppercase; color: var(--cause); margin: 0 0 var(--sp-3);
+}
+.nb-figcap {
+  font-family: var(--font-mono); font-size: var(--fs-fig); color: var(--text-muted);
+  line-height: 1.45; margin-top: var(--sp-3); max-width: var(--measure);
+}
+.nb-figcap b { color: var(--text); font-weight: var(--w-semi); }
+
+/* ───────────────────────────────  Data table  ─────────────────────────── */
+.nb-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.78rem; }
+.nb-table th, .nb-table td { padding: 8px 12px; text-align: left; border-bottom: var(--bw) solid var(--border); }
+.nb-table th {
+  font-weight: var(--w-semi); color: var(--text); text-transform: uppercase;
+  font-size: 0.62rem; letter-spacing: var(--tk-label); border-bottom: var(--bw-strong) solid var(--border-strong);
+}
+.nb-table td.num, .nb-table th.num { text-align: right; font-feature-settings: "tnum" 1; }
+.nb-table .pos { color: var(--pos); }
+.nb-table .neg { color: var(--neg); }
+.nb-table .game { color: var(--caution); font-style: italic; }
+.nb-table tbody tr:hover td { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+
+/* ──────────────────────────────  Specimen box  ────────────────────────── */
+/* A quoted model output / failure-mode exhibit. Coloured left rule by verdict. */
+.nb-specimen {
+  background: var(--surface-card);
+  border: var(--bw) solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--r-1) var(--r-1) 0;
+  padding: var(--sp-4) var(--sp-4) var(--sp-3);
+  margin: var(--sp-4) 0;
+}
+.nb-specimen--win { border-left-color: var(--pos); }
+.nb-specimen--crash { border-left-color: var(--neg); }
+.nb-specimen--weird { border-left-color: var(--caution); }
+.nb-specimen__head {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: var(--tk-label);
+  text-transform: uppercase; margin-bottom: var(--sp-2);
+}
+.nb-specimen__head .lid { font-weight: var(--w-semi); color: var(--text); }
+.nb-specimen__head .t { color: var(--text-muted); }
+.nb-specimen__quote {
+  font-family: var(--font-mono); font-size: 0.76rem; line-height: 1.55; color: var(--text-dim);
+  white-space: pre-wrap; word-break: break-word; margin: 0;
+}
+.nb-specimen__quote .hl { background: color-mix(in srgb, var(--accent) 18%, transparent); padding: 0 2px; }
+.nb-specimen__gloss { font-family: var(--font-serif); font-style: italic; font-size: var(--fs-sm); color: var(--text-dim); margin: var(--sp-2) 0 0; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   NOTEBOOK IDENTITY COMPONENTS
+   The deliberate anti-"tasteslop" set: a page is a RECORD, not a pitch.
+   Use these instead of a hero + stat-cell row. Uncertainty, corrections and
+   provenance are first-class *visual* elements, not buried prose.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Notebook header — replaces the SaaS hero/stats-strip ─────────────────
+   A masthead that reads like the top of a lab page: specimen · status ·
+   last-revised · confidence · caveats. Mono labels, hairline rules, no
+   big-number theatre. */
+.nb-record { border-top: var(--bw-strong) solid var(--text); padding-top: var(--sp-4); }
+.nb-record__title { font-size: var(--fs-h2); font-weight: var(--w-med); margin: 0 0 var(--sp-4); }
+.nb-record__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--sp-3) var(--sp-5);
+  border-bottom: var(--bw) solid var(--border-strong);
+  padding-bottom: var(--sp-4);
+}
+.nb-record__field { display: flex; flex-direction: column; gap: 3px; }
+.nb-record__k {
+  font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: var(--tk-label);
+  text-transform: uppercase; color: var(--text-muted);
+}
+.nb-record__v { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text); line-height: 1.4; }
+
+/* confidence chip — high / medium / low */
+.nb-conf {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: var(--tk-label);
+  text-transform: uppercase; color: var(--text);
+}
+.nb-conf__dots { display: inline-flex; gap: 3px; }
+.nb-conf__dot { width: 7px; height: 7px; border-radius: var(--r-round); border: 1px solid var(--text-muted); }
+.nb-conf__dot.on { background: var(--accent); border-color: var(--accent); }
+.nb-conf--low .nb-conf__dot.on { background: var(--caution); border-color: var(--caution); }
+.nb-conf--medium .nb-conf__dot.on { background: var(--accent); border-color: var(--accent); }
+
+/* ── Correction / Dead-End card — the site's identity made structural ─────
+   Hypothesis → why it looked true → why it failed → disposition. Violet/neg
+   keyed. Place it NEAR THE TOP of a page; falsification is rewarded, not buried. */
+.nb-correction {
+  border: var(--bw) solid var(--border-strong);
+  border-left: 3px solid var(--neg);
+  border-radius: 0 var(--r-1) var(--r-1) 0;
+  background: color-mix(in srgb, var(--neg) 6%, var(--surface-card));
+  padding: var(--sp-4) var(--sp-5) var(--sp-4);
+  margin: var(--sp-5) 0;
+}
+.nb-correction__head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: var(--tk-kicker);
+  text-transform: uppercase; color: var(--neg); margin-bottom: var(--sp-3);
+}
+.nb-correction__disp {
+  font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: var(--tk-label);
+  text-transform: uppercase; color: var(--neg); border: 1px solid var(--neg);
+  border-radius: var(--r-1); padding: 0.3em 0.55em;
+}
+.nb-correction__row { display: grid; grid-template-columns: 9rem 1fr; gap: 4px var(--sp-4); padding: var(--sp-2) 0; }
+.nb-correction__row + .nb-correction__row { border-top: 1px dotted var(--border); }
+.nb-correction__k {
+  font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: var(--tk-label);
+  text-transform: uppercase; color: var(--text-muted); padding-top: 2px;
+}
+.nb-correction__b { font-family: var(--font-serif); font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.5; }
+.nb-correction__b b { color: var(--text); }
+@media (max-width: 600px) { .nb-correction__row { grid-template-columns: 1fr; gap: 1px; } }
+
+/* ── Confidence + Known-limitations block ────────────────────────────────
+   Renders uncertainty with visual weight instead of a closing caveat sentence. */
+.nb-limits {
+  border: var(--bw) solid var(--border-strong);
+  border-radius: var(--r-1);
+  padding: var(--sp-4) var(--sp-5);
+  margin: var(--sp-5) 0;
+}
+.nb-limits__head {
+  display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap;
+  border-bottom: var(--bw) solid var(--border); padding-bottom: var(--sp-3); margin-bottom: var(--sp-3);
+}
+.nb-limits__label {
+  font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--tk-kicker);
+  text-transform: uppercase; color: var(--text-muted);
+}
+.nb-limits ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--sp-2); }
+.nb-limits li {
+  position: relative; padding-left: 1.3em; font-family: var(--font-serif);
+  font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.5;
+}
+.nb-limits li::before { content: "—"; position: absolute; left: 0; color: var(--caution); }
+
+/* ── Provenance caption — "these charts came from files, not Illustrator" ──*/
+.nb-prov {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.02em;
+  color: var(--text-muted); margin-top: var(--sp-2); display: flex; flex-wrap: wrap; gap: 0 0.9em;
+}
+.nb-prov span { white-space: nowrap; }
+.nb-prov b { color: var(--text-dim); font-weight: var(--w-med); }
+
+/* ──────────────────────────────  Lab nav  ─────────────────────────────── */
+.nb-nav {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 0;
+  position: sticky; top: 0; z-index: var(--z-nav);
+  border-bottom: var(--bw) solid var(--border-strong);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: var(--tk-nav);
+  text-transform: uppercase;
+}
+.nb-nav a { display: block; padding: 0.7rem 1rem; color: var(--text-dim); white-space: nowrap; }
+.nb-nav a:hover, .nb-nav a.is-active { color: var(--accent); text-decoration: none; }
+.nb-nav .nb-nav__home { color: var(--text); font-weight: var(--w-semi); letter-spacing: 0.12em; }
+.nb-nav .nb-nav__spacer { flex: 1; }

@@ -1,0 +1,706 @@
+<!-- @dsCard group="Portfolio Hub" viewport="1100x1400" name="Writeup — Nanbeige-4.1-3B (where the surgery helped)" subtitle="The one specimen where inference-time layer surgery measurably improved the model — and the one that taught me how slippery 'improved' is. Two opposite surgeries (a prune and a duplication) each lift no-CoT arithmetic by t≈+5; a control test shows the lift is mostly unlocked willingness-to-commit, partly sharpened intuition. Honest-incomplete: the cross-axis validation is part of the story, not hidden." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nanbeige-4.1-3B — where the surgery helped — The Vivisection Lab</title>
+<meta name="description" content="Nanbeige-4.1-3B is the one specimen where inference-time layer surgery measurably improved the model. Two opposite surgeries — pruning an overhead layer and amplifying a circuit — each lift no-CoT arithmetic intuition by t≈+5. But a control test (force the bare model to commit) shows the lift decomposes into a large willingness-to-commit component and a small genuine-computation residual. The no-CoT win does not yet transfer to deployed chat. Honest-incomplete, with every quantitative claim tagged for the pre-publish re-run.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E141A'/%3E%3Cpath d='M7 22 L13 11' stroke='%236FCBD8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M25 22 L19 11' stroke='%23E3C24A' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='9' r='2.6' fill='%23DCE4EC'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  main { max-width: var(--page-max); margin: 0 auto; padding: var(--sp-7) var(--gutter) var(--sp-9); }
+  section { padding: var(--sp-7) 0 0; }
+  .dek { font-family: var(--font-serif); font-style: italic; font-size: var(--fs-dek); line-height: 1.4; color: var(--text-dim); max-width: 64ch; margin: var(--sp-5) 0 0; }
+  h2 { font-size: var(--fs-h2); margin: 0 0 var(--sp-4); }
+  h2 .num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); letter-spacing: .1em; vertical-align: 0.7em; margin-right: var(--sp-3); }
+  h3 { font-size: var(--fs-h3, 1.05rem); margin: var(--sp-6) 0 var(--sp-3); color: var(--text); }
+  p { max-width: var(--measure); }
+  .dropcap { max-width: var(--measure); }
+  .dropcap::first-letter { font-family: var(--font-serif); font-weight: 500; font-size: 3.4em; line-height: 0.82; float: left; padding: 0.04em 0.12em 0 0; color: var(--accent-bright); }
+  .col-side { display: grid; grid-template-columns: 1fr 260px; gap: var(--sp-7); align-items: start; }
+  .col-side .aside { font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); border-left: 1px solid var(--border-strong); padding-left: var(--sp-4); font-style: italic; }
+  .col-side .aside .nb-kicker { font-style: normal; display: block; margin-bottom: var(--sp-2); }
+  .hl-acc { color: var(--accent); font-weight: 500; }
+  .figure { margin: var(--sp-6) 0; }
+  .nb-plate svg { display: block; width: 100%; height: auto; }
+  .fig-mobile { display: none; }
+  pre.code { font-family: var(--font-mono); font-size: 0.82em; line-height: 1.6; background: var(--surface-sunken); border: 1px solid var(--rule2,#27323D); border-left: 3px solid var(--accent); border-radius: var(--radius-2); padding: var(--sp-4) var(--sp-5); margin: var(--sp-5) 0; max-width: var(--measure); overflow-x: auto; color: var(--ink2,#A4B0BC); }
+  pre.code .cm { color: var(--muted); }
+  .vrfy { font-family: var(--font-mono); font-size: 0.72em; letter-spacing: .04em; color: var(--cause); border: 1px solid var(--cause); border-radius: 3px; padding: 0 .35em; opacity: .85; white-space: nowrap; vertical-align: 1px; }
+  .olabel { font-family: var(--font-mono); font-size: 0.7em; letter-spacing: .06em; text-transform: uppercase; padding: 0 .3em; border-radius: 3px; vertical-align: 1px; }
+  .olabel.obs { color: var(--fourth); border: 1px solid var(--fourth); }
+  .olabel.inf { color: var(--neg); border: 1px solid var(--neg); }
+  .negresult { border: 1px solid var(--border-strong); border-left: 3px solid var(--neg); background: var(--surface-sunken); padding: var(--sp-4) var(--sp-5); margin: var(--sp-6) 0; max-width: var(--measure); border-radius: var(--radius-2); }
+  .negresult .nb-kicker { color: var(--neg); display: block; margin-bottom: var(--sp-2); }
+  .negresult p { margin: 0; font-size: var(--fs-sm); line-height: 1.6; color: var(--text-dim); }
+  .nb-table td.first { color: var(--accent); font-weight: 500; }
+  .nb-table td .pos { color: var(--accent); } .nb-table td .neg { color: var(--neg); }
+  /* figure placeholder — a deliberate stub, not a broken image */
+  .fig-stub { border: 1.5px dashed var(--border-strong); border-radius: var(--radius-2); background-color: var(--surface-sunken); background-image: repeating-linear-gradient(135deg, transparent 0 11px, var(--rule2,#27323D) 11px 12px); padding: var(--sp-5); margin: var(--sp-6) 0; max-width: var(--measure); }
+  .fig-stub__tag { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing:.14em; text-transform:uppercase; color: var(--fourth); border:1px solid var(--fourth); border-radius:3px; padding: .15em .5em; display:inline-block; background: var(--bg); }
+  .fig-stub__title { font-family: var(--font-serif); font-size: 1.05rem; color: var(--text); margin: var(--sp-3) 0 0; }
+  .fig-stub__spec { font-size: var(--fs-sm); line-height:1.6; color: var(--text-dim); background: var(--bg2,#141D26); padding: var(--sp-3) var(--sp-4); border-radius: var(--radius-2); margin: var(--sp-3) 0 0; }
+  .fig-stub__spec b { color: var(--text); }
+  .fig-stub__spec code { color: var(--accent); }
+  .fig-stub__data { font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--text-muted); margin-top: var(--sp-3); background: var(--bg2,#141D26); padding: .45em .6em; border-radius:3px; line-height:1.5; }
+  @media (max-width: 760px) {
+    .col-side { grid-template-columns: 1fr; gap: var(--sp-5); }
+    .fig-desktop { display: none; }
+    .fig-mobile { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nb-nav">
+  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
+  <a href="#patient">The patient</a>
+  <a href="#echo">The echo saga</a>
+  <a href="#mechanisms">Two mechanisms</a>
+  <a href="#control">The control</a>
+  <a href="#disconnect">The disconnect</a>
+  <a href="#caveats">Caveats</a>
+  <span class="nb-nav__spacer"></span>
+  <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
+  <a href="#" data-theme-toggle>☼ Light</a>
+</nav>
+
+<main>
+  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · small-thinking-model branch · <em>the lab's most encouraging result, wearing its caveats on the outside</em></div>
+  <header class="nb-record">
+    <div class="nb-record__title">Nanbeige-4.1-3B — where the surgery finally helped (and what "helped" turned out to mean)</div>
+    <div class="nb-record__grid">
+      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v">Nanbeige-4.1-3B · 32-layer dense, trace-distilled · Q8_0 · no-CoT arithmetic battery</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">the line's strongest <em>positive</em> claim · not published · cross-axis validation in-flight (v4 re-run is a hard pre-publish gate)</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Result</span><span class="nb-record__v">two opposite surgeries each lift no-CoT math by t≈+5 — mostly unlocked commitment, partly sharpened intuition</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Source</span><span class="nb-record__v">rys_nanbeige.md (8-day-old, point-in-time) · rys_nanbeige_cot_q4.md · the results JSONL is truth</span></div>
+      <div class="nb-record__field">
+        <span class="nb-record__k">Confidence</span>
+        <span class="nb-conf nb-conf--medium"><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span></span>medium — the no-CoT lift is real and twice-replicated; whether it transfers to deployed chat is unshown, and every number wants the v4 re-run</span>
+      </div>
+    </div>
+  </header>
+
+  <p class="dek">This is the one specimen where inference-time surgery measurably <em>improved</em> the model — and also
+  the one that taught me how slippery "improved" is. The win is real on the axis I measured; whether it survives onto the
+  axes you'd actually deploy on is still being checked. Read it as the lab's most encouraging result, caveats on the
+  outside.</p>
+
+  <section id="patient">
+    <h2><span class="num">§0</span>The patient</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap"><a href="https://huggingface.co/Nanbeige">Nanbeige-4.1-3B</a> is small, dense (32 layers),
+        and <span class="hl-acc">trace-distilled</span> — trained on reasoning traces from a larger model, so it has a
+        thinking-model's habits in a 3B body. Run at Q8_0, no hybrid-attention constraint, so unlike the Gemma family
+        every block size is legal surgery. It earned its place as the positive target of the small-thinking-model
+        branch: after a string of clean negatives (MiniCPM-V's "indecision tax," HRM's collapsed champion), this is
+        where a duplication and a deletion both, independently, made the model better at something — and the interesting
+        part is the "at something."</p>
+        <p>The thing being measured is <em>no-CoT arithmetic intuition</em>. The probe design is David Ng's: no
+        chain-of-thought, tiny outputs, hard mental-math, partial-credit scoring for magnitude closeness. We force no-CoT
+        by prefilling a <em>closed</em> think block (<code>&lt;think&gt;\n\n&lt;/think&gt;</code>) so the model has to
+        commit without deliberating. What that isolates is the model's System-1 — what it "knows" before it gets to
+        reason — and a trace-distilled model turns out to have a complicated relationship with being asked to answer
+        without thinking.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">Why this specimen matters</span>
+        Every earlier small-thinking-model was a negative. Nanbeige is the existence proof that the surgery can move a
+        capability axis at all — which is exactly why it gets the strictest grading and the most caveats. An encouraging
+        result is the one you should trust least until it's cross-validated.
+      </aside>
+    </div>
+  </section>
+
+  <section id="echo">
+    <h2><span class="num">§1</span>The 66% that wasn't there (the echo saga)</h2>
+    <p>Before any result, the cautionary tale that reshaped the whole lab's grading. The first overnight sweep produced a
+    clean leaderboard — top config <code>14-15 + 17-18 ×2</code> at 0.40 vs baseline 0.19, t=7.5, ~30 configs beating
+    baseline at t≥2. Encouraging. Also, substantially fake.</p>
+    <p>The grader took the <em>last</em> integer in each response. But on hard mental math, a model that won't commit
+    often just <em>echoes the question</em> — "We are asked: 'What is 8273645928374659 plus 9384756192847362?'" — and
+    never emits a guess. The parser grabbed an input number, the partial-credit scorer rewarded its digit-overlap with
+    the answer, and <span class="hl-acc">66% of the overnight responses scored on echo alone</span>, with no actual model
+    guess in them. <span class="olabel obs">observation</span> The leaderboard was partly measuring prose-emission rate.</p>
+    <p>The fix (<code>regrade_no_echo.py</code>) blocklists each prompt's own integers and re-scores. The result is the
+    one worth internalizing:</p>
+
+    <table class="nb-table" style="margin-top:var(--sp-5);max-width:48ch">
+      <thead><tr><th></th><th>raw partial</th><th>de-echoed</th></tr></thead>
+      <tbody>
+        <tr><td class="first">baseline</td><td>0.190</td><td><b>0.039</b> <span class="neg">(−80%)</span></td></tr>
+        <tr><td class="first">top config</td><td>0.404</td><td><b>0.357</b> <span class="neg">(−12%)</span></td></tr>
+        <tr><td class="first">Δ vs baseline</td><td>+0.214</td><td><b class="pos">+0.318</b></td></tr>
+      </tbody>
+    </table>
+
+    <p>De-contamination <em>grew</em> the effect. <span class="olabel inf">interpretation</span> The baseline had been
+    quietly scoring on echo too; removing the cheating widened the real gap. The signal was hiding <em>under</em> the
+    baseline's contamination. (This is the canonical echo case the <a href="measuring.html">methods writeup</a>
+    generalizes — every partial-credit grader on free text needs this check.)</p>
+
+    <figure class="figure" id="fig1">
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="720" height="420" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="34" font-size="18">The echo correction grows the effect</text>
+<text class="mut" x="40" y="53" font-size="10">Partial-credit score · raw → de-echoed (Nanbeige no-CoT math)</text>
+<text x="118" y="204" text-anchor="end" class="ink2" font-size="11">baseline</text>
+<line x1="176.8" y1="200" x2="358.0" y2="200" class="slas" stroke-width="2"/>
+<circle cx="358.0" cy="200" r="6" fill="var(--bg,#0E141A)" class="slas" stroke-width="2.2"/>
+<circle cx="176.8" cy="200" r="6" class="acc"/>
+<text x="368.0" y="190.0" class="sla" font-size="10">0.190</text>
+<text x="176.8" y="190.0" text-anchor="middle" class="acc" font-size="10">0.039</text>
+<text x="118" y="294" text-anchor="end" class="ink2" font-size="11">top config</text>
+<line x1="558.4" y1="290" x2="614.8" y2="290" class="slas" stroke-width="2"/>
+<circle cx="614.8" cy="290" r="6" fill="var(--bg,#0E141A)" class="slas" stroke-width="2.2"/>
+<circle cx="558.4" cy="290" r="6" class="acc"/>
+<text x="624.8" y="280.0" class="sla" font-size="10">0.404</text>
+<text x="558.4" y="280.0" text-anchor="middle" class="acc" font-size="10">0.357</text>
+<line x1="614.8" y1="174" x2="614.8" y2="290" class="rule" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="358.0" y1="200" x2="358.0" y2="174" class="rule" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="490.0" y="150" text-anchor="middle" class="sla" font-size="10">raw gap +0.214</text>
+<text x="370.0" y="285" text-anchor="middle" class="acc" font-size="11">de-echoed gap +0.318 ↑</text>
+<line x1="130" y1="340" x2="670" y2="340" class="axis" stroke-width="1"/>
+<text x="130.0" y="356" text-anchor="middle" class="mut" font-size="10">0.0</text>
+<text x="250.0" y="356" text-anchor="middle" class="mut" font-size="10">0.1</text>
+<text x="370.0" y="356" text-anchor="middle" class="mut" font-size="10">0.2</text>
+<text x="490.0" y="356" text-anchor="middle" class="mut" font-size="10">0.3</text>
+<text x="610.0" y="356" text-anchor="middle" class="mut" font-size="10">0.4</text>
+<text x="400" y="372" text-anchor="middle" class="ink2" font-size="10">partial-credit score</text>
+<circle cx="490" cy="90" r="5" fill="var(--bg,#0E141A)" class="slas" stroke-width="2"/><text x="500" y="94" class="ink2" font-size="10">raw</text>
+<circle cx="560" cy="90" r="5" class="acc"/><text x="570" y="94" class="ink2" font-size="10">de-echoed</text>
+<line x1="40" y1="378" x2="680" y2="378" class="rule" stroke-width="1"/>
+<text x="40" y="396" class="ink2" font-size="11">The correction moves the <tspan class="sla">baseline</tspan> far more — it was the bigger cheater, so the gap widens.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 430" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="400" height="430" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="34" font-size="15">The echo correction grows the effect</text>
+<text class="mut" x="40" y="52" font-size="8">Partial-credit score · raw → de-echoed (Nanbeige no-CoT math)</text>
+<text x="58" y="174" text-anchor="end" class="ink2" font-size="9.5">baseline</text>
+<line x1="94.3" y1="170" x2="188.2" y2="170" class="slas" stroke-width="2"/>
+<circle cx="188.2" cy="170" r="6" fill="var(--bg,#0E141A)" class="slas" stroke-width="2.2"/>
+<circle cx="94.3" cy="170" r="6" class="acc"/>
+<text x="198.2" y="160.0" class="sla" font-size="8.5">0.190</text>
+<text x="94.3" y="160.0" text-anchor="middle" class="acc" font-size="8.5">0.039</text>
+<text x="58" y="284" text-anchor="end" class="ink2" font-size="9.5">top config</text>
+<line x1="292.1" y1="280" x2="321.4" y2="280" class="slas" stroke-width="2"/>
+<circle cx="321.4" cy="280" r="6" fill="var(--bg,#0E141A)" class="slas" stroke-width="2.2"/>
+<circle cx="292.1" cy="280" r="6" class="acc"/>
+<text x="331.4" y="270.0" class="sla" font-size="8.5">0.404</text>
+<text x="292.1" y="270.0" text-anchor="middle" class="acc" font-size="8.5">0.357</text>
+<line x1="321.4" y1="144" x2="321.4" y2="280" class="rule" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="188.2" y1="170" x2="188.2" y2="144" class="rule" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="256.7" y="126" text-anchor="middle" class="sla" font-size="8.5">raw gap +0.214</text>
+<text x="194.4" y="265" text-anchor="middle" class="acc" font-size="9.5">de-echoed gap +0.318 ↑</text>
+<line x1="70" y1="324" x2="350" y2="324" class="axis" stroke-width="1"/>
+<text x="70.0" y="340" text-anchor="middle" class="mut" font-size="8.5">0.0</text>
+<text x="132.2" y="340" text-anchor="middle" class="mut" font-size="8.5">0.1</text>
+<text x="194.4" y="340" text-anchor="middle" class="mut" font-size="8.5">0.2</text>
+<text x="256.7" y="340" text-anchor="middle" class="mut" font-size="8.5">0.3</text>
+<text x="318.9" y="340" text-anchor="middle" class="mut" font-size="8.5">0.4</text>
+<text x="210" y="356" text-anchor="middle" class="ink2" font-size="8.5">partial-credit score</text>
+<circle cx="60" cy="110" r="5" fill="var(--bg,#0E141A)" class="slas" stroke-width="2"/><text x="70" y="114" class="ink2" font-size="8.5">raw</text>
+<circle cx="60" cy="128" r="5" class="acc"/><text x="70" y="132" class="ink2" font-size="8.5">de-echoed</text>
+<line x1="40" y1="388" x2="360" y2="388" class="rule" stroke-width="1"/>
+<text x="40" y="406" class="ink2" font-size="9">The correction moves the <tspan class="sla">baseline</tspan> far more — it was the bigger cheater, so the gap widens.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 1 —</b> a before-and-after of two configurations. After removing echo-only
+      responses, the baseline score collapses from 0.19 to 0.04 while the top configuration barely moves, from 0.40 to
+      0.36 — so the gap between them grows from 0.21 to 0.32. Cleaning the grader <em>strengthened</em> the result.</figcaption>
+      <div class="nb-prov"><span><b>source</b> nanbeige_nocot_math_followup*_results.jsonl · regrade_no_echo.py</span><span><b>type</b> data-grounded — all four values exact (0.190/0.039, 0.404/0.357)</span><span><b>safety</b> raw vs de-echoed by marker fill, not colour</span></div>
+    </figure>
+  </section>
+
+  <section id="mechanisms">
+    <h2><span class="num">§2</span>Two mechanisms, opposite directions, equal lift</h2>
+    <p>The headline, once the grading was honest: <span class="hl-acc">two different surgeries produce the same-size
+    improvement by doing opposite things.</span></p>
+    <ul>
+      <li><b><code>prune_9</code> — t = +5.13.</b> <em>Delete</em> layer 9 and the model gets better at mental math.</li>
+      <li><b><code>17_21_x2</code> — t = +5.06.</b> <em>Amplify</em> the layers-17–20 circuit (duplicate it) and the model
+      gets better at mental math.</li>
+    </ul>
+    <p>Two distinct interventions — one additive, one subtractive — converge on a similar outcome. Strict baseline 0.025 →
+    both land near 0.17 (<code>prune_9</code> 0.175, <code>17_21_x2</code> 0.165). Composing them is <em>not</em> additive
+    <span class="olabel inf">interpretation</span> — which fits their reaching the same capability rather than stacking
+    independent gains. The way to see <em>why</em> is a per-layer capability fingerprint: run every layer's duplication
+    and every layer's prune, and plot the two t-statistics together. The map is sharply structured, not a smear:</p>
+
+    <table class="nb-table" style="margin-top:var(--sp-5)">
+      <thead><tr><th>layer</th><th>dup_t</th><th>prune_t</th><th>reading</th></tr></thead>
+      <tbody>
+        <tr><td class="first">5</td><td><b class="neg">−2.2</b></td><td>+0.3</td><td><b>edge layer</b> — duplicating detonates it</td></tr>
+        <tr><td class="first">9</td><td>+0.7 (null)</td><td><b class="pos">+5.13</b></td><td><b>noise / overhead</b> — pruning is the headline; dup does nothing</td></tr>
+        <tr><td class="first">11</td><td>+2.7</td><td>−1.5</td><td>load-bearing — dup helps, prune hurts</td></tr>
+        <tr><td class="first">13</td><td><b class="pos">+3.4</b></td><td>−0.6</td><td>circuit entry — the strongest single-layer dup</td></tr>
+        <tr><td class="first">14</td><td><b class="pos">+3.1</b></td><td><b class="neg">−2.0</b></td><td><b>load-bearing core</b> — amplify it <em>or</em> lose the model (prune → tool-call fallback)</td></tr>
+        <tr><td class="first">17–20</td><td>+ (peak L20 +2.4)</td><td>−</td><td>the 17–20 circuit <code>17_21_x2</code> amplifies as a block</td></tr>
+        <tr><td class="first">21</td><td>+0.05 (null)</td><td><b class="pos">+3.3</b></td><td>pruning helps; dup does nothing</td></tr>
+      </tbody>
+    </table>
+
+    <p>Two things jump out. <b>No single layer reproduces the <code>17_21_x2</code> block</b> (+5.06) — the strongest
+    single-layer dup is L13 at +3.4 — so the circuit is a genuine multi-layer unit, not one hot layer riding the rest.
+    And <b>L14 is load-bearing in both directions</b>: duplicating it is among the largest single-layer gains (+3.1) while
+    pruning it is catastrophic (−2.0, the model falls back to tool-calls). You want more of it, and you can't take it
+    away.</p>
+
+    <figure class="figure" id="fig2">
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="720" height="440" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="34" font-size="18">The per-layer surgery fingerprint</text>
+<text class="mut" x="40" y="53" font-size="10">Effect of duplicating vs pruning each layer (paired t vs baseline)</text>
+<line x1="60" y1="279.3" x2="690" y2="279.3" class="axis" stroke-width="1"/>
+<line x1="60" y1="110" x2="60" y2="370" class="axis" stroke-width="1"/>
+<line x1="60" y1="339.8" x2="690" y2="339.8" class="rule" stroke-width="0.6"/>
+<text x="54" y="342.8" text-anchor="end" class="mut" font-size="9">-2</text>
+<line x1="60" y1="279.3" x2="690" y2="279.3" class="rule" stroke-width="0"/>
+<text x="54" y="282.3" text-anchor="end" class="mut" font-size="9">+0</text>
+<line x1="60" y1="218.8" x2="690" y2="218.8" class="rule" stroke-width="0.6"/>
+<text x="54" y="221.8" text-anchor="end" class="mut" font-size="9">+2</text>
+<line x1="60" y1="158.4" x2="690" y2="158.4" class="rule" stroke-width="0.6"/>
+<text x="54" y="161.4" text-anchor="end" class="mut" font-size="9">+4</text>
+<text x="90.0" y="385" text-anchor="middle" class="mut" font-size="9">6</text>
+<text x="150.0" y="385" text-anchor="middle" class="mut" font-size="9">8</text>
+<text x="210.0" y="385" text-anchor="middle" class="mut" font-size="9">10</text>
+<text x="270.0" y="385" text-anchor="middle" class="mut" font-size="9">12</text>
+<text x="330.0" y="385" text-anchor="middle" class="mut" font-size="9">14</text>
+<text x="390.0" y="385" text-anchor="middle" class="mut" font-size="9">16</text>
+<text x="450.0" y="385" text-anchor="middle" class="mut" font-size="9">18</text>
+<text x="510.0" y="385" text-anchor="middle" class="mut" font-size="9">20</text>
+<text x="570.0" y="385" text-anchor="middle" class="mut" font-size="9">22</text>
+<text x="630.0" y="385" text-anchor="middle" class="mut" font-size="9">24</text>
+<text x="690.0" y="385" text-anchor="middle" class="mut" font-size="9">26</text>
+<text x="375" y="402" text-anchor="middle" class="ink2" font-size="9">layer index</text>
+<polyline points="60.0,345.8 180.0,258.1 240.0,197.7 300.0,176.5 330.0,185.6 510.0,206.7 540.0,277.8 690.0,351.9" class="accs" stroke-width="1.2" opacity="0.5"/>
+<polyline points="60.0,270.2 180.0,124.2 240.0,324.7 300.0,297.4 330.0,339.8 450.0,294.4 540.0,179.5 690.0,309.5" class="cits" stroke-width="1.2" opacity="0.5" stroke-dasharray="5 3"/>
+<circle cx="60.0" cy="345.8" r="3.4" class="acc"/>
+<circle cx="180.0" cy="258.1" r="3.4" class="acc"/>
+<circle cx="240.0" cy="197.7" r="3.4" class="acc"/>
+<circle cx="300.0" cy="176.5" r="3.4" class="acc"/>
+<circle cx="330.0" cy="185.6" r="3.4" class="acc"/>
+<circle cx="510.0" cy="206.7" r="3.4" class="acc"/>
+<circle cx="540.0" cy="277.8" r="3.4" class="acc"/>
+<circle cx="690.0" cy="351.9" r="3.4" class="acc"/>
+<polygon points="60.0,266.2325581395349 56.52,272.2325581395349 63.48,272.2325581395349" class="cit"/>
+<polygon points="180.0,120.2093023255814 176.52,126.2093023255814 183.48,126.2093023255814" class="cit"/>
+<polygon points="240.0,320.6511627906977 236.52,326.6511627906977 243.48,326.6511627906977" class="cit"/>
+<polygon points="300.0,293.4418604651163 296.52,299.4418604651163 303.48,299.4418604651163" class="cit"/>
+<polygon points="330.0,335.7674418604651 326.52,341.7674418604651 333.48,341.7674418604651" class="cit"/>
+<polygon points="450.0,290.4186046511628 446.52,296.4186046511628 453.48,296.4186046511628" class="cit"/>
+<polygon points="540.0,175.53488372093025 536.52,181.53488372093025 543.48,181.53488372093025" class="cit"/>
+<polygon points="690.0,305.5348837209302 686.52,311.5348837209302 693.48,311.5348837209302" class="cit"/>
+<text x="180.0" y="116.2" text-anchor="middle" class="cit" font-size="9">L9 prune +5.13</text>
+<text x="330.0" y="355.8" text-anchor="middle" class="vio" font-size="9">L14 amplify-or-die</text>
+<line x1="330.0" y1="185.6" x2="330.0" y2="339.8" class="vios" stroke-width="1" stroke-dasharray="2 2"/>
+<circle cx="490" cy="108" r="3.4" class="acc"/><text x="500" y="111" class="ink2" font-size="9">duplicate (dup_t)</text>
+<polygon points="610,104 606.52,110.0 613.48,110.0" class="cit"/><text x="620" y="111" class="ink2" font-size="9">prune (prune_t)</text>
+<line x1="40" y1="400" x2="690" y2="400" class="rule" stroke-width="1"/>
+<text x="40" y="418" class="ink2" font-size="11">Layer roles are legible and often <tspan class="vio">opposite-signed</tspan>: L9 overhead, L14 load-bearing both ways.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 460" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="400" height="460" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="34" font-size="15">The per-layer surgery fingerprint</text>
+<text class="mut" x="40" y="52" font-size="8">Effect of duplicating vs pruning each layer (paired t vs baseline)</text>
+<line x1="60" y1="299.3" x2="370" y2="299.3" class="axis" stroke-width="1"/>
+<line x1="60" y1="130" x2="60" y2="390" class="axis" stroke-width="1"/>
+<line x1="60" y1="359.8" x2="370" y2="359.8" class="rule" stroke-width="0.6"/>
+<text x="54" y="362.8" text-anchor="end" class="mut" font-size="8">-2</text>
+<line x1="60" y1="299.3" x2="370" y2="299.3" class="rule" stroke-width="0"/>
+<text x="54" y="302.3" text-anchor="end" class="mut" font-size="8">+0</text>
+<line x1="60" y1="238.8" x2="370" y2="238.8" class="rule" stroke-width="0.6"/>
+<text x="54" y="241.8" text-anchor="end" class="mut" font-size="8">+2</text>
+<line x1="60" y1="178.4" x2="370" y2="178.4" class="rule" stroke-width="0.6"/>
+<text x="54" y="181.4" text-anchor="end" class="mut" font-size="8">+4</text>
+<text x="74.8" y="405" text-anchor="middle" class="mut" font-size="8">6</text>
+<text x="104.3" y="405" text-anchor="middle" class="mut" font-size="8">8</text>
+<text x="133.8" y="405" text-anchor="middle" class="mut" font-size="8">10</text>
+<text x="163.3" y="405" text-anchor="middle" class="mut" font-size="8">12</text>
+<text x="192.9" y="405" text-anchor="middle" class="mut" font-size="8">14</text>
+<text x="222.4" y="405" text-anchor="middle" class="mut" font-size="8">16</text>
+<text x="251.9" y="405" text-anchor="middle" class="mut" font-size="8">18</text>
+<text x="281.4" y="405" text-anchor="middle" class="mut" font-size="8">20</text>
+<text x="311.0" y="405" text-anchor="middle" class="mut" font-size="8">22</text>
+<text x="340.5" y="405" text-anchor="middle" class="mut" font-size="8">24</text>
+<text x="370.0" y="405" text-anchor="middle" class="mut" font-size="8">26</text>
+<text x="215" y="422" text-anchor="middle" class="ink2" font-size="8">layer index</text>
+<polyline points="60.0,365.8 119.0,278.1 148.6,217.7 178.1,196.5 192.9,205.6 281.4,226.7 296.2,297.8 370.0,371.9" class="accs" stroke-width="1.2" opacity="0.5"/>
+<polyline points="60.0,290.2 119.0,144.2 148.6,344.7 178.1,317.4 192.9,359.8 251.9,314.4 296.2,199.5 370.0,329.5" class="cits" stroke-width="1.2" opacity="0.5" stroke-dasharray="5 3"/>
+<circle cx="60.0" cy="365.8" r="2.8" class="acc"/>
+<circle cx="119.0" cy="278.1" r="2.8" class="acc"/>
+<circle cx="148.6" cy="217.7" r="2.8" class="acc"/>
+<circle cx="178.1" cy="196.5" r="2.8" class="acc"/>
+<circle cx="192.9" cy="205.6" r="2.8" class="acc"/>
+<circle cx="281.4" cy="226.7" r="2.8" class="acc"/>
+<circle cx="296.2" cy="297.8" r="2.8" class="acc"/>
+<circle cx="370.0" cy="371.9" r="2.8" class="acc"/>
+<polygon points="60.0,287.0325581395349 57.216,291.8325581395349 62.784,291.8325581395349" class="cit"/>
+<polygon points="119.04761904761904,141.00930232558142 116.26361904761903,145.8093023255814 121.83161904761904,145.8093023255814" class="cit"/>
+<polygon points="148.57142857142856,341.4511627906977 145.78742857142856,346.2511627906977 151.35542857142855,346.2511627906977" class="cit"/>
+<polygon points="178.09523809523807,314.2418604651163 175.31123809523808,319.0418604651163 180.87923809523807,319.0418604651163" class="cit"/>
+<polygon points="192.85714285714286,356.5674418604651 190.07314285714287,361.36744186046514 195.64114285714285,361.36744186046514" class="cit"/>
+<polygon points="251.9047619047619,311.2186046511628 249.1207619047619,316.01860465116283 254.6887619047619,316.01860465116283" class="cit"/>
+<polygon points="296.19047619047615,196.33488372093026 293.40647619047616,201.13488372093025 298.97447619047614,201.13488372093025" class="cit"/>
+<polygon points="370.0,326.33488372093024 367.216,331.13488372093025 372.784,331.13488372093025" class="cit"/>
+<text x="119.0" y="136.2" text-anchor="middle" class="cit" font-size="8">L9 prune +5.13</text>
+<text x="192.9" y="375.8" text-anchor="middle" class="vio" font-size="8">L14 amplify-or-die</text>
+<line x1="192.9" y1="205.6" x2="192.9" y2="359.8" class="vios" stroke-width="1" stroke-dasharray="2 2"/>
+<circle cx="60" cy="86" r="3.4" class="acc"/><text x="70" y="89" class="ink2" font-size="8">duplicate (dup_t)</text>
+<polygon points="60,100 56.52,106.0 63.48,106.0" class="cit"/><text x="70" y="107" class="ink2" font-size="8">prune (prune_t)</text>
+<line x1="40" y1="420" x2="370" y2="420" class="rule" stroke-width="1"/>
+<text x="40" y="438" class="ink2" font-size="9">Layer roles are legible and often <tspan class="vio">opposite-signed</tspan>: L9 overhead, L14 load-bearing both ways.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 2 —</b> a per-layer chart from L5 to L26 plotting two effect-size series: the
+      effect of duplicating each layer and of pruning each layer. Layer 9 spikes far above the rest when pruned but is
+      flat when duplicated. Layer 14 is high when duplicated and deeply negative when pruned. The middle layers 11–20
+      reward duplication; the edge layers 5 and 26 are harmed by it. The roles are layer-specific and often
+      opposite-signed.</figcaption>
+      <div class="nb-prov"><span><b>source</b> per-layer single-dup & single-prune sweep (paired t vs baseline)</span><span><b>type</b> data-grounded — the seven layers from the §2 fingerprint table</span><span><b>safety</b> dup vs prune by marker shape + line dash</span></div>
+    </figure>
+
+    <h3>You can read the anatomy off the failure modes</h3>
+    <p>Each prune breaks the model in a characteristically different way — the best vignettes in the whole specimen:</p>
+    <ul>
+      <li><b><code>prune_9</code></b> produces terse, direct equations: <code>8273645928374659 + 9384756192847362 =
+      17658401121221921</code> — no wrappers, and on <code>add_huge</code> a single seed landed <b>one digit off</b>. Its
+      m|g (score given a guess) is the highest of any config, ~0.90. <span class="olabel inf">interpretation</span> Layer
+      9 was apparently spending capacity on output-formatting overhead at the cost of accuracy; removing it recovers the
+      latent arithmetic.</li>
+      <li><b>RYS duplicates</b> produce <em>wrapped</em> answers: <code>&lt;p&gt;... = 17658120711221801&lt;/p&gt;</code>
+      — clean-looking structure, but 4–5 digit errors. Their lift is <b>rate-dominated</b> (the model commits more often)
+      with a smaller accuracy gain.</li>
+      <li><b><code>prune_14</code></b> produces tool-call attempts (<code>&lt;function=calculate-product&gt;</code>) — remove
+      it and the model falls back to its tool-use training. The "I can do this internally" nickname fits the failure mode
+      — but <span class="olabel inf">that label is a hypothesis the behaviour invites, not a role we localized.</span></li>
+      <li><b><code>prune_18</code></b> produces preamble <em>without execution</em> — "I'll calculate the sum… Let me do
+      this carefully…" then nothing. Read as a hypothesis, L18 looks like a "follow-through to an answer" circuit — the
+      most "anxious little model" failure of all. (Same caveat: the nickname is what the failure suggests, not a measured
+      function.)</li>
+    </ul>
+  </section>
+
+  <section id="control">
+    <h2><span class="num">§3</span>The control test: the model already knew (it mostly wouldn't say)</h2>
+    <p class="dropcap">Here's the result that recolours everything above. The natural reading of "surgery improved mental
+    math" is <em>the surgery added arithmetic capability</em>. A control test says mostly no.</p>
+    <p>Force the bare baseline to commit — logit-bias the <code>&lt;think&gt;</code> token to −100 and stop on the
+    reasoning-wrapper strings, so it physically cannot open a deliberation — and the bare model's m|g jumps to
+    <b>0.522</b>, within reach of the <em>unbiased top-RYS</em> m|g of <b>0.58</b>. In other words: when you make the
+    untouched model answer instead of letting it stall, its guesses are nearly as good as the surgically-boosted model's.
+    <span class="hl-acc">Most of Nanbeige's "no-CoT badness" was unwillingness to commit, not poor intuition.</span>
+    <span class="olabel obs">observation</span> (And the mechanical-damage configs stay broken under bias —
+    <code>5_6_x2</code> still craters — so this isn't an artifact of the bias itself; layer-5–7 damage is structural, not a
+    policy effect.)</p>
+    <p>So the RYS lift decomposes. Using <code>overall = rate × m|g</code> (rate = fraction that actually guess; m|g =
+    quality given a guess):</p>
+
+    <table class="nb-table" style="margin-top:var(--sp-5)">
+      <thead><tr><th></th><th>rate</th><th>m|g</th><th>overall</th></tr></thead>
+      <tbody>
+        <tr><td class="first">baseline</td><td>0.194</td><td>0.199</td><td>0.039</td></tr>
+        <tr><td class="first">baseline, forced to commit (n=1)</td><td>0.244</td><td><b class="pos">0.522</b></td><td>0.127</td></tr>
+        <tr><td class="first">top RYS</td><td>0.613</td><td>0.582</td><td>0.357</td></tr>
+        <tr><td class="first">lift</td><td>×3.2</td><td>×2.9</td><td>+0.32</td></tr>
+      </tbody>
+    </table>
+
+    <p>The forced-commit row is n=1, from the biased singles phase. Its punch: forcing the bare model to answer barely
+    moved the <em>rate</em> (0.194→0.244) yet lifted quality to m|g <b>0.522</b> — nearly top-RYS's <b>0.582</b>. So what
+    suppression was hiding was mostly <em>intuition the model already had</em>, not just the willingness to use it. One
+    caveat on <code>m|g</code> itself: it's conditional on the answers the model actually emits, so it's a selection
+    effect, not a pure capability measure — if surgery makes the model commit more often, the extra answers it ventures
+    may be systematically harder ones, which would if anything <em>understate</em> the gap.</p>
+    <p>Both axes lift ~3×. The <b>rate</b> lift is a compliance story — the surgery makes the model stop narrating and
+    commit. The <b>m|g</b> lift can't be compliance — when the surgical model <em>does</em> guess, its guesses are
+    individually closer. So there's a real residual: a small genuine-computation component (the 0.52 → 0.58 gap) riding on
+    a large willingness-to-commit component. The honest headline isn't "surgery taught it math"; it's
+    <span class="hl-acc">"surgery mostly unlocked intuition the model already had, and sharpened it a little."</span></p>
+
+    <figure class="figure" id="fig3">
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 450" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="720" height="450" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="34" font-size="18">Willingness vs capability</text>
+<text class="mut" x="40" y="53" font-size="10">rate (commit) × m|g (quality given a guess) · the lift decomposed</text>
+<line x1="80" y1="110" x2="80" y2="370" class="axis" stroke-width="1"/>
+<line x1="80" y1="370" x2="680" y2="370" class="axis" stroke-width="1"/>
+<text x="80.0" y="386" text-anchor="middle" class="mut" font-size="9">0.0</text>
+<text x="240.0" y="386" text-anchor="middle" class="mut" font-size="9">0.2</text>
+<text x="400.0" y="386" text-anchor="middle" class="mut" font-size="9">0.4</text>
+<text x="560.0" y="386" text-anchor="middle" class="mut" font-size="9">0.6</text>
+<text x="74" y="373.0" text-anchor="end" class="mut" font-size="9">0.0</text>
+<text x="74" y="298.7" text-anchor="end" class="mut" font-size="9">0.2</text>
+<text x="74" y="224.4" text-anchor="end" class="mut" font-size="9">0.4</text>
+<text x="74" y="150.1" text-anchor="end" class="mut" font-size="9">0.6</text>
+<text x="380" y="403" text-anchor="middle" class="ink2" font-size="10">rate — willingness to commit →</text>
+<text x="26" y="240" transform="rotate(-90 26 240)" text-anchor="middle" class="ink2" font-size="10">m|g — quality given a guess →</text>
+<defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink2,#A4B0BC)"/></marker></defs>
+<line x1="235.2" y1="296.1" x2="275.2" y2="176.1" class="slas" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+<text x="229.2" y="236" text-anchor="end" class="cit" font-size="9">force commit:</text>
+<text x="229.2" y="248" text-anchor="end" class="cit" font-size="9">intuition already there</text>
+<line x1="275.2" y1="176.1" x2="570.4" y2="153.8" class="accs" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+<text x="423" y="166" text-anchor="middle" class="acc" font-size="9">surgery: mostly compliance →</text>
+<circle cx="235.2" cy="296.1" r="6.5" class="sla"/>
+<text x="235.2" y="314.1" text-anchor="middle" class="ink2" font-size="9">bare baseline (0.19, 0.20)</text>
+<circle cx="275.2" cy="176.1" r="6.5" class="cit"/>
+<text x="275.2" y="194.1" text-anchor="middle" class="ink2" font-size="9">baseline, forced (0.24, 0.52)</text>
+<circle cx="570.4" cy="153.8" r="6.5" class="acc"/>
+<text x="570.4" y="141.8" text-anchor="middle" class="ink2" font-size="9">top RYS (0.61, 0.58)</text>
+<line x1="40" y1="408" x2="680" y2="408" class="rule" stroke-width="1"/>
+<text x="40" y="426" class="ink2" font-size="11">Most of the gain is <tspan class="acc">horizontal</tspan> (made it commit); only a small <tspan class="cit">vertical</tspan> residual is real compute.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 470" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="400" height="470" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="34" font-size="15">Willingness vs capability</text>
+<text class="mut" x="40" y="52" font-size="8">rate (commit) × m|g (quality given a guess) · the lift decomposed</text>
+<line x1="80" y1="130" x2="80" y2="390" class="axis" stroke-width="1"/>
+<line x1="80" y1="390" x2="360" y2="390" class="axis" stroke-width="1"/>
+<text x="80.0" y="406" text-anchor="middle" class="mut" font-size="8">0.0</text>
+<text x="154.7" y="406" text-anchor="middle" class="mut" font-size="8">0.2</text>
+<text x="229.3" y="406" text-anchor="middle" class="mut" font-size="8">0.4</text>
+<text x="304.0" y="406" text-anchor="middle" class="mut" font-size="8">0.6</text>
+<text x="74" y="393.0" text-anchor="end" class="mut" font-size="8">0.0</text>
+<text x="74" y="318.7" text-anchor="end" class="mut" font-size="8">0.2</text>
+<text x="74" y="244.4" text-anchor="end" class="mut" font-size="8">0.4</text>
+<text x="74" y="170.1" text-anchor="end" class="mut" font-size="8">0.6</text>
+<text x="220" y="423" text-anchor="middle" class="ink2" font-size="9">rate — willingness to commit →</text>
+<text x="26" y="260" transform="rotate(-90 26 260)" text-anchor="middle" class="ink2" font-size="9">m|g — quality given a guess →</text>
+<defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink2,#A4B0BC)"/></marker></defs>
+<line x1="152.4" y1="316.1" x2="171.1" y2="196.1" class="slas" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+<text x="146.4" y="256" text-anchor="end" class="cit" font-size="8">force commit:</text>
+<text x="146.4" y="268" text-anchor="end" class="cit" font-size="8">intuition already there</text>
+<line x1="171.1" y1="196.1" x2="308.9" y2="173.8" class="accs" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+<text x="240" y="186" text-anchor="middle" class="acc" font-size="8">surgery: mostly compliance →</text>
+<circle cx="152.4" cy="316.1" r="6.5" class="sla"/>
+<text x="152.4" y="334.1" text-anchor="middle" class="ink2" font-size="8">bare baseline (0.19, 0.20)</text>
+<circle cx="171.1" cy="196.1" r="6.5" class="cit"/>
+<text x="171.1" y="214.1" text-anchor="middle" class="ink2" font-size="8">baseline, forced (0.24, 0.52)</text>
+<circle cx="308.9" cy="173.8" r="6.5" class="acc"/>
+<text x="308.9" y="161.8" text-anchor="middle" class="ink2" font-size="8">top RYS (0.61, 0.58)</text>
+<line x1="40" y1="428" x2="360" y2="428" class="rule" stroke-width="1"/>
+<text x="40" y="446" class="ink2" font-size="9">Most of the gain is <tspan class="acc">horizontal</tspan> (made it commit); only a small <tspan class="cit">vertical</tspan> residual is real compute.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 3 —</b> willingness-to-commit against answer quality. The untouched baseline
+      sits low on both. Forcing it to commit lifts quality sharply with little change in willingness — the intuition was
+      already present. The surgical configuration sits high on willingness and only slightly higher on quality: most of
+      its gain is getting the model to answer, not making it smarter.</figcaption>
+      <div class="nb-prov"><span><b>source</b> rate × m|g per config + biased-singles control (n=1)</span><span><b>type</b> data-grounded — the three points exact (bare / forced / top-RYS)</span><span><b>safety</b> decomposition reads off arrow direction; points by marker</span></div>
+    </figure>
+
+    <p>What the model is doing when it succeeds is worth naming, because it isn't arithmetic. On <code>add_huge</code>
+    (truth <code>17,658,402,121,222,021</code>) the top config guessed <code>17,658,121,721,212,121</code> — first five
+    digits exact, right magnitude, right digit count, plausible tail. It can't be memorizing 17-digit sums;
+    <span class="olabel inf">the simplest reading is magnitude pattern-matching</span> — what
+    eight-quadrillion-plus-nine-quadrillion <em>looks like</em>. That's the mental-estimation skill no-CoT probing is meant
+    to elicit, and surgery in the 13–22 band appears to sharpen it.</p>
+  </section>
+
+  <section id="disconnect">
+    <h2><span class="num">§4</span>The disconnect (why this isn't shippable yet)</h2>
+    <p>Now the caveat that keeps this honest, and the reason there's no GGUF attached. The no-CoT sweep measures
+    <em>intuition under suppressed deliberation</em>. That is <b>not</b> the same axis as "is this a better model to chat
+    with" — and they can move in opposite directions.</p>
+    <p>Spin up the <code>17_21_x2</code> GGUF and talk to it in normal thinking mode, and it drives <em>more</em> thinking
+    tokens, sometimes to <em>worse</em> answers: it got <code>47 × 83</code> wrong while spending ~6× more thinking than
+    baseline (697 vs 112 reasoning tokens). <span class="olabel obs">observation</span> The surgery that makes the model
+    commit a good gut answer when forbidden to think can, when it <em>is</em> allowed to think, push it into longer,
+    escape-proof deliberation loops. (<code>prune_9_10_21</code>'s zero-token "just answer" reflex is the opposite failure
+    — fast but fragile, breaking on novel framings.) The no-CoT win and the chat-quality outcome are orthogonal, and you
+    can't assume one buys the other.</p>
+
+    <div class="negresult">
+      <span class="nb-kicker">A hypothesis the data motivates — not one it settles</span>
+      <p>If the surgery mostly moves <em>willingness</em> rather than capability, then what it touches may be the model's
+      <b>control policy</b> — the learned machinery deciding when to deliberate, when to commit, when to defer to a tool —
+      rather than its arithmetic. And "change" may be too gentle: the same edit could be <em>breaking</em> parts of that
+      policy that trace-distillation and chat-tuning installed to meet their design goals. On that reading the no-CoT
+      "win" and the chat "regression" stop being a contradiction — they're <b>one lesion seen from two sides</b>: damage
+      to the deliberation-control circuitry reads as a gain when deliberation is forbidden and a loss when it's wanted.
+      <span class="olabel inf">interpretation — offered as a frame, not a finding</span></p>
+    </div>
+
+    <p>This is exactly the kind of thing the lab refuses to paper over. The phase-3 work reframes the metric to
+    <em>efficiency</em> (score per thinking-token) and adds the missing axes — easy-math (does it preserve trivial
+    ability?), EQ (did a useful "doubt circuit" get removed?), and conversational sanity (did we make a math
+    autoencoder?). Until those land, and until the whole thing re-runs on the v4 battery for cross-model comparability,
+    the responsible claim is bounded:</p>
+
+    <blockquote class="nb-pull nb-pull--wide"><b>On no-CoT arithmetic intuition, two opposite surgeries each produce a
+    real lift — t ≈ +5 apiece — mostly by unlocking commitment and partly by sharpening magnitude-intuition — and it is
+    not yet shown that this transfers to deployed chat behaviour.</b> A genuine contribution, stated at exactly the
+    confidence the evidence supports.</blockquote>
+  </section>
+
+  <section id="contributes">
+    <h2><span class="num">§5</span>What this specimen contributes</h2>
+    <ul>
+      <li><b>Two mechanisms, one effect size.</b> Removing an overhead layer (<code>prune_9</code>) and amplifying a
+      circuit (<code>17_21_x2</code>) give equal lift. Composing them is <em>not</em> super-additive
+      (<code>prune_9 + 17_21_x2 + 21_22_x2</code>, t≈+5.27, barely above either alone) → they reach <b>overlapping</b>
+      capability, not independent gains.</li>
+      <li><b>Prune is a first-class, independent intervention</b>, not the inverse of dup — certain layers (9,
+      output-overhead) carry computation the model is <em>better off without</em>. The prune-rescue asymmetry recurs
+      across the whole lab (E4B, Granite).</li>
+      <li><b>The willingness/capability decomposition</b> (rate × m|g + the biased baseline) separates "made it commit"
+      from "made it smarter," and on this model the answer is "mostly the former, a little of the latter." This is the
+      cross-model through-line: Nanbeige's <em>unwillingness</em>, MiniCPM-V's <em>indecision tax</em>, the 26B's
+      <em>colon-stall</em> are the same disease in three architectures.</li>
+      <li><b>The failure-mode gallery</b> shows layer roles are legible by <em>how</em> the model breaks, not just by the
+      score.</li>
+    </ul>
+  </section>
+
+  <section id="caveats">
+    <div class="nb-limits">
+      <div class="nb-limits__head">
+        <span class="nb-limits__label">Caveats &amp; reproduction</span>
+        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — these bound the claims</span>
+      </div>
+      <ul>
+        <li><b>Not published; not yet cross-validated.</b> No-CoT math is one axis; easy-math, EQ, CoT efficiency, and
+        chat quality are unmeasured or in-flight. The v4-battery re-run (Phase 2) is a hard pre-publish gate for
+        cross-model comparability.</li>
+        <li><b>All numbers are Q8 / May-2026 battery</b> and point-in-time from memory; confirm against the results JSONL
+        (<code>nanbeige_nocot_math_followup*_results.jsonl</code>) <span class="vrfy">VERIFY</span> before shipping any
+        figure.</li>
+        <li><b>Publish framing</b> (locked in the plan): documented result + reproducible tooling, <b>not</b> "custom
+        model." Any uploaded GGUF is a <em>representative variant</em>, never "best." Credit chain: Nanbeige → David Ng
+        (technique + probe design) → this lab (the inferential layer). License Apache-2.0 from base.</li>
+        <li><b>Engine</b>: llama.cpp / llama-server, build-on-demand GGUFs via <code>layer_path.py</code>,
+        <code>-fa on</code>, Q8_0 KV cache. De-echo + magnitude regrade via <code>regrade_no_echo.py</code>. Closed-think
+        prefill forces no-CoT.</li>
+      </ul>
+    </div>
+
+    <div class="nb-marginalia" style="margin-top:var(--sp-7)">
+      <div class="nb-marginalia__label">Colophon &amp; lineage</div>
+      <div class="nb-marginalia__body">
+        <p style="max-width:64ch">Nanbeige is the positive target of the small-thinking-model branch — the one place the
+        surgery moved a capability axis, and the place that forced the willingness-vs-capability decomposition the rest of
+        the lab now reuses. Shared measurement rules — the echo taxonomy, rate × m|g, the biased-baseline trick — live on
+        the <a href="measuring.html">methods writeup</a> and the terse <a href="methods.html">Methods &amp; references</a>
+        page. Technique and probe-design credit: David Ng (<span class="mono">dnhkng</span>). Sibling specimens:
+        <a href="gemma.html">Gemma 4</a>, <a href="/lab/05_granite.html">Granite</a>, <a href="hrm.html">HRM</a>,
+        <a href="/lab/01_minicpm5_sigma_alpha.html">MiniCPM5</a>. Companion qualitative chat/CoT notes inform §4. Run locally
+        on a 16&nbsp;GB Mac&nbsp;Mini.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer style="max-width:var(--page-max);margin:0 auto;padding:var(--sp-6) var(--gutter) var(--sp-9)">
+  <p style="font-family:var(--font-mono);font-size:var(--fs-micro);letter-spacing:.03em;color:var(--text-muted);line-height:1.7">© 2026 · The Vivisection Lab · exploratory research notes, provided as-is, no warranty · writeups &amp; figures CC&nbsp;BY · uses cookieless analytics, no personal data collected</p>
+</footer>
+
+<script src="/assets/nb.js"></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+/* ============================================================================
+   COLOR TOKENS — Notebook Design System
+   ----------------------------------------------------------------------------
+   Two skins, two modes. Dark is the default in both skins.
+
+     skin       metaphor       default mode    set via
+     ─────────  ─────────────  ──────────────  ───────────────────────
+     PROBE      observation    dark            :root            (default)
+     (cool)                    light           html.light
+     LAB        intervention   dark            html.lab
+     (warm)                    light           html.lab.light
+
+   Components only ever read the SEMANTIC tokens (--surface, --text, --accent,
+   --cause …). The raw palette is redefined per scope; the semantic layer is
+   declared once on :root and resolves to whichever raw value is in scope.
+
+   Accent logic (shared across both skins):
+     --accent   the thing observed / the primary voice
+     --cause    the injected intervention — the one deliberate warm pop
+     --pos      a good / surviving result   --neg  a failed / retired result
+     --caution  a hedge / "look here"        --fourth  the safe 4th series
+   The cool palette is cividis-adjacent and protan-safe: no red↔green pair is
+   ever load-bearing. Markers + dash patterns carry series, colour is secondary.
+   ========================================================================== */
+
+/* ─────────────────────────────  PROBE · DARK  (default)  ───────────────── */
+:root {
+  /* surfaces & ink */
+  --bg:        #0E141A;
+  --bg2:       #141D26;   /* panels / scan-plate / figure ground */
+  --paper:     #141D26;   /* card fill (cool keeps cards flush with panels) */
+  --ink:       #DCE4EC;
+  --ink2:      #A4B0BC;
+  --muted:     #6F7C88;
+  --rule:      #1C2630;   /* hairline */
+  --rule2:     #27323D;   /* slightly stronger hairline */
+
+  /* roles */
+  --accent:        #4FB2C2;  /* cyan — primary */
+  --accent-bright: #6FCBD8;  /* bright cyan — drop-caps, igniting payload */
+  --cause:         #E3C24A;  /* citron — the injected intervention */
+  --pos:           #4FB2C2;  /* cool has no green; survival reads as the signal */
+  --neg:           #B98AD6;  /* violet — broken-on-purpose / retired */
+  --caution:       #E3C24A;  /* citron */
+  --fourth:        #6E92C4;  /* slate-blue — safe 4th line series */
+
+  /* named palette (fidelity / docs) */
+  --cyan:      #4FB2C2;
+  --cyan-2:    #6FCBD8;
+  --citron:    #E3C24A;
+  --violet:    #B98AD6;
+  --series-slate: #6E92C4;
+
+  color-scheme: dark;
+}
+
+/* ──────────────────────────────  PROBE · LIGHT  ────────────────────────── */
+html.light {
+  --bg:        #EDF1F4;
+  --bg2:       #E3E9EE;
+  --paper:     #E9EEF2;
+  --ink:       #16222C;
+  --ink2:      #3A4853;
+  --muted:     #69757F;
+  --rule:      #CBD5DD;
+  --rule2:     #D8E0E6;
+
+  --accent:        #27708A;
+  --accent-bright: #27708A;
+  --cause:         #8A6D0E;
+  --pos:           #27708A;
+  --neg:           #7A52A8;
+  --caution:       #8A6D0E;
+  --fourth:        #3E5C8A;
+
+  --cyan:      #27708A;
+  --cyan-2:    #27708A;
+  --citron:    #8A6D0E;
+  --violet:    #7A52A8;
+  --series-slate: #3E5C8A;
+
+  color-scheme: light;
+}
+
+/* ───────────────────────────────  LAB · DARK  ─────────────────────────── */
+html.lab {
+  --bg:        #1A1814;
+  --bg2:       #221E18;
+  --paper:     #25201A;   /* warm cards sit on their own paper, lifted off bg */
+  --ink:       #ECE5D6;
+  --ink2:      #C9C0AC;
+  --muted:     #8A8270;
+  --rule:      #3D362C;
+  --rule2:     #322C24;
+
+  --accent:        #D77955;  /* terracotta — primary AND the intervention */
+  --accent-bright: #E0A085;
+  --cause:         #D77955;  /* in the warm skin the cut IS the accent */
+  --pos:           #84A78C;  /* sage */
+  --neg:           #B85F5F;  /* wine */
+  --caution:       #C9A35E;  /* gold */
+  --fourth:        #7892A8;  /* slate */
+
+  --terracotta: #D77955;
+  --sage:       #84A78C;
+  --wine:       #B85F5F;
+  --gold:       #C9A35E;
+  --slate:      #7892A8;
+
+  color-scheme: dark;
+}
+
+/* ──────────────────────────────  LAB · LIGHT  ─────────────────────────── */
+html.lab.light {
+  --bg:        #EFEAE0;
+  --bg2:       #E7E1D4;
+  --paper:     #F6F2E9;
+  --ink:       #221E18;
+  --ink2:      #443D31;
+  --muted:     #7C7466;
+  --rule:      #C7BDA9;
+  --rule2:     #D9D1BE;
+
+  --accent:        #B85C3D;
+  --accent-bright: #B85C3D;
+  --cause:         #B85C3D;
+  --pos:           #5C7A66;
+  --neg:           #7A2E2E;
+  --caution:       #A6852E;
+  --fourth:        #2F3F52;
+
+  --terracotta: #B85C3D;
+  --sage:       #5C7A66;
+  --wine:       #7A2E2E;
+  --gold:       #A6852E;
+  --slate:      #2F3F52;
+
+  color-scheme: light;
+}
+
+/* ─────────────────────────  SEMANTIC LAYER (declared once)  ─────────────
+   Resolved per-element, so it always reflects the raw palette in scope.
+   ----------------------------------------------------------------------- */
+:root {
+  --surface:         var(--bg);
+  --surface-sunken:  var(--bg2);
+  --surface-card:    var(--paper);
+
+  --text:            var(--ink);
+  --text-dim:        var(--ink2);
+  --text-muted:      var(--muted);
+
+  --border:          var(--rule);
+  --border-strong:   var(--rule2);
+
+  --link:            var(--accent);
+  --link-hover:      var(--accent-bright);
+  --focus-ring:      var(--accent);
+
+  /* selection */
+  --select-bg:       color-mix(in srgb, var(--accent) 26%, transparent);
+}
+
+::selection { background: var(--select-bg); }

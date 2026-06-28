@@ -1,0 +1,123 @@
+<!-- @dsCard group="Portfolio Hub" viewport="1100x900" name="Portfolio hub — index" subtitle="Slim research-notebook hub; plain HTML, ~1KB JS, no framework" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anya — research notebooks</title>
+<meta name="description" content="Independent ML-evaluation research: small open-weight models taken apart and watched, on a 16 GB Mac Mini. Negative and corrected results kept on purpose.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E141A'/%3E%3Cpath d='M6 16 H15' stroke='%236F7C88' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 9' stroke='%236FCBD8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 23' stroke='%23E3C24A' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='15' cy='16' r='2.6' fill='%23ECEFF3'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  main { max-width: var(--page-max); margin: 0 auto; padding: 0 var(--gutter); }
+  .masthead { padding: var(--sp-9) 0 var(--sp-7); border-bottom: var(--bw) solid var(--border-strong); }
+  .masthead h1 { font-size: clamp(2rem, 3.6vw, 2.9rem); max-width: 18ch; margin: var(--sp-4) 0 var(--sp-5); }
+  .masthead h1 em { font-style: italic; color: var(--accent-bright); }
+  .bridge { font-size: var(--fs-dek); color: var(--text-dim); max-width: 62ch; }
+  .bridge a { border-bottom: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); }
+  section { padding: var(--sp-7) 0; border-bottom: var(--bw) solid var(--border); }
+  .sec-label { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--tk-kicker); text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--sp-5); }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+  .workgrid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--sp-6); margin-top: var(--sp-5); }
+  .work h3 { font-size: 1.08rem; margin: 0 0 var(--sp-2); }
+  .work p { font-size: var(--fs-sm); color: var(--text-dim); }
+  footer { max-width: var(--page-max); margin: 0 auto; padding: var(--sp-6) var(--gutter) var(--sp-9); }
+  .legal { font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: .03em; color: var(--text-muted); line-height: 1.7; }
+  @media (max-width: 760px) { .cards, .workgrid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav class="nb-nav">
+  <a class="nb-nav__home" href="/">ANYA · RESEARCH NOTEBOOKS</a>
+  <a href="/lab/writeup.html">Surgery</a>
+  <a href="#geometry">Geometry</a>
+  <a href="#duologue">Duologue</a>
+  <a href="#mem0">mem0</a>
+  <span class="nb-nav__spacer"></span>
+  <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
+  <a href="#" data-theme-toggle>☼ Light</a>
+</nav>
+
+<main>
+  <header class="masthead">
+    <div class="nb-kicker">Independent ML-evaluation research · 2026</div>
+    <h1>Small models, taken apart and <em>watched</em>.</h1>
+    <p class="bridge">
+      I'm a software engineer (formerly .NET / CMS, now self-directed) measuring where ability
+      lives inside small open-weight language models - duplicating layers, pruning them, scanning
+      hidden states - on a 16&nbsp;GB Mac Mini, no cloud GPUs. Most of these experiments end in a
+      characterised breakage rather than a better model, and that's the point: the
+      <a href="/lab/writeup.html">negative and corrected results</a> are kept on purpose, with the autopsy.
+    </p>
+  </header>
+
+  <section>
+    <div class="sec-label">The notebooks</div>
+    <div class="cards">
+      <a class="nb-card" href="/lab/writeup.html">
+        <div class="nb-card__tag"><span>Surgery · intervention</span><span class="st">published</span></div>
+        <h3>The Vivisection Lab</h3>
+        <p class="nb-card__dek">Layer duplication, pruning and steering across a dense model, an MoE, and a recurrent reasoner — "what happens when you cut."</p>
+        <div class="nb-card__find"><b>Finding —</b> which surgeries help is mostly explained by where the model stashes its keys and values.</div>
+        <div class="nb-card__go">Read the record →</div>
+      </a>
+      <a class="nb-card" id="geometry" href="#">
+        <div class="nb-card__tag"><span>Geometry · observation</span><span class="st">live</span></div>
+        <h3>The Vivarium</h3>
+        <p class="nb-card__dek">Hidden-state scans of a model kept intact under glass — "what does it already know, and when in the stack does it know it."</p>
+        <div class="nb-card__find"><b>Finding —</b> six independent probes land on the same mid-stack concept zone (L18–27).</div>
+        <div class="nb-card__go">Read the scan →</div>
+      </a>
+      <a class="nb-card" id="duologue" href="#">
+        <div class="nb-card__tag"><span>Self-play · emergent comm</span><span class="st">live</span></div>
+        <h3>Duologue</h3>
+        <p class="nb-card__dek">Two agents developing a shared symbolic channel through tool calls — what two models do to each other, not to a benchmark.</p>
+        <div class="nb-card__find"><b>Finding —</b> a stable private code emerges, then drifts; the drift is the interesting part.</div>
+        <div class="nb-card__go">Read the log →</div>
+      </a>
+      <a class="nb-card nb-card--draft" id="mem0" href="#">
+        <div class="nb-card__tag"><span>Systems · ETL pipeline</span><span class="st st--draft">in progress</span></div>
+        <h3>mem0-processor</h3>
+        <p class="nb-card__dek">A local-LLM ETL pipeline that reads its own Claude Code logs and maintains a self-updating memory — pipeline → artifact → daily use.</p>
+        <div class="nb-card__find"><b>Story —</b> ~60 models benchmarked through it; the systems narrative, honest-status, AWS legs marked in-progress.</div>
+        <div class="nb-card__go">Read the architecture →</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="work">
+    <div class="sec-label">How I work</div>
+    <div class="nb-marginalia">
+      <div class="nb-marginalia__label">In one line</div>
+      <div class="nb-marginalia__body">
+        <p style="margin:0;max-width:64ch">The differentiator isn't a model that got better - it's the measurement layer underneath:
+        seed discipline, paired effect sizes, and a strict regrade that keeps catching the pretty
+        results lying. I direct and decide; large models read code, run the statistics, and draft.
+        The judgment about what's true is mine.</p>
+      </div>
+    </div>
+    <div class="workgrid">
+      <div class="work">
+        <h3>Measured, not marketed</h3>
+        <p>Every number traces to a file in a repo - config hash in the filename, raw per-probe JSONL, strict score leading. No comparison that isn't backed by an artifact.</p>
+      </div>
+      <div class="work">
+        <h3>Negatives are first-class</h3>
+        <p>Two headline findings here were wrong and stayed on the page with the autopsy. A notebook that only records confirmed results is a brochure.</p>
+      </div>
+      <div class="work">
+        <h3>Lean by conviction</h3>
+        <p>Static HTML, ~1&nbsp;KB of JS, hand-authored SVG figures, no framework. Greppable all the way down — and it loads instantly on a phone.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p class="legal">© 2026 · Anya · exploratory research notes, provided as-is, no warranty · writeups &amp; figures CC&nbsp;BY · code MIT · uses cookieless analytics, no personal data collected</p>
+</footer>
+
+<script src="/assets/nb.js"></script>
+</body>
+</html>

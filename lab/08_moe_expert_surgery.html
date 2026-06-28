@@ -1,0 +1,1204 @@
+<!-- @dsCard group="Portfolio Hub" viewport="1100x1400" name="Writeup — Experts, not layers (MoE pivot)" subtitle="Pivot-explainer: why layer-RYS fails on MoE, the router-diff trick, the Huihui teardown" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Experts, not layers — The Vivisection Lab</title>
+<meta name="description" content="Point layer-surgery at a Mixture-of-Experts model and it stops working — informatively. The clean negative, a router-diff trick that recovers a gatekept clone map, and a 75%-pruned model that still runs.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E141A'/%3E%3Cpath d='M6 16 H15' stroke='%236F7C88' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 9' stroke='%236FCBD8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 23' stroke='%23E3C24A' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='15' cy='16' r='2.6' fill='%23ECEFF3'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  main { max-width: var(--page-max); margin: 0 auto; padding: var(--sp-7) var(--gutter) var(--sp-9); }
+  section { padding: var(--sp-7) 0 0; }
+  .dek { font-family: var(--font-serif); font-style: italic; font-size: var(--fs-dek); line-height: 1.4; color: var(--text-dim); max-width: 62ch; margin: var(--sp-5) 0 0; }
+  h2 { font-size: var(--fs-h2); margin: 0 0 var(--sp-4); }
+  h2 .num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); letter-spacing: .1em; vertical-align: 0.7em; margin-right: var(--sp-3); }
+  p { max-width: var(--measure); }
+  .dropcap { max-width: var(--measure); }
+  .dropcap::first-letter { font-family: var(--font-serif); font-weight: 500; font-size: 3.4em; line-height: 0.82; float: left; padding: 0.04em 0.12em 0 0; color: var(--accent-bright); }
+  .col-side { display: grid; grid-template-columns: 1fr 260px; gap: var(--sp-7); align-items: start; }
+  .col-side .aside { font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); border-left: 1px solid var(--border-strong); padding-left: var(--sp-4); font-style: italic; }
+  .col-side .aside .nb-kicker { font-style: normal; display: block; margin-bottom: var(--sp-2); }
+  .hl-acc { color: var(--accent); font-weight: 500; }
+  .figure { margin: var(--sp-6) 0; }
+  /* inline-token figures: theme via page vars; viewport swap is a CSS toggle, not a src swap */
+  .nb-plate svg { display: block; width: 100%; height: auto; }
+  .fig-mobile { display: none; }
+  @media (max-width: 760px) {
+    .col-side { grid-template-columns: 1fr; gap: var(--sp-5); }
+    .fig-desktop { display: none; }
+    .fig-mobile { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nb-nav">
+  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
+  <a href="#wall">The wall</a>
+  <a href="#toolkit">Toolkit</a>
+  <a href="#clonemap">Router diff</a>
+  <a href="#teardown">Teardown</a>
+  <span class="nb-nav__spacer"></span>
+  <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
+  <a href="#" data-theme-toggle>☼ Light</a>
+</nav>
+
+<main>
+  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · MoE branch</div>
+  <header class="nb-record">
+    <div class="nb-record__title">Experts, not layers</div>
+    <div class="nb-record__grid">
+      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v">Gemma-26B-A4B · Huihui4-8B-A4B · MoE</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">pivot-explainer · surgery in-flight</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Last revised</span><span class="nb-record__v">2026-06-21</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Battery</span><span class="nb-record__v">router-diff · REAP teardown (no fixed-seed eval yet)</span></div>
+      <div class="nb-record__field">
+        <span class="nb-record__k">Confidence</span>
+        <span class="nb-conf nb-conf--medium"><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span></span>medium — methods solid, capability preliminary</span>
+      </div>
+    </div>
+  </header>
+
+  <p class="dek">Every other specimen in this lab treats a <em>layer</em> as the thing you operate on. Point
+  the same machinery at a Mixture-of-Experts model and it stops working — and the way it stops working is
+  informative enough to be its own result. This is the page where the line forks.</p>
+
+  <aside class="nb-correction">
+    <div class="nb-correction__head"><span>⌦ Correction</span><span class="nb-correction__disp">retired — for MoE</span></div>
+    <div class="nb-correction__row"><span class="nb-correction__k">Hypothesis</span><span class="nb-correction__b">A layer is the universal unit of surgery — duplicate, prune, or damp one and capability moves, on any architecture.</span></div>
+    <div class="nb-correction__row"><span class="nb-correction__k">Why it looked true</span><span class="nb-correction__b">It held across every dense specimen — Granite, MiniCPM5 — where a layer genuinely <em>is</em> a unit of computation you can amplify.</span></div>
+    <div class="nb-correction__row"><span class="nb-correction__k">Why it failed</span><span class="nb-correction__b">On an MoE, duplicating a block re-runs the router and double-applies expert selection on an <em>uncalibrated</em> residual. The router sees an input distribution it was never trained on, null rates explode, strict scores floor. It's not "no effect" — it's "actively breaks the routing."</span></div>
+    <div class="nb-correction__row"><span class="nb-correction__k">Disposition</span><span class="nb-correction__b"><b>Retired for MoE.</b> The unit of <em>capacity</em> here is the expert, not the layer — so the line forks to the expert axis. The rest of this page is the lever it forks to.</span></div>
+  </aside>
+
+  <section id="wall">
+    <h2><span class="num">§1</span>The wall</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">Whole-layer surgery has no purchase on a Mixture-of-Experts model, for two
+        distinct reasons. <span class="hl-acc">Duplication corrupts routing</span> — a duplicated MoE block
+        is mechanically destructive, full stop. And <span class="hl-acc">pruning is the wrong axis, not
+        harmful</span>: pruning an MoE layer is an <em>output-compliance</em> fix — it unclogs a stalled
+        output valve so the model emits a clean letter or number — not a reasoning fix.</p>
+        <p>Whether the unclogged output is <em>correct</em> depends entirely on whether the latent
+        capability was already there. On factual multiple-choice (latent), unclogging surfaces a real
+        answer the model knew — a genuine, large gain. On 16-digit arithmetic (not latent), unclogging just
+        produces confident, well-formatted garbage: the strict phantom. Same mechanism, opposite verdict,
+        decided by latent-knowledge presence — the exact compliance-not-capability pattern, here as the
+        whole story rather than a footnote.</p>
+        <p>The reason is structural: on an MoE the unit of capacity is the <span class="hl-acc">expert</span>
+        — distributed across hundreds of them, ~8 active per token — not the layer. To touch what the model
+        actually knows, you have to operate on experts.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">The clean negative</span>
+        Came from Gemma 26B-A4B, a 30-layer MoE. "It failed the task" is at least two different failures —
+        broken routing vs. an unclogged valve over absent capability — and only the architecture tells you
+        which.
+      </aside>
+    </div>
+
+    <figure class="figure" id="fig1">
+      <p class="nb-plate__note">↳ a layer is a computation you can repeat; an expert bank is a routed lookup you can't repeat without breaking the route</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The layer is the wrong handle on a Mixture-of-Experts model</title>
+  <desc>Two diagrams. On a dense model, duplicating a layer amplifies a unit of computation and capability shifts. On a mixture-of-experts model, the layer is a router selecting a few of many experts; duplicating the whole layer re-runs the router on a shifted input, mis-fires the expert selection, and breaks the output. The operable unit on an MoE is the expert, not the layer.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .ok   { fill: var(--accent,#4FB2C2); }
+    .bad  { fill: var(--neg,#B98AD6); }
+    .lyr  { fill: var(--bg2,#141D26); stroke: var(--rule2,#27323D); stroke-width: 1.2; }
+    .lyrhi{ fill: none; stroke: var(--accent,#4FB2C2); stroke-width: 2; }
+    .exp  { fill: var(--bg2,#141D26); stroke: var(--rule2,#27323D); stroke-width: 0.8; }
+    .explit { fill: var(--accent,#4FB2C2); stroke: var(--accent,#4FB2C2); }
+    .expmis { fill: none; stroke: var(--neg,#B98AD6); stroke-width: 1; }
+    .gd   { stroke: var(--ink2,#A4B0BC); fill: none; }
+    .gdbad{ stroke: var(--neg,#B98AD6); fill: none; }
+  </style>
+
+  <rect x="0" y="0" width="720" height="500" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="32" font-size="18">The layer is the wrong handle</text>
+  <text class="mut" x="40" y="51" font-size="10">A layer is a computation you can repeat. An expert bank is a routed lookup you can&#8217;t repeat without breaking the route.</text>
+
+  <line x1="360" y1="72" x2="360" y2="452" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 4"/>
+
+  <!-- ===================== LEFT: DENSE ===================== -->
+  <text class="ink2" x="40" y="88" font-size="12" font-family="var(--font-serif,'Newsreader',Georgia,serif)">Dense &#183; duplicate a layer &#8594; amplify</text>
+
+  <!-- original stack -->
+  <g>
+    <rect class="lyr" x="70"  y="110" width="120" height="26" rx="3"/>
+    <rect class="lyr" x="70"  y="142" width="120" height="26" rx="3"/>
+    <rect class="lyrhi" x="70" y="174" width="120" height="26" rx="3"/>
+    <rect class="lyr" x="70"  y="206" width="120" height="26" rx="3"/>
+    <rect class="lyr" x="70"  y="238" width="120" height="26" rx="3"/>
+    <text class="ok" x="130" y="191" font-size="9" text-anchor="middle">layer L</text>
+  </g>
+
+  <!-- duplicate arrow -->
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--accent,#4FB2C2)"/>
+    </marker>
+    <marker id="arb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--neg,#B98AD6)"/>
+    </marker>
+  </defs>
+  <line x1="196" y1="187" x2="244" y2="187" class="gd" stroke-width="1.4" marker-end="url(#ar)"/>
+  <text class="ok" x="220" y="180" font-size="8.5" text-anchor="middle">dup</text>
+
+  <!-- amplified stack: L duplicated -->
+  <g>
+    <rect class="lyr" x="250" y="110" width="120" height="26" rx="3"/>
+    <rect class="lyr" x="250" y="142" width="120" height="26" rx="3"/>
+    <rect class="lyrhi" x="250" y="174" width="120" height="26" rx="3"/>
+    <rect class="lyrhi" x="250" y="206" width="120" height="26" rx="3"/>
+    <rect class="lyr" x="250" y="238" width="120" height="26" rx="3"/>
+    <rect class="lyr" x="250" y="270" width="120" height="26" rx="3"/>
+    <text class="ok" x="310" y="191" font-size="9" text-anchor="middle">L</text>
+    <text class="ok" x="310" y="223" font-size="9" text-anchor="middle">L&#8242; (copy)</text>
+  </g>
+
+  <text class="ok" x="130" y="330" font-size="11" text-anchor="middle">&#10003; capability shifts</text>
+  <text class="mut" x="200" y="350" font-size="9" text-anchor="middle">the unit of compute is repeated &#8212;</text>
+  <text class="mut" x="200" y="363" font-size="9" text-anchor="middle">a layer can be amplified.</text>
+
+  <!-- ===================== RIGHT: MoE ===================== -->
+  <text class="ink2" x="380" y="88" font-size="12" font-family="var(--font-serif,'Newsreader',Georgia,serif)">MoE &#183; the same dup re-runs the router</text>
+
+  <!-- input residual -->
+  <text class="mut" x="400" y="120" font-size="9">residual in</text>
+  <line x1="400" y1="126" x2="400" y2="150" class="gd" stroke-width="1.2" marker-end="url(#ar)"/>
+
+  <!-- router node -->
+  <rect x="372" y="150" width="56" height="22" rx="3" fill="var(--bg2,#141D26)" stroke="var(--accent,#4FB2C2)" stroke-width="1.5"/>
+  <text class="ok" x="400" y="165" font-size="9" text-anchor="middle">router</text>
+
+  <!-- expert bank: 8 cols x 4 rows = 32 shown, "of ~128"; ~8 lit -->
+  <g>
+    <!-- row template; lit ones get .explit -->
+    <!-- we lay 32 experts; mark 8 lit (the routed top-k) -->
+    <rect class="explit" x="372" y="190" width="12" height="12" rx="2"/>
+    <rect class="exp" x="388" y="190" width="12" height="12" rx="2"/>
+    <rect class="exp" x="404" y="190" width="12" height="12" rx="2"/>
+    <rect class="explit" x="420" y="190" width="12" height="12" rx="2"/>
+    <rect class="exp" x="436" y="190" width="12" height="12" rx="2"/>
+    <rect class="exp" x="452" y="190" width="12" height="12" rx="2"/>
+    <rect class="exp" x="468" y="190" width="12" height="12" rx="2"/>
+    <rect class="explit" x="484" y="190" width="12" height="12" rx="2"/>
+
+    <rect class="exp" x="372" y="206" width="12" height="12" rx="2"/>
+    <rect class="exp" x="388" y="206" width="12" height="12" rx="2"/>
+    <rect class="explit" x="404" y="206" width="12" height="12" rx="2"/>
+    <rect class="exp" x="420" y="206" width="12" height="12" rx="2"/>
+    <rect class="exp" x="436" y="206" width="12" height="12" rx="2"/>
+    <rect class="explit" x="452" y="206" width="12" height="12" rx="2"/>
+    <rect class="exp" x="468" y="206" width="12" height="12" rx="2"/>
+    <rect class="exp" x="484" y="206" width="12" height="12" rx="2"/>
+
+    <rect class="exp" x="372" y="222" width="12" height="12" rx="2"/>
+    <rect class="explit" x="388" y="222" width="12" height="12" rx="2"/>
+    <rect class="exp" x="404" y="222" width="12" height="12" rx="2"/>
+    <rect class="exp" x="420" y="222" width="12" height="12" rx="2"/>
+    <rect class="exp" x="436" y="222" width="12" height="12" rx="2"/>
+    <rect class="exp" x="452" y="222" width="12" height="12" rx="2"/>
+    <rect class="explit" x="468" y="222" width="12" height="12" rx="2"/>
+    <rect class="exp" x="484" y="222" width="12" height="12" rx="2"/>
+
+    <rect class="exp" x="372" y="238" width="12" height="12" rx="2"/>
+    <rect class="exp" x="388" y="238" width="12" height="12" rx="2"/>
+    <rect class="exp" x="404" y="238" width="12" height="12" rx="2"/>
+    <rect class="exp" x="420" y="238" width="12" height="12" rx="2"/>
+    <rect class="exp" x="436" y="238" width="12" height="12" rx="2"/>
+    <rect class="exp" x="452" y="238" width="12" height="12" rx="2"/>
+    <rect class="exp" x="468" y="238" width="12" height="12" rx="2"/>
+    <rect class="exp" x="484" y="238" width="12" height="12" rx="2"/>
+  </g>
+  <text class="mut" x="510" y="200" font-size="8.5">&#9632; ~8 of ~128</text>
+  <text class="mut" x="510" y="212" font-size="8.5">experts lit</text>
+  <text class="mut" x="510" y="224" font-size="8.5">per token</text>
+
+  <!-- duplicate the whole layer -> shifted input -->
+  <line x1="400" y1="252" x2="400" y2="284" class="gdbad" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arb)"/>
+  <text class="bad" x="408" y="272" font-size="8.5">dup &#8594; router re-runs on</text>
+  <text class="bad" x="408" y="283" font-size="8.5">an uncalibrated residual</text>
+
+  <!-- second router on shifted input: mis-fires -->
+  <rect x="372" y="288" width="56" height="22" rx="3" fill="var(--bg2,#141D26)" stroke="var(--neg,#B98AD6)" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <text class="bad" x="400" y="303" font-size="9" text-anchor="middle">router&#8242;</text>
+
+  <!-- mis-fired selection: different + sparse, dashed outline -->
+  <g>
+    <rect class="expmis" x="372" y="326" width="12" height="12" rx="2" stroke-dasharray="2 1.5"/>
+    <rect class="exp" x="388" y="326" width="12" height="12" rx="2"/>
+    <rect class="exp" x="404" y="326" width="12" height="12" rx="2"/>
+    <rect class="exp" x="420" y="326" width="12" height="12" rx="2"/>
+    <rect class="expmis" x="436" y="326" width="12" height="12" rx="2" stroke-dasharray="2 1.5"/>
+    <rect class="exp" x="452" y="326" width="12" height="12" rx="2"/>
+    <rect class="expmis" x="468" y="326" width="12" height="12" rx="2" stroke-dasharray="2 1.5"/>
+    <rect class="exp" x="484" y="326" width="12" height="12" rx="2"/>
+  </g>
+  <text class="bad" x="510" y="336" font-size="8.5">wrong experts &#8212;</text>
+  <text class="bad" x="510" y="348" font-size="8.5">null rates explode</text>
+
+  <text class="bad" x="400" y="378" font-size="11" text-anchor="middle">&#10007; routing breaks</text>
+  <text class="mut" x="500" y="398" font-size="9" text-anchor="middle">the route can&#8217;t be repeated &#8212; the</text>
+  <text class="mut" x="500" y="411" font-size="9" text-anchor="middle">operable unit is the <tspan class="ok">expert</tspan>, not the layer.</text>
+
+  <!-- takeaway -->
+  <line x1="40" y1="430" x2="680" y2="430" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="40" y="452" class="ink2" font-size="11">Dense surgery works because a layer is a <tspan class="ok">unit of computation</tspan> you can duplicate. On an MoE the layer is a <tspan class="ok">router</tspan> +</text>
+  <text x="40" y="468" class="ink2" font-size="11">expert bank; duplicating it re-runs the router on a shifted residual, <tspan class="bad">mis-fires selection, and breaks the output</tspan>.</text>
+  <text x="40" y="486" class="mut" font-size="10">To touch what the model knows, operate on the <tspan class="ok">expert</tspan> &#8212; the unit of capacity &#8212; not the layer.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The layer is the wrong handle on a Mixture-of-Experts model</title>
+  <desc>On a dense model, duplicating a layer amplifies a unit of computation and capability shifts. On a mixture-of-experts model, the layer is a router selecting a few of many experts; duplicating the whole layer re-runs the router on a shifted input, mis-fires the expert selection, and breaks the output. The operable unit on an MoE is the expert, not the layer.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .ok   { fill: var(--accent,#4FB2C2); }
+    .bad  { fill: var(--neg,#B98AD6); }
+    .lyr  { fill: var(--bg2,#141D26); stroke: var(--rule2,#27323D); stroke-width: 1.2; }
+    .lyrhi{ fill: none; stroke: var(--accent,#4FB2C2); stroke-width: 2; }
+    .exp  { fill: var(--bg2,#141D26); stroke: var(--rule2,#27323D); stroke-width: 0.8; }
+    .explit { fill: var(--accent,#4FB2C2); stroke: var(--accent,#4FB2C2); }
+    .expmis { fill: none; stroke: var(--neg,#B98AD6); stroke-width: 1; }
+    .gd   { stroke: var(--ink2,#A4B0BC); fill: none; }
+    .gdbad{ stroke: var(--neg,#B98AD6); fill: none; }
+  </style>
+
+  <rect x="0" y="0" width="400" height="720" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="17">The layer is the wrong handle</text>
+  <text class="mut" x="20" y="50" font-size="9">A layer is a computation you can repeat; an</text>
+  <text class="mut" x="20" y="62" font-size="9">expert bank is a route you can&#8217;t repeat unbroken.</text>
+
+  <defs>
+    <marker id="arm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--accent,#4FB2C2)"/>
+    </marker>
+    <marker id="arbm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--neg,#B98AD6)"/>
+    </marker>
+  </defs>
+
+  <!-- ===== TOP: DENSE ===== -->
+  <text class="ink2" x="20" y="88" font-size="11" font-family="var(--font-serif,'Newsreader',Georgia,serif)">Dense &#183; duplicate a layer &#8594; amplify</text>
+
+  <g>
+    <rect class="lyr"  x="40"  y="100" width="90" height="20" rx="3"/>
+    <rect class="lyrhi" x="40" y="124" width="90" height="20" rx="3"/>
+    <rect class="lyr"  x="40"  y="148" width="90" height="20" rx="3"/>
+    <text class="ok" x="85" y="138" font-size="8.5" text-anchor="middle">layer L</text>
+  </g>
+  <line x1="136" y1="134" x2="184" y2="134" class="gd" stroke-width="1.4" marker-end="url(#arm)"/>
+  <text class="ok" x="160" y="127" font-size="8" text-anchor="middle">dup</text>
+  <g>
+    <rect class="lyr"  x="190" y="92"  width="90" height="20" rx="3"/>
+    <rect class="lyrhi" x="190" y="116" width="90" height="20" rx="3"/>
+    <rect class="lyrhi" x="190" y="140" width="90" height="20" rx="3"/>
+    <rect class="lyr"  x="190" y="164" width="90" height="20" rx="3"/>
+    <text class="ok" x="235" y="130" font-size="8" text-anchor="middle">L</text>
+    <text class="ok" x="235" y="154" font-size="8" text-anchor="middle">L&#8242;</text>
+  </g>
+  <text class="ok" x="85" y="190" font-size="10" text-anchor="middle">&#10003; capability shifts</text>
+
+  <line x1="20" y1="206" x2="380" y2="206" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 4"/>
+
+  <!-- ===== BOTTOM: MoE ===== -->
+  <text class="ink2" x="20" y="232" font-size="11" font-family="var(--font-serif,'Newsreader',Georgia,serif)">MoE &#183; the same dup re-runs the router</text>
+
+  <line x1="80" y1="244" x2="80" y2="266" class="gd" stroke-width="1.2" marker-end="url(#arm)"/>
+  <rect x="52" y="266" width="56" height="20" rx="3" fill="var(--bg2,#141D26)" stroke="var(--accent,#4FB2C2)" stroke-width="1.5"/>
+  <text class="ok" x="80" y="280" font-size="9" text-anchor="middle">router</text>
+
+  <!-- expert bank 8x3, 8 lit -->
+  <g>
+    <rect class="explit" x="52" y="300" width="11" height="11" rx="2"/>
+    <rect class="exp" x="67" y="300" width="11" height="11" rx="2"/>
+    <rect class="exp" x="82" y="300" width="11" height="11" rx="2"/>
+    <rect class="explit" x="97" y="300" width="11" height="11" rx="2"/>
+    <rect class="exp" x="112" y="300" width="11" height="11" rx="2"/>
+    <rect class="exp" x="127" y="300" width="11" height="11" rx="2"/>
+    <rect class="explit" x="142" y="300" width="11" height="11" rx="2"/>
+    <rect class="exp" x="157" y="300" width="11" height="11" rx="2"/>
+
+    <rect class="exp" x="52" y="315" width="11" height="11" rx="2"/>
+    <rect class="explit" x="67" y="315" width="11" height="11" rx="2"/>
+    <rect class="exp" x="82" y="315" width="11" height="11" rx="2"/>
+    <rect class="exp" x="97" y="315" width="11" height="11" rx="2"/>
+    <rect class="explit" x="112" y="315" width="11" height="11" rx="2"/>
+    <rect class="exp" x="127" y="315" width="11" height="11" rx="2"/>
+    <rect class="exp" x="142" y="315" width="11" height="11" rx="2"/>
+    <rect class="explit" x="157" y="315" width="11" height="11" rx="2"/>
+
+    <rect class="exp" x="52" y="330" width="11" height="11" rx="2"/>
+    <rect class="exp" x="67" y="330" width="11" height="11" rx="2"/>
+    <rect class="explit" x="82" y="330" width="11" height="11" rx="2"/>
+    <rect class="exp" x="97" y="330" width="11" height="11" rx="2"/>
+    <rect class="exp" x="112" y="330" width="11" height="11" rx="2"/>
+    <rect class="explit" x="127" y="330" width="11" height="11" rx="2"/>
+    <rect class="exp" x="142" y="330" width="11" height="11" rx="2"/>
+    <rect class="exp" x="157" y="330" width="11" height="11" rx="2"/>
+  </g>
+  <text class="mut" x="182" y="312" font-size="8">&#9632; ~8 of ~128</text>
+  <text class="mut" x="182" y="324" font-size="8">experts lit</text>
+  <text class="mut" x="182" y="336" font-size="8">per token</text>
+
+  <line x1="80" y1="346" x2="80" y2="376" class="gdbad" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#arbm)"/>
+  <text class="bad" x="92" y="364" font-size="8">dup &#8594; router re-runs on</text>
+  <text class="bad" x="92" y="375" font-size="8">an uncalibrated residual</text>
+
+  <rect x="52" y="380" width="56" height="20" rx="3" fill="var(--bg2,#141D26)" stroke="var(--neg,#B98AD6)" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <text class="bad" x="80" y="394" font-size="9" text-anchor="middle">router&#8242;</text>
+
+  <g>
+    <rect class="expmis" x="52" y="414" width="11" height="11" rx="2" stroke-dasharray="2 1.5"/>
+    <rect class="exp" x="67" y="414" width="11" height="11" rx="2"/>
+    <rect class="exp" x="82" y="414" width="11" height="11" rx="2"/>
+    <rect class="expmis" x="97" y="414" width="11" height="11" rx="2" stroke-dasharray="2 1.5"/>
+    <rect class="exp" x="112" y="414" width="11" height="11" rx="2"/>
+    <rect class="expmis" x="127" y="414" width="11" height="11" rx="2" stroke-dasharray="2 1.5"/>
+    <rect class="exp" x="142" y="414" width="11" height="11" rx="2"/>
+    <rect class="exp" x="157" y="414" width="11" height="11" rx="2"/>
+  </g>
+  <text class="bad" x="182" y="420" font-size="8">wrong experts &#8212;</text>
+  <text class="bad" x="182" y="432" font-size="8">null rates explode</text>
+
+  <text class="bad" x="80" y="456" font-size="10" text-anchor="middle">&#10007; routing breaks</text>
+
+  <!-- takeaway -->
+  <line x1="20" y1="478" x2="380" y2="478" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="20" y="500" class="ink2" font-size="10.5">Dense surgery works because a layer is a</text>
+  <text x="20" y="515" class="ink2" font-size="10.5"><tspan class="ok">unit of computation</tspan> you can duplicate.</text>
+  <text x="20" y="536" class="ink2" font-size="10.5">On an MoE the layer is a <tspan class="ok">router</tspan> + expert</text>
+  <text x="20" y="551" class="ink2" font-size="10.5">bank; duplicating it re-runs the router on a</text>
+  <text x="20" y="566" class="ink2" font-size="10.5">shifted residual and <tspan class="bad">breaks the output</tspan>.</text>
+  <text x="20" y="587" class="mut" font-size="9.5">The operable unit of capacity is the</text>
+  <text x="20" y="600" class="mut" font-size="9.5"><tspan class="ok">expert</tspan>, not the layer.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 1 —</b> the layer is the wrong handle. Dense (left): duplicate a layer, amplify a unit of computation, capability shifts. MoE (right): duplicate the layer, re-run the router on a shifted residual, mis-fire the expert selection, break the output.</figcaption>
+      <div class="nb-prov"><span><b>source</b> §"The wall" · rys_reap.md</span><span><b>type</b> schematic — no data pull</span><span><b>safety</b> shape/lightness + ✓/✗, not red/green</span></div>
+    </figure>
+  </section>
+
+  <section id="toolkit">
+    <h2><span class="num">§2</span>The expert-surgery toolkit</h2>
+    <p>Three operations on the expert axis, three different jobs. REAP is a <em>functional-importance</em>
+    cut — it measures each expert's data-conditioned contribution (gate weight × output, aggregated over a
+    calibration set) and culls the low-saliency ones. That's a "what does the model actually use" cut, the
+    opposite of the geometric cosine/delta scans the dense work uses.</p>
+
+    <table class="nb-table" style="margin-top:var(--sp-5)">
+      <thead><tr><th>Technique</th><th>What it does</th><th>Use case</th></tr></thead>
+      <tbody>
+        <tr><td><b>REAP</b> · prune</td><td>delete low-utility experts (router-weighted activation pruning)</td><td>shrink total params</td></tr>
+        <tr><td><b>ExpertClone</b> · merge</td><td>blend similar experts</td><td>densify, preserve knowledge</td></tr>
+        <tr><td><b>SEC</b> · clone</td><td>overwrite junk slots with copies of specialist experts</td><td>bias routing toward specialists, no retraining</td></tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top:var(--sp-5)">REAP's published headline (Cerebras,
+    <a href="https://arxiv.org/abs/2510.13999">arXiv&nbsp;2510.13999</a>) is <span class="hl-acc">50% expert
+    compression, near-lossless on code</span> for very large MoEs (Qwen3-Coder-480B, Kimi-K2), with pruning
+    beating merging on generative tasks because merging loses routing control. The lab's own datapoints
+    below deliberately go <em>deeper</em> than that documented window, into the degraded-but-usable regime.
+    The two concrete results that follow are an SEC replay and a REAP teardown; the lab's <em>own</em> runs
+    of both are still ahead.</p>
+  </section>
+
+  <section id="clonemap">
+    <h2><span class="num">§3</span>You can steal a clone map by diffing routers</h2>
+    <div class="col-side">
+      <div>
+        <p class="dropcap">Someone had surgically re-biased an MoE's routing toward its specialist experts,
+        shipped the result, and withheld the how. xpressai published a modified MoE — the live card is
+        <code>Qwen3.6-35B-A3B-ExpertClone-Logic</code> — but the implementation repo is <span class="hl-acc">not
+        publicly accessible</span> (and not on the Wayback Machine as of 2026-06), so the profiling
+        methodology is permanently opaque. That opacity is exactly what raises the stakes of the router-diff
+        method: without it, the surgery couldn't be recovered at all.</p>
+        <p>You don't need their code to <em>replay</em> the surgery, because of one architectural fact: the
+        router tensor (<code>ffn_gate_inp.weight</code>) is <span class="hl-acc">F32 in every quant</span> of
+        the same base. In the cloned file, the victim router columns were overwritten with the donor's — so
+        they now match the donor. Therefore a router column that <em>matches base</em> is a donor
+        (untouched); a column that <em>differs from base</em> is a victim (overwritten). Donor→victim
+        direction falls out definitively, no guessing.</p>
+        <p>Run that diff and you recover the clone map — <span class="hl-acc">39 of 40 layers cleanly</span>
+        (layer 39 was genuinely untouched), with victim indices systematically small (0–17, the low-firing
+        experts) and donors spread (1–229), which independently confirms a "lowest-total-firing expert as
+        victim" selection rule. Then replay it: 39 × 4 = 156 mmap slab copies onto a runnable pre-quantized
+        IQ2_M of the same base, near-instant, quant-agnostic. You've reproduced a gatekept model's surgery
+        on hardware you own, without their code.</p>
+      </div>
+      <aside class="aside">
+        <span class="nb-kicker">Honest scope</span>
+        This <em>extracts and replays</em> a published decision; it does not reverse-engineer the profiling
+        step (what corpus, what criteria chose the donors). Building <em>own</em> clone maps from scratch is
+        still future work — and the capability eval so far is preliminary, no fixed seed yet.
+      </aside>
+    </div>
+
+    <figure class="figure" id="fig2">
+      <p class="nb-plate__note">↳ victims hug the low-index slots across 39 of 40 layers; layer 39 is entirely donor</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Recovering a clone map by diffing routers against the base model</title>
+  <desc>A grid of expert slots by layer. Cells are marked by whether each router column matches the base model or differs from it. Columns that differ — the overwritten victims — cluster in the low-index slots across 39 of 40 layers, while one layer is entirely unchanged. Because the router is full-precision in every quant, diffing it against the base recovers exactly which experts were cloned where, without the original surgery code.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .vlab { fill: var(--cause,#E3C24A); }
+    .vic  { fill: var(--cause,#E3C24A); }
+    .donor{ fill: var(--accent,#4FB2C2); }
+  </style>
+
+  <rect x="0" y="0" width="720" height="500" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="32" font-size="18">Recovering a clone map from the routers</text>
+  <text class="mut" x="40" y="51" font-size="10">The router (ffn_gate_inp.weight) is F32 in every quant &#8212; so diffing it against the base recovers exactly which experts were overwritten.</text>
+
+  <!-- ===== inset logic (left) ===== -->
+  <text class="ink2" x="40" y="90" font-size="11" font-family="var(--font-serif,'Newsreader',Georgia,serif)">the diff rule</text>
+  <g font-size="9">
+    <rect x="40" y="104" width="14" height="14" rx="2" class="donor"/>
+    <text x="62" y="114" class="ink2">column == base</text>
+    <text x="62" y="126" class="mut">&#8594; donor (untouched)</text>
+
+    <rect x="40" y="146" width="14" height="14" rx="2" class="vic"/>
+    <text x="62" y="156" class="ink2">column &#8800; base</text>
+    <text x="62" y="168" class="mut">&#8594; victim (overwritten</text>
+    <text x="62" y="180" class="mut">&#160;&#160;&#160;with donor&#8217;s column)</text>
+  </g>
+  <text class="mut" x="40" y="212" font-size="9">donor &#8594; victim direction</text>
+  <text class="mut" x="40" y="224" font-size="9">falls out definitively &#8212;</text>
+  <text class="mut" x="40" y="236" font-size="9">no guessing.</text>
+
+  <text class="vlab" x="40" y="276" font-size="10">39 of 40 layers recovered</text>
+  <text class="mut" x="40" y="290" font-size="9">cleanly. 4 victims/layer,</text>
+  <text class="mut" x="40" y="302" font-size="9">all in low slots 0&#8211;17;</text>
+  <text class="mut" x="40" y="314" font-size="9">donors spread 1&#8211;229.</text>
+  <text class="ink2" x="40" y="338" font-size="9">&#8594; confirms a &#8220;lowest-</text>
+  <text class="ink2" x="40" y="350" font-size="9">&#160;&#160;&#160;firing expert = victim&#8221;</text>
+  <text class="ink2" x="40" y="362" font-size="9">&#160;&#160;&#160;selection rule.</text>
+
+  <!-- ===== the grid (right) ===== -->
+  <!-- plot box x 360..660 (expert 0..230), y 70..430 (layer 0..39) -->
+  <rect x="360" y="70" width="300" height="360" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+
+  <!-- faint donor field: implies the untouched majority across 1..229 -->
+  <rect x="360" y="70" width="300" height="360" fill="var(--accent,#4FB2C2)" opacity="0.05"/>
+  <g stroke="var(--accent,#4FB2C2)" stroke-width="0.5" opacity="0.18">
+    <line x1="392" y1="70" x2="392" y2="430"/>
+    <line x1="450" y1="70" x2="450" y2="430"/>
+    <line x1="520" y1="70" x2="520" y2="430"/>
+    <line x1="590" y1="70" x2="590" y2="430"/>
+  </g>
+  <text class="donor" x="540" y="250" font-size="9" text-anchor="middle" opacity="0.6">donor field &#8212; ~226 untouched experts/layer</text>
+
+  <!-- victim-zone bracket 0..17 -->
+  <rect x="360" y="70" width="30" height="360" fill="var(--cause,#E3C24A)" opacity="0.07"/>
+  <text class="vlab" x="375" y="446" font-size="8.5" text-anchor="middle">slots 0&#8211;17</text>
+
+  <!-- axes labels -->
+  <text class="mut" x="510" y="446" font-size="9" text-anchor="middle">expert slot index &#8594; (0 &#8230; 229)</text>
+  <text x="345" y="250" transform="rotate(-90 345 250)" text-anchor="middle" class="mut" font-size="9">layer 0 &#8594; 39</text>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="356" y="74">L0</text>
+    <text x="356" y="254">L19</text>
+    <text x="356" y="425">L38</text>
+  </g>
+
+  <!-- victim marks (generated; 4/layer in slots 0-17, none on layer 39) -->
+  <g>
+    <rect x="363.2" y="68.0" width="4" height="4" class="vic"/>
+    <rect x="371.0" y="68.0" width="4" height="4" class="vic"/>
+    <rect x="373.7" y="68.0" width="4" height="4" class="vic"/>
+    <rect x="380.2" y="68.0" width="4" height="4" class="vic"/>
+    <rect x="359.3" y="77.2" width="4" height="4" class="vic"/>
+    <rect x="360.6" y="77.2" width="4" height="4" class="vic"/>
+    <rect x="361.9" y="77.2" width="4" height="4" class="vic"/>
+    <rect x="364.5" y="77.2" width="4" height="4" class="vic"/>
+    <rect x="358.0" y="86.5" width="4" height="4" class="vic"/>
+    <rect x="359.3" y="86.5" width="4" height="4" class="vic"/>
+    <rect x="365.8" y="86.5" width="4" height="4" class="vic"/>
+    <rect x="378.9" y="86.5" width="4" height="4" class="vic"/>
+    <rect x="359.3" y="95.7" width="4" height="4" class="vic"/>
+    <rect x="360.6" y="95.7" width="4" height="4" class="vic"/>
+    <rect x="375.0" y="95.7" width="4" height="4" class="vic"/>
+    <rect x="378.9" y="95.7" width="4" height="4" class="vic"/>
+    <rect x="358.0" y="104.9" width="4" height="4" class="vic"/>
+    <rect x="360.6" y="104.9" width="4" height="4" class="vic"/>
+    <rect x="367.1" y="104.9" width="4" height="4" class="vic"/>
+    <rect x="375.0" y="104.9" width="4" height="4" class="vic"/>
+    <rect x="359.3" y="114.2" width="4" height="4" class="vic"/>
+    <rect x="361.9" y="114.2" width="4" height="4" class="vic"/>
+    <rect x="367.1" y="114.2" width="4" height="4" class="vic"/>
+    <rect x="369.7" y="114.2" width="4" height="4" class="vic"/>
+    <rect x="358.0" y="123.4" width="4" height="4" class="vic"/>
+    <rect x="359.3" y="123.4" width="4" height="4" class="vic"/>
+    <rect x="367.1" y="123.4" width="4" height="4" class="vic"/>
+    <rect x="373.7" y="123.4" width="4" height="4" class="vic"/>
+    <rect x="363.2" y="132.6" width="4" height="4" class="vic"/>
+    <rect x="365.8" y="132.6" width="4" height="4" class="vic"/>
+    <rect x="369.7" y="132.6" width="4" height="4" class="vic"/>
+    <rect x="380.2" y="132.6" width="4" height="4" class="vic"/>
+    <rect x="361.9" y="141.8" width="4" height="4" class="vic"/>
+    <rect x="363.2" y="141.8" width="4" height="4" class="vic"/>
+    <rect x="368.4" y="141.8" width="4" height="4" class="vic"/>
+    <rect x="369.7" y="141.8" width="4" height="4" class="vic"/>
+    <rect x="361.9" y="151.1" width="4" height="4" class="vic"/>
+    <rect x="364.5" y="151.1" width="4" height="4" class="vic"/>
+    <rect x="365.8" y="151.1" width="4" height="4" class="vic"/>
+    <rect x="380.2" y="151.1" width="4" height="4" class="vic"/>
+    <rect x="359.3" y="160.3" width="4" height="4" class="vic"/>
+    <rect x="360.6" y="160.3" width="4" height="4" class="vic"/>
+    <rect x="361.9" y="160.3" width="4" height="4" class="vic"/>
+    <rect x="369.7" y="160.3" width="4" height="4" class="vic"/>
+    <rect x="365.8" y="169.5" width="4" height="4" class="vic"/>
+    <rect x="373.7" y="169.5" width="4" height="4" class="vic"/>
+    <rect x="375.0" y="169.5" width="4" height="4" class="vic"/>
+    <rect x="377.6" y="169.5" width="4" height="4" class="vic"/>
+    <rect x="364.5" y="178.8" width="4" height="4" class="vic"/>
+    <rect x="371.0" y="178.8" width="4" height="4" class="vic"/>
+    <rect x="376.3" y="178.8" width="4" height="4" class="vic"/>
+    <rect x="378.9" y="178.8" width="4" height="4" class="vic"/>
+    <rect x="364.5" y="188.0" width="4" height="4" class="vic"/>
+    <rect x="367.1" y="188.0" width="4" height="4" class="vic"/>
+    <rect x="369.7" y="188.0" width="4" height="4" class="vic"/>
+    <rect x="372.3" y="188.0" width="4" height="4" class="vic"/>
+    <rect x="360.6" y="197.2" width="4" height="4" class="vic"/>
+    <rect x="367.1" y="197.2" width="4" height="4" class="vic"/>
+    <rect x="368.4" y="197.2" width="4" height="4" class="vic"/>
+    <rect x="369.7" y="197.2" width="4" height="4" class="vic"/>
+    <rect x="363.2" y="206.5" width="4" height="4" class="vic"/>
+    <rect x="371.0" y="206.5" width="4" height="4" class="vic"/>
+    <rect x="376.3" y="206.5" width="4" height="4" class="vic"/>
+    <rect x="377.6" y="206.5" width="4" height="4" class="vic"/>
+    <rect x="360.6" y="215.7" width="4" height="4" class="vic"/>
+    <rect x="361.9" y="215.7" width="4" height="4" class="vic"/>
+    <rect x="375.0" y="215.7" width="4" height="4" class="vic"/>
+    <rect x="380.2" y="215.7" width="4" height="4" class="vic"/>
+    <rect x="363.2" y="224.9" width="4" height="4" class="vic"/>
+    <rect x="365.8" y="224.9" width="4" height="4" class="vic"/>
+    <rect x="371.0" y="224.9" width="4" height="4" class="vic"/>
+    <rect x="377.6" y="224.9" width="4" height="4" class="vic"/>
+    <rect x="359.3" y="234.2" width="4" height="4" class="vic"/>
+    <rect x="360.6" y="234.2" width="4" height="4" class="vic"/>
+    <rect x="364.5" y="234.2" width="4" height="4" class="vic"/>
+    <rect x="371.0" y="234.2" width="4" height="4" class="vic"/>
+    <rect x="359.3" y="243.4" width="4" height="4" class="vic"/>
+    <rect x="372.3" y="243.4" width="4" height="4" class="vic"/>
+    <rect x="376.3" y="243.4" width="4" height="4" class="vic"/>
+    <rect x="377.6" y="243.4" width="4" height="4" class="vic"/>
+    <rect x="360.6" y="252.6" width="4" height="4" class="vic"/>
+    <rect x="368.4" y="252.6" width="4" height="4" class="vic"/>
+    <rect x="372.3" y="252.6" width="4" height="4" class="vic"/>
+    <rect x="377.6" y="252.6" width="4" height="4" class="vic"/>
+    <rect x="359.3" y="261.8" width="4" height="4" class="vic"/>
+    <rect x="360.6" y="261.8" width="4" height="4" class="vic"/>
+    <rect x="369.7" y="261.8" width="4" height="4" class="vic"/>
+    <rect x="371.0" y="261.8" width="4" height="4" class="vic"/>
+    <rect x="369.7" y="271.1" width="4" height="4" class="vic"/>
+    <rect x="373.7" y="271.1" width="4" height="4" class="vic"/>
+    <rect x="376.3" y="271.1" width="4" height="4" class="vic"/>
+    <rect x="380.2" y="271.1" width="4" height="4" class="vic"/>
+    <rect x="358.0" y="280.3" width="4" height="4" class="vic"/>
+    <rect x="364.5" y="280.3" width="4" height="4" class="vic"/>
+    <rect x="372.3" y="280.3" width="4" height="4" class="vic"/>
+    <rect x="376.3" y="280.3" width="4" height="4" class="vic"/>
+    <rect x="358.0" y="289.5" width="4" height="4" class="vic"/>
+    <rect x="361.9" y="289.5" width="4" height="4" class="vic"/>
+    <rect x="364.5" y="289.5" width="4" height="4" class="vic"/>
+    <rect x="377.6" y="289.5" width="4" height="4" class="vic"/>
+    <rect x="363.2" y="298.8" width="4" height="4" class="vic"/>
+    <rect x="365.8" y="298.8" width="4" height="4" class="vic"/>
+    <rect x="369.7" y="298.8" width="4" height="4" class="vic"/>
+    <rect x="372.3" y="298.8" width="4" height="4" class="vic"/>
+    <rect x="367.1" y="308.0" width="4" height="4" class="vic"/>
+    <rect x="373.7" y="308.0" width="4" height="4" class="vic"/>
+    <rect x="376.3" y="308.0" width="4" height="4" class="vic"/>
+    <rect x="378.9" y="308.0" width="4" height="4" class="vic"/>
+    <rect x="360.6" y="317.2" width="4" height="4" class="vic"/>
+    <rect x="364.5" y="317.2" width="4" height="4" class="vic"/>
+    <rect x="367.1" y="317.2" width="4" height="4" class="vic"/>
+    <rect x="377.6" y="317.2" width="4" height="4" class="vic"/>
+    <rect x="363.2" y="326.5" width="4" height="4" class="vic"/>
+    <rect x="368.4" y="326.5" width="4" height="4" class="vic"/>
+    <rect x="373.7" y="326.5" width="4" height="4" class="vic"/>
+    <rect x="375.0" y="326.5" width="4" height="4" class="vic"/>
+    <rect x="364.5" y="335.7" width="4" height="4" class="vic"/>
+    <rect x="368.4" y="335.7" width="4" height="4" class="vic"/>
+    <rect x="375.0" y="335.7" width="4" height="4" class="vic"/>
+    <rect x="380.2" y="335.7" width="4" height="4" class="vic"/>
+    <rect x="359.3" y="344.9" width="4" height="4" class="vic"/>
+    <rect x="363.2" y="344.9" width="4" height="4" class="vic"/>
+    <rect x="367.1" y="344.9" width="4" height="4" class="vic"/>
+    <rect x="373.7" y="344.9" width="4" height="4" class="vic"/>
+    <rect x="363.2" y="354.2" width="4" height="4" class="vic"/>
+    <rect x="364.5" y="354.2" width="4" height="4" class="vic"/>
+    <rect x="367.1" y="354.2" width="4" height="4" class="vic"/>
+    <rect x="371.0" y="354.2" width="4" height="4" class="vic"/>
+    <rect x="358.0" y="363.4" width="4" height="4" class="vic"/>
+    <rect x="367.1" y="363.4" width="4" height="4" class="vic"/>
+    <rect x="375.0" y="363.4" width="4" height="4" class="vic"/>
+    <rect x="377.6" y="363.4" width="4" height="4" class="vic"/>
+    <rect x="358.0" y="372.6" width="4" height="4" class="vic"/>
+    <rect x="364.5" y="372.6" width="4" height="4" class="vic"/>
+    <rect x="368.4" y="372.6" width="4" height="4" class="vic"/>
+    <rect x="369.7" y="372.6" width="4" height="4" class="vic"/>
+    <rect x="363.2" y="381.8" width="4" height="4" class="vic"/>
+    <rect x="369.7" y="381.8" width="4" height="4" class="vic"/>
+    <rect x="372.3" y="381.8" width="4" height="4" class="vic"/>
+    <rect x="375.0" y="381.8" width="4" height="4" class="vic"/>
+    <rect x="359.3" y="391.1" width="4" height="4" class="vic"/>
+    <rect x="363.2" y="391.1" width="4" height="4" class="vic"/>
+    <rect x="367.1" y="391.1" width="4" height="4" class="vic"/>
+    <rect x="371.0" y="391.1" width="4" height="4" class="vic"/>
+    <rect x="365.8" y="400.3" width="4" height="4" class="vic"/>
+    <rect x="373.7" y="400.3" width="4" height="4" class="vic"/>
+    <rect x="378.9" y="400.3" width="4" height="4" class="vic"/>
+    <rect x="380.2" y="400.3" width="4" height="4" class="vic"/>
+    <rect x="361.9" y="409.5" width="4" height="4" class="vic"/>
+    <rect x="371.0" y="409.5" width="4" height="4" class="vic"/>
+    <rect x="373.7" y="409.5" width="4" height="4" class="vic"/>
+    <rect x="377.6" y="409.5" width="4" height="4" class="vic"/>
+    <rect x="359.3" y="418.8" width="4" height="4" class="vic"/>
+    <rect x="365.8" y="418.8" width="4" height="4" class="vic"/>
+    <rect x="373.7" y="418.8" width="4" height="4" class="vic"/>
+    <rect x="378.9" y="418.8" width="4" height="4" class="vic"/>
+  </g>
+
+  <!-- layer 39: clean row, annotated -->
+  <line x1="360" y1="425.5" x2="660" y2="425.5" stroke="var(--ink2,#A4B0BC)" stroke-width="0.8" stroke-dasharray="3 3"/>
+  <text class="ink2" x="664" y="428" font-size="8">L39 &#8212; untouched (all donor)</text>
+
+  <!-- legend -->
+  <g font-size="9">
+    <rect x="360" y="462" width="9" height="9" class="vic"/>
+    <text x="374" y="470" class="ink2">victim (router column differs from base)</text>
+    <rect x="360" y="478" width="9" height="9" class="donor" opacity="0.35"/>
+    <text x="374" y="486" class="ink2">donor field (column matches base)</text>
+  </g>
+
+  <!-- takeaway -->
+  <line x1="40" y1="462" x2="330" y2="462" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="40" y="480" class="ink2" font-size="10">Replay: 39 &#215; 4 = 156 mmap slab copies onto a</text>
+  <text x="40" y="494" class="ink2" font-size="10">runnable IQ2_M &#8212; a gatekept surgery, reproduced.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Recovering a clone map by diffing routers against the base model</title>
+  <desc>A grid of expert slots by layer. Cells are marked by whether each router column matches the base model or differs from it. Columns that differ — the overwritten victims — cluster in the low-index slots across 39 of 40 layers, while one layer is entirely unchanged. Because the router is full-precision in every quant, diffing it against the base recovers exactly which experts were cloned where, without the original surgery code.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .vlab { fill: var(--cause,#E3C24A); }
+    .vic  { fill: var(--cause,#E3C24A); }
+    .donor{ fill: var(--accent,#4FB2C2); }
+  </style>
+
+  <rect x="0" y="0" width="400" height="720" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="16">Recovering a clone map from routers</text>
+  <text class="mut" x="20" y="50" font-size="9">The router is F32 in every quant &#8212; diff it against</text>
+  <text class="mut" x="20" y="62" font-size="9">the base to recover which experts were overwritten.</text>
+
+  <!-- diff rule legend -->
+  <g font-size="9">
+    <rect x="20" y="78" width="12" height="12" rx="2" class="donor"/>
+    <text x="38" y="88" class="ink2">== base &#8594; donor</text>
+    <rect x="170" y="78" width="12" height="12" rx="2" class="vic"/>
+    <text x="188" y="88" class="ink2">&#8800; base &#8594; victim</text>
+  </g>
+
+  <!-- plot box x 70..330 (expert 0..230), y 130..560 (layer 0..39) -->
+  <rect x="70" y="130" width="260" height="430" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <rect x="70" y="130" width="260" height="430" fill="var(--accent,#4FB2C2)" opacity="0.05"/>
+  <g stroke="var(--accent,#4FB2C2)" stroke-width="0.5" opacity="0.18">
+    <line x1="120" y1="130" x2="120" y2="560"/>
+    <line x1="190" y1="130" x2="190" y2="560"/>
+    <line x1="260" y1="130" x2="260" y2="560"/>
+  </g>
+  <text class="donor" x="225" y="350" font-size="8.5" text-anchor="middle" opacity="0.6">donor field &#8212; ~226 untouched/layer</text>
+
+  <!-- victim zone 0..17 -->
+  <rect x="70" y="130" width="20" height="430" fill="var(--cause,#E3C24A)" opacity="0.08"/>
+  <text class="vlab" x="80" y="576" font-size="8" text-anchor="middle">0&#8211;17</text>
+
+  <text class="mut" x="225" y="576" font-size="8.5" text-anchor="middle">expert slot index &#8594; (0 &#8230; 229)</text>
+  <text x="55" y="345" transform="rotate(-90 55 345)" text-anchor="middle" class="mut" font-size="8.5">layer 0 &#8594; 39</text>
+
+  <!-- victim marks (mobile) -->
+  <g>
+    <rect x="69.1" y="148.0" width="4" height="4" class="vic"/>
+    <rect x="73.7" y="148.0" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="148.0" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="148.0" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="158.5" width="4" height="4" class="vic"/>
+    <rect x="69.1" y="158.5" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="158.5" width="4" height="4" class="vic"/>
+    <rect x="79.3" y="158.5" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="169.0" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="169.0" width="4" height="4" class="vic"/>
+    <rect x="78.2" y="169.0" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="169.0" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="179.5" width="4" height="4" class="vic"/>
+    <rect x="70.3" y="179.5" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="179.5" width="4" height="4" class="vic"/>
+    <rect x="78.2" y="179.5" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="190.1" width="4" height="4" class="vic"/>
+    <rect x="73.7" y="190.1" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="190.1" width="4" height="4" class="vic"/>
+    <rect x="81.6" y="190.1" width="4" height="4" class="vic"/>
+    <rect x="69.1" y="200.6" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="200.6" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="200.6" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="200.6" width="4" height="4" class="vic"/>
+    <rect x="75.9" y="211.1" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="211.1" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="211.1" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="211.1" width="4" height="4" class="vic"/>
+    <rect x="69.1" y="221.6" width="4" height="4" class="vic"/>
+    <rect x="70.3" y="221.6" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="221.6" width="4" height="4" class="vic"/>
+    <rect x="78.2" y="221.6" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="232.1" width="4" height="4" class="vic"/>
+    <rect x="79.3" y="232.1" width="4" height="4" class="vic"/>
+    <rect x="82.7" y="232.1" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="232.1" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="242.6" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="242.6" width="4" height="4" class="vic"/>
+    <rect x="73.7" y="242.6" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="242.6" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="253.1" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="253.1" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="253.1" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="253.1" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="263.6" width="4" height="4" class="vic"/>
+    <rect x="78.2" y="263.6" width="4" height="4" class="vic"/>
+    <rect x="79.3" y="263.6" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="263.6" width="4" height="4" class="vic"/>
+    <rect x="70.3" y="274.2" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="274.2" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="274.2" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="274.2" width="4" height="4" class="vic"/>
+    <rect x="73.7" y="284.7" width="4" height="4" class="vic"/>
+    <rect x="75.9" y="284.7" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="284.7" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="284.7" width="4" height="4" class="vic"/>
+    <rect x="79.3" y="295.2" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="295.2" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="295.2" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="295.2" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="305.7" width="4" height="4" class="vic"/>
+    <rect x="75.9" y="305.7" width="4" height="4" class="vic"/>
+    <rect x="82.7" y="305.7" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="305.7" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="316.2" width="4" height="4" class="vic"/>
+    <rect x="75.9" y="316.2" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="316.2" width="4" height="4" class="vic"/>
+    <rect x="81.6" y="316.2" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="326.7" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="326.7" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="326.7" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="326.7" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="337.2" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="337.2" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="337.2" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="337.2" width="4" height="4" class="vic"/>
+    <rect x="73.7" y="347.7" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="347.7" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="347.7" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="347.7" width="4" height="4" class="vic"/>
+    <rect x="70.3" y="358.3" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="358.3" width="4" height="4" class="vic"/>
+    <rect x="75.9" y="358.3" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="358.3" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="368.8" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="368.8" width="4" height="4" class="vic"/>
+    <rect x="79.3" y="368.8" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="368.8" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="379.3" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="379.3" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="379.3" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="379.3" width="4" height="4" class="vic"/>
+    <rect x="70.3" y="389.8" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="389.8" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="389.8" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="389.8" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="400.3" width="4" height="4" class="vic"/>
+    <rect x="81.6" y="400.3" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="400.3" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="400.3" width="4" height="4" class="vic"/>
+    <rect x="69.1" y="410.8" width="4" height="4" class="vic"/>
+    <rect x="73.7" y="410.8" width="4" height="4" class="vic"/>
+    <rect x="79.3" y="410.8" width="4" height="4" class="vic"/>
+    <rect x="82.7" y="410.8" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="421.3" width="4" height="4" class="vic"/>
+    <rect x="81.6" y="421.3" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="421.3" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="421.3" width="4" height="4" class="vic"/>
+    <rect x="70.3" y="431.8" width="4" height="4" class="vic"/>
+    <rect x="73.7" y="431.8" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="431.8" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="431.8" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="442.4" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="442.4" width="4" height="4" class="vic"/>
+    <rect x="81.6" y="442.4" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="442.4" width="4" height="4" class="vic"/>
+    <rect x="70.3" y="452.9" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="452.9" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="452.9" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="452.9" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="463.4" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="463.4" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="463.4" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="463.4" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="473.9" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="473.9" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="473.9" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="473.9" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="484.4" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="484.4" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="484.4" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="484.4" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="494.9" width="4" height="4" class="vic"/>
+    <rect x="75.9" y="494.9" width="4" height="4" class="vic"/>
+    <rect x="78.2" y="494.9" width="4" height="4" class="vic"/>
+    <rect x="81.6" y="494.9" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="505.4" width="4" height="4" class="vic"/>
+    <rect x="79.3" y="505.4" width="4" height="4" class="vic"/>
+    <rect x="82.7" y="505.4" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="505.4" width="4" height="4" class="vic"/>
+    <rect x="69.1" y="515.9" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="515.9" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="515.9" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="515.9" width="4" height="4" class="vic"/>
+    <rect x="82.7" y="526.5" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="526.5" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="526.5" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="526.5" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="537.0" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="537.0" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="537.0" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="537.0" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="547.5" width="4" height="4" class="vic"/>
+    <rect x="81.6" y="547.5" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="547.5" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="547.5" width="4" height="4" class="vic"/>
+  </g>
+
+  <!-- layer 39 clean row -->
+  <line x1="70" y1="558" x2="330" y2="558" stroke="var(--ink2,#A4B0BC)" stroke-width="0.8" stroke-dasharray="3 3"/>
+  <text class="ink2" x="330" y="554" font-size="7.5" text-anchor="end">L39 untouched</text>
+
+  <!-- result block -->
+  <text class="vlab" x="20" y="600" font-size="11">39 of 40 layers recovered cleanly</text>
+  <text class="mut" x="20" y="616" font-size="9">4 victims/layer, all in low slots 0&#8211;17; donors</text>
+  <text class="mut" x="20" y="628" font-size="9">spread 1&#8211;229 &#8594; confirms &#8220;lowest-firing = victim&#8221;.</text>
+
+  <line x1="20" y1="644" x2="380" y2="644" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="20" y="664" class="ink2" font-size="10.5">Replay: 39 &#215; 4 = 156 mmap slab copies onto a</text>
+  <text x="20" y="679" class="ink2" font-size="10.5">runnable IQ2_M &#8212; a gatekept surgery, reproduced</text>
+  <text x="20" y="694" class="ink2" font-size="10.5">on hardware you own, without their code.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 2 —</b> recovering a clone map from the routers. Because the router is full-precision in every quant, diffing it against base recovers exactly which experts were cloned where, without the original surgery code.</figcaption>
+      <div class="nb-prov"><span><b>source</b> ffn_gate_inp.weight diff vs base</span><span><b>generated</b> 2026-06</span><span><b>note</b> exact per-layer victim columns illustrative (structure real, columns not claimed)</span></div>
+    </figure>
+
+    <blockquote class="nb-pull nb-pull--wide" style="max-width:var(--measure)">
+      A strong clone doesn't visibly stumble on eyeball prompts — so the SEC delta is real-but-sub-perceptual, exactly where ad-hoc evaluation fails and the calibrated seed-paired battery earns its keep.
+      <cite>The router-diff replay · §3 · capability eval still preliminary</cite>
+    </blockquote>
+  </section>
+
+  <section id="teardown">
+    <h2><span class="num">§4</span>Deep expert excision is usable below parity</h2>
+    <p>You can't A/B a 100B→30B retention on a 16&nbsp;GB Mac — you can't run the 100B base — so the
+    locally-obtainable verdict is <em>usability</em>, not parity. And there's one clean, unconfounded
+    datapoint, read straight off a published model's own card.</p>
+    <p><code>huihui-ai/Huihui4-8B-A4B</code> is a REAP of <code>gemma-4-26B-A4B-it</code>: experts
+    <span class="hl-acc">128→32 (75% culled)</span>, 8 active/token, all 30 layers intact, a pure
+    count-prune. The param math checks out exactly — base routed-expert 22.84B + fixed 2.40B = 25.23B; cull
+    to 32 → routed 5.71B + unchanged 2.40B = <span class="hl-acc">8.10B</span>, dead-on the "8B" label. The
+    26→8B ratio is only 3.1× despite a 4× expert cut because fixed overhead (attention, dense FFN,
+    embeddings, router, norms) doesn't scale with expert count.</p>
+    <p>The unconfounded number, from their own perplexity eval: straight 128→32 prune, 0 SFT steps,
+    <span class="hl-acc">PPL 1.596 → 2.483 (+55%)</span>. Degraded, but <em>not broken</em> — 75% of the
+    experts are gone and it's still a functioning model. The baseline that makes that interesting isn't the
+    unpruned model — you can't run that on 16&nbsp;GB — it's <em>non-existence</em>. The real comparison is
+    "a degraded version you can actually run" vs. "nothing at all," which is why a +55% PPL hit reads as
+    intriguing rather than disqualifying: this is an accessibility result, not a capability claim.</p>
+
+    <figure class="figure" id="fig3">
+      <p class="nb-plate__note">↳ the only measured point sits past the estimated cliff, yet well above the broken floor</p>
+      <div class="nb-plate">
+        <div class="fig-desktop"><svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The REAP usability window</title>
+  <desc>A curve of model capability against the fraction of experts pruned. Capability holds well through roughly 30 to 50 percent pruning, declines past a cliff near 60 percent where pruning exceeds what the router was trained for, and at 75 percent — the Huihui teardown point — perplexity has risen 55 percent but the model still functions, sitting well above the broken floor.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .estlab { fill: var(--ink2,#A4B0BC); }
+    .meas { fill: var(--accent,#4FB2C2); }
+    .estband { fill: var(--ink2,#A4B0BC); opacity: 0.14; }
+    .estline { stroke: var(--ink2,#A4B0BC); fill: none; stroke-dasharray: 6 4; }
+    .cliff { fill: var(--neg,#B98AD6); opacity: 0.10; }
+    .clab  { fill: var(--neg,#B98AD6); }
+  </style>
+
+  <rect x="0" y="0" width="720" height="500" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="32" font-size="18">The REAP usability window</text>
+  <text class="mut" x="40" y="51" font-size="10">Expert pruning is graceful to ~30&#8211;50%, then a cliff past the trained router-k. One measured point: Huihui at 75% cull.</text>
+
+  <!-- plot box: x 80..650 (prune 0..80%), y 90..410 (retained 0..1.05) -->
+  <!-- gridlines -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="80" y1="105.24" x2="650" y2="105.24"/>
+    <line x1="80" y1="166.19" x2="650" y2="166.19"/>
+    <line x1="80" y1="257.62" x2="650" y2="257.62"/>
+    <line x1="80" y1="349.05" x2="650" y2="349.05"/>
+  </g>
+
+  <!-- axes -->
+  <line x1="80" y1="90" x2="80" y2="410" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="80" y1="410" x2="650" y2="410" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="9" text-anchor="end">
+    <text x="74" y="108">1.0</text><text x="74" y="169">0.8</text><text x="74" y="261">0.5</text><text x="74" y="352">0.2</text>
+  </g>
+  <text x="34" y="245" transform="rotate(-90 34 245)" text-anchor="middle" class="ink2" font-size="10">retained capability (inv. PPL, base = 1.0)</text>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="80" y="425">0</text><text x="222.5" y="425">20</text><text x="365" y="425">40</text><text x="507.5" y="425">60</text><text x="650" y="425">80</text>
+  </g>
+  <text x="365" y="442" text-anchor="middle" class="mut" font-size="10">% of experts pruned</text>
+
+  <!-- reliable window 30-50% -->
+  <rect x="293.75" y="90" width="142.5" height="320" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+  <text class="meas" x="365" y="102" font-size="9" text-anchor="middle" opacity="0.85">graceful ~30&#8211;50%</text>
+
+  <!-- cliff zone ~55-65% (estimated, soft) -->
+  <rect x="471.875" y="90" width="71.25" height="320" class="cliff"/>
+  <text class="clab" x="507.5" y="102" font-size="9" text-anchor="middle">cliff &#8776;60%</text>
+  <text class="clab" x="507.5" y="392" font-size="8" text-anchor="middle">past trained router-k</text>
+
+  <!-- estimated uncertainty band (lit, NOT measured) -->
+  <polygon class="estband"
+    points="80,105.24 293.75,117.43 436.25,129.62 507.5,147.90 614.375,196.67 614.375,233.24 507.5,190.57 436.25,154.00 293.75,135.71 80,105.24"/>
+  <!-- estimated center line (dashed = estimated) -->
+  <polyline class="estline" stroke-width="1.8"
+    points="80,105.24 293.75,126.57 436.25,141.81 507.5,169.24 614.375,214.95"/>
+  <text class="estlab" x="200" y="118" font-size="8.5">estimated from REAP literature (soft band, not measured)</text>
+
+  <!-- base reference: not runnable locally -->
+  <line x1="80" y1="105.24" x2="650" y2="105.24" stroke="var(--accent,#4FB2C2)" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>
+  <text class="meas" x="646" y="100" font-size="8" text-anchor="end" opacity="0.85">base = 1.0 &#183; can&#8217;t run 100B on 16GB &#8594; parity untestable</text>
+
+  <!-- broken floor -->
+  <line x1="80" y1="349.05" x2="650" y2="349.05" stroke="var(--ink2,#A4B0BC)" stroke-width="1" stroke-dasharray="4 3"/>
+  <text class="mut" x="84" y="362" font-size="8.5">&#8220;broken&#8221; floor</text>
+
+  <!-- Huihui measured point @ 75% / retained 0.643 -->
+  <line x1="614.375" y1="220.13" x2="614.375" y2="410" stroke="var(--accent,#4FB2C2)" stroke-width="0.8" stroke-dasharray="2 3" opacity="0.6"/>
+  <path d="M614.375,213 L621,220.13 L614.375,227.26 L607.75,220.13 Z" fill="var(--accent,#4FB2C2)"/>
+  <text class="meas" x="606" y="206" font-size="9.5" text-anchor="end">Huihui4-8B (measured)</text>
+  <text class="meas" x="606" y="218" font-size="8.5" text-anchor="end">75% cull &#183; PPL 1.60&#8594;2.48 (+55%)</text>
+  <text class="meas" x="606" y="230" font-size="8.5" text-anchor="end">degraded, not broken</text>
+
+  <!-- legend -->
+  <g font-size="9">
+    <rect x="430" y="300" width="16" height="9" class="estband" opacity="0.4"/>
+    <line x1="430" y1="304.5" x2="446" y2="304.5" class="estline" stroke-width="1.6"/>
+    <text x="452" y="308" class="ink2">estimated window (literature)</text>
+    <path d="M438,318 L443,322.5 L438,327 L433,322.5 Z" fill="var(--accent,#4FB2C2)"/>
+    <text x="452" y="326" class="ink2">measured datapoint (Huihui card)</text>
+    <rect x="430" y="334" width="16" height="9" class="cliff" opacity="0.5"/>
+    <text x="452" y="342" class="ink2">estimated cliff (router-k limit)</text>
+  </g>
+
+  <!-- takeaway -->
+  <line x1="40" y1="458" x2="680" y2="458" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="40" y="478" class="ink2" font-size="11">The only <tspan class="meas">measured</tspan> point sits <tspan class="meas">past the cliff</tspan> (75% cull) yet <tspan class="meas">well above the broken floor</tspan> &#8212; deep excision lands a usable, sub-parity model.</text>
+  <text x="40" y="494" class="mut" font-size="10">The real baseline isn&#8217;t the unpruned model (un-runnable on 16GB) &#8212; it&#8217;s non-existence. An accessibility result, not a capability claim.</text>
+</svg></div>
+        <div class="fig-mobile"><svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The REAP usability window</title>
+  <desc>A curve of model capability against the fraction of experts pruned. Capability holds well through roughly 30 to 50 percent pruning, declines past a cliff near 60 percent where pruning exceeds what the router was trained for, and at 75 percent — the Huihui teardown point — perplexity has risen 55 percent but the model still functions, sitting well above the broken floor.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .estlab { fill: var(--ink2,#A4B0BC); }
+    .meas { fill: var(--accent,#4FB2C2); }
+    .estband { fill: var(--ink2,#A4B0BC); opacity: 0.14; }
+    .estline { stroke: var(--ink2,#A4B0BC); fill: none; stroke-dasharray: 6 4; }
+    .cliff { fill: var(--neg,#B98AD6); opacity: 0.10; }
+    .clab  { fill: var(--neg,#B98AD6); }
+  </style>
+
+  <rect x="0" y="0" width="400" height="720" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="17">The REAP usability window</text>
+  <text class="mut" x="20" y="50" font-size="9">Pruning is graceful to ~30&#8211;50%, then a cliff past</text>
+  <text class="mut" x="20" y="62" font-size="9">the trained router-k. One measured point: Huihui.</text>
+
+  <!-- plot box x 70..360 (prune 0..80), y 130..430 (retained 0..1.05) -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="70" y1="144.29" x2="360" y2="144.29"/>
+    <line x1="70" y1="201.43" x2="360" y2="201.43"/>
+    <line x1="70" y1="287.14" x2="360" y2="287.14"/>
+    <line x1="70" y1="372.86" x2="360" y2="372.86"/>
+  </g>
+  <line x1="70" y1="130" x2="70" y2="430" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="70" y1="430" x2="360" y2="430" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8.5" text-anchor="end">
+    <text x="64" y="147">1.0</text><text x="64" y="204">0.8</text><text x="64" y="290">0.5</text><text x="64" y="376">0.2</text>
+  </g>
+  <text x="30" y="280" transform="rotate(-90 30 280)" text-anchor="middle" class="ink2" font-size="9">retained cap. (inv. PPL, base = 1.0)</text>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="70" y="445">0</text><text x="142.5" y="445">20</text><text x="215" y="445">40</text><text x="287.5" y="445">60</text><text x="360" y="445">80</text>
+  </g>
+  <text x="215" y="461" text-anchor="middle" class="mut" font-size="9">% of experts pruned</text>
+
+  <!-- reliable window 30-50% -->
+  <rect x="178.75" y="130" width="72.5" height="300" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+  <text class="meas" x="215" y="142" font-size="8" text-anchor="middle" opacity="0.85">graceful</text>
+
+  <!-- cliff zone ~55-65% -->
+  <rect x="269.375" y="130" width="36.25" height="300" class="cliff"/>
+  <text class="clab" x="287.5" y="142" font-size="8" text-anchor="middle">cliff &#8776;60%</text>
+
+  <!-- estimated band -->
+  <polygon class="estband"
+    points="70,144.29 178.75,155.71 251.25,167.14 287.5,184.29 341.875,230.0 341.875,264.29 287.5,224.29 251.25,190.0 178.75,172.86 70,144.29"/>
+  <polyline class="estline" stroke-width="1.8"
+    points="70,144.29 178.75,164.29 251.25,178.57 287.5,204.29 341.875,247.14"/>
+  <text class="estlab" x="74" y="158" font-size="7.5">estimated (REAP lit, soft band)</text>
+
+  <!-- base reference -->
+  <line x1="70" y1="144.29" x2="360" y2="144.29" stroke="var(--accent,#4FB2C2)" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>
+  <text class="meas" x="356" y="139" font-size="7" text-anchor="end" opacity="0.85">base=1.0 &#183; parity untestable on 16GB</text>
+
+  <!-- broken floor -->
+  <line x1="70" y1="372.86" x2="360" y2="372.86" stroke="var(--ink2,#A4B0BC)" stroke-width="1" stroke-dasharray="4 3"/>
+  <text class="mut" x="74" y="386" font-size="8">&#8220;broken&#8221; floor</text>
+
+  <!-- Huihui measured point @ 75% / 0.643 -->
+  <line x1="341.875" y1="246.29" x2="341.875" y2="430" stroke="var(--accent,#4FB2C2)" stroke-width="0.8" stroke-dasharray="2 3" opacity="0.6"/>
+  <path d="M341.875,239 L348.5,246.29 L341.875,253.58 L335.25,246.29 Z" fill="var(--accent,#4FB2C2)"/>
+  <text class="meas" x="333" y="232" font-size="8.5" text-anchor="end">Huihui4-8B</text>
+  <text class="meas" x="333" y="244" font-size="7.5" text-anchor="end">75% cull (measured)</text>
+  <text class="meas" x="333" y="255" font-size="7.5" text-anchor="end">PPL +55%, not broken</text>
+
+  <!-- legend -->
+  <g font-size="8.5">
+    <line x1="20" y1="486" x2="40" y2="486" class="estline" stroke-width="1.6"/>
+    <text x="46" y="489" class="ink2">estimated window (literature)</text>
+    <path d="M30,498 L35,502.5 L30,507 L25,502.5 Z" fill="var(--accent,#4FB2C2)"/>
+    <text x="46" y="506" class="ink2">measured datapoint (Huihui card)</text>
+    <rect x="22" y="514" width="16" height="9" class="cliff" opacity="0.5"/>
+    <text x="46" y="522" class="ink2">estimated cliff (router-k limit)</text>
+  </g>
+
+  <!-- takeaway -->
+  <line x1="20" y1="542" x2="380" y2="542" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="20" y="562" class="ink2" font-size="10.5">The only <tspan class="meas">measured</tspan> point sits <tspan class="meas">past</tspan></text>
+  <text x="20" y="577" class="ink2" font-size="10.5"><tspan class="meas">the cliff</tspan> (75% cull) yet <tspan class="meas">well above</tspan></text>
+  <text x="20" y="592" class="ink2" font-size="10.5">the broken floor &#8212; deep excision lands a</text>
+  <text x="20" y="607" class="ink2" font-size="10.5">usable, sub-parity model.</text>
+  <text x="20" y="628" class="mut" font-size="9.5">The real baseline isn&#8217;t the unpruned model</text>
+  <text x="20" y="641" class="mut" font-size="9.5">(un-runnable on 16GB) &#8212; it&#8217;s non-existence.</text>
+  <text x="20" y="654" class="mut" font-size="9.5">An accessibility result, not a capability claim.</text>
+</svg></div>
+      </div>
+      <figcaption class="nb-figcap"><b>Fig 3 —</b> the REAP usability window. The graceful window (~30–50%) and the cliff (~60%, past the trained router-k) are drawn as a soft band — estimated from the REAP literature, not measured here. The only measured point is Huihui at 75% cull.</figcaption>
+      <div class="nb-prov"><span><b>source</b> Huihui4-8B-A4B card + REAP arXiv 2510.13999</span><span><b>measured</b> 1 point (75% cull, PPL +55%)</span><span><b>band</b> estimated from literature, not measured</span></div>
+    </figure>
+
+    <aside class="nb-correction" style="margin-top:var(--sp-6)">
+      <div class="nb-correction__head"><span>⌦ Grader-skepticism note</span><span class="nb-correction__disp">artifact, not result</span></div>
+      <div class="nb-correction__row"><span class="nb-correction__k">The tempting read</span><span class="nb-correction__b">Their <em>post-SFT</em> PPL drops <em>below</em> the 128-expert base (1.004 &lt; 1.596) — so 32 experts beat 128?</span></div>
+      <div class="nb-correction__row"><span class="nb-correction__k">Why it's false</span><span class="nb-correction__b">The SFT and the PPL eval are on the <em>same</em> 500 samples — eval-on-train-distribution leakage (memorising a narrow thinking-format), not genuine superiority.</span></div>
+      <div class="nb-correction__row"><span class="nb-correction__k">The honest claim</span><span class="nb-correction__b">The 0-step <b>+55%</b> number. The sub-base number is an artifact — and saying so is the difference between a benchmark and a press release.</span></div>
+    </aside>
+  </section>
+
+  <section id="direction">
+    <h2><span class="num">§5</span>Why this is the live direction for consumer ML</h2>
+    <p>A 250B <em>dense</em> model is dead in the water locally (250&nbsp;GB working set). A 250B <em>MoE</em>
+    with mmap + expert offload has a working set of ~10&nbsp;GB, because only the active experts are hot —
+    tractable at ~1–3 tok/s for cold-NVMe pages. <span class="hl-acc">MoE + REAP + local is the one regime
+    where a consumer machine gets to touch frontier-scale models at all.</span></p>
+    <p>The standing hypothesis (<em>speculative — plausible mechanism, untested in this lab</em>): active
+    params, not total, may be the intelligence proxy, up to the trained router-k. Pruning total to 30–40B
+    while keeping ~6–10B active per token <em>might</em> gain per-token quality — remaining experts get hit
+    more often, the router is less stretched. The supporting datapoint, a 35→14B-A3B reaped model "nearly
+    keeping up" with full siblings, is an eyeball read, not a paired eval — so this stays a hypothesis, not a
+    finding. The honest tax: a reaped older base loses to a newer dense one (generational gains > REAP
+    preservation), so the workflow only pays on current-SOTA bases and has to be re-run per base update.</p>
+    <p>The engine direction matches the rest of the lab's evolution: the refined surgery line is
+    <span class="hl-acc">live-MLX-module patching</span>, not GGUF slab-rewriting — which is also why ragged
+    per-layer expert counts (the elegant "let a global saliency threshold decide each layer's count" version
+    of REAP) are a dead end in stock GGUF (a single global <code>n_expert</code> scalar) and a natural fit
+    in MLX.</p>
+  </section>
+
+  <section id="methods">
+    <div class="nb-limits">
+      <div class="nb-limits__head">
+        <span class="nb-limits__label">Known limitations</span>
+        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — this is a working log, not a results page</span>
+      </div>
+      <ul>
+        <li><b>SEC capability is preliminary</b> — extracted + replayed + vibe-tested, no fixed-seed paired battery run yet. The router-diff <em>method</em> is solid; the <em>quantified recovery</em> is the next step.</li>
+        <li><b>The lab's own REAP run has not happened</b> — the plan is reaped-no-SFT first (build a deep prune, eval the pure prune, only train if compelling). The Huihui numbers are <em>their</em> teardown, read off the card.</li>
+        <li><b>Training on a 16&nbsp;GB Mac is constrained</b> — full fp16 SFT of an 8B ≈ 100&nbsp;GB (impossible); QLoRA is CUDA-only (dead end on Apple Silicon); the only path is MLX-LM LoRA on a 4-bit quant, and <em>where</em> the adapters go to heal an MoE prune (router? surviving experts?) is unsettled.</li>
+        <li>All param / PPL / index numbers are point-in-time from memory — verify against the model cards and GGUF dumps before publishing. Fig 2's exact per-layer victim columns are illustrative; the clustering structure is the claim, not the specific indices.</li>
+      </ul>
+    </div>
+
+    <div class="nb-marginalia" style="margin-top:var(--sp-7)">
+      <div class="nb-marginalia__label">Colophon &amp; method</div>
+      <div class="nb-marginalia__body">
+        <p style="max-width:64ch">The MoE branch of the vivisection lab — where the dense-model machinery
+        (<a href="/lab/05_granite.html">Granite</a>, <a href="measuring.html">MiniCPM5</a>) hits its limit and the unit
+        of surgery changes from the layer to the expert. Router-diff runs against full-precision
+        <span class="mono">ffn_gate_inp.weight</span> tensors in pre-quantized GGUFs; teardown numbers read off
+        published model cards. Built and run locally on a 16&nbsp;GB Mac&nbsp;Mini. The inferential harness that
+        makes the sub-perceptual deltas measurable is the <a href="measuring.html">methods writeup</a>.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer style="max-width:var(--page-max);margin:0 auto;padding:var(--sp-6) var(--gutter) var(--sp-9)">
+  <p style="font-family:var(--font-mono);font-size:var(--fs-micro);letter-spacing:.03em;color:var(--text-muted);line-height:1.7">© 2026 · The Vivisection Lab · exploratory research notes, provided as-is, no warranty · writeups &amp; figures CC&nbsp;BY · uses cookieless analytics, no personal data collected</p>
+</footer>
+
+<script src="/assets/nb.js"></script>
+</body>
+</html>

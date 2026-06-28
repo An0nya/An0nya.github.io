@@ -1,0 +1,62 @@
+/* ============================================================================
+   TYPOGRAPHY TOKENS — Notebook Design System
+   ----------------------------------------------------------------------------
+   Two families, doing two jobs, with no third voice:
+     · Newsreader (serif)  — prose, headlines, deks, pull-quotes, drop-caps.
+       Set at weight 400–500, optical sizing on, tight tracking on display.
+     · JetBrains Mono      — every label, kicker, caption, stat, nav item, datum.
+       Uppercase + letter-spaced. This is the "instrument readout" voice.
+   The serif/mono split is load-bearing: prose is human, mono is measured.
+   No sans-serif anywhere — a sans body would read as a SaaS template.
+   ========================================================================== */
+:root {
+  --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-mono:  'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* weights */
+  --w-reg:  400; /* @kind font */
+  --w-med:  500; /* @kind font */
+  --w-semi: 600; /* @kind font */
+
+  /* type scale — toned down from the prototype (calmer display sizes) */
+  --fs-display: clamp(2.2rem, 4.5vw, 3.4rem); /* @kind font */ /* h1 / hero */
+  --fs-h2:      1.55rem;   /* @kind font */
+  --fs-h3:      1.3rem;    /* @kind font */
+  --fs-dek:     1.18rem;   /* @kind font */
+  --fs-body:    1.0625rem; /* @kind font */
+  --fs-sm:      0.94rem;   /* @kind font */
+  --fs-fig:     0.8rem;    /* @kind font */
+
+  /* mono label sizes */
+  --fs-kicker:  0.72rem;   /* @kind font */
+  --fs-label:   0.66rem;   /* @kind font */
+  --fs-micro:   0.6rem;    /* @kind font */
+
+  /* line heights */
+  --lh-display: 1.08; /* @kind font */
+  --lh-tight:   1.22; /* @kind font */
+  --lh-body:    1.7;  /* @kind font */
+  --lh-mono:    1.5;  /* @kind font */
+
+  /* tracking */
+  --tk-display: -0.02em;  /* @kind font */
+  --tk-body:    0;        /* @kind font */
+  --tk-kicker:  0.14em;   /* @kind font */
+  --tk-label:   0.1em;    /* @kind font */
+  --tk-nav:     0.08em;   /* @kind font */
+
+  /* the editorial text measure */
+  --measure:    68ch; /* @kind other */
+}
+
+/* Optical-size + oldstyle numerals are part of the look — apply on the root. */
+:root {
+  font-optical-sizing: auto;
+  font-feature-settings: "kern" 1;
+}
+
+/* Accessibility font toggle: swap the serif body voice for Atkinson Hyperlegible.
+   Mono labels stay mono. Set html.a11y-font to activate. */
+html.a11y-font {
+  --font-serif: 'Atkinson Hyperlegible', 'Newsreader', Georgia, serif;
+}

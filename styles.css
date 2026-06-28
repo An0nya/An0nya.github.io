@@ -1,0 +1,11 @@
+/* ============================================================================
+   Notebook Design System — global entry point.
+   Consumers link THIS one file. It is an import manifest only — no rules here.
+   Order: fonts → colour tokens → type tokens → spacing/layout/motion → base.
+   ========================================================================== */
+@import url('./tokens/fonts.css');
+@import url('./tokens/colors.css');
+@import url('./tokens/typography.css');
+@import url('./tokens/spacing.css');
+@import url('./tokens/base.css');
+@import url('./components/components.css');
