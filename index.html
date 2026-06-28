@@ -16,7 +16,8 @@
   .bridge { font-size: var(--fs-dek); color: var(--text-dim); max-width: 62ch; }
   .bridge a { border-bottom: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); }
   section { padding: var(--sp-7) 0; border-bottom: var(--bw) solid var(--border); }
-  .sec-label { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--tk-kicker); text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--sp-5); }
+  .sec-label { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--tk-kicker); text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--sp-2); }
+  .sec-note { font-size: var(--fs-sm); color: var(--text-dim); max-width: 60ch; margin: 0 0 var(--sp-5); }
   .cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
   .workgrid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--sp-6); margin-top: var(--sp-5); }
   .work h3 { font-size: 1.08rem; margin: 0 0 var(--sp-2); }
@@ -30,10 +31,9 @@
 
 <nav class="nb-nav">
   <a class="nb-nav__home" href="/">ANYA · RESEARCH NOTEBOOKS</a>
-  <a href="/lab/writeup.html">Surgery</a>
-  <a href="#geometry">Geometry</a>
-  <a href="#duologue">Duologue</a>
-  <a href="#mem0">mem0</a>
+  <a href="#intervention">Intervention</a>
+  <a href="#method">Method</a>
+  <a href="#systems">Systems</a>
   <span class="nb-nav__spacer"></span>
   <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
   <a href="#" data-theme-toggle>☼ Light</a>
@@ -48,40 +48,90 @@
       lives inside small open-weight language models - duplicating layers, pruning them, scanning
       hidden states - on a 16&nbsp;GB Mac Mini, no cloud GPUs. Most of these experiments end in a
       characterised breakage rather than a better model, and that's the point: the
-      <a href="/lab/writeup.html">negative and corrected results</a> are kept on purpose, with the autopsy.
+      <a href="/lab/05_granite.html">negative and corrected results</a> are kept on purpose, with the autopsy.
     </p>
   </header>
 
-  <section>
-    <div class="sec-label">The notebooks</div>
+  <section id="intervention">
+    <div class="sec-label">Intervention</div>
+    <p class="sec-note">What happens when you cut. Layers duplicated, pruned, damped, and — in a mixture-of-experts model — whole experts removed, with the effect measured each time.</p>
     <div class="cards">
-      <a class="nb-card" href="/lab/writeup.html">
-        <div class="nb-card__tag"><span>Surgery · intervention</span><span class="st">published</span></div>
-        <h3>The Vivisection Lab</h3>
-        <p class="nb-card__dek">Layer duplication, pruning and steering across a dense model, an MoE, and a recurrent reasoner — "what happens when you cut."</p>
-        <div class="nb-card__find"><b>Finding —</b> which surgeries help is mostly explained by where the model stashes its keys and values.</div>
+      <a class="nb-card" href="/lab/01_minicpm5_sigma_alpha.html">
+        <div class="nb-card__tag"><span>Dense · damping</span><span class="st">published</span></div>
+        <h3>MiniCPM5 — the husk, and the Σα-law</h3>
+        <p class="nb-card__dek">The model produced nothing shippable — but the instrument was built here, and one empirical regularity held up across every later specimen.</p>
+        <div class="nb-card__find"><b>Finding —</b> a methods notebook wearing a specimen's clothes: read it for the ruler, not the result.</div>
+        <div class="nb-card__go">Read the husk →</div>
+      </a>
+      <a class="nb-card" href="/lab/03_nanbeige.html">
+        <div class="nb-card__tag"><span>Dense · intervention</span><span class="st">published</span></div>
+        <h3>Nanbeige — where the surgery helped</h3>
+        <p class="nb-card__dek">The one specimen where inference-time surgery measurably helped — and what "helped" turned out to actually mean on inspection.</p>
+        <div class="nb-card__find"><b>Finding —</b> the gain was real but narrow; the headline needed the caveat to stay true.</div>
         <div class="nb-card__go">Read the record →</div>
       </a>
-      <a class="nb-card" id="geometry" href="#">
-        <div class="nb-card__tag"><span>Geometry · observation</span><span class="st">live</span></div>
-        <h3>The Vivarium</h3>
-        <p class="nb-card__dek">Hidden-state scans of a model kept intact under glass — "what does it already know, and when in the stack does it know it."</p>
-        <div class="nb-card__find"><b>Finding —</b> six independent probes land on the same mid-stack concept zone (L18–27).</div>
-        <div class="nb-card__go">Read the scan →</div>
+      <a class="nb-card" href="/lab/05_granite.html">
+        <div class="nb-card__tag"><span>Dense · correction</span><span class="st">published</span></div>
+        <h3>Granite — the champion fell</h3>
+        <p class="nb-card__dek">This page shipped with a clean headline, then I overturned it myself. The autopsy stayed on the page rather than getting quietly deleted.</p>
+        <div class="nb-card__find"><b>Finding —</b> which surgeries help is mostly explained by where the model stashes its keys and values.</div>
+        <div class="nb-card__go">Read the reversal →</div>
       </a>
-      <a class="nb-card" id="duologue" href="#">
-        <div class="nb-card__tag"><span>Self-play · emergent comm</span><span class="st">live</span></div>
-        <h3>Duologue</h3>
-        <p class="nb-card__dek">Two agents developing a shared symbolic channel through tool calls — what two models do to each other, not to a benchmark.</p>
-        <div class="nb-card__find"><b>Finding —</b> a stable private code emerges, then drifts; the drift is the interesting part.</div>
+      <a class="nb-card" href="/lab/08_moe_expert_surgery.html">
+        <div class="nb-card__tag"><span>MoE · intervention</span><span class="st">published</span></div>
+        <h3>Experts, not layers</h3>
+        <p class="nb-card__dek">Every other specimen treats the model as a stack of layers. This one cuts along a different seam — removing whole experts from a mixture-of-experts model.</p>
+        <div class="nb-card__find"><b>Finding —</b> expert removal degrades differently from layer surgery, and the seam matters.</div>
+        <div class="nb-card__go">Read the dissection →</div>
+      </a>
+    </div>
+  </section>
+
+  <section id="method">
+    <div class="sec-label">Method</div>
+    <p class="sec-note">The instrument under the results — how a measurement earns trust before any finding is allowed to stand. (The vivisection &amp; vivarium overview-methodology pages will land here too.)</p>
+    <div class="cards">
+      <a class="nb-card" href="/lab/02_anatomy_of_a_sweep.html">
+        <div class="nb-card__tag"><span>Methods · measurement</span><span class="st">published</span></div>
+        <h3>Anatomy of a sweep you can trust</h3>
+        <p class="nb-card__dek">The surgery is suspiciously easy to run; trusting the number is the hard part. Seed discipline, paired effect sizes, and a regrade that keeps catching pretty results lying.</p>
+        <div class="nb-card__find"><b>Method —</b> the differentiator isn't a better model, it's the measurement layer underneath.</div>
+        <div class="nb-card__go">Read the protocol →</div>
+      </a>
+      <a class="nb-card" href="/lab/04_quant_bench.html">
+        <div class="nb-card__tag"><span>Runtime · benchmark</span><span class="st">published</span></div>
+        <h3>MLX is the fastest local runtime*</h3>
+        <p class="nb-card__dek">The asterisk is the whole point: 1B dense model, batched decode only, M4 Mini, custom generation loop, raw tok/s — every qualifier spelled out, not buried.</p>
+        <div class="nb-card__find"><b>Finding —</b> a defensible "fastest" only exists once you fence in exactly what you measured.</div>
+        <div class="nb-card__go">Read the benchmark →</div>
+      </a>
+    </div>
+  </section>
+
+  <section id="systems">
+    <div class="sec-label">Systems</div>
+    <p class="sec-note">Agents and memory — what models do to each other and to their own history, built as working pipelines rather than benchmarks.</p>
+    <div class="cards">
+      <a class="nb-card" href="/lab/06_duologue.html">
+        <div class="nb-card__tag"><span>Self-play · emergent comm</span><span class="st">published</span></div>
+        <h3>duologue — two models, one channel</h3>
+        <p class="nb-card__dek">Two instances of the same local model, one wire between them, no shared dictionary. Can two copies invent a private code — and what happens to it over time?</p>
+        <div class="nb-card__find"><b>Finding —</b> a stable code emerges, then drifts; the drift is the interesting part.</div>
         <div class="nb-card__go">Read the log →</div>
       </a>
-      <a class="nb-card nb-card--draft" id="mem0" href="#">
-        <div class="nb-card__tag"><span>Systems · ETL pipeline</span><span class="st st--draft">in progress</span></div>
+      <a class="nb-card" href="/lab/07_mem0_processor.html">
+        <div class="nb-card__tag"><span>Systems · ETL pipeline</span><span class="st">published</span></div>
         <h3>mem0-processor</h3>
-        <p class="nb-card__dek">A local-LLM ETL pipeline that reads its own Claude Code logs and maintains a self-updating memory — pipeline → artifact → daily use.</p>
-        <div class="nb-card__find"><b>Story —</b> ~60 models benchmarked through it; the systems narrative, honest-status, AWS legs marked in-progress.</div>
+        <p class="nb-card__dek">I set out to build agent memory and built a model-evaluation harness instead. ~60 models benchmarked through it; the systems narrative with honest status on each leg.</p>
+        <div class="nb-card__find"><b>Story —</b> the artifact you keep is rarely the one you set out to build.</div>
         <div class="nb-card__go">Read the architecture →</div>
+      </a>
+      <a class="nb-card" href="/lab/09_self_improving_memory.html">
+        <div class="nb-card__tag"><span>Systems · agent memory</span><span class="st">published</span></div>
+        <h3>Teaching an agent to read its own logs</h3>
+        <p class="nb-card__dek">Human memory over-weights the dramatic incident and forgets the papercut that happened twelve times. This is the pipeline taught not to make that mistake.</p>
+        <div class="nb-card__find"><b>Finding —</b> frequency, not drama, is what a memory layer should be weighting.</div>
+        <div class="nb-card__go">Read the design →</div>
       </a>
     </div>
   </section>
