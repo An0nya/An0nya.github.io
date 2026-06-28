@@ -18,6 +18,7 @@
   section { padding: var(--sp-7) 0; border-bottom: var(--bw) solid var(--border); }
   .sec-label { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--tk-kicker); text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--sp-2); }
   .sec-note { font-size: var(--fs-sm); color: var(--text-dim); max-width: 60ch; margin: 0 0 var(--sp-5); }
+  .sec-note a { border-bottom: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); }
   .cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
   .workgrid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--sp-6); margin-top: var(--sp-5); }
   .work h3 { font-size: 1.08rem; margin: 0 0 var(--sp-2); }
@@ -84,12 +85,19 @@
         <div class="nb-card__find"><b>Finding —</b> expert removal degrades differently from layer surgery, and the seam matters.</div>
         <div class="nb-card__go">Read the dissection →</div>
       </a>
+      <a class="nb-card" href="/lab/hrm.html">
+        <div class="nb-card__tag"><span>Recurrent · negative result</span><span class="st">draft</span></div>
+        <h3>HRM — a false dawn</h3>
+        <p class="nb-card__dek">A recurrent reasoner whose whole thesis is reasoning-depth through loops, not parameters. A gorgeous overnight finding that more loops help — then my own verification pass, sampling instead of greedy, demolished it.</p>
+        <div class="nb-card__find"><b>Finding —</b> greedy single-shot scoring manufactured a clean false champion; the methodology lesson outlived the result.</div>
+        <div class="nb-card__go">Read the false dawn →</div>
+      </a>
     </div>
   </section>
 
   <section id="method">
     <div class="sec-label">Method</div>
-    <p class="sec-note">The instrument under the results — how a measurement earns trust before any finding is allowed to stand. (The vivisection &amp; vivarium overview-methodology pages will land here too.)</p>
+    <p class="sec-note">The instrument under the results — how a measurement earns trust before any finding is allowed to stand. The terse <a href="/lab/methods.html">Methods &amp; references</a> page holds the shared vocabulary; the vivisection &amp; vivarium overview-methodology pages will join it.</p>
     <div class="cards">
       <a class="nb-card" href="/lab/02_anatomy_of_a_sweep.html">
         <div class="nb-card__tag"><span>Methods · measurement</span><span class="st">published</span></div>

@@ -1,0 +1,425 @@
+<!-- @dsCard group="Portfolio Hub" viewport="1100x1800" name="Writeup — HRM: a false dawn (a recurrent reasoner, and a result that didn't survive)" subtitle="Vivisecting HRM-Text-1B, a recurrent reasoner: a clean slow/fast mechanism, a gorgeous overnight finding that more loops help reasoning, and the verification pass that demolished it. A high-variance model + greedy single-shot scoring + a decoupled-but-corroborating metric manufactured a clean false result. The negative result and the methodology lesson are the point." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HRM: a false dawn — The Vivisection Lab</title>
+<meta name="description" content="Vivisecting HRM-Text-1B, a recurrent reasoner: a clean slow/fast mechanism, a beautiful overnight finding that more loops help reasoning, and the verification pass that demolished it. A methodology lesson.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E141A'/%3E%3Cpath d='M6 16 H15' stroke='%236F7C88' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 9' stroke='%236FCBD8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 23' stroke='%23E3C24A' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='15' cy='16' r='2.6' fill='%23ECEFF3'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  main { max-width: var(--page-max); margin: 0 auto; padding: var(--sp-7) var(--gutter) var(--sp-9); }
+  section { padding: var(--sp-7) 0 0; }
+  .dek { font-family: var(--font-serif); font-style: italic; font-size: var(--fs-dek); line-height: 1.4; color: var(--text-dim); max-width: 64ch; margin: var(--sp-5) 0 0; }
+  h1 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.04; margin: var(--sp-3) 0 var(--sp-5); }
+  h1 em { font-style: italic; color: var(--accent-bright); }
+  h2 { font-size: var(--fs-h2); margin: 0 0 var(--sp-4); }
+  h2 .num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); letter-spacing: .1em; vertical-align: 0.7em; margin-right: var(--sp-3); }
+  p { max-width: var(--measure); }
+  em, b { color: inherit; }
+  .mono { font-family: var(--font-mono); font-size: 0.92em; }
+  .small { font-size: var(--fs-sm); }
+  .muted { color: var(--text-muted); }
+  .hl-acc { color: var(--accent); font-weight: 500; }
+  .hl-neg { color: var(--neg); font-weight: 500; }
+  /* draft banner */
+  .draft-banner { display: flex; gap: var(--sp-4); align-items: baseline; border: 1px solid var(--border-strong); border-left: 3px solid var(--accent); background: var(--surface-sunken); border-radius: var(--radius-2); padding: var(--sp-4) var(--sp-5); margin: 0 0 var(--sp-6); max-width: var(--measure); font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); }
+  .draft-banner .dlabel { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); flex: none; }
+  /* hero topbar */
+  .topbar { display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-5); justify-content: space-between; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: .04em; color: var(--text-muted); }
+  .topbar .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: var(--sp-2); vertical-align: 1px; }
+  .nb-kicker { margin-top: var(--sp-6); }
+  /* stats strip */
+  .stats-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--sp-4); margin: var(--sp-6) 0; padding: var(--sp-5) 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .stat .num { display: block; font-family: var(--font-mono); font-size: 1.5rem; color: var(--text); line-height: 1.1; }
+  .stat .num small { font-size: 0.6em; color: var(--text-muted); }
+  .stat .label { display: block; font-size: var(--fs-micro); line-height: 1.4; color: var(--text-muted); margin-top: var(--sp-2); }
+  /* two-up columns */
+  .col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-6); }
+  .col-side { display: grid; grid-template-columns: 1fr 260px; gap: var(--sp-7); align-items: start; }
+  .col-side .aside { font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); border-left: 1px solid var(--border-strong); padding-left: var(--sp-4); font-style: italic; }
+  .col-side .aside .nb-kicker { font-style: normal; display: block; margin: 0 0 var(--sp-2); }
+  .dropcap::first-letter { font-family: var(--font-serif); font-weight: 500; font-size: 3.4em; line-height: 0.82; float: left; padding: 0.04em 0.12em 0 0; color: var(--accent-bright); }
+  /* figure stub — inline-SVG redraw pending; raster source not carried into the lean repo */
+  .figure { margin: var(--sp-6) 0; max-width: var(--measure); }
+  .fig-stub { border: 1.5px dashed var(--border-strong); border-radius: var(--radius-2); background-color: var(--surface-sunken); background-image: repeating-linear-gradient(135deg, transparent 0 11px, var(--rule2,#27323D) 11px 12px); padding: var(--sp-6) var(--sp-5); text-align: center; font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--text-muted); }
+  .nb-figcap { font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); margin-top: var(--sp-3); }
+  .nb-figcap b { color: var(--text); }
+  /* tables — symbols + text carry verdict; colour is redundant (protan-safe) */
+  .tbl-wrap { overflow-x: auto; margin: var(--sp-5) 0; }
+  table.tbl { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); max-width: var(--measure); }
+  table.tbl th { text-align: left; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: .04em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border-strong); padding: 0 var(--sp-4) var(--sp-2); }
+  table.tbl td { padding: var(--sp-2) var(--sp-4); border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text-dim); }
+  table.tbl td.label { color: var(--text); }
+  table.tbl td.num { font-family: var(--font-mono); }
+  table.tbl tr.divider td { border-top: 2px solid var(--border-strong); }
+  .pos { color: var(--accent); }      /* cyan — distinct from red for protanopes */
+  .neg { color: var(--neg); }
+  .game { color: var(--neg); font-weight: 600; }
+  /* specimen failure cards */
+  .specimen { border: 1px solid var(--border-strong); border-radius: var(--radius-2); padding: var(--sp-5); margin: var(--sp-5) 0; max-width: var(--measure); }
+  .specimen .head { display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-4); justify-content: space-between; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: .03em; }
+  .specimen .lid { color: var(--accent); }
+  .specimen .t { color: var(--text-muted); }
+  .specimen-name { font-weight: 600; color: var(--text); margin: var(--sp-3) 0; }
+  .specimen .quote { font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.6; white-space: pre-wrap; background: var(--surface-sunken); border-left: 3px solid var(--border-strong); border-radius: var(--radius-2); padding: var(--sp-4) var(--sp-5); color: var(--ink2,#A4B0BC); overflow-x: auto; }
+  .specimen .gloss { font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); margin-top: var(--sp-3); }
+  /* pull quote */
+  .pull { font-family: var(--font-serif); font-size: 1.25rem; line-height: 1.4; color: var(--text); border-left: 3px solid var(--accent); padding: var(--sp-3) 0 var(--sp-3) var(--sp-5); margin: var(--sp-6) 0; max-width: 60ch; }
+  .pull cite { display: block; font-family: var(--font-mono); font-size: 0.7rem; font-style: normal; letter-spacing: .04em; color: var(--text-muted); margin-top: var(--sp-4); }
+  /* caveats */
+  .walkback { list-style: none; padding: 0; margin: var(--sp-5) 0 0; max-width: var(--measure); }
+  .walkback li { font-size: var(--fs-sm); line-height: 1.6; color: var(--text-dim); padding-left: var(--sp-5); border-left: 1px solid var(--border); margin-bottom: var(--sp-4); }
+  .wbhead { display: block; color: var(--text); font-weight: 600; }
+  .rule { height: 1px; background: var(--border); border: 0; margin: var(--sp-7) 0 var(--sp-4); }
+  a[href^="http"] { border-bottom: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); }
+  @media (max-width: 760px) {
+    .col-2, .col-side { grid-template-columns: 1fr; }
+    .stats-strip { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nb-nav">
+  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
+  <a href="#mechanism">Mechanism</a>
+  <a href="#finding">The finding</a>
+  <a href="#turn">Verification</a>
+  <a href="#lesson">The lesson</a>
+  <a href="methods.html">Methods</a>
+  <span class="nb-nav__spacer"></span>
+  <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
+  <a href="#" data-theme-toggle>☼ Light</a>
+</nav>
+
+<main>
+
+<div class="draft-banner">
+  <span class="dlabel">Draft</span>
+  <span>This specimen is a recurrent architecture I don't yet fully understand, and the headline finding here was overturned by my own verification pass. It's published as an honest work-in-progress — the negative result and the methodology lesson are the point. Read it as a notebook entry, not a paper.</span>
+</div>
+
+<section class="hero">
+  <div class="topbar">
+    <div><span class="dot"></span>Specimen · HRM-Text-1B · recurrent · MLX bf16</div>
+    <div class="right">35 configs · 5 waves · then the verification that killed it</div>
+  </div>
+
+  <div class="nb-kicker">A recurrent reasoner, and a result that didn't survive</div>
+  <h1>HRM:<br><em>a false dawn</em>.</h1>
+  <p class="dek">
+    A Hierarchical Reasoning Model — a recurrent architecture whose whole thesis
+    is <em>reasoning-depth through loops, not parameters</em>. The dissection
+    produced a clean mechanistic picture, one gorgeous finding ("duplicate the
+    renderer module and multi-hop reasoning improves"), and then — when I ran the
+    rigorous follow-up the finding deserved — the headline collapsed. Sampling
+    killed it. What survived is more useful than what died.
+  </p>
+
+  <div class="stats-strip">
+    <div class="stat"><span class="num">2×3</span><span class="label">H · L cycles<br>= 8 passes / token</span></div>
+    <div class="stat"><span class="num">128</span><span class="label">Unrolled layers<br>weight-shared</span></div>
+    <div class="stat"><span class="num">35</span><span class="label">Configs swept<br>across 5 waves</span></div>
+    <div class="stat"><span class="num">5<small>/6</small></span><span class="label">"Champion" battery<br>greedy, n=1</span></div>
+    <div class="stat"><span class="num">0<small>/3</small></span><span class="label">Same champion<br>sampled, verified</span></div>
+  </div>
+
+  <div class="nb-marginalia">
+    <div class="nb-marginalia__label">The patient</div>
+    <div class="nb-marginalia__body">
+      <p>
+        <a href="https://huggingface.co/sapientinc/HRM-Text-1B">HRM-Text-1B</a> is a
+        language-scale adaptation of Sapient's Hierarchical Reasoning Model — two
+        recurrent transformer stacks, a low-level <b>L</b> module and a high-level
+        <b>H</b> module, iterated together. The original was ~27M parameters and
+        reasoned on ARC and Sudoku purely by <em>recurrent computation at fixed
+        parameter count</em>. Run here through Aryagm's
+        <a href="https://github.com/Aryagm/HRM-mlx">HRM-mlx</a> Apple-Silicon port
+        — which is <em>not</em> mlx_lm-compatible; the recurrence needs bespoke
+        per-pass KV caches.
+      </p>
+      <p>
+        The probe arsenal: a cross-language interlingua scan (geometry), a
+        per-cycle logit lens (mechanism), a coherence detector (degeneracy floor),
+        and a small reasoning battery (capability). Triangulating them is the whole
+        method — and is also exactly what went wrong.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── §1 SLOW/FAST ──────────────────────────────────────────────── -->
+<section id="mechanism">
+  <h2><span class="num">§1</span>The slow/fast split is real, and legible</h2>
+  <div class="col-side">
+    <div>
+      <p class="dropcap">
+        The forward loop, almost literally: the fast <b>L</b> module relaxes many
+        times toward a target held fixed by the slow <b>H</b> state; then <b>H</b>
+        takes a single step, moving the target; repeat. It is nested fixed-point
+        iteration — <em>mutual</em> refinement of one evolving state, not a one-way
+        pipeline.
+      </p>
+      <p>
+        A per-cycle <span class="hl-acc">logit lens</span> — decoding each module's
+        state through the output head — makes the division of labour visible in
+        plain token space. <b>H</b> (meaning) decodes to content: the problem's
+        actual numbers, reasoning words like "Since," "We," "By." <b>L</b> (surface)
+        decodes to subword fragments that aren't clean output tokens. The roles
+        aren't a training story you have to take on faith; they're right there in
+        the decode.
+      </p>
+    </div>
+    <aside class="aside">
+      <span class="nb-kicker">Setup gotcha</span>
+      On a 16&nbsp;GB machine the bf16 run drove the system to ~13.6&nbsp;GB and
+      into swap — yet the live KV cache is only ~480&nbsp;MB. The culprit was
+      MLX's unbounded buffer-cache pool, fed by the per-token concatenate across
+      128 passes; it piled up to 12.4&nbsp;GB. Two memory counters
+      <em>both lied</em> (one ignores the pool, one ignores Metal wired memory).
+      Fix: <span class="mono">--static-cache</span> (13.6→3.4&nbsp;GB). Decode then
+      runs ~29 tok/s; the earlier "2 tok/s" was pure swap thrash.
+    </aside>
+  </div>
+
+  <div class="figure">
+    <div class="fig-stub">[ Fig 1 — depth geometry · inline-SVG redraw pending ]</div>
+    <div class="nb-figcap"><b>Fig 1 — depth geometry.</b> Adjacent-layer cosine and delta-norm down the unrolled stack. A smooth residual-stream highway (cos 0.96–0.99) through the body, then a violent rotation into output-token geometry at the final layer (cos→0.71, ‖Δ‖ spike). The L (fast) module is noisier per layer than H (slow). Same signature as Granite and Gemma — a textbook transformer wearing a recurrent costume.</div>
+  </div>
+</section>
+
+
+<!-- ─── §2 INTERLINGUA ────────────────────────────────────────────── -->
+<section id="interlingua">
+  <h2><span class="num">§2</span>An interlingua — with a warning label</h2>
+  <p class="dek">
+    Using a cross-language centered-cosine probe (parallel EN/ZH/FR sentences),
+    the model develops a partial language-decoupled "interlingua" — but only for
+    structured content, and only in the H module.
+  </p>
+  <div class="col-2">
+    <div>
+      <p>
+        Math, English↔Chinese: cosine jumps to <b>+0.32 the instant the state
+        enters the H (slow) module</b>, cycle 0, and recurs across cycles. Prose
+        (fact, poem) EN↔ZH <em>never</em> crosses (~0). Only structured, numeric
+        content becomes language-decoupled — and it happens in the meaning module,
+        exactly where the lens says meaning lives.
+      </p>
+    </div>
+    <div>
+      <p>
+        This is a real representational property, and it is seductive. <b>Remember
+        it</b> — in §5 it becomes the trap. A metric this clean, this
+        theoretically-satisfying, is precisely the kind of thing that will later
+        seem to "corroborate" a behavioral story it has nothing to do with.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── §3 LOOP SCALING ───────────────────────────────────────────── -->
+<section id="loop-scaling">
+  <h2><span class="num">§3</span>The loop-scaling negative (and a self-correction)</h2>
+  <p>
+    HRM's whole premise is buying reasoning with more loops, so I pushed
+    <span class="mono">H_cycles</span> from 2 to 8. It does not help: the math
+    interlingua peaks at the <em>trained</em> cycles and decays to noise by H2+,
+    and the H-state does not converge to a fixed point — it oscillates.
+  </p>
+  <p>
+    I first logged this as "low-rank collapse." <b>An effective-rank probe
+    falsified my own claim</b> — the participation ratio <em>rises</em> across
+    cycles (10→22), it doesn't fall. The real mechanism, from the lens: over
+    iteration, the meaning channel converges onto end-of-sequence and formatting
+    tokens (<span class="mono">&lt;|box_end|&gt;</span>, <span class="mono">\n</span>).
+    The model reads excess compute as "you're done — terminate." Content
+    evaporates into <em>termination</em>, at full rank. The checkpoint is
+    saturated at its trained depth; you cannot buy reasoning with free test-time
+    loops. <em>(First lesson that a probe can mislead — a rank probe corrected a
+    wrong reading of a cosine probe. It would not be the last.)</em>
+  </p>
+</section>
+
+
+<!-- ─── §4 THE EXCITING FINDING ───────────────────────────────────── -->
+<section id="finding">
+  <h2><span class="num">§4</span>The exciting finding — a sweep, and a "champion"</h2>
+  <p class="dek">
+    A unified harness, ~35 configs across five waves: layer duplication,
+    per-cycle L-schedules, residual damping, H/L ratios. Readout per config:
+    geometry + interlingua + logit-lens + a 6-item reasoning battery — scored
+    <em>greedily, n=1</em>. A clean story emerged.
+  </p>
+
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>config</th><th class="num">battery</th><th>solved the multi-hop age-sort?</th></tr></thead>
+      <tbody>
+        <tr><td class="label">baseline</td><td class="num">3 / 6</td><td class="neg">✗</td></tr>
+        <tr class="divider"><td class="label">rys_l &nbsp;<span class="muted">(duplicate early L layers)</span></td><td class="num pos">5 / 6</td><td class="pos">✓ &nbsp;— best of all configs</td></tr>
+        <tr><td class="label">combo_rys_anchor</td><td class="num pos">5 / 6</td><td class="pos">✓</td></tr>
+        <tr><td class="label">ratio_hi_l &nbsp;<span class="muted">(more L cycles)</span></td><td class="num">4 / 6</td><td class="pos">✓</td></tr>
+        <tr><td class="label">ext_h2_l6 &nbsp;<span class="muted">(2× L)</span></td><td class="num">4 / 6</td><td class="pos">✓</td></tr>
+        <tr><td class="label">every extended-H config</td><td class="num neg">0–1 / 6</td><td class="neg">✗</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:var(--sp-5)">
+    The pattern was gorgeous and theoretically motivated: <b>more settling in the
+    fast/renderer module helped reasoning; more drift-inducing H hurt.</b> A narrow
+    sweet spot, early-L duplication. And the interlingua geometry seemed to
+    corroborate it. It even survived a first robustness pass — the supposed
+    <em>null control</em> (duplicating L) was the single best config. <em>(In
+    hindsight, that the control won should have been the tell.)</em>
+  </p>
+
+  <div class="figure">
+    <div class="fig-stub">[ Fig 2 — the 35-config sweep · inline-SVG redraw pending ]</div>
+    <div class="nb-figcap"><b>Fig 2 — the 35-config sweep (greedy, n=1).</b> Each point a config: interlingua strength (x) vs battery score (y); solved-the-age-sort configs marked. Two things are visible at once — and only one of them survives §6. The solved configs scatter across <em>all</em> interlingua values (the claim that geometry is decoupled from reasoning — this <b>holds</b>); and they cluster in the more-L configs (rys_l, ratio_hi_l, combo_rys_anchor — the "champion" story that <b>does not</b>). This is the figure that looked like a result.</div>
+  </div>
+</section>
+
+
+<!-- ─── §5 THE TURN ───────────────────────────────────────────────── -->
+<section id="turn">
+  <h2><span class="num">§5</span>The turn: verification deflates it</h2>
+  <p class="dek">
+    The whole thing rested on greedy, n=1 scoring. The rigorous follow-up —
+    sampling at temperature 0.7, N=3 per item — broke it immediately.
+  </p>
+
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>age-sort, sampled (N=3)</th><th class="num">score</th><th>vs greedy</th></tr></thead>
+      <tbody>
+        <tr><td class="label">baseline</td><td class="num">2 / 3</td><td>solves it ~70% on its own</td></tr>
+        <tr class="divider"><td class="label">rys_l &nbsp;<span class="muted">(the "champion")</span></td><td class="num neg">0 / 3</td><td class="game">worse than baseline ←!!</td></tr>
+        <tr><td class="label">combo_rys_anchor</td><td class="num">1 / 3</td><td>within noise</td></tr>
+        <tr><td class="label">ratio_hi_l</td><td class="num">2 / 3</td><td>within noise</td></tr>
+        <tr><td class="label">ext_h2_l6</td><td class="num">2 / 3</td><td>within noise</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:var(--sp-5)">
+    <b>The champion scored 0/3 — worse than baseline.</b> No config beat baseline;
+    everything non-extended clustered within N=3 noise. The base model is simply
+    non-deterministic and solves these puzzles ~70% of the time on its own — the
+    greedy sweep had been measuring <em>which single draw got lucky</em>, not
+    capability.
+  </p>
+  <p>
+    And the interlingua metric that "corroborated" the story? <b>Decoupled.</b>
+    Across all configs the highest-interlingua runs were among the <em>worst</em>
+    behaviorally; a config with near-zero interlingua reasoned fine. The pretty
+    geometry measures a representational property, not capability — the §2 warning
+    label, cashed in. <em>(Second, decisive lesson that probes mislead — and this
+    one had fooled me for a full overnight.)</em>
+  </p>
+</section>
+
+
+<!-- ─── §6 WHAT HELD ──────────────────────────────────────────────── -->
+<section id="held">
+  <h2><span class="num">§6</span>What actually held — and the mechanism</h2>
+  <p class="dek">
+    Reading the real generations and the per-cycle lens — not just the scores —
+    recovered a satisfying result: the modules' roles, confirmed by <em>how</em>
+    they fail.
+  </p>
+
+  <div class="specimen">
+    <div class="head"><span class="lid">ext_h4 — more H</span><span class="t">failure mode: drift off-task</span></div>
+    <div class="specimen-name">H is the integrator — over-run it and it loses the thread</div>
+    <div class="quote">z_h, cycles 0–1:  [names, task content]   ← identical to baseline
+z_h, cycles 2–3:  ['1','To','From', …]      ← untrained cycles, names vanish
+output:           number / symbol salad</div>
+    <div class="gloss">The first two H-cycles match baseline; the <em>untrained</em> cycles drift the meaning state off the task tokens, and the output degenerates. Extra H-updates bury the input under accumulated abstraction.</div>
+  </div>
+
+  <div class="specimen">
+    <div class="head"><span class="lid">rys_l — duplicate L</span><span class="t">failure mode: surface fragmentation</span></div>
+    <div class="specimen-name">L is the renderer — over-drive it and the surface destabilises</div>
+    <div class="quote">z_h fragments:  'C','Be','A'   instead of  'Eve','Cara','Ben'
+generations:    ordering CORRECT, but Cara→"Costa"→"Rice", answers truncate</div>
+    <div class="gloss">The reasoning <em>ordering</em> is usually right; the names get corrupted and answers truncate. So rys_l's "0/3" is largely a <em>rendering</em> defect an exact-match scorer punishes as a reasoning failure — a subtlety the score alone hid.</div>
+  </div>
+
+  <p style="margin-top:var(--sp-5)">
+    The modules behave exactly as their roles predict — the surgery perturbs the
+    <b>surface</b> (L) or the <b>state stability</b> (H), and neither reliably
+    improves reasoning. The robust conclusions: <span class="hl-neg">you can
+    reliably make this model worse</span> (extend H → garbage); <span class="hl-neg">you
+    cannot reliably make it better</span> by inference-time surgery; one fencepost
+    trap (<span class="mono">clock_strike</span>) was solved by <em>nothing,
+    ever</em> — a hard capability ceiling. The reasoning capability is near-fixed
+    and saturated; the real lever is retraining, not surgery.
+  </p>
+</section>
+
+
+<!-- ─── §7 PROBE TRIANGULATION ────────────────────────────────────── -->
+<section id="probes">
+  <h2><span class="num">§7</span>What each instrument is actually good for</h2>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead><tr><th>probe</th><th>measures</th><th>verdict</th></tr></thead>
+      <tbody>
+        <tr><td class="label">interlingua (cosine)</td><td>representational geometry</td><td class="neg">decoupled from capability — not a capability proxy</td></tr>
+        <tr><td class="label">coherence (distinct-trigram + boxed-rate)</td><td>degeneracy / non-commitment</td><td>a crater <em>floor</em> detector (Pearson +0.44); can't separate good from better</td></tr>
+        <tr><td class="label">logit lens (per-cycle)</td><td>mechanism</td><td class="pos">the MVP — pinpointed drift vs fragmentation; twice corrected wrong readings</td></tr>
+        <tr><td class="label">behavioral battery</td><td>reasoning</td><td>the only capability signal — but worthless at greedy n=1; needs sampling + headroom + N≥~8</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!-- ─── §8 LESSON ─────────────────────────────────────────────────── -->
+<section id="lesson">
+  <h2><span class="num">§8</span>The methodology lesson</h2>
+  <div class="pull">
+    A high-variance model + greedy single-shot evaluation + a corroborating-but-decoupled
+    geometric metric will manufacture a clean, theoretically-satisfying,
+    completely false finding — and it will survive a casual robustness check.
+    Sampling and champion-verification are not optional polish; they are the
+    difference between a result and a hallucination. A metric that agrees with
+    your story is not evidence until you've shown it tracks the outcome you care about.
+    <cite>HRM-Text-1B · the real takeaway · 2026</cite>
+  </div>
+</section>
+
+
+<!-- ─── §9 CAVEATS / REPRO ────────────────────────────────────────── -->
+<section id="caveats">
+  <h2><span class="num">§9</span>Caveats &amp; reproduction</h2>
+  <ul class="walkback">
+    <li><span class="wbhead">n is small even after the follow-up</span> (N=3 on verification); the deflation is clear but residual effects (a possible weak more-L → fencepost lift) are unresolved and need N≥8 on harder items.</li>
+    <li><span class="wbhead">The battery is a vibes-grade yardstick</span>, fit for within-model deltas, not cross-model claims; the multi-hop items saturate baseline (limited headroom).</li>
+    <li><span class="wbhead">Scorers are imperfect</span> — one item's answer collides with its prompt; exact-name matching penalises correct-order/wrong-surface. Full generations are dumped so any claim can be re-graded.</li>
+    <li><span class="wbhead">The original greedy "champion" generations were never saved</span> — superseded by the sampled re-runs. Fitting: the thing that started the excitement was a draw that can't be reproduced.</li>
+    <li><span class="wbhead">This is an under-trained base checkpoint without ACT.</span> The loop-scaling story may well be true on a properly-trained successor. None of this indicts the <em>architecture</em> — only this checkpoint, probed this way.</li>
+  </ul>
+
+  <hr class="rule">
+  <p class="small muted">
+    Model: <span class="mono">Aryagm/HRM-Text-1B-MLX</span> (bf16 probing / 4bit serving), via
+    <a href="https://github.com/Aryagm/HRM-mlx">HRM-mlx</a>. Always <span class="mono">--static-cache</span>; bf16, never fp16.
+    Scripts: <span class="mono">extract_states.py</span> · <span class="mono">interlingua_scan.py</span> ·
+    <span class="mono">logit_lens.py</span> · <span class="mono">experiments.py</span> (sampling) ·
+    <span class="mono">regrade.py</span> (strict boxed) · <span class="mono">probe_coherence.py</span>. Full-generation JSONs in <span class="mono">figs/</span>.
+    Sibling specimens: <a href="/lab/05_granite.html">Granite</a> · <a href="gemma.html">Gemma 4</a>.
+    Shared <a href="methods.html">methods &amp; references</a>.
+  </p>
+</section>
+
+</main>
+<script src="/assets/nb.js"></script>
+</body>
+</html>
