@@ -33,6 +33,7 @@
 <nav class="nb-nav">
   <a class="nb-nav__home" href="/">ANYA · RESEARCH NOTEBOOKS</a>
   <a href="#intervention">Intervention</a>
+  <a href="#observation">Observation</a>
   <a href="#method">Method</a>
   <a href="#systems">Systems</a>
   <span class="nb-nav__spacer"></span>
@@ -85,6 +86,13 @@
         <div class="nb-card__find"><b>Finding —</b> which cuts survive is mostly set by the shared-KV anchor geometry — and by refusing to trust the grader that wanted to be fooled.</div>
         <div class="nb-card__go">Read the surgical record →</div>
       </a>
+      <a class="nb-card" href="/lab/gemma31b.html">
+        <div class="nb-card__tag"><span>Dense · negative result</span><span class="st">published</span></div>
+        <h3>Gemma 4 31B — the model that wouldn't break</h3>
+        <p class="nb-card__dek">A 176-config dup/prune sweep of a 31B model squeezed into 16 GB at IQ2_M, and not one surgery won. The page is the autopsy of a null result — because the null still had a shape.</p>
+        <div class="nb-card__find"><b>Finding —</b> robust to a single cut, rigid under a structural one, damage scaling span × depth — and the seed-noise lived at the front of the stack, not the back.</div>
+        <div class="nb-card__go">Read the negative result →</div>
+      </a>
       <a class="nb-card" href="/lab/08_moe_expert_surgery.html">
         <div class="nb-card__tag"><span>MoE · intervention</span><span class="st">published</span></div>
         <h3>Experts, not layers</h3>
@@ -98,6 +106,20 @@
         <p class="nb-card__dek">A recurrent reasoner whose whole thesis is reasoning-depth through loops, not parameters. A gorgeous overnight finding that more loops help — then my own verification pass, sampling instead of greedy, demolished it.</p>
         <div class="nb-card__find"><b>Finding —</b> greedy single-shot scoring manufactured a clean false champion; the methodology lesson outlived the result.</div>
         <div class="nb-card__go">Read the false dawn →</div>
+      </a>
+    </div>
+  </section>
+
+  <section id="observation">
+    <div class="sec-label">Observation</div>
+    <p class="sec-note">The other half of the method: watch without cutting. Probe a model's hidden states the day it ships and ask where, geometrically, a concept lives — before any layer is touched.</p>
+    <div class="cards">
+      <a class="nb-card" href="/lab/vivarium_geometry.html">
+        <div class="nb-card__tag"><span>Hidden-state · geometry</span><span class="st">published</span></div>
+        <h3>The Vivarium — Gemma 4 12B on day zero</h3>
+        <p class="nb-card__dek">A zero-day observational scan of Gemma-4-12B. Six probes — paraphrase invariance, a sleeper token, a two-gate staircase, cross-lingual convergence, WiC sense bands — pointed at the same place.</p>
+        <div class="nb-card__find"><b>Finding —</b> all six land on one concept zone at layers 18–27; the final layer spends it on predicting the next token. Figures are acknowledged palette stand-ins.</div>
+        <div class="nb-card__go">Read the scan →</div>
       </a>
     </div>
   </section>

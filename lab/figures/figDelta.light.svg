@@ -1,0 +1,51 @@
+<svg id="figDelta" viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg">
+<line x1="58" x2="880" y1="174.0" y2="174.0" stroke="#B4C0C8" stroke-width="0.8"/>
+<text x="53" y="177.5" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="end">0</text>
+<line x1="58" x2="880" y1="141.3" y2="141.3" stroke="#D2DAE0" stroke-width="0.4"/>
+<text x="53" y="144.8" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="end">+25</text>
+<line x1="58" x2="880" y1="108.6" y2="108.6" stroke="#D2DAE0" stroke-width="0.4"/>
+<text x="53" y="112.1" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="end">+50</text>
+<line x1="58" x2="880" y1="76.0" y2="76.0" stroke="#D2DAE0" stroke-width="0.4"/>
+<text x="53" y="79.5" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="end">+75</text>
+<line x1="58" x2="880" y1="43.3" y2="43.3" stroke="#D2DAE0" stroke-width="0.4"/>
+<text x="53" y="46.8" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="end">+100</text>
+<text x="11" y="101" font-family="JetBrains Mono,monospace" font-size="9.5" letter-spacing="1" fill="#7B8794" text-anchor="middle" transform="rotate(-90 11 101)">‖Δh‖ (avg across tokens)</text>
+<polygon points="58.0,47.5 75.5,70.6 93.0,97.9 110.5,94.0 128.0,76.4 145.4,48.8 162.9,49.3 180.4,73.9 197.9,81.5 215.4,87.0 232.9,110.6 250.4,100.3 267.9,92.1 285.4,83.9 302.9,135.0 320.3,114.8 337.8,135.3 355.3,127.9 372.8,119.0 390.3,130.7 407.8,133.6 425.3,124.5 442.8,126.4 460.3,123.7 477.7,124.9 495.2,122.5 512.7,82.2 530.2,79.2 547.7,92.2 565.2,106.3 582.7,107.6 600.2,100.0 617.7,84.2 635.1,90.3 652.6,104.7 670.1,114.9 687.6,129.9 705.1,132.4 722.6,117.1 740.1,104.3 757.6,78.5 775.1,94.4 792.6,130.8 810.0,119.6 827.5,121.1 845.0,113.4 862.5,109.5 880.0,103.3 880.0,117.3 862.5,119.9 845.0,123.2 827.5,130.3 810.0,128.1 792.6,136.1 775.1,98.3 757.6,83.9 740.1,109.5 722.6,122.0 705.1,141.8 687.6,139.8 670.1,121.6 652.6,117.6 635.1,101.2 617.7,90.7 600.2,107.7 582.7,114.4 565.2,117.0 547.7,103.8 530.2,86.2 512.7,94.1 495.2,130.8 477.7,133.9 460.3,130.1 442.8,130.5 425.3,128.9 407.8,137.0 390.3,136.2 372.8,122.4 355.3,130.3 337.8,137.0 320.3,121.5 302.9,138.5 285.4,87.8 267.9,96.2 250.4,102.6 232.9,113.6 215.4,89.2 197.9,86.6 180.4,81.2 162.9,58.1 145.4,56.4 128.0,79.8 110.5,96.1 93.0,99.0 75.5,75.8 58.0,53.1" fill="#4FB2C2" fill-opacity="0.12" stroke="none"/>
+<path d="M58.0,50.3 L75.5,73.2 L93.0,98.5 L110.5,95.0 L128.0,78.1 L145.4,52.6 L162.9,53.7 L180.4,77.6 L197.9,84.1 L215.4,88.1 L232.9,112.1 L250.4,101.4 L267.9,94.1 L285.4,85.8 L302.9,136.7 L320.3,118.1 L337.8,136.1 L355.3,129.1 L372.8,120.7 L390.3,133.4 L407.8,135.3 L425.3,126.7 L442.8,128.4 L460.3,126.9 L477.7,129.4 L495.2,126.6 L512.7,88.2 L530.2,82.7 L547.7,98.0 L565.2,111.6 L582.7,111.0 L600.2,103.8 L617.7,87.4 L635.1,95.8 L652.6,111.2 L670.1,118.2 L687.6,134.8 L705.1,137.1 L722.6,119.5 L740.1,106.9 L757.6,81.2 L775.1,96.3 L792.6,133.5 L810.0,123.8 L827.5,125.7 L845.0,118.3 L862.5,114.7 L880.0,110.3" fill="none" stroke="#4FB2C2" stroke-width="1.8" stroke-linejoin="round"/>
+<circle cx="58.0" cy="50.3" r="1.6" fill="#4FB2C2"/>
+<circle cx="93.0" cy="98.5" r="1.6" fill="#4FB2C2"/>
+<circle cx="128.0" cy="78.1" r="1.6" fill="#4FB2C2"/>
+<circle cx="162.9" cy="53.7" r="1.6" fill="#4FB2C2"/>
+<circle cx="197.9" cy="84.1" r="1.6" fill="#4FB2C2"/>
+<circle cx="232.9" cy="112.1" r="1.6" fill="#4FB2C2"/>
+<circle cx="267.9" cy="94.1" r="1.6" fill="#4FB2C2"/>
+<circle cx="302.9" cy="136.7" r="1.6" fill="#4FB2C2"/>
+<circle cx="337.8" cy="136.1" r="1.6" fill="#4FB2C2"/>
+<circle cx="372.8" cy="120.7" r="1.6" fill="#4FB2C2"/>
+<circle cx="407.8" cy="135.3" r="1.6" fill="#4FB2C2"/>
+<circle cx="442.8" cy="128.4" r="1.6" fill="#4FB2C2"/>
+<circle cx="477.7" cy="129.4" r="1.6" fill="#4FB2C2"/>
+<circle cx="512.7" cy="88.2" r="1.6" fill="#4FB2C2"/>
+<circle cx="547.7" cy="98.0" r="1.6" fill="#4FB2C2"/>
+<circle cx="582.7" cy="111.0" r="1.6" fill="#4FB2C2"/>
+<circle cx="617.7" cy="87.4" r="1.6" fill="#4FB2C2"/>
+<circle cx="652.6" cy="111.2" r="1.6" fill="#4FB2C2"/>
+<circle cx="687.6" cy="134.8" r="1.6" fill="#4FB2C2"/>
+<circle cx="722.6" cy="119.5" r="1.6" fill="#4FB2C2"/>
+<circle cx="757.6" cy="81.2" r="1.6" fill="#4FB2C2"/>
+<circle cx="792.6" cy="133.5" r="1.6" fill="#4FB2C2"/>
+<circle cx="827.5" cy="125.7" r="1.6" fill="#4FB2C2"/>
+<circle cx="862.5" cy="114.7" r="1.6" fill="#4FB2C2"/>
+<text x="58.0" y="188" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="middle">0</text>
+<text x="145.4" y="188" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="middle">5</text>
+<text x="232.9" y="188" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="middle">10</text>
+<text x="320.3" y="188" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="middle">15</text>
+<text x="407.8" y="188" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="middle">20</text>
+<text x="495.2" y="188" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="middle">25</text>
+<text x="582.7" y="188" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="middle">30</text>
+<text x="670.1" y="188" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="middle">35</text>
+<text x="757.6" y="188" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="middle">40</text>
+<text x="845.0" y="188" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="middle">45</text>
+<text x="880.0" y="188" font-family="JetBrains Mono,monospace" font-size="9.5" fill="#69757F" text-anchor="middle">47</text>
+<text x="469" y="218" font-family="JetBrains Mono,monospace" font-size="9.5" letter-spacing="1" fill="#7B8794" text-anchor="middle">layer</text>
+</svg>
