@@ -1,210 +1,429 @@
-<!-- @dsCard group="Portfolio Hub" viewport="1100x900" name="Portfolio hub — index" subtitle="Slim research-notebook hub; plain HTML, ~1KB JS, no framework" -->
+<!-- @dsCard group="Portfolio Hub" viewport="1100x900" name="Portfolio hub — index" subtitle="Slim research-notebook hub; plain HTML, ~1.5KB JS, no framework" -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Anya — research notebooks</title>
-<meta name="description" content="Independent ML-evaluation research: small open-weight models taken apart and watched, on a 16 GB Mac Mini. Negative and corrected results kept on purpose.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E141A'/%3E%3Cpath d='M6 16 H15' stroke='%236F7C88' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 9' stroke='%236FCBD8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 23' stroke='%23E3C24A' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='15' cy='16' r='2.6' fill='%23ECEFF3'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="/styles.css">
-<style>
-  main { max-width: var(--page-max); margin: 0 auto; padding: 0 var(--gutter); }
-  .masthead { padding: var(--sp-9) 0 var(--sp-7); border-bottom: var(--bw) solid var(--border-strong); }
-  .masthead h1 { font-size: clamp(2rem, 3.6vw, 2.9rem); max-width: 18ch; margin: var(--sp-4) 0 var(--sp-5); }
-  .masthead h1 em { font-style: italic; color: var(--accent-bright); }
-  .bridge { font-size: var(--fs-dek); color: var(--text-dim); max-width: 62ch; }
-  .bridge a { border-bottom: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); }
-  section { padding: var(--sp-7) 0; border-bottom: var(--bw) solid var(--border); }
-  .sec-label { font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--tk-kicker); text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--sp-2); }
-  .sec-note { font-size: var(--fs-sm); color: var(--text-dim); max-width: 60ch; margin: 0 0 var(--sp-5); }
-  .sec-note a { border-bottom: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); }
-  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
-  .workgrid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--sp-6); margin-top: var(--sp-5); }
-  .work h3 { font-size: 1.08rem; margin: 0 0 var(--sp-2); }
-  .work p { font-size: var(--fs-sm); color: var(--text-dim); }
-  footer { max-width: var(--page-max); margin: 0 auto; padding: var(--sp-6) var(--gutter) var(--sp-9); }
-  .legal { font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: .03em; color: var(--text-muted); line-height: 1.7; }
-  @media (max-width: 760px) { .cards, .workgrid { grid-template-columns: 1fr; } }
-</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Anya — research notebooks</title>
+    <meta name="description" content="Independent ML-evaluation research: small open-weight models taken apart and watched, on a 16 GB Mac Mini. Negative and corrected results kept on purpose.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E141A'/%3E%3Cpath d='M6 16 H15' stroke='%236F7C88' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 9' stroke='%236FCBD8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 23' stroke='%23E3C24A' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='15' cy='16' r='2.6' fill='%23ECEFF3'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+    main {
+        max-width: var(--page-max);
+        margin: 0 auto;
+        padding: 0 var(--gutter);
+    }
+
+    .masthead {
+        padding: var(--sp-9) 0 var(--sp-7);
+        border-bottom: var(--bw) solid var(--border-strong);
+    }
+
+    .masthead h1 {
+        font-size: clamp(2rem, 3.6vw, 2.9rem);
+        max-width: 18ch;
+        margin: var(--sp-4) 0 var(--sp-5);
+    }
+
+    .masthead h1 em {
+        font-style: italic;
+        color: var(--accent-bright);
+    }
+
+    .bridge {
+        font-size: var(--fs-dek);
+        color: var(--text-dim);
+        max-width: 62ch;
+    }
+
+    .bridge a {
+        border-bottom: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+    }
+
+    section {
+        padding: var(--sp-7) 0;
+        border-bottom: var(--bw) solid var(--border);
+    }
+
+    .sec-label {
+        font-family: var(--font-mono);
+        font-size: var(--fs-label);
+        letter-spacing: var(--tk-kicker);
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: var(--sp-2);
+    }
+
+    .sec-note {
+        font-size: var(--fs-sm);
+        color: var(--text-dim);
+        max-width: 60ch;
+        margin: 0 0 var(--sp-5);
+    }
+
+    .sec-note a {
+        border-bottom: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+    }
+
+    .cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--sp-4);
+    }
+
+    .workgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: var(--sp-6);
+        margin-top: var(--sp-5);
+    }
+
+    .work h3 {
+        font-size: 1.08rem;
+        margin: 0 0 var(--sp-2);
+    }
+
+    .work p {
+        font-size: var(--fs-sm);
+        color: var(--text-dim);
+    }
+
+    footer {
+        max-width: var(--page-max);
+        margin: 0 auto;
+        padding: var(--sp-6) var(--gutter) var(--sp-9);
+    }
+
+    .legal {
+        font-family: var(--font-mono);
+        font-size: var(--fs-micro);
+        letter-spacing: .03em;
+        color: var(--text-muted);
+        line-height: 1.7;
+    }
+
+    @media (max-width: 760px) {
+        .cards, .workgrid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* ── nb-spec: specimen readout ──────────────────────────────────────────
+       Compact mono key/value strip that REPLACES the "Dense · damping" tag
+       (arch + op live here now — don't print them twice). One accent so the
+       card pops on a scan; austere on purpose.
+       Knobs:
+         • Austerity is the anti-slop move: mono, hairline border, square
+           corners. A gradient / rounded pill / icon flips it back to reading AI.
+         • The pop is the op value (var --accent-bright) — the operation is the
+           thing you actually scan a research index for.
+         • Optional scannability upgrade: color the left keyline per arch via
+           [data-arch] so dense / MoE / recurrent sort by eye across the grid.
+           Uncomment below + add data-arch="moe" etc. to each box.
+         • Heavy on mobile? flex-wrap already stacks it; or hide dt under 760px
+           and keep just the values. */
+    .nb-spec {
+        display: flex; flex-wrap: wrap; gap: 0;
+        margin: var(--sp-3) 0 0;
+        border: 1px solid var(--border);
+        border-left: 2px solid var(--accent);
+        font-family: var(--font-mono);
+        font-size: var(--fs-micro);
+        line-height: 1.4;
+    }
+    .nb-spec > div { display: flex; gap: .5ch; padding: .25rem .6rem; border-right: 1px solid var(--border); }
+    .nb-spec > div:last-child { border-right: 0; }
+    .nb-spec dt { margin: 0; color: var(--text-muted); text-transform: lowercase; }
+    .nb-spec dd { margin: 0; color: var(--text-dim); }
+    .nb-spec dd.op { color: var(--accent-bright); }   /* the pop */
+    /* optional — recolor keyline by architecture for at-a-glance sorting:
+    .nb-spec[data-arch="dense"]     { border-left-color: var(--accent); }
+    .nb-spec[data-arch="moe"]       { border-left-color: var(--accent-bright); }
+    .nb-spec[data-arch="recurrent"] { border-left-color: #E3C24A; }
+    */
+    </style>
 </head>
 <body>
 
-<nav class="nb-nav">
-  <a class="nb-nav__home" href="/">ANYA · RESEARCH NOTEBOOKS</a>
-  <a href="#intervention">Intervention</a>
-  <a href="#observation">Observation</a>
-  <a href="#method">Method</a>
-  <a href="#systems">Systems</a>
-  <span class="nb-nav__spacer"></span>
-  <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
-  <a href="#" data-theme-toggle>☼ Light</a>
-</nav>
+    <nav class="nb-nav">
+        <a class="nb-nav__home" href="/">ANYA · EXPERIMENTATION NOTEBOOKS</a>
+        <a href="#intervention">Intervention</a>
+        <a href="#observation">Observation</a>
+        <a href="#method">Method</a>
+        <a href="#systems">Systems</a>
+        <span class="nb-nav__spacer"></span>
+        <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
+        <a href="#" data-theme-toggle>☼ Light</a>
+    </nav>
 
-<main>
-  <header class="masthead">
-    <div class="nb-kicker">Independent ML-evaluation research · 2026</div>
-    <h1>Small models, taken apart and <em>watched</em>.</h1>
-    <p class="bridge">
-      I'm a software engineer (formerly .NET / CMS, now self-directed) measuring where ability
-      lives inside small open-weight language models - duplicating layers, pruning them, scanning
-      hidden states - on a 16&nbsp;GB Mac Mini, no cloud GPUs. Most of these experiments end in a
-      characterised breakage rather than a better model, and that's the point: the
-      <a href="/lab/05_granite.html">negative and corrected results</a> are kept on purpose, with the autopsy.
-    </p>
-  </header>
+    <main>
+        <header class="masthead">
+            <div class="nb-kicker">Independent ML-evaluation · 2026</div>
+            <h1>
+                Local AI models, torn down, modified, and tested.
+            </h1>
+            <p class="bridge">
+      I'm a software engineer (professionally .NET, personally omni-curious) that's been trying out local LLMs, partially in hopes of finding a way to reduce my cloud usage, and partially in order to learn more about how they work by modifying them. You can learn a lot about how many things function by disassembling them, and LLMs are all the rage these days, which makes them a great candidate that won't end up in the landfill when I do something wrong.
+            </p>
+        </header>
 
-  <section id="intervention">
-    <div class="sec-label">Intervention</div>
-    <p class="sec-note">What happens when you cut. Layers duplicated, pruned, damped, and — in a mixture-of-experts model — whole experts removed, with the effect measured each time.</p>
-    <div class="cards">
-      <a class="nb-card" href="/lab/01_minicpm5_sigma_alpha.html">
-        <div class="nb-card__tag"><span>Dense · damping</span><span class="st">published</span></div>
-        <h3>MiniCPM5 — the husk, and the Σα-law</h3>
-        <p class="nb-card__dek">The model produced nothing shippable — but the instrument was built here, and one empirical regularity held up across every later specimen.</p>
-        <div class="nb-card__find"><b>Finding —</b> a methods notebook wearing a specimen's clothes: read it for the ruler, not the result.</div>
-        <div class="nb-card__go">Read the husk →</div>
-      </a>
-      <a class="nb-card" href="/lab/03_nanbeige.html">
-        <div class="nb-card__tag"><span>Dense · intervention</span><span class="st">published</span></div>
-        <h3>Nanbeige — where the surgery helped</h3>
-        <p class="nb-card__dek">The one specimen where inference-time surgery measurably helped — and what "helped" turned out to actually mean on inspection.</p>
-        <div class="nb-card__find"><b>Finding —</b> the gain was real but narrow; the headline needed the caveat to stay true.</div>
-        <div class="nb-card__go">Read the record →</div>
-      </a>
-      <a class="nb-card" href="/lab/05_granite.html">
-        <div class="nb-card__tag"><span>Dense · correction</span><span class="st">published</span></div>
-        <h3>Granite — the champion fell</h3>
-        <p class="nb-card__dek">This page shipped with a clean headline, then I overturned it myself. The autopsy stayed on the page rather than getting quietly deleted.</p>
-        <div class="nb-card__find"><b>Finding —</b> which surgeries help is mostly explained by where the model stashes its keys and values.</div>
-        <div class="nb-card__go">Read the reversal →</div>
-      </a>
-      <a class="nb-card" href="/lab/gemma.html">
-        <div class="nb-card__tag"><span>Dense · shared-KV</span><span class="st">published</span></div>
-        <h3>Gemma 4 — opened at every layer</h3>
-        <p class="nb-card__dek">The most complete dissection in the lab — all 42 layers duplicated and pruned, each scored two ways. The lenient grader handed back a tidy list of winners; the strict regrade culled most of them.</p>
-        <div class="nb-card__find"><b>Finding —</b> which cuts survive is mostly set by the shared-KV anchor geometry — and by refusing to trust the grader that wanted to be fooled.</div>
-        <div class="nb-card__go">Read the surgical record →</div>
-      </a>
-      <a class="nb-card" href="/lab/gemma31b.html">
-        <div class="nb-card__tag"><span>Dense · negative result</span><span class="st">published</span></div>
-        <h3>Gemma 4 31B — the model that wouldn't break</h3>
-        <p class="nb-card__dek">A 176-config dup/prune sweep of a 31B model squeezed into 16 GB at IQ2_M, and not one surgery won. The page is the autopsy of a null result — because the null still had a shape.</p>
-        <div class="nb-card__find"><b>Finding —</b> robust to a single cut, rigid under a structural one, damage scaling span × depth — and the seed-noise lived at the front of the stack, not the back.</div>
-        <div class="nb-card__go">Read the negative result →</div>
-      </a>
-      <a class="nb-card" href="/lab/08_moe_expert_surgery.html">
-        <div class="nb-card__tag"><span>MoE · intervention</span><span class="st">published</span></div>
-        <h3>Experts, not layers</h3>
-        <p class="nb-card__dek">Every other specimen treats the model as a stack of layers. This one cuts along a different seam — removing whole experts from a mixture-of-experts model.</p>
-        <div class="nb-card__find"><b>Finding —</b> expert removal degrades differently from layer surgery, and the seam matters.</div>
-        <div class="nb-card__go">Read the dissection →</div>
-      </a>
-      <a class="nb-card" href="/lab/hrm.html">
-        <div class="nb-card__tag"><span>Recurrent · negative result</span><span class="st">draft</span></div>
-        <h3>HRM — a false dawn</h3>
-        <p class="nb-card__dek">A recurrent reasoner whose whole thesis is reasoning-depth through loops, not parameters. A gorgeous overnight finding that more loops help — then my own verification pass, sampling instead of greedy, demolished it.</p>
-        <div class="nb-card__find"><b>Finding —</b> greedy single-shot scoring manufactured a clean false champion; the methodology lesson outlived the result.</div>
-        <div class="nb-card__go">Read the false dawn →</div>
-      </a>
-    </div>
-  </section>
+        <section id="why">
+            <div class="sec-label">The draw</div>
+            <p class="sec-note">I've been inspired by many people who spend their time and prodigious compute on fine-tuning, quantizing, and experimenting with models, and all the open source software they publish. I have no pretensions of creating models that can compete or eclipse those released by the big organizations, but I can attempt new experiments and share what I've come across for others to read.</p>
+            <p class="sec-note">Another draw is the feel of hanging out at the raw edge of technological progress in the community driven space of local LLMs. It resembles to me past technology boom periods where anyone could become a wizard in a new technology and people cobbled together enterprise hardware to host free websites or services. For my part, I'm doing all this on a base model Mac mini, which admittedly is uniquely capable for LLMs, but still nothing on the scale of the compute available to frontier companies or even research groups. The ability to perform all this on my own device, no signups, no fees, and no worrying that a tweak I've tried will cost me wasted money on a rented server. All this runs in the background and I can pivot my tasks when I want.</p>
+        </section>
 
-  <section id="observation">
-    <div class="sec-label">Observation</div>
-    <p class="sec-note">The other half of the method: watch without cutting. Probe a model's hidden states the day it ships and ask where, geometrically, a concept lives — before any layer is touched.</p>
-    <div class="cards">
-      <a class="nb-card" href="/lab/vivarium_geometry.html">
-        <div class="nb-card__tag"><span>Hidden-state · geometry</span><span class="st">published</span></div>
-        <h3>The Vivarium — Gemma 4 12B on day zero</h3>
-        <p class="nb-card__dek">A zero-day observational scan of Gemma-4-12B. Six probes — paraphrase invariance, a sleeper token, a two-gate staircase, cross-lingual convergence, WiC sense bands — pointed at the same place.</p>
-        <div class="nb-card__find"><b>Finding —</b> all six land on one concept zone at layers 18–27; the final layer spends it on predicting the next token. Figures are acknowledged palette stand-ins.</div>
-        <div class="nb-card__go">Read the scan →</div>
-      </a>
-    </div>
-  </section>
+        <section id="intervention">
+            <div class="sec-label">Intervention</div>
+            <p class="sec-note">Exploring what happens when you modify models. Layers duplicated, pruned, damped, and recombined, then measured to see how the resulting model fares.</p>
+            <p class="sec-note">The model layer experiments are inspired by the work of David Ng, and while I haven't had the same amount of success on leaderboards, I have been expanding on his method and tackling the ever present difficulty of evaluating model performance.</p>
+            <div class="cards">
+                <a class="nb-card" href="/lab/01_minicpm5_sigma_alpha.html">
+                    <dl class="nb-spec" data-arch="dense">
+                        <div><dt>arch</dt><dd>dense · llama-style · 1B</dd></div>
+                        <div><dt>runtime</dt><dd>MLX · f16</dd></div>
+                        <div><dt>op</dt><dd class="op">layer dup/prune · damping</dd></div>
+                    </dl>
+                    <h3>MiniCPM5 — the lightweight prototype</h3>
+                    <p class="nb-card__dek">The model didn't produce an unambiguous success, but the instrumentation was built here, and one empirical regularity held up across every later specimen.</p>
+                    <div class="nb-card__find">
+                        <b>Results: </b>
+                         A model too small for improvement, but just small enough to quickly iterate the scripts, probesets, and new intervention ideas on.
+                    </div>
+                    <div class="nb-card__go">Read more →</div>
+                </a>
+                <a class="nb-card" href="/lab/03_nanbeige.html">
+                    <div class="nb-card__tag">
+                        <span>Dense · layer surgery</span>
+                    </div>
+                    <h3>Nanbeige — the overthinking curiosity</h3>
+                    <p class="nb-card__dek">The one specimen where inference-time surgery measurably helped, albeit in a roundabout way.</p>
+                    <div class="nb-card__find">
+                        <b>Results: </b>
+                         An early attempt at evaluating models showed a real improvement from certain layer changes, but on closer inspection it wasn't really making the model smarter.
+                    </div>
+                    <div class="nb-card__go">Read more →</div>
+                </a>
+                <a class="nb-card" href="/lab/05_granite.html">
+                    <div class="nb-card__tag">
+                        <span>Dense · correction</span>
+                    </div>
+                    <h3>Granite — revisited and overturned</h3>
+                    <p class="nb-card__dek">This page showed me just how far my instrumentation had come, and it required more than just a few edits to address. Both the original and addendum update coexist to demonstrate how a rigorous approach matters. And, of course, the revised result isn't kind to the hypothesis of altering the granite model.</p>
+                    <div class="nb-card__find">
+                        <b>Finding: </b>
+                         which surgeries help seems to correlate with where the model stashes its keys and values.
+                    </div>
+                    <div class="nb-card__go">Read more →</div>
+                </a>
+                <a class="nb-card" href="/lab/gemma.html">
+                    <div class="nb-card__tag">
+                        <span>Dense · shared-KV</span>
+                        <span class="st">published</span>
+                    </div>
+                    <h3>Gemma 4 E4B — a unique design</h3>
+                    <p class="nb-card__dek">The original disection and published page, and one of the larger models to receive an extensive sweep of its layers. This model also demonstrated the fragility of the evaluator and the necessity of interpreting the results correctly. The lenient grader handed back a tidy list of winners, but the strict regrade culled most of them.
+This model also served as a proof of concept as RYS layer edits don't play well with models structured like this. Unlike the dense isotropic models where each layer just interfaces with its neighbors, this model required some careful editing and remapping to work correctly, and certain layers remain off limits.</p>
+                    <div class="nb-card__find">
+                        <b>Results: </b>
+                         which cuts survive is mostly set by the shared-KV anchor geometry; the rest was the strict regrade throwing out wins that didn't replicate.
+                    </div>
+                    <div class="nb-card__go">Read more →</div>
+                </a>
+                <a class="nb-card" href="/lab/gemma31b.html">
+                    <div class="nb-card__tag">
+                        <span>Dense · negative result</span>
+                        <span class="st">published</span>
+                    </div>
+                    <h3>Gemma 4 31B — the heavyweight</h3>
+                    <p class="nb-card__dek">This is a report of a 176-config dup/prune sweep of a flagship 31B model squeezed into 16 GB at IQ2_M, and not one surgery won. This model stressed my machine and my patience, but given its size I had hoped to finally see a notable result. The original method suggests that a model with more layers develops a real language-independent section of layers that could be duplicated to improve reasoning without disturbing its processing. These findings suggest minimal to no improvement.</p>
+                    <div class="nb-card__find">
+                        <b>Results: </b>
+                         It's robust to a single cut but rigid under a structural one, with damage scaling as span × depth. The seed-noise lived at the front of the stack, not the back.
+			 Realistically too large of a model to attempt this on, and while the improved instrumentation might deliver more honest results, I'm leaving this one at the preliminary finding to spare myself.
+                    </div>
+                    <div class="nb-card__go">Read more →</div>
+                </a>
+                <a class="nb-card" href="/lab/08_moe_expert_surgery.html">
+                    <div class="nb-card__tag">
+                        <span>MoE · intervention</span>
+                        <span class="st">published</span>
+                    </div>
+                    <h3>MoE - Experts, not layers</h3>
+                    <p class="nb-card__dek">Every other experiment treats a model as a stack of layers, but there may be a different lever to try on mixture-of-experts models. This isn't a new idea either, and it has more institutional support in the form of Cerebras REAP, but I'm curious what happens when you take it further than they suggest.</p>
+                    <div class="nb-card__find">
+                        <b>Results: </b>
+                         expert removal degrades a model differently from layer surgery, and it's not as obvious on the surface level
+                    </div>
+                    <div class="nb-card__go">Read more →</div>
+                </a>
+                <a class="nb-card" href="/lab/hrm.html">
+                    <div class="nb-card__tag">
+                        <span>Recurrent · negative result</span>
+                        <span class="st">draft</span>
+                    </div>
+                    <h3>HRM — a promising idea, not model</h3>
+                    <p class="nb-card__dek">A Hierarchical Recurrent Model sounds like the perfect experimentation platform for me. After all, my whole hypothesis is increasing reasoning depth through looping layers rather than just making a bigger model or training it. This is a novel class of transformer LLMs that's not ready for prime time yet, but that didn't stop me from exploring the exact promise of looped transformers - a built in system to multiply the number of passes the token takes through layers.The first overnight test delivered outstanding and exciting results, but as is a recurring theme here, upon further inspection and more rigorous testing, it turned out to be a fluke.</p>
+                    <div class="nb-card__find">
+                        <b>Results: </b>
+                         greedy sampling and no replication manufactured a false champion.
+			 The promise of simply increasing the number of loops hit a wall when faced with a larger, general-purpose model than the original paper.
+                    </div>
+                    <div class="nb-card__go">Read more →</div>
+                </a>
+            </div>
+        </section>
 
-  <section id="method">
-    <div class="sec-label">Method</div>
-    <p class="sec-note">The instrument under the results — how a measurement earns trust before any finding is allowed to stand. The terse <a href="/lab/methods.html">Methods &amp; references</a> page holds the shared vocabulary; the vivisection &amp; vivarium overview-methodology pages will join it.</p>
-    <div class="cards">
-      <a class="nb-card" href="/lab/02_anatomy_of_a_sweep.html">
-        <div class="nb-card__tag"><span>Methods · measurement</span><span class="st">published</span></div>
-        <h3>Anatomy of a sweep you can trust</h3>
-        <p class="nb-card__dek">The surgery is suspiciously easy to run; trusting the number is the hard part. Seed discipline, paired effect sizes, and a regrade that keeps catching pretty results lying.</p>
-        <div class="nb-card__find"><b>Method —</b> the differentiator isn't a better model, it's the measurement layer underneath.</div>
-        <div class="nb-card__go">Read the protocol →</div>
-      </a>
-      <a class="nb-card" href="/lab/04_quant_bench.html">
-        <div class="nb-card__tag"><span>Runtime · benchmark</span><span class="st">published</span></div>
-        <h3>MLX is the fastest local runtime*</h3>
-        <p class="nb-card__dek">The asterisk is the whole point: 1B dense model, batched decode only, M4 Mini, custom generation loop, raw tok/s — every qualifier spelled out, not buried.</p>
-        <div class="nb-card__find"><b>Finding —</b> a defensible "fastest" only exists once you fence in exactly what you measured.</div>
-        <div class="nb-card__go">Read the benchmark →</div>
-      </a>
-    </div>
-  </section>
+	
+        <section id="observation">
+            <div class="sec-label">Observation</div>
+            <p class="sec-note">The other side of layer edits is the hidden layer scanning that led to the hypothesis behind RYS. <a href="https://dnhkng.github.io/">David Ng</a> showed cosine similarity charts for paired phrases, layer by layer, that illustrated the potential of a &ldquo;reasoning zone.&rdquo; It's a powerful visualization that demonstrates how the model transforms all inputs into intermediate values that don't correspond to our language or understanding, and I enjoy seeing these visualizations for each of the models.</p>
+            <div class="cards">
+                <a class="nb-card" href="/lab/geometry.html">
+                    <div class="nb-card__tag">
+                        <span>9 models · centered cosine/delta</span>
+                        <span class="st">published</span>
+                    </div>
+                    <h3>Internal Geometry - Visualizing nine models' hidden states</h3>
+                    <p class="nb-card__dek">The RYS literature says smaller models don't develop a convergent reasoning zone in the middle layers. I scanned them anyway, and disappointingly it's true, but there are some interesting standouts, namely in the Gemma 4 family.</p>
+                    <div class="nb-card__find">
+                        <b>Finding: </b>
+                         the 2-bit and 8-bit scans superimpose, so the concept space tracks training, not precision. The MoE is the holdout - its capacity sits in expert routing, so a layer-wise probe finds little to grab.
+                    </div>
+                    <div class="nb-card__go">View the figures →</div>
+                </a>
+                <a class="nb-card" href="/lab/vivarium_geometry.html">
+                    <div class="nb-card__tag">
+                        <span>Hidden-state · geometry</span>
+                        <span class="st">published</span>
+                    </div>
+                    <h3>The Vivarium - Gemma 4 12B on day zero</h3>
+                    <p class="nb-card__dek">This brand-new dense Gemma model dropped right as I was refining the MLX hidden-state extraction script, and it seemed like a perfect opportunity to crack the model open before even a single fine-tune came out. The scan was interesting, but I took it further by investigating per-token hidden states - comparing two sentences that differ by barely a word but whose meanings diverge widely. This created a visual demonstration of where in the model a token takes on meaning, rather than being a number corresponding to a dictionary entry.</p>
+                    <div class="nb-card__find">
+                        <b>Finding: </b>
+                         the probes converge on one concept zone at layers 18-27; the final layer spends it on next-token prediction. Per-token, a word's sense resolves in that same band: the model fixes "crane" as the bird before the sentence ends.
+                    </div>
+                    <div class="nb-card__go">View the figures →</div>
+                </a>
+            </div>
+        </section>
 
-  <section id="systems">
-    <div class="sec-label">Systems</div>
-    <p class="sec-note">Agents and memory — what models do to each other and to their own history, built as working pipelines rather than benchmarks.</p>
-    <div class="cards">
-      <a class="nb-card" href="/lab/06_duologue.html">
-        <div class="nb-card__tag"><span>Self-play · emergent comm</span><span class="st">published</span></div>
-        <h3>duologue — two models, one channel</h3>
-        <p class="nb-card__dek">Two instances of the same local model, one wire between them, no shared dictionary. Can two copies invent a private code — and what happens to it over time?</p>
-        <div class="nb-card__find"><b>Finding —</b> a stable code emerges, then drifts; the drift is the interesting part.</div>
-        <div class="nb-card__go">Read the log →</div>
-      </a>
-      <a class="nb-card" href="/lab/07_mem0_processor.html">
-        <div class="nb-card__tag"><span>Systems · ETL pipeline</span><span class="st">published</span></div>
-        <h3>mem0-processor</h3>
-        <p class="nb-card__dek">I set out to build agent memory and built a model-evaluation harness instead. ~60 models benchmarked through it; the systems narrative with honest status on each leg.</p>
-        <div class="nb-card__find"><b>Story —</b> the artifact you keep is rarely the one you set out to build.</div>
-        <div class="nb-card__go">Read the architecture →</div>
-      </a>
-      <a class="nb-card" href="/lab/09_self_improving_memory.html">
-        <div class="nb-card__tag"><span>Systems · agent memory</span><span class="st">published</span></div>
-        <h3>Teaching an agent to read its own logs</h3>
-        <p class="nb-card__dek">Human memory over-weights the dramatic incident and forgets the papercut that happened twelve times. This is the pipeline taught not to make that mistake.</p>
-        <div class="nb-card__find"><b>Finding —</b> frequency, not drama, is what a memory layer should be weighting.</div>
-        <div class="nb-card__go">Read the design →</div>
-      </a>
-    </div>
-  </section>
+        <section id="method">
+            <div class="sec-label">Method</div>
+            <p class="sec-note">The recurring pattern in all the model sweeps I've performed is just how crucial the methodology of evaluating the model is. It comes down to crafting or importing the right question set to choose probes, refining a grading pattern to reduce false positives and false negatives, setting up the inference runtime to restrict the model from CoT reasoning, tweaking the prompt to encourage it to respond with just the answer, playing with the chat template, etc. - and then doing all that over again on a new model that plays by different rules.</p>
+            <p class="sec-note">On top of that, when you're experimenting with LLMs on consumer hardware, every tweak that makes it run faster is worth it, from benchmarking runtimes to making a custom prompt-batching pipeline to reduce overhead. Even step one - scanning the model to assess roughly what layers will be actionable - can be optimized.</p>
+            <p class="sec-note">The hidden-state extraction script was written for PyTorch with raw fp16 transformers, but I needed it to work with quantized models. And then I investigated whether MLX could perform the same task, since it also operates on raw transformers rather than a packaged GGUF. Editing layers on the fly in MLX is natively supported, but digging into this functionality offered the opportunity to try out layer damping, which turned out to be a useful layer-modification path, less disruptive than pruning or duplicating. It also set up future experiments in related tangents - activation steering/injection, sparse autoencoders, and diffusion models.</p>
+            <p class="sec-note">
+                The terse
+                <a href="/lab/methods.html">Methods &amp; references</a>
+                 page holds the shared vocabulary; the vivisection &amp; vivarium overview-methodology pages will join it.
+            </p>
+            <div class="cards">
+                <a class="nb-card" href="/lab/02_anatomy_of_a_sweep.html">
+                    <div class="nb-card__tag">
+                        <span>Methods · measurement</span>
+                        <span class="st">published</span>
+                    </div>
+                    <h3>Anatomy of a sweep</h3>
+                    <p class="nb-card__dek">Running the surgery isn't difficult once you establish the mechanics of it; extracting and evaluating the resulting model's response is where it turns into work. Three traps do most of the damage: a lenient grader inflates partial credit, the model can echo the answer straight back, and format-compliance passes for capability if you don't check. So before spending compute I profile how much headroom the baseline even leaves to measure, then calibrate the grading channel against it.</p>
+                    <div class="nb-card__find">
+                        <b>Method: </b>
+                         most false wins come from the measurement, not the model, so the grader gets calibrated before any compute is spent.
+                    </div>
+                    <div class="nb-card__go">Read more →</div>
+                </a>
+                <a class="nb-card" href="/lab/04_quant_bench.html">
+                    <div class="nb-card__tag">
+                        <span>Runtime · benchmark</span>
+                        <span class="st">published</span>
+                    </div>
+                    <h3>MLX is the fastest local runtime*</h3>
+                    <p class="nb-card__dek">The asterisk is the whole point: 1B dense model, batched decode only, M4 Mini, custom generation loop, raw tok/s - every qualifier is on the label. The more interesting result, outside that narrow use case, is that MLX and llama.cpp are pretty evenly matched, so there isn't really a headline about which runtime is better.</p>
+                    <div class="nb-card__find">
+                        <b>Finding: </b>
+                         "fastest" is true for batched decode, where MLX roughly doubles llama.cpp's throughput at the expense of more than double the RAM. For single-prompt processing, the runtimes and most quants are comparable. Only PyTorch is the slow outlier on Apple Silicon.
+                    </div>
+                    <div class="nb-card__go">Read more →</div>
+                </a>
+            </div>
+        </section>
 
-  <section class="work">
-    <div class="sec-label">How I work</div>
-    <div class="nb-marginalia">
-      <div class="nb-marginalia__label">In one line</div>
-      <div class="nb-marginalia__body">
-        <p style="margin:0;max-width:64ch">The differentiator isn't a model that got better - it's the measurement layer underneath:
-        seed discipline, paired effect sizes, and a strict regrade that keeps catching the pretty
-        results lying. I direct and decide; large models read code, run the statistics, and draft.
-        The judgment about what's true is mine.</p>
-      </div>
-    </div>
-    <div class="workgrid">
-      <div class="work">
-        <h3>Measured, not marketed</h3>
-        <p>Every number traces to a file in a repo - config hash in the filename, raw per-probe JSONL, strict score leading. No comparison that isn't backed by an artifact.</p>
-      </div>
-      <div class="work">
-        <h3>Negatives are first-class</h3>
-        <p>Two headline findings here were wrong and stayed on the page with the autopsy. A notebook that only records confirmed results is a brochure.</p>
-      </div>
-      <div class="work">
-        <h3>Lean by conviction</h3>
-        <p>Static HTML, ~1&nbsp;KB of JS, hand-authored SVG figures, no framework. Greppable all the way down — and it loads instantly on a phone.</p>
-      </div>
-    </div>
-  </section>
-</main>
+        <section id="systems">
+            <div class="sec-label">Systems</div>
+            <p class="sec-note">This is driven by my relatively recent dive into using frontier LLMs for development — the last time I really tried them, it was more a party trick than an actual product. Claude Code has been instrumental in diminishing the setup friction and distractions so I can focus on what I set out to do, but it's also a fantastic pair programming partner for these novel tasks. In fact, the very investigations linked on this page are downstream results from my initial LLM-related project of wanting a cross platform memory system that didn't require so much manual file juggling or reminders.</p>
+            <p class="sec-note">These projects concern agents and LLM memory systems, and serve more as experimentation and personal tooling than as polished products.</p>
+            <div class="cards">
+                <a class="nb-card" href="/lab/06_duologue.html">
+                    <div class="nb-card__tag">
+                        <span>Orchestration · emergent comm</span>
+                        <span class="st">published</span>
+                    </div>
+                    <h3>duologue - one model, two agents</h3>
+                    <p class="nb-card__dek">Duologue is more in the spirit of the model experimentation in the previous sections than a functional use for agents, but it did submerge me into the tricky world of context management and orchestration. It started with two models in RAM concurrently. I can't run two Qwen-27Bs at once, though, so the trick became feeding a single model a carefully crafted history that makes it believe it's talking to someone else. That resolved the mechanistic aspect. The fun part ended up being setting up various scenarios for it: first to see whether it recognizes the other agent as AI, and later whether the two agents could communicate under strict restrictions on their messages to each other.</p>
+                    <div class="nb-card__find">
+                        <b>Finding: </b>
+                         When they aren't flopping tool calls, the models do attempt to establish communication with the limited vocabulary, but none of the local models managed to achieve shared understanding.
+                    </div>
+                    <div class="nb-card__go">Read more →</div>
+                </a>
+                <a class="nb-card" href="/lab/07_mem0_processor.html">
+                    <div class="nb-card__tag">
+                        <span>Systems · ETL pipeline</span>
+                        <span class="st">published</span>
+                    </div>
+                    <h3>mem0-processor</h3>
+                    <p class="nb-card__dek">The project that kicked off everything else here. I wanted a persistent memory store kept current by LLMs, but the options were flawed: claude.ai's user memories are occasionally wrong, Claude Code has the model write its own unreliably, the two don't even talk to each other, and everything I found leaned on paid Claude to generate the memories. So I built a pipeline that uses free open-weight models to summarize my sessions and upload them to mem0, keeping close control over the transcript and prompt. Trusting those local summaries meant scoring the models to see which were any good, and that scoring rig quietly became a 60+ model evaluation harness.</p>
+                    <div class="nb-card__find">
+                        <b>Finding: </b>
+                         scoring each summary against hand-written ground-truth fact sets and ranking by z-score is what lets "this model summarizes better than that one" actually mean something.
+                    </div>
+                    <div class="nb-card__go">Read the architecture →</div>
+                </a>
+                <a class="nb-card" href="/lab/09_self_improving_memory.html">
+                    <div class="nb-card__tag">
+                        <span>Systems · agent memory</span>
+                        <span class="st">published</span>
+                    </div>
+                    <h3>Teaching an agent to read its own logs</h3>
+                    <p class="nb-card__dek">What do you do when you have 1200 session summaries from hundreds of different local models sitting on your storage drive from testing the mem0 pipeline? I couldn't let that go to waste, and I'd been meaning to optimize my CLAUDE.md empirically from past experience. The summaries are meant to be small enough to parse easily, but cumulatively they add up to a corpus too large for any model to process at once. Through several layers of aggregation, I used Claude to distill them into meaningful observations that measurably improved my system prompt and memory system, to the point where starting a new session can feel frictionless.</p>
+                    <div class="nb-card__find">
+                        <b>Finding: </b>
+                         I weight what recurs, not what was loudest; that's the whole design decision.
+                    </div>
+                    <div class="nb-card__go">Read more →</div>
+                </a>
+            </div>
+        </section>
 
-<footer>
-  <p class="legal">© 2026 · Anya · exploratory research notes, provided as-is, no warranty · writeups &amp; figures CC&nbsp;BY · code MIT · uses cookieless analytics, no personal data collected</p>
-</footer>
+        <section class="work">
+            <div class="sec-label">How I work</div>
+            <div class="nb-marginalia">
+                <div class="nb-marginalia__body">
+                    <p style="margin:0;max-width:64ch">As evidenced by the variety of topics above, my attention jumps around when unbound, but the one thing I'm strict on is keeping my results in check. I don't claim a model that got better. I claim a better measurement layer under it: seed discipline, paired effect sizes, and a strict regrade that culls the wins that don't replicate. I direct and decide; large models read code, run the statistics, and draft. The judgment about what's true is mine. I work collaboratively with Claude to accelerate my workflow and to explore novel areas I wouldn't have the faintest clue where to start.</p>
+                </div>
+            </div>
+            <div class="workgrid">
+                <div class="work">
+                    <h3>Reproducibility</h3>
+                    <p>Every number on this site traces back to a file in a repo: the config hash lives in the filename, the raw per-probe results are kept as JSONL, and the strict score always leads. I won't publish a comparison that isn't backed by an artifact you could open and re-run yourself.</p>
+                </div>
+                <div class="work">
+                    <h3>Transparency</h3>
+                    <p>Many of the headline findings on this page were wrong, and were wrong due to incorrect interpretation or configuration. I want to ensure that I don't overstate my results, and that I provide the full story of how I arrived at them rather than cherry-picking or stripping out the failures.</p>
+                </div>
+                <div class="work">
+                    <h3>Efficiency</h3>
+                    <p>I appreciate efficiency in software engineering, both from a performance aspect and the perspective of selecting the right framework to match the needs of a project. This is reflected in this site: it's static HTML, ~1.5&nbsp;KB of JS, slim SVG figures, no framework, one cookieless tracker. It is everything it needs to be and nothing more, and the simple structure has the added benefit of being easily parseable by screen readers or LLMs, and treats accessibility as a priority, not an afterthought.</p>
+                </div>
+            </div>
+        </section>
+    </main>
 
-<script src="/assets/nb.js"></script>
+    <footer>
+        <p class="legal">© 2026 · Anya · exploratory research notes, provided as-is, no warranty · writeups &amp; figures CC&nbsp;BY · code MIT · uses cookieless analytics, no personal data collected</p>
+    </footer>
+
+    <script src="/assets/nb.js"></script>
 </body>
 </html>
