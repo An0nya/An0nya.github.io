@@ -392,23 +392,77 @@ a.nb-card:hover .nb-card__go { color: var(--accent-bright); }
 .site-bar a { display: block; padding: 0.7rem 1rem; color: var(--text-dim); white-space: nowrap; }
 .site-bar a:hover, .site-bar a.is-active { color: var(--accent); text-decoration: none; }
 .site-bar__home { color: var(--text); font-weight: var(--w-semi); letter-spacing: 0.12em; }
+/* per-page category label: markup stays identical everywhere (the bar is synced
+   from one fragment); each page names its category via a body.cat-* class. */
+.site-bar__cat::after { content: " · Experimentation Notebooks"; color: var(--text-dim); font-weight: var(--w-reg); }
+body.cat-intervention .site-bar__cat::after { content: " · Intervention"; }
+body.cat-observation  .site-bar__cat::after { content: " · Observation"; }
+body.cat-method       .site-bar__cat::after { content: " · Method"; }
+body.cat-systems      .site-bar__cat::after { content: " · Systems"; }
 .site-bar__spacer { flex: 1; }
 .site-bar__links { display: flex; flex-wrap: wrap; }
-/* NOTE: mobile currently wraps the section links to a second row (old nav
-   behavior). A true tap-to-open dropdown is a follow-up — the robust no-JS
-   route is the checkbox hack (native <details> hides content cross-engine). */
 
-.page-toc { display: none; }
-@media (min-width: 1400px) {
+/* category dropdowns — native <details>, work with JS off (click/tap to open).
+   nb.js adds accordion + click-away as progressive enhancement. */
+.nav-group { position: relative; }
+.nav-group > summary {
+  display: block; padding: 0.7rem 1rem; color: var(--text-dim);
+  cursor: pointer; white-space: nowrap; list-style: none; user-select: none;
+}
+.nav-group > summary::-webkit-details-marker { display: none; }
+.nav-group > summary::after { content: " ▾"; opacity: 0.55; }
+.nav-group > summary:hover, .nav-group[open] > summary { color: var(--accent); }
+.nav-group > ul {
+  list-style: none; margin: 0; padding: var(--sp-2) 0;
+  position: absolute; top: 100%; left: 0; min-width: 12rem;
+  background: var(--surface); border: var(--bw) solid var(--border-strong); border-top: 0;
+}
+.nav-group > ul a { padding: 0.5rem 1rem; text-transform: none; letter-spacing: 0; font-size: 0.72rem; white-space: nowrap; }
+.nav-group > ul a:hover { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+
+/* mobile: checkbox-hack hamburger reveals the categories stacked full-width */
+.site-bar__burger { display: none; cursor: pointer; padding: 0.7rem 1rem; }
+@media (max-width: 760px) {
+  .site-bar__burger { display: block; }
+  .site-bar__cat { display: none; }
+  .site-bar__links { order: 10; width: 100%; display: none; flex-direction: column; }
+  .site-bar__toggle:checked ~ .site-bar__links { display: flex; }
+  .nav-group > ul { position: static; border: 0; min-width: 0; padding-left: var(--sp-4); }
+}
+
+/* Default (< 1400px): a slim horizontal strip stuck just below the site-bar,
+   so in-page section nav is present at laptop/tablet/phone widths too. */
+.page-toc {
+  display: flex; align-items: center; overflow-x: auto;
+  position: sticky; top: 2.6rem; z-index: calc(var(--z-nav) - 1);
+  border-bottom: var(--bw) solid var(--border);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(6px);
+  font-family: var(--font-mono); font-size: 0.62rem;
+  letter-spacing: var(--tk-nav); text-transform: uppercase;
+  scrollbar-width: none;
+  /* align the strip's content start with the body text column (page container
+     margin + the container's own inner gutter) */
+  padding-left: calc(var(--gutter) + max(0px, (100vw - var(--page-max)) / 2));
+  padding-right: var(--gutter);
+}
+.page-toc::-webkit-scrollbar { display: none; }
+.page-toc__label { color: var(--text-muted); white-space: nowrap; padding-right: var(--sp-2); }
+.page-toc a { display: block; padding: 0.55rem 0.8rem; color: var(--text-dim); white-space: nowrap; }
+.page-toc a:hover { color: var(--accent); text-decoration: none; }
+.page-toc a.is-active { color: var(--accent-bright); }
+
+/* Wide (>= 1500px): enough left margin to float it into a fixed sidebar
+   without hugging the window edge. Below this it stays the sticky strip. */
+@media (min-width: 1500px) {
   .page-toc {
     display: block; position: fixed; top: 5.5rem;
     left: calc((100vw - var(--page-max)) / 2 - 10.5rem);
-    width: 9rem;
-    font-family: var(--font-mono); font-size: 0.66rem;
-    letter-spacing: var(--tk-nav); text-transform: uppercase;
+    width: 9rem; overflow: visible; padding: 0;
+    border: 0; background: none; backdrop-filter: none;
+    font-size: 0.66rem;
   }
-  .page-toc__label { color: var(--text-muted); margin-bottom: var(--sp-2); }
-  .page-toc a { display: block; padding: 0.35rem 0; color: var(--text-dim); border-left: 2px solid transparent; padding-left: var(--sp-3); }
-  .page-toc a:hover { color: var(--accent); text-decoration: none; }
-  .page-toc a.is-active { color: var(--accent-bright); border-left-color: var(--accent); }
+  .page-toc__label { padding: 0; margin-bottom: var(--sp-2); }
+  .page-toc a { padding: 0.35rem 0; border-left: 2px solid transparent; padding-left: var(--sp-3); }
+  .page-toc a.is-active { border-left-color: var(--accent); }
 }

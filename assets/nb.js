@@ -32,6 +32,25 @@
       });
     });
     spy();
+    menus();
+  }
+
+  /* Nav dropdowns work with JS off (native <details>). This just makes them
+     behave like a menu bar: opening one closes the others, and a click
+     outside closes them all. */
+  function menus() {
+    var groups = document.querySelectorAll('.nav-group');
+    if (!groups.length) return;
+    groups.forEach(function (g) {
+      g.addEventListener('toggle', function () {
+        if (!g.open) return;
+        groups.forEach(function (o) { if (o !== g) o.open = false; });
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('.nav-group')) return;
+      groups.forEach(function (g) { g.open = false; });
+    });
   }
 
   /* Scroll-spy: light up the page-TOC link for the section in view. Pure

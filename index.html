@@ -20,6 +20,63 @@
         border-bottom: var(--bw) solid var(--border-strong);
     }
 
+    .masthead__id {
+        display: flex; flex-wrap: wrap; align-items: baseline;
+        gap: var(--sp-3) var(--sp-4);
+        margin-bottom: var(--sp-4);
+    }
+    .masthead__name {
+        font-family: var(--font-mono);
+        font-size: var(--fs-label);
+        letter-spacing: var(--tk-kicker);
+        text-transform: uppercase;
+        color: var(--text);
+    }
+    .masthead__links {
+        display: flex; gap: var(--sp-4);
+        font-family: var(--font-mono);
+        font-size: var(--fs-label);
+        letter-spacing: var(--tk-nav);
+        text-transform: uppercase;
+    }
+    .masthead__links a { color: var(--text-dim); }
+    .masthead__links a:hover { color: var(--accent); }
+
+    /* Sections map — a compact, scannable index so the long card list has a
+       table of contents and the Systems work isn't buried at the bottom. */
+    .sec-index {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--sp-3);
+        margin-top: var(--sp-5);
+    }
+    .sec-index a {
+        display: block;
+        padding: var(--sp-4);
+        border: var(--bw) solid var(--border);
+        background: var(--surface);
+    }
+    .sec-index a:hover { border-color: var(--accent); text-decoration: none; }
+    .sec-index__label {
+        font-family: var(--font-mono);
+        font-size: var(--fs-label);
+        letter-spacing: var(--tk-kicker);
+        text-transform: uppercase;
+        color: var(--text);
+        display: flex; justify-content: space-between; align-items: baseline;
+        margin-bottom: var(--sp-2);
+    }
+    .sec-index__n { color: var(--accent-bright); }
+    .sec-index p {
+        font-size: var(--fs-sm);
+        color: var(--text-dim);
+        margin: 0;
+        line-height: 1.4;
+    }
+    @media (max-width: 760px) {
+        .sec-index { grid-template-columns: 1fr 1fr; }
+    }
+
     .masthead h1 {
         font-size: clamp(2rem, 3.6vw, 2.9rem);
         max-width: 18ch;
@@ -190,22 +247,74 @@
 <body>
 
     <!-- SITE-BAR:START — managed by tools/sync-nav.py; edit components/_site-bar.html -->
-    <nav class="site-bar">
-      <a class="site-bar__home" href="/">ANYA · EXPERIMENTATION NOTEBOOKS</a>
+    <nav class="site-bar" aria-label="Site">
+      <a class="site-bar__home" href="/">ANYA<span class="site-bar__cat"></span></a>
+      <input type="checkbox" id="nav-toggle" class="site-bar__toggle" hidden>
       <div class="site-bar__links">
-        <a href="/#intervention">Intervention</a>
-        <a href="/#observation">Observation</a>
-        <a href="/#method">Method</a>
-        <a href="/#systems">Systems</a>
+        <details class="nav-group">
+          <summary>Intervention</summary>
+          <ul>
+            <li><a href="/#intervention">All interventions →</a></li>
+            <li><a href="/lab/01_minicpm5_sigma_alpha.html">MiniCPM5</a></li>
+            <li><a href="/lab/03_nanbeige.html">Nanbeige</a></li>
+            <li><a href="/lab/05_granite.html">Granite</a></li>
+            <li><a href="/lab/gemma.html">Gemma 4 E4B</a></li>
+            <li><a href="/lab/gemma31b.html">Gemma 4 31B</a></li>
+            <li><a href="/lab/08_moe_expert_surgery.html">MoE surgery</a></li>
+            <li><a href="/lab/hrm.html">HRM</a></li>
+          </ul>
+        </details>
+        <details class="nav-group">
+          <summary>Observation</summary>
+          <ul>
+            <li><a href="/#observation">All observations →</a></li>
+            <li><a href="https://an0nya.github.io/vivisection-lab/geometry.html">Internal geometry ↗</a></li>
+            <li><a href="/lab/vivarium_geometry.html">The Vivarium</a></li>
+          </ul>
+        </details>
+        <details class="nav-group">
+          <summary>Method</summary>
+          <ul>
+            <li><a href="/#method">Method index →</a></li>
+            <li><a href="/lab/methods.html">Methods &amp; references</a></li>
+            <li><a href="/lab/02_anatomy_of_a_sweep.html">Anatomy of a sweep</a></li>
+            <li><a href="/lab/04_quant_bench.html">Quant benchmark</a></li>
+          </ul>
+        </details>
+        <details class="nav-group">
+          <summary>Systems</summary>
+          <ul>
+            <li><a href="/#systems">All systems →</a></li>
+            <li><a href="/lab/06_duologue.html">duologue</a></li>
+            <li><a href="/lab/07_mem0_processor.html">mem0-processor</a></li>
+            <li><a href="/lab/09_self_improving_memory.html">Self-improving memory</a></li>
+          </ul>
+        </details>
       </div>
       <span class="site-bar__spacer"></span>
       <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
       <a href="#" data-theme-toggle>☼ Light</a>
+      <label for="nav-toggle" class="site-bar__burger">☰ Menu</label>
     </nav>
     <!-- SITE-BAR:END -->
 
+    <aside class="page-toc" aria-label="On this page">
+      <p class="page-toc__label">Sections</p>
+      <a href="#intervention" data-spy>Intervention</a>
+      <a href="#observation" data-spy>Observation</a>
+      <a href="#method" data-spy>Method</a>
+      <a href="#systems" data-spy>Systems</a>
+    </aside>
+
     <main>
         <header class="masthead">
+            <div class="masthead__id">
+                <span class="masthead__name">Anya Ilyina</span>
+                <span class="masthead__links">
+                    <a href="https://github.com/An0nya" target="_blank" rel="noopener">GitHub ↗</a>
+                    <a href="https://www.linkedin.com/in/anya-ilyina/" target="_blank" rel="noopener">LinkedIn ↗</a>
+                </span>
+            </div>
             <div class="nb-kicker">Independent ML-evaluation · 2026</div>
             <h1>
                 Local AI models, torn down, modified, and tested.
@@ -219,6 +328,16 @@
             <div class="sec-label">The draw</div>
             <p class="sec-note">I've been inspired by many people who spend their time and prodigious compute on fine-tuning, quantizing, and experimenting with models, and all the open source software they publish. I have no pretensions of creating models that can compete or eclipse those released by the big organizations, but I can attempt new experiments and share what I've come across for others to read.</p>
             <p class="sec-note">Another draw is the feel of hanging out at the raw edge of technological progress in the community driven space of local LLMs. It resembles to me past technology boom periods where anyone could become a wizard in a new technology and people cobbled together enterprise hardware to host free websites or services. For my part, I'm doing all this on a base model Mac mini, which admittedly is uniquely capable for LLMs, but still nothing on the scale of the compute available to frontier companies or even research groups. The ability to perform all this on my own device, no signups, no fees, and no worrying that a tweak I've tried will cost me wasted money on a rented server. All this runs in the background and I can pivot my tasks when I want.</p>
+        </section>
+
+        <section id="map" aria-label="Sections">
+            <div class="sec-label">Sections</div>
+            <nav class="sec-index">
+                <a href="#intervention"><span class="sec-index__label">Intervention <span class="sec-index__n">7</span></span><p>Cutting into nine open-weight models — layer surgery, damping, expert edits.</p></a>
+                <a href="#observation"><span class="sec-index__label">Observation <span class="sec-index__n">2</span></span><p>Watching without cutting: hidden-state geometry and day-zero probes.</p></a>
+                <a href="#method"><span class="sec-index__label">Method <span class="sec-index__n">3</span></span><p>How the sweeps, graders, and quant benchmarks actually work.</p></a>
+                <a href="#systems"><span class="sec-index__label">Systems <span class="sec-index__n">3</span></span><p>Agent tooling around the models: memory pipelines and self-play.</p></a>
+            </nav>
         </section>
 
         <section id="intervention">
@@ -283,7 +402,7 @@
                             <div><dt>op</dt><dd class="op">dup/prune/swap</dd></div>
                         </dl>
                     </div>
-                    <p class="nb-card__dek">The original disection and published page, and one of the larger models to receive an extensive sweep of its layers. This model also demonstrated the fragility of the evaluator and the necessity of interpreting the results correctly. The lenient grader handed back a tidy list of winners, but the strict regrade culled most of them.
+                    <p class="nb-card__dek">The original dissection and published page, and one of the larger models to receive an extensive sweep of its layers. This model also demonstrated the fragility of the evaluator and the necessity of interpreting the results correctly. The lenient grader handed back a tidy list of winners, but the strict regrade culled most of them.
 This model also served as a proof of concept as RYS layer edits don't play well with models structured like this. Unlike the dense isotropic models where each layer just interfaces with its neighbors, this model required some careful editing and remapping to work correctly, and certain layers remain off limits.</p>
                     <div class="nb-card__find">
                         <b>Results: </b>
@@ -333,7 +452,7 @@ This model also served as a proof of concept as RYS layer edits don't play well 
                             <div><dt>status</dt><dd class="draft">draft</dd></div>
                         </dl>
                     </div>
-                    <p class="nb-card__dek">A Hierarchical Recurrent Model sounds like the perfect experimentation platform for me. After all, my whole hypothesis is increasing reasoning depth through looping layers rather than just making a bigger model or training it. This is a novel class of transformer LLMs that's not ready for prime time yet, but that didn't stop me from exploring the exact promise of looped transformers - a built in system to multiply the number of passes the token takes through layers.The first overnight test delivered outstanding and exciting results, but as is a recurring theme here, upon further inspection and more rigorous testing, it turned out to be a fluke.</p>
+                    <p class="nb-card__dek">A Hierarchical Recurrent Model sounds like the perfect experimentation platform for me. After all, my whole hypothesis is increasing reasoning depth through looping layers rather than just making a bigger model or training it. This is a novel class of transformer LLMs that's not ready for prime time yet, but that didn't stop me from exploring the exact promise of looped transformers - a built in system to multiply the number of passes the token takes through layers. The first overnight test delivered outstanding and exciting results, but as is a recurring theme here, upon further inspection and more rigorous testing, it turned out to be a fluke.</p>
                     <div class="nb-card__find">
                         <b>Results: </b>
                          greedy sampling and no replication manufactured a false champion.
@@ -349,9 +468,9 @@ This model also served as a proof of concept as RYS layer edits don't play well 
             <div class="sec-label">Observation</div>
             <p class="sec-note">The other side of layer edits is the hidden layer scanning that led to the hypothesis behind RYS. <a href="https://dnhkng.github.io/">David Ng</a> showed cosine similarity charts for paired phrases, layer by layer, that illustrated the potential of a &ldquo;reasoning zone.&rdquo; It's a powerful visualization that demonstrates how the model transforms all inputs into intermediate values that don't correspond to our language or understanding, and I enjoy seeing these visualizations for each of the models.</p>
             <div class="cards">
-                <a class="nb-card" href="/lab/geometry.html">
+                <a class="nb-card" href="https://an0nya.github.io/vivisection-lab/geometry.html">
                     <div class="nb-card__head">
-                        <h3>Internal Geometry - Visualizing nine models' hidden states</h3>
+                        <h3>Internal Geometry - Visualizing nine models' hidden states ↗</h3>
                         <dl class="nb-spec" data-arch="dense">
                             <div><dt>arch</dt><dd>9 models</dd></div>
                             <div><dt>op</dt><dd class="op">centered cosine · delta</dd></div>

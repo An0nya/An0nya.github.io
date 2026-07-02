@@ -53,20 +53,68 @@
   }
 </style>
 </head>
-<body>
+<body class="cat-systems">
 
-<nav class="nb-nav">
-  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
-  <a href="#problem">The problem</a>
-  <a href="#corpora">Two corpora</a>
-  <a href="#mapreduce">Map-reduce</a>
-  <a href="#confidence">Confidence</a>
-  <a href="#failure">The failure</a>
-  <a href="#promoted">What landed</a>
-  <span class="nb-nav__spacer"></span>
+<!-- SITE-BAR:START — managed by tools/sync-nav.py; edit components/_site-bar.html -->
+<nav class="site-bar" aria-label="Site">
+  <a class="site-bar__home" href="/">ANYA<span class="site-bar__cat"></span></a>
+  <input type="checkbox" id="nav-toggle" class="site-bar__toggle" hidden>
+  <div class="site-bar__links">
+    <details class="nav-group">
+      <summary>Intervention</summary>
+      <ul>
+        <li><a href="/#intervention">All interventions →</a></li>
+        <li><a href="/lab/01_minicpm5_sigma_alpha.html">MiniCPM5</a></li>
+        <li><a href="/lab/03_nanbeige.html">Nanbeige</a></li>
+        <li><a href="/lab/05_granite.html">Granite</a></li>
+        <li><a href="/lab/gemma.html">Gemma 4 E4B</a></li>
+        <li><a href="/lab/gemma31b.html">Gemma 4 31B</a></li>
+        <li><a href="/lab/08_moe_expert_surgery.html">MoE surgery</a></li>
+        <li><a href="/lab/hrm.html">HRM</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Observation</summary>
+      <ul>
+        <li><a href="/#observation">All observations →</a></li>
+        <li><a href="https://an0nya.github.io/vivisection-lab/geometry.html">Internal geometry ↗</a></li>
+        <li><a href="/lab/vivarium_geometry.html">The Vivarium</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Method</summary>
+      <ul>
+        <li><a href="/#method">Method index →</a></li>
+        <li><a href="/lab/methods.html">Methods &amp; references</a></li>
+        <li><a href="/lab/02_anatomy_of_a_sweep.html">Anatomy of a sweep</a></li>
+        <li><a href="/lab/04_quant_bench.html">Quant benchmark</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Systems</summary>
+      <ul>
+        <li><a href="/#systems">All systems →</a></li>
+        <li><a href="/lab/06_duologue.html">duologue</a></li>
+        <li><a href="/lab/07_mem0_processor.html">mem0-processor</a></li>
+        <li><a href="/lab/09_self_improving_memory.html">Self-improving memory</a></li>
+      </ul>
+    </details>
+  </div>
+  <span class="site-bar__spacer"></span>
   <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
   <a href="#" data-theme-toggle>☼ Light</a>
+  <label for="nav-toggle" class="site-bar__burger">☰ Menu</label>
 </nav>
+<!-- SITE-BAR:END -->
+<aside class="page-toc" aria-label="On this page">
+  <p class="page-toc__label">On this page</p>
+  <a href="#problem" data-spy>The problem</a>
+  <a href="#corpora" data-spy>Two corpora</a>
+  <a href="#mapreduce" data-spy>Map-reduce</a>
+  <a href="#confidence" data-spy>Confidence</a>
+  <a href="#failure" data-spy>The failure</a>
+  <a href="#promoted" data-spy>What landed</a>
+</aside>
 
 <main>
   <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Methods notebook · Anya · 2026 · the loop-closing branch · <em>eval rigor, turned reflexively on the agent's own behaviour</em></div>

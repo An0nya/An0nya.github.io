@@ -34,19 +34,67 @@
   }
 </style>
 </head>
-<body>
+<body class="cat-method">
 
-<nav class="nb-nav">
-  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
-  <a href="#headline">The headline</a>
-  <a href="#occupancy">Occupancy</a>
-  <a href="#perGB">Per-GB flip</a>
-  <a href="#prefill">Prefill</a>
-  <a href="#roofline">M5 vs M4</a>
-  <span class="nb-nav__spacer"></span>
+<!-- SITE-BAR:START — managed by tools/sync-nav.py; edit components/_site-bar.html -->
+<nav class="site-bar" aria-label="Site">
+  <a class="site-bar__home" href="/">ANYA<span class="site-bar__cat"></span></a>
+  <input type="checkbox" id="nav-toggle" class="site-bar__toggle" hidden>
+  <div class="site-bar__links">
+    <details class="nav-group">
+      <summary>Intervention</summary>
+      <ul>
+        <li><a href="/#intervention">All interventions →</a></li>
+        <li><a href="/lab/01_minicpm5_sigma_alpha.html">MiniCPM5</a></li>
+        <li><a href="/lab/03_nanbeige.html">Nanbeige</a></li>
+        <li><a href="/lab/05_granite.html">Granite</a></li>
+        <li><a href="/lab/gemma.html">Gemma 4 E4B</a></li>
+        <li><a href="/lab/gemma31b.html">Gemma 4 31B</a></li>
+        <li><a href="/lab/08_moe_expert_surgery.html">MoE surgery</a></li>
+        <li><a href="/lab/hrm.html">HRM</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Observation</summary>
+      <ul>
+        <li><a href="/#observation">All observations →</a></li>
+        <li><a href="https://an0nya.github.io/vivisection-lab/geometry.html">Internal geometry ↗</a></li>
+        <li><a href="/lab/vivarium_geometry.html">The Vivarium</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Method</summary>
+      <ul>
+        <li><a href="/#method">Method index →</a></li>
+        <li><a href="/lab/methods.html">Methods &amp; references</a></li>
+        <li><a href="/lab/02_anatomy_of_a_sweep.html">Anatomy of a sweep</a></li>
+        <li><a href="/lab/04_quant_bench.html">Quant benchmark</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Systems</summary>
+      <ul>
+        <li><a href="/#systems">All systems →</a></li>
+        <li><a href="/lab/06_duologue.html">duologue</a></li>
+        <li><a href="/lab/07_mem0_processor.html">mem0-processor</a></li>
+        <li><a href="/lab/09_self_improving_memory.html">Self-improving memory</a></li>
+      </ul>
+    </details>
+  </div>
+  <span class="site-bar__spacer"></span>
   <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
   <a href="#" data-theme-toggle>☼ Light</a>
+  <label for="nav-toggle" class="site-bar__burger">☰ Menu</label>
 </nav>
+<!-- SITE-BAR:END -->
+<aside class="page-toc" aria-label="On this page">
+  <p class="page-toc__label">On this page</p>
+  <a href="#headline" data-spy>The results</a>
+  <a href="#occupancy" data-spy>Occupancy</a>
+  <a href="#perGB" data-spy>Per-GB flip</a>
+  <a href="#prefill" data-spy>Prefill</a>
+  <a href="#roofline" data-spy>M5 vs M4</a>
+</aside>
 
 <main>
   <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · benchmarking branch</div>
@@ -69,7 +117,7 @@
   turns out to be an artifact of only ever measuring single-stream decode.</p>
 
   <section id="gap">
-    <h2><span class="num">§1</span>The gap this fills — and the one flag that makes it honest</h2>
+    <h2><span class="num">§1</span>The table I couldn't find, and the flag that makes the RAM numbers comparable</h2>
     <div class="col-side">
       <div>
         <p class="dropcap">If you run local models on a Mac, you've read the common recommendation to use MLX
@@ -79,9 +127,9 @@
         quant formats, three runtimes installed and warmed simultaneously, one harness measuring the
         <em>same thing</em> across all of them, and a machine nobody bothers to benchmark on — a base M4 Mini,
         16&nbsp;GB.</p>
-        <p>So I built it. One driver (<code>unified_bench.py</code>), three backend adapters (MLX in-process,
+        <p>So I built it myself: one driver (<code>unified_bench.py</code>), three backend adapters (MLX in-process,
         llama.cpp via <code>llama-server</code>, PyTorch/MPS in-process), identical sweep grids and schema,
-        and — the part that makes it honest — <em>one</em> RAM metric applied identically to all three. The
+        and <em>one</em> RAM metric applied identically to all three. The
         model is MiniCPM5-1B (a plain 1.08B Llama, 24 layers): small enough to sweep exhaustively,
         architecturally vanilla enough that the results aren't a quirk of some exotic block.</p>
       </div>
@@ -101,7 +149,7 @@
   </section>
 
   <section id="headline">
-    <h2><span class="num">§2</span>The headline: speed is runtime-by-<em>axis</em>, not one winner</h2>
+    <h2><span class="num">§2</span>No overall winner — each runtime owns a different axis</h2>
     <p>Measure every axis uniformly and there is no overall winner — each runtime owned a different axis in
     these runs:</p>
 
@@ -328,17 +376,17 @@
   </section>
 
   <section id="perGB">
-    <h2><span class="num">§4</span>The number that decides it on 16 GB: throughput per gigabyte</h2>
+    <h2><span class="num">§4</span>Throughput per gigabyte is what decides it on 16 GB</h2>
     <div class="col-side">
       <div>
         <p class="dropcap">MLX buys that decode throughput with <span class="hl-acc">~5–6× the RAM</span>. At
         peak concurrency MLX sat at 10–12.7&nbsp;GB — the only runtime that flirts with the M4's 14&nbsp;GB
         Metal wired limit — while llama held 1.2–2.3&nbsp;GB. On a 16&nbsp;GB box, <em>this</em>, not tok/s, is
         the deciding factor, and it inverts the leaderboard.</p>
-        <p>Score by <span class="hl-acc">throughput per gigabyte</span> — the honest figure-of-merit when memory
+        <p>Score by <span class="hl-acc">throughput per gigabyte</span> — the figure of merit that matters when memory
         is the constraint, which on consumer Apple Silicon it always is — and llama.cpp dominates by 4–5×. Best
         llama (IQ2_XS) hit ~615 tok/s/GB; <em>every</em> llama quant (~490–615) beat <em>every</em> MLX quant
-        (~114–120); PyTorch trailed at ~56. <span class="vrfy">VERIFY</span> The real summary is two sentences:
+        (~114–120); PyTorch trailed at ~56. <span class="vrfy">VERIFY</span>
         <b>MLX is the raw-speed-at-any-RAM-cost choice; llama.cpp is the efficient choice, and on a 16&nbsp;GB
         machine efficiency is what runs.</b></p>
       </div>
@@ -351,7 +399,7 @@
     </div>
 
     <figure class="figure" id="fig2">
-      <p class="nb-plate__note">↳ the visual whole point is the reordering between the two panels</p>
+      <p class="nb-plate__note">↳ the two panels rank the same 11 configs; only the metric changes</p>
       <div class="nb-plate">
         <div class="fig-desktop"><svg viewBox="0 0 720 588" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
@@ -492,7 +540,7 @@
     <text x="150" y="509" text-anchor="end" font-size="9.5">PyTorch fp16</text>
     <text x="209.8" y="509" class="val">56</text>
   </g>
-  <text x="160" y="526" class="mut" font-size="9">same order, ramp shattered &#8212; the top five (MLX) are now the shortest above PyTorch</text>
+  <text x="160" y="526" class="mut" font-size="9">same order, re-ranked &#8212; the top five (MLX) are now the shortest above PyTorch</text>
 
   <!-- takeaway + caveat -->
   <text x="40" y="548" class="ink2" font-size="10">Every llama.cpp quant beats every MLX config 2&#8211;4&#215; per GB. On 16 GB, per-GB is the axis that fits.</text>
@@ -598,7 +646,7 @@
     <rect x="98" y="475" width="24.5" height="10" fill="url(#pyDotM)"/>
     <text x="92" y="483" text-anchor="end" font-size="9">PyTorch fp16</text><text x="126.5" y="483" class="val">56</text>
   </g>
-  <text x="98" y="501" class="mut" font-size="8.5">ramp shattered &#8212; MLX now shortest above PyTorch</text>
+  <text x="98" y="501" class="mut" font-size="8.5">re-ranked &#8212; MLX now shortest above PyTorch</text>
 
   <!-- takeaway + caveat -->
   <text x="16" y="522" class="ink2" font-size="9">Every llama.cpp quant beats every MLX config</text>
@@ -628,8 +676,8 @@
     physical limit. <b>Single-stream decode is memory-bandwidth-bound:</b> a 4-bit 1.08B model is ~0.6&nbsp;GB,
     so 120&nbsp;GB/s ÷ 0.6 ≈ <span class="hl-acc">200 tok/s</span>; observed best ~155 = ~78% of that bound.
     2-bit (~0.35&nbsp;GB) predicts ~343, observed 218 ≈ 64%. <b>Prefill is compute-bound:</b> 2000 tok/s ×
-    ~2·1.08e9&nbsp;FLOP/tok ≈ <span class="hl-acc">4.3 TFLOP/s</span>, in the M4 10-core GPU's fp16 range. The
-    answer to the question I couldn't find online: <b>for speed, quant choice wasn't a meaningful
+    ~2·1.08e9&nbsp;FLOP/tok ≈ <span class="hl-acc">4.3 TFLOP/s</span>, in the M4 10-core GPU's fp16 range. Which, I suppose,
+    answers the question I couldn't find online: <b>for speed, quant choice wasn't a meaningful
     discriminator — pick the quant on quality.</b></p>
   </section>
 
@@ -792,7 +840,7 @@
   <section id="methods">
     <div class="nb-limits">
       <div class="nb-limits__head">
-        <span class="nb-limits__label">Pending — the honest gaps</span>
+        <span class="nb-limits__label">Pending — the open gaps</span>
         <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — don't ship without addressing these</span>
       </div>
       <ul>
@@ -811,9 +859,9 @@
         <p style="max-width:64ch">Harness, raw data, and viz: <span class="mono">unified_bench.py</span> (three
         adapters, prefill + concurrency sweeps), <span class="mono">unified_results.jsonl</span>,
         <span class="mono">make_unified_viz.py</span>. The model is the same MiniCPM5-1B that the
-        <a href="measuring.html">layer-surgery work</a> dissects — a different thesis, same patient. The
+        <a href="measuring.html">layer-surgery work</a> dissects. The
         equal-environment discipline is the same one behind the <a href="/lab/07_mem0_processor.html">summarization
-        benchmark</a>: refuse the easy version of the metric. Built and run locally on a 16&nbsp;GB
+        benchmark</a>: measure all of them the same way or the comparison means nothing. Built and run locally on a 16&nbsp;GB
         Mac&nbsp;Mini.</p>
       </div>
     </div>

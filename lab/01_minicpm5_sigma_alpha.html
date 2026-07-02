@@ -56,23 +56,71 @@
   }
 </style>
 </head>
-<body>
+<body class="cat-intervention">
 
-<nav class="nb-nav">
-  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
-  <a href="#patient">The patient</a>
-  <a href="#lever">The lever</a>
-  <a href="#split">Split-pass</a>
-  <a href="#sigma">The Σα-law</a>
-  <a href="#exposure">Exposure</a>
-  <a href="#methods">Methods</a>
-  <span class="nb-nav__spacer"></span>
+<!-- SITE-BAR:START — managed by tools/sync-nav.py; edit components/_site-bar.html -->
+<nav class="site-bar" aria-label="Site">
+  <a class="site-bar__home" href="/">ANYA<span class="site-bar__cat"></span></a>
+  <input type="checkbox" id="nav-toggle" class="site-bar__toggle" hidden>
+  <div class="site-bar__links">
+    <details class="nav-group">
+      <summary>Intervention</summary>
+      <ul>
+        <li><a href="/#intervention">All interventions →</a></li>
+        <li><a href="/lab/01_minicpm5_sigma_alpha.html">MiniCPM5</a></li>
+        <li><a href="/lab/03_nanbeige.html">Nanbeige</a></li>
+        <li><a href="/lab/05_granite.html">Granite</a></li>
+        <li><a href="/lab/gemma.html">Gemma 4 E4B</a></li>
+        <li><a href="/lab/gemma31b.html">Gemma 4 31B</a></li>
+        <li><a href="/lab/08_moe_expert_surgery.html">MoE surgery</a></li>
+        <li><a href="/lab/hrm.html">HRM</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Observation</summary>
+      <ul>
+        <li><a href="/#observation">All observations →</a></li>
+        <li><a href="https://an0nya.github.io/vivisection-lab/geometry.html">Internal geometry ↗</a></li>
+        <li><a href="/lab/vivarium_geometry.html">The Vivarium</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Method</summary>
+      <ul>
+        <li><a href="/#method">Method index →</a></li>
+        <li><a href="/lab/methods.html">Methods &amp; references</a></li>
+        <li><a href="/lab/02_anatomy_of_a_sweep.html">Anatomy of a sweep</a></li>
+        <li><a href="/lab/04_quant_bench.html">Quant benchmark</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Systems</summary>
+      <ul>
+        <li><a href="/#systems">All systems →</a></li>
+        <li><a href="/lab/06_duologue.html">duologue</a></li>
+        <li><a href="/lab/07_mem0_processor.html">mem0-processor</a></li>
+        <li><a href="/lab/09_self_improving_memory.html">Self-improving memory</a></li>
+      </ul>
+    </details>
+  </div>
+  <span class="site-bar__spacer"></span>
   <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
   <a href="#" data-theme-toggle>☼ Light</a>
+  <label for="nav-toggle" class="site-bar__burger">☰ Menu</label>
 </nav>
+<!-- SITE-BAR:END -->
+<aside class="page-toc" aria-label="On this page">
+  <p class="page-toc__label">On this page</p>
+  <a href="#patient" data-spy>The patient</a>
+  <a href="#lever" data-spy>The lever</a>
+  <a href="#split" data-spy>Split-pass</a>
+  <a href="#sigma" data-spy>The Σα-law</a>
+  <a href="#exposure" data-spy>Exposure</a>
+  <a href="#methods" data-spy>Methods</a>
+</aside>
 
 <main>
-  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · continuous-damping branch · <em>a methods notebook wearing a specimen's clothes</em></div>
+  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · continuous-damping branch · <em>closed out — the method is the deliverable</em></div>
   <header class="nb-record">
     <div class="nb-record__title">MiniCPM5-1B — the husk, and the Σα-law it left behind</div>
     <div class="nb-record__grid">
@@ -95,8 +143,8 @@
     <h2><span class="num">§0</span>The patient</h2>
     <div class="col-side">
       <div>
-        <p class="dropcap"><a href="https://huggingface.co/openbmb/MiniCPM5-1B">MiniCPM5-1B</a> is the small, honest
-        one. The OG release — not a conversion — and the config doesn't lie about what it is: it dropped the old
+        <p class="dropcap"><a href="https://huggingface.co/openbmb/MiniCPM5-1B">MiniCPM5-1B</a> is the small, plain
+        one. The OG release — not a conversion — and the config is exactly what it says: it dropped the old
         muP machinery and genuinely declares <code>LlamaForCausalLM</code>, <code>model_type: llama</code>. A plain
         Llama derivative — 24 dense GQA layers, untied embeddings, none of the muP <code>scale_emb</code> /
         <code>scale_depth</code> scaffolding. That matters downstream: everything here is plain-Llama behaviour, and
@@ -105,7 +153,7 @@
         with llama.cpp on a static GGUF — you can duplicate or delete whole blocks, but you can't turn a layer's
         contribution down to 60%. The interesting surgery on MiniCPM5 is <em>continuous</em>, so the whole sweep
         moved into a live MLX process where the model's own Python objects get patched between forward passes. That
-        sounds like a footnote. It's the reason this page exists.</p>
+        sounds like a footnote, but it's the reason this page exists.</p>
       </div>
       <aside class="aside">
         <span class="nb-kicker">The frame</span>
@@ -371,7 +419,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <h2><span class="num">§2</span>Building the ruler before trusting it</h2>
     <div class="col-side">
       <div>
-        <p class="dropcap">The first honest finding had nothing to do with surgery. <span class="hl-acc">The base
+        <p class="dropcap">The first real finding had nothing to do with surgery. <span class="hl-acc">The base
         model has a cliff.</span> On the original wide math set, ~50% of items floored to 0.0 and ~24% saturated to
         1.0 — only ~8% sat in a band where a score could <em>move</em>. Baseline 0.33, no resolution. A sweep run on
         that ruler measures mostly nothing, precisely.</p>
@@ -616,7 +664,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
         <span class="vrfy">VERIFY</span> <code>split_1_a50_a70 = 0.53 strict, t +6.2</code>.</p>
         <p>Don't apply the layer's contribution in one go. Apply a <em>scaled-back</em> version, let the residual
         stream move, then run the layer <em>again</em> on that moved stream and apply another scaled-back version —
-        two gentle nudges instead of one shove. The thing that makes this its own mechanism: on the second nudge the
+        two gentle nudges instead of one shove. What makes this its own mechanism is that on the second nudge the
         layer re-evaluates from the stream's <em>new</em> position, so it contributes a fresh opinion, not a scaled
         copy of its first.</p>
       </div>
@@ -930,7 +978,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <p>And it isn't only those three controls. We swept a <em>single</em> damped pass of L1 across the whole
     single-knob range — α = 0.5 → 1.5, the entire envelope a single α can reach. It tops out at <b>+0.028</b> (α ≈ 0.6)
     and craters under amplification (α = 1.5 → <b>−0.115</b>); it never clears baseline by more than noise. The best
-    split/stack sits at <b>+0.153</b>. No single α comes close — a <b>+0.125</b> gap, ~5×. The sharpest cut: at the
+    split/stack sits at <b>+0.153</b>. No single α comes close — a <b>+0.125</b> gap, ~5×. And at the
     <em>same</em> total dose <b>Σα = 1.5</b>, one pass scores −0.115 and the split scores +0.153, a <b>0.27 swing</b>
     that is pure re-evaluation. (Cross-checked across two independent sweep files — L1 at α = 1.30 gives Δ −0.080 in
     <em>both</em> to four decimals — so the comparison rides on Δ-vs-baseline, where the constant harness offset
@@ -1437,7 +1485,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <h2><span class="num">§6</span>The degeneration rate — exposure, not capability</h2>
     <div class="col-side">
       <div>
-        <p class="dropcap">Here's the result I'm fondest of, and it cost no compute — a metric computed over generations
+        <p class="dropcap">This is the result I'm fondest of, and it cost no compute — a metric computed over generations
         that were already stored. Different probe channels disagreed about whether a config was good: math liked
         high-k; the emotional-intelligence (eq) channel hated it. <span class="olabel obs">obs</span> diffing the
         verbatim responses showed the disagreement is about length — math answers are ~16 tokens, eq answers ~96.
@@ -1458,7 +1506,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
       </aside>
     </div>
 
-    <p>And then the clincher. Take the eq channel, throw out only the derailed responses, and score the <em>clean</em>
+    <p>Take the eq channel, throw out only the derailed responses, and score the <em>clean</em>
     ones (conditional mean): at k10/k12 the clean-only eq is <b>≥ baseline</b> (0.478 / 0.475 vs 0.472).
     <span class="hl-acc">The clean responses hold at or above baseline on every channel</span> — including the one whose
     aggregate score the surgery tanked. What the surgery costs isn't content quality; it's the <em>probability</em> of
@@ -1724,7 +1772,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 </svg></div>
       </div>
       <figcaption class="nb-figcap"><b>Fig 6 —</b> exposure, not capability. <b>Left:</b> degeneration rate (%) rising
-      monotonically with both copy count (at fixed Σα) and Σα (at fixed k). <b>Right:</b> the conditional-mean reveal —
+      monotonically with both copy count (at fixed Σα) and Σα (at fixed k). <b>Right:</b> the conditional-mean comparison —
       for the eq channel, the aggregate score falls with k, but scoring only the non-derailed responses holds flat at
       or above the untouched-model baseline (dashed). The surgery improves content quality and only costs derailment
       probability.</figcaption>
@@ -1743,7 +1791,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <p>The Σα² term gives the dose parabola (peak ≈ 1.65 for math); the <em>profile</em>-curvature term, Σa² summed
     over the per-pass alphas, is a penalty for <b>concentration</b> — spreading the same Σα across flatter, smaller
     passes costs less than dumping it into one big pass. "Flat beats ramp" and "k6 beats k4" are the same phenomenon:
-    both lower Σa² at fixed Σα. One surface, two knobs.</p>
+    both lower Σa² at fixed Σα.</p>
 
     <p>Where the regression <em>fails</em> is itself informative: the residual-norm wall is not smooth. A k1→k2 rescue
     at Σ1.5 was observed at <b>+0.252</b> against a quadratic prediction of ~+0.05 — a single concentrated pass breaks
@@ -1792,11 +1840,11 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
   <section id="caveats">
     <div class="nb-limits">
       <div class="nb-limits__head">
-        <span class="nb-limits__label">Caveats — the honest gaps</span>
+        <span class="nb-limits__label">Caveats — the open gaps</span>
         <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — these bound the claims</span>
       </div>
       <ul>
-        <li><b>No shippable model win.</b> The honest headline is a husk: the best math specialist (<code>split_1_a50_a70</code>) loses overall to a de-collapse config, and even that is pathology relief. Don't read a capability claim into this page; read a method and a regularity.</li>
+        <li><b>No shippable model win.</b> The headline is a husk: the best math specialist (<code>split_1_a50_a70</code>) loses overall to a de-collapse config, and even that is pathology relief. Don't read a capability claim into this page; read a method and a regularity.</li>
         <li><b>The peak is a ridge, channel-dependent</b> (§4). Anyone quoting "Σα = 1.25" without the 1.25–1.65 range and the math-vs-balanced drift is over-claiming.</li>
         <li><b>The CoT prosthesis hypothesis is a smoke-test hunch</b> (§8), not a result — flagged because it's the most promising unfinished thread, not because it's settled.</li>
         <li><b>eq is a null-rate gauge, not a ranker</b> on the v4 battery (r &gt; 1, low signal); use it for derailment exposure, not leaderboards.</li>

@@ -32,18 +32,66 @@
   }
 </style>
 </head>
-<body>
+<body class="cat-intervention">
 
-<nav class="nb-nav">
-  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
-  <a href="#wall">The wall</a>
-  <a href="#toolkit">Toolkit</a>
-  <a href="#clonemap">Router diff</a>
-  <a href="#teardown">Teardown</a>
-  <span class="nb-nav__spacer"></span>
+<!-- SITE-BAR:START — managed by tools/sync-nav.py; edit components/_site-bar.html -->
+<nav class="site-bar" aria-label="Site">
+  <a class="site-bar__home" href="/">ANYA<span class="site-bar__cat"></span></a>
+  <input type="checkbox" id="nav-toggle" class="site-bar__toggle" hidden>
+  <div class="site-bar__links">
+    <details class="nav-group">
+      <summary>Intervention</summary>
+      <ul>
+        <li><a href="/#intervention">All interventions →</a></li>
+        <li><a href="/lab/01_minicpm5_sigma_alpha.html">MiniCPM5</a></li>
+        <li><a href="/lab/03_nanbeige.html">Nanbeige</a></li>
+        <li><a href="/lab/05_granite.html">Granite</a></li>
+        <li><a href="/lab/gemma.html">Gemma 4 E4B</a></li>
+        <li><a href="/lab/gemma31b.html">Gemma 4 31B</a></li>
+        <li><a href="/lab/08_moe_expert_surgery.html">MoE surgery</a></li>
+        <li><a href="/lab/hrm.html">HRM</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Observation</summary>
+      <ul>
+        <li><a href="/#observation">All observations →</a></li>
+        <li><a href="https://an0nya.github.io/vivisection-lab/geometry.html">Internal geometry ↗</a></li>
+        <li><a href="/lab/vivarium_geometry.html">The Vivarium</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Method</summary>
+      <ul>
+        <li><a href="/#method">Method index →</a></li>
+        <li><a href="/lab/methods.html">Methods &amp; references</a></li>
+        <li><a href="/lab/02_anatomy_of_a_sweep.html">Anatomy of a sweep</a></li>
+        <li><a href="/lab/04_quant_bench.html">Quant benchmark</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Systems</summary>
+      <ul>
+        <li><a href="/#systems">All systems →</a></li>
+        <li><a href="/lab/06_duologue.html">duologue</a></li>
+        <li><a href="/lab/07_mem0_processor.html">mem0-processor</a></li>
+        <li><a href="/lab/09_self_improving_memory.html">Self-improving memory</a></li>
+      </ul>
+    </details>
+  </div>
+  <span class="site-bar__spacer"></span>
   <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
   <a href="#" data-theme-toggle>☼ Light</a>
+  <label for="nav-toggle" class="site-bar__burger">☰ Menu</label>
 </nav>
+<!-- SITE-BAR:END -->
+<aside class="page-toc" aria-label="On this page">
+  <p class="page-toc__label">On this page</p>
+  <a href="#wall" data-spy>The wall</a>
+  <a href="#toolkit" data-spy>Toolkit</a>
+  <a href="#clonemap" data-spy>Router diff</a>
+  <a href="#teardown" data-spy>Teardown</a>
+</aside>
 
 <main>
   <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · MoE branch</div>
@@ -70,7 +118,7 @@
     <div class="nb-correction__row"><span class="nb-correction__k">Hypothesis</span><span class="nb-correction__b">A layer is the universal unit of surgery — duplicate, prune, or damp one and capability moves, on any architecture.</span></div>
     <div class="nb-correction__row"><span class="nb-correction__k">Why it looked true</span><span class="nb-correction__b">It held across every dense specimen — Granite, MiniCPM5 — where a layer genuinely <em>is</em> a unit of computation you can amplify.</span></div>
     <div class="nb-correction__row"><span class="nb-correction__k">Why it failed</span><span class="nb-correction__b">On an MoE, duplicating a block re-runs the router and double-applies expert selection on an <em>uncalibrated</em> residual. The router sees an input distribution it was never trained on, null rates explode, strict scores floor. It's not "no effect" — it's "actively breaks the routing."</span></div>
-    <div class="nb-correction__row"><span class="nb-correction__k">Disposition</span><span class="nb-correction__b"><b>Retired for MoE.</b> The unit of <em>capacity</em> here is the expert, not the layer — so the line forks to the expert axis. The rest of this page is the lever it forks to.</span></div>
+    <div class="nb-correction__row"><span class="nb-correction__k">Disposition</span><span class="nb-correction__b"><b>Retired for MoE.</b> The unit of <em>capacity</em> here is the expert, not the layer — so the line forks to the expert axis; the rest of this page is that work.</span></div>
   </aside>
 
   <section id="wall">
@@ -79,7 +127,7 @@
       <div>
         <p class="dropcap">Whole-layer surgery has no purchase on a Mixture-of-Experts model, for two
         distinct reasons. <span class="hl-acc">Duplication corrupts routing</span> — a duplicated MoE block
-        is mechanically destructive, full stop. And <span class="hl-acc">pruning is the wrong axis, not
+        is mechanically destructive. And <span class="hl-acc">pruning is the wrong axis, not
         harmful</span>: pruning an MoE layer is an <em>output-compliance</em> fix — it unclogs a stalled
         output valve so the model emits a clean letter or number — not a reasoning fix.</p>
         <p>Whether the unclogged output is <em>correct</em> depends entirely on whether the latent
@@ -428,8 +476,7 @@
         shipped the result, and withheld the how. xpressai published a modified MoE — the live card is
         <code>Qwen3.6-35B-A3B-ExpertClone-Logic</code> — but the implementation repo is <span class="hl-acc">not
         publicly accessible</span> (and not on the Wayback Machine as of 2026-06), so the profiling
-        methodology is permanently opaque. That opacity is exactly what raises the stakes of the router-diff
-        method: without it, the surgery couldn't be recovered at all.</p>
+        methodology is permanently opaque. That opacity is what makes the router-diff method necessary: without it, the surgery couldn't be recovered at all.</p>
         <p>You don't need their code to <em>replay</em> the surgery, because of one architectural fact: the
         router tensor (<code>ffn_gate_inp.weight</code>) is <span class="hl-acc">F32 in every quant</span> of
         the same base. In the cloned file, the victim router columns were overwritten with the donor's — so
@@ -444,7 +491,7 @@
         on hardware you own, without their code.</p>
       </div>
       <aside class="aside">
-        <span class="nb-kicker">Honest scope</span>
+        <span class="nb-kicker">Scope</span>
         This <em>extracts and replays</em> a published decision; it does not reverse-engineer the profiling
         step (what corpus, what criteria chose the donors). Building <em>own</em> clone maps from scratch is
         still future work — and the capability eval so far is preliminary, no fixed seed yet.
@@ -1143,7 +1190,7 @@
       <div class="nb-correction__head"><span>⌦ Grader-skepticism note</span><span class="nb-correction__disp">artifact, not result</span></div>
       <div class="nb-correction__row"><span class="nb-correction__k">The tempting read</span><span class="nb-correction__b">Their <em>post-SFT</em> PPL drops <em>below</em> the 128-expert base (1.004 &lt; 1.596) — so 32 experts beat 128?</span></div>
       <div class="nb-correction__row"><span class="nb-correction__k">Why it's false</span><span class="nb-correction__b">The SFT and the PPL eval are on the <em>same</em> 500 samples — eval-on-train-distribution leakage (memorising a narrow thinking-format), not genuine superiority.</span></div>
-      <div class="nb-correction__row"><span class="nb-correction__k">The honest claim</span><span class="nb-correction__b">The 0-step <b>+55%</b> number. The sub-base number is an artifact — and saying so is the difference between a benchmark and a press release.</span></div>
+      <div class="nb-correction__row"><span class="nb-correction__k">The defensible claim</span><span class="nb-correction__b">The 0-step <b>+55%</b> number. The sub-base number is an eval-leakage artifact and shouldn't be cited.</span></div>
     </aside>
   </section>
 
@@ -1158,7 +1205,7 @@
     while keeping ~6–10B active per token <em>might</em> gain per-token quality — remaining experts get hit
     more often, the router is less stretched. The supporting datapoint, a 35→14B-A3B reaped model "nearly
     keeping up" with full siblings, is an eyeball read, not a paired eval — so this stays a hypothesis, not a
-    finding. The honest tax: a reaped older base loses to a newer dense one (generational gains > REAP
+    finding. The tax: a reaped older base loses to a newer dense one (generational gains > REAP
     preservation), so the workflow only pays on current-SOTA bases and has to be re-run per base update.</p>
     <p>The engine direction matches the rest of the lab's evolution: the refined surgery line is
     <span class="hl-acc">live-MLX-module patching</span>, not GGUF slab-rewriting — which is also why ragged

@@ -51,20 +51,68 @@
   }
 </style>
 </head>
-<body>
+<body class="cat-method">
 
-<nav class="nb-nav">
-  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
-  <a href="#problem">The one problem</a>
-  <a href="#grader">Phantom: grader</a>
-  <a href="#pairing">Pairing</a>
-  <a href="#multiplicity">Multiplicity</a>
-  <a href="#baseline">The baseline</a>
-  <a href="#coda">Belief vs behaviour</a>
-  <span class="nb-nav__spacer"></span>
+<!-- SITE-BAR:START — managed by tools/sync-nav.py; edit components/_site-bar.html -->
+<nav class="site-bar" aria-label="Site">
+  <a class="site-bar__home" href="/">ANYA<span class="site-bar__cat"></span></a>
+  <input type="checkbox" id="nav-toggle" class="site-bar__toggle" hidden>
+  <div class="site-bar__links">
+    <details class="nav-group">
+      <summary>Intervention</summary>
+      <ul>
+        <li><a href="/#intervention">All interventions →</a></li>
+        <li><a href="/lab/01_minicpm5_sigma_alpha.html">MiniCPM5</a></li>
+        <li><a href="/lab/03_nanbeige.html">Nanbeige</a></li>
+        <li><a href="/lab/05_granite.html">Granite</a></li>
+        <li><a href="/lab/gemma.html">Gemma 4 E4B</a></li>
+        <li><a href="/lab/gemma31b.html">Gemma 4 31B</a></li>
+        <li><a href="/lab/08_moe_expert_surgery.html">MoE surgery</a></li>
+        <li><a href="/lab/hrm.html">HRM</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Observation</summary>
+      <ul>
+        <li><a href="/#observation">All observations →</a></li>
+        <li><a href="https://an0nya.github.io/vivisection-lab/geometry.html">Internal geometry ↗</a></li>
+        <li><a href="/lab/vivarium_geometry.html">The Vivarium</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Method</summary>
+      <ul>
+        <li><a href="/#method">Method index →</a></li>
+        <li><a href="/lab/methods.html">Methods &amp; references</a></li>
+        <li><a href="/lab/02_anatomy_of_a_sweep.html">Anatomy of a sweep</a></li>
+        <li><a href="/lab/04_quant_bench.html">Quant benchmark</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Systems</summary>
+      <ul>
+        <li><a href="/#systems">All systems →</a></li>
+        <li><a href="/lab/06_duologue.html">duologue</a></li>
+        <li><a href="/lab/07_mem0_processor.html">mem0-processor</a></li>
+        <li><a href="/lab/09_self_improving_memory.html">Self-improving memory</a></li>
+      </ul>
+    </details>
+  </div>
+  <span class="site-bar__spacer"></span>
   <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
   <a href="#" data-theme-toggle>☼ Light</a>
+  <label for="nav-toggle" class="site-bar__burger">☰ Menu</label>
 </nav>
+<!-- SITE-BAR:END -->
+<aside class="page-toc" aria-label="On this page">
+  <p class="page-toc__label">On this page</p>
+  <a href="#problem" data-spy>The one problem</a>
+  <a href="#grader" data-spy>Phantom: grader</a>
+  <a href="#pairing" data-spy>Pairing</a>
+  <a href="#multiplicity" data-spy>Multiplicity</a>
+  <a href="#baseline" data-spy>The baseline</a>
+  <a href="#coda" data-spy>Belief vs behaviour</a>
+</aside>
 
 <main>
   <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Methods notebook · Anya · 2026 · the inferential layer · <em>the surgery is the easy part; the measurement is the contribution</em></div>
@@ -106,11 +154,11 @@
     <h2><span class="num">§0</span>The one hard problem</h2>
     <div class="col-side">
       <div>
-        <p class="dropcap">Layer surgery is almost suspiciously easy to <em>do</em>. Duplicate a transformer block, or
+        <p class="dropcap">The surgery itself is trivial. Duplicate a transformer block, or
         delete one, or — once you're in a live process instead of a static file — turn one down to 60% strength. No
         training, seconds per edit. Re-run a benchmark, read the number, declare a winner.</p>
-        <p>That last step is where everything goes wrong, and it goes wrong the same way for everyone. The number moved.
-        But a benchmark number on a perturbed model moves for at least four reasons, and only one is the one you want:</p>
+        <p>That last step is where it goes wrong: the number moved, but a benchmark number on a perturbed
+        model moves for at least four reasons, and only one is the one you want:</p>
         <ol>
           <li><b>The model genuinely got better (or worse)</b> at the thing you measured.</li>
           <li><b>Seed noise</b> — you happened to sample a luckier set of generations.</li>
@@ -144,12 +192,12 @@
     <p class="dropcap">Run any model's first sweep and you get a leaderboard. Some fraction of it is hallucinated, and the
     mechanism is always identical: <span class="hl-acc">a lenient grader scores output form</span> — well-shaped,
     right-magnitude, compliant — instead of correctness. I've watched it manufacture champions on every model in the lab,
-    in three distinct flavours. The worst one hid in plain sight.</p>
+    in three distinct flavours.</p>
 
     <h3>Echo contamination</h3>
     <p>This one cost a full overnight. A naive integer parser grabs the <em>last</em> number in a response; when the model
     just echoes the question back — "What is 4,318 plus 2,901?" — the parser scores partial credit on the <em>input</em>
-    numbers. On Nanbeige, <b>66% of one overnight run was echo-only.</b> Here's the twist: when you de-contaminate —
+    numbers. On Nanbeige, <b>66% of one overnight run was echo-only.</b> And when you de-contaminate —
     blocklist each prompt's own integers — the real RYS effect <em>grew</em>, from +0.21 to +0.32.
     <span class="olabel inf">interpretation</span> The baseline had been quietly scoring on echo too, so cleaning it up
     widened the gap. The signal was hiding under the baseline's own cheating.</p>
@@ -792,7 +840,7 @@
 
   <section id="pairing">
     <h2><span class="num">§3</span>Pairing: why "the ranges overlap" is not "it's noise"</h2>
-    <p class="dropcap">Here's the most common way a careful person still gets it wrong. You compute a config's mean score,
+    <p class="dropcap">The most common way a careful person still gets it wrong: you compute a config's mean score,
     the baseline's mean score, you notice their <em>ranges overlap</em>, and you conclude the difference is noise. That
     conclusion is unjustified, and seeing why is the whole game.</p>
     <p>Every config is scored against the baseline <b>on the same seeds</b>. Think of each seed as a fixed exam paper
@@ -1236,7 +1284,7 @@
     <a href="/lab/05_granite.html">Granite</a>). A zero-compute count over <em>already-stored</em> responses: how often a
     generation derails — special-token leaks (<code>&lt;|fim_prefix|&gt;</code>), name:number line-loops, digit
     repetition. It's monotone in both surgery knobs (copy count and cumulative-α), and it turns out to be the <em>real</em>
-    cost axis. The clincher: throw out only the derailed responses and score the clean ones, and <b>the surgery improves
+    cost axis. Throw out only the derailed responses and score the clean ones, and <b>the surgery improves
     content quality on every channel — the only thing it costs is derailment probability.</b> That reframes a lot of
     apparent "EQ craters" as a single mechanism: <span class="hl-acc">channel divergence ≈ exposure divergence.</span> A
     short channel (~16-token math) barely gives a low per-token derailment risk room to fire; a long channel (~96-token
@@ -1265,7 +1313,7 @@
     (as opposed to an effect-size <em>magnitude</em>) is an <em>interaction</em>: a sampler×config or quant×surgery
     effect, where the offset differs across configs. And a baseline-only ladder structurally cannot detect an
     interaction — you need ≥2 configs across the ladder to see one.</p>
-    <p>So the honest scope statement is: <span class="hl-acc">quant noise is real, and it degrades the precision
+    <p>So the scope statement is: <span class="hl-acc">quant noise is real, and it degrades the precision
     tails</span> — exact multi-digit arithmetic, tool-call and structured tokens, long-context, strict
     instruction-following — which is exactly where production agentic use breaks even when broad-strokes sweep capability
     doesn't. But it is <em>not</em> a blocker for what a sweep measures, and it never touches rank or direction. The clean

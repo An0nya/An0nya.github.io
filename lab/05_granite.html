@@ -42,19 +42,67 @@
   }
 </style>
 </head>
-<body>
+<body class="cat-intervention">
 
-<nav class="nb-nav">
-  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
-  <a href="#fell">The fall</a>
-  <a href="#bugs">Flipped bugs</a>
-  <a href="#stacking">Stacking</a>
-  <a href="#ushape">U-shaped layers</a>
-  <a href="#sigma">The Σα-law</a>
-  <span class="nb-nav__spacer"></span>
+<!-- SITE-BAR:START — managed by tools/sync-nav.py; edit components/_site-bar.html -->
+<nav class="site-bar" aria-label="Site">
+  <a class="site-bar__home" href="/">ANYA<span class="site-bar__cat"></span></a>
+  <input type="checkbox" id="nav-toggle" class="site-bar__toggle" hidden>
+  <div class="site-bar__links">
+    <details class="nav-group">
+      <summary>Intervention</summary>
+      <ul>
+        <li><a href="/#intervention">All interventions →</a></li>
+        <li><a href="/lab/01_minicpm5_sigma_alpha.html">MiniCPM5</a></li>
+        <li><a href="/lab/03_nanbeige.html">Nanbeige</a></li>
+        <li><a href="/lab/05_granite.html">Granite</a></li>
+        <li><a href="/lab/gemma.html">Gemma 4 E4B</a></li>
+        <li><a href="/lab/gemma31b.html">Gemma 4 31B</a></li>
+        <li><a href="/lab/08_moe_expert_surgery.html">MoE surgery</a></li>
+        <li><a href="/lab/hrm.html">HRM</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Observation</summary>
+      <ul>
+        <li><a href="/#observation">All observations →</a></li>
+        <li><a href="https://an0nya.github.io/vivisection-lab/geometry.html">Internal geometry ↗</a></li>
+        <li><a href="/lab/vivarium_geometry.html">The Vivarium</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Method</summary>
+      <ul>
+        <li><a href="/#method">Method index →</a></li>
+        <li><a href="/lab/methods.html">Methods &amp; references</a></li>
+        <li><a href="/lab/02_anatomy_of_a_sweep.html">Anatomy of a sweep</a></li>
+        <li><a href="/lab/04_quant_bench.html">Quant benchmark</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Systems</summary>
+      <ul>
+        <li><a href="/#systems">All systems →</a></li>
+        <li><a href="/lab/06_duologue.html">duologue</a></li>
+        <li><a href="/lab/07_mem0_processor.html">mem0-processor</a></li>
+        <li><a href="/lab/09_self_improving_memory.html">Self-improving memory</a></li>
+      </ul>
+    </details>
+  </div>
+  <span class="site-bar__spacer"></span>
   <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
   <a href="#" data-theme-toggle>☼ Light</a>
+  <label for="nav-toggle" class="site-bar__burger">☰ Menu</label>
 </nav>
+<!-- SITE-BAR:END -->
+<aside class="page-toc" aria-label="On this page">
+  <p class="page-toc__label">On this page</p>
+  <a href="#fell" data-spy>The fall</a>
+  <a href="#bugs" data-spy>Flipped bugs</a>
+  <a href="#stacking" data-spy>Stacking</a>
+  <a href="#ushape" data-spy>U-shaped layers</a>
+  <a href="#sigma" data-spy>The Σα-law</a>
+</aside>
 
 <main>
   <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · dense-model + steering branch · <em>addendum to the published Granite page</em></div>
@@ -74,7 +122,7 @@
 
   <p class="dek">This is the page where I overturned my own headline. The Granite page shipped with a clean
   champion; a better instrument erased it. The mechanism work survived untouched — and the constructive
-  findings that replaced the leaderboard are better than the one they lost, and they appear to generalize.</p>
+  findings that replaced the leaderboard are more useful than what they replaced, and they appear to generalize.</p>
 
   <aside class="nb-correction">
     <div class="nb-correction__head"><span>⌦ Correction</span><span class="nb-correction__disp">superseded — does not reproduce</span></div>
@@ -93,9 +141,8 @@
         whole mechanism stack: direction-is-read / magnitude-is-discarded, the U-shaped depth-vulnerability
         curve, RYS-dup-as-power-iteration, the ~4-layer circuit-coherence length, the steering /
         soft-abliteration results, the continuous-depth ODE framing. The page keeps every one of those.</p>
-        <p>So the page gets a walkback banner on <code>combo_10_38</code> — and, more usefully, it gets to tell
-        a <em>better</em> story than the one it lost. The real findings of the Granite line are constructive,
-        and they appear to generalize beyond it. The rest of this addendum is those four findings.</p>
+        <p>So the page gets a walkback banner on <code>combo_10_38</code> — and, more usefully, a constructive
+        section to replace the leaderboard it lost. The rest of this addendum is those four findings.</p>
       </div>
       <aside class="aside">
         <span class="nb-kicker">Draft status</span>
@@ -110,7 +157,7 @@
     <h2><span class="num">§2</span>Finding 1 — capability is a few flipped bugs, not a risen tide</h2>
     <div class="col-side">
       <div>
-        <p class="dropcap">This is the reframe that makes the rest legible. Granite's no-CoT arithmetic baseline
+        <p class="dropcap">Granite's no-CoT arithmetic baseline
         doesn't fail <em>randomly</em>; it fails <span class="hl-acc">deterministically</span>, in a handful of
         specific, reproducible ways. <code>907 − 131</code> (= 776) never comes back right across 15 seeds — it
         settles into one of <em>two</em> stable wrong answers, <b>676</b> (9/15, a hundreds-column slip) or
@@ -119,7 +166,7 @@
         the 0/15 reproducibility is what's measured; <span class="olabel inf">inf</span> "basin / attractor" is
         the interpretation.</p>
         <p>A "winning" surgery doesn't lift a diffuse competence — it <span class="hl-acc">flips a few of these
-        specific bugs to 12/12 right</span>. And here's the measurement trap: a balanced 49-probe average
+        specific bugs to 12/12 right</span>. The measurement trap is that a balanced 49-probe average
         <em>dilutes</em> a concentrated flip until it looks like a tiny effect. The small balanced t-stats badly
         <em>understate</em> what's happening — and that's correct behaviour, not a measurement failure. The win
         really is concentrated. The right lens is <b>per-probe</b>: which exact bug got fixed, and how many
@@ -1058,7 +1105,7 @@
   <section id="caveats">
     <div class="nb-limits">
       <div class="nb-limits__head">
-        <span class="nb-limits__label">Caveats — the honest gaps</span>
+        <span class="nb-limits__label">Caveats — the open gaps</span>
         <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — these gate the constructive claims</span>
       </div>
       <ul>

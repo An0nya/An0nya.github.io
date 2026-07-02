@@ -51,23 +51,71 @@
   }
 </style>
 </head>
-<body>
+<body class="cat-intervention">
 
-<nav class="nb-nav">
-  <a class="nb-nav__home" href="/">VIVISECTION LAB</a>
-  <a href="#patient">The patient</a>
-  <a href="#echo">The echo saga</a>
-  <a href="#mechanisms">Two mechanisms</a>
-  <a href="#control">The control</a>
-  <a href="#disconnect">The disconnect</a>
-  <a href="#caveats">Caveats</a>
-  <span class="nb-nav__spacer"></span>
+<!-- SITE-BAR:START — managed by tools/sync-nav.py; edit components/_site-bar.html -->
+<nav class="site-bar" aria-label="Site">
+  <a class="site-bar__home" href="/">ANYA<span class="site-bar__cat"></span></a>
+  <input type="checkbox" id="nav-toggle" class="site-bar__toggle" hidden>
+  <div class="site-bar__links">
+    <details class="nav-group">
+      <summary>Intervention</summary>
+      <ul>
+        <li><a href="/#intervention">All interventions →</a></li>
+        <li><a href="/lab/01_minicpm5_sigma_alpha.html">MiniCPM5</a></li>
+        <li><a href="/lab/03_nanbeige.html">Nanbeige</a></li>
+        <li><a href="/lab/05_granite.html">Granite</a></li>
+        <li><a href="/lab/gemma.html">Gemma 4 E4B</a></li>
+        <li><a href="/lab/gemma31b.html">Gemma 4 31B</a></li>
+        <li><a href="/lab/08_moe_expert_surgery.html">MoE surgery</a></li>
+        <li><a href="/lab/hrm.html">HRM</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Observation</summary>
+      <ul>
+        <li><a href="/#observation">All observations →</a></li>
+        <li><a href="https://an0nya.github.io/vivisection-lab/geometry.html">Internal geometry ↗</a></li>
+        <li><a href="/lab/vivarium_geometry.html">The Vivarium</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Method</summary>
+      <ul>
+        <li><a href="/#method">Method index →</a></li>
+        <li><a href="/lab/methods.html">Methods &amp; references</a></li>
+        <li><a href="/lab/02_anatomy_of_a_sweep.html">Anatomy of a sweep</a></li>
+        <li><a href="/lab/04_quant_bench.html">Quant benchmark</a></li>
+      </ul>
+    </details>
+    <details class="nav-group">
+      <summary>Systems</summary>
+      <ul>
+        <li><a href="/#systems">All systems →</a></li>
+        <li><a href="/lab/06_duologue.html">duologue</a></li>
+        <li><a href="/lab/07_mem0_processor.html">mem0-processor</a></li>
+        <li><a href="/lab/09_self_improving_memory.html">Self-improving memory</a></li>
+      </ul>
+    </details>
+  </div>
+  <span class="site-bar__spacer"></span>
   <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
   <a href="#" data-theme-toggle>☼ Light</a>
+  <label for="nav-toggle" class="site-bar__burger">☰ Menu</label>
 </nav>
+<!-- SITE-BAR:END -->
+<aside class="page-toc" aria-label="On this page">
+  <p class="page-toc__label">On this page</p>
+  <a href="#patient" data-spy>The patient</a>
+  <a href="#echo" data-spy>The echo saga</a>
+  <a href="#mechanisms" data-spy>Two mechanisms</a>
+  <a href="#control" data-spy>The control</a>
+  <a href="#disconnect" data-spy>The disconnect</a>
+  <a href="#caveats" data-spy>Caveats</a>
+</aside>
 
 <main>
-  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · small-thinking-model branch · <em>the lab's most encouraging result, wearing its caveats on the outside</em></div>
+  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · small-thinking-model branch · <em>the lab's most encouraging result — and the most heavily caveated</em></div>
   <header class="nb-record">
     <div class="nb-record__title">Nanbeige-4.1-3B — where the surgery finally helped (and what "helped" turned out to mean)</div>
     <div class="nb-record__grid">
@@ -115,17 +163,16 @@
   </section>
 
   <section id="echo">
-    <h2><span class="num">§1</span>The 66% that wasn't there (the echo saga)</h2>
+    <h2><span class="num">§1</span>The echo saga — 66% of responses scored without containing a guess</h2>
     <p>Before any result, the cautionary tale that reshaped the whole lab's grading. The first overnight sweep produced a
     clean leaderboard — top config <code>14-15 + 17-18 ×2</code> at 0.40 vs baseline 0.19, t=7.5, ~30 configs beating
-    baseline at t≥2. Encouraging. Also, substantially fake.</p>
+    baseline at t≥2 — encouraging, and substantially fake.</p>
     <p>The grader took the <em>last</em> integer in each response. But on hard mental math, a model that won't commit
     often just <em>echoes the question</em> — "We are asked: 'What is 8273645928374659 plus 9384756192847362?'" — and
     never emits a guess. The parser grabbed an input number, the partial-credit scorer rewarded its digit-overlap with
     the answer, and <span class="hl-acc">66% of the overnight responses scored on echo alone</span>, with no actual model
     guess in them. <span class="olabel obs">observation</span> The leaderboard was partly measuring prose-emission rate.</p>
-    <p>The fix (<code>regrade_no_echo.py</code>) blocklists each prompt's own integers and re-scores. The result is the
-    one worth internalizing:</p>
+    <p>The fix (<code>regrade_no_echo.py</code>) blocklists each prompt's own integers and re-scores:</p>
 
     <table class="nb-table" style="margin-top:var(--sp-5);max-width:48ch">
       <thead><tr><th></th><th>raw partial</th><th>de-echoed</th></tr></thead>
@@ -251,7 +298,7 @@
 
   <section id="mechanisms">
     <h2><span class="num">§2</span>Two mechanisms, opposite directions, equal lift</h2>
-    <p>The headline, once the grading was honest: <span class="hl-acc">two different surgeries produce the same-size
+    <p>With the grading fixed, <span class="hl-acc">two different surgeries produce the same-size
     improvement by doing opposite things.</span></p>
     <ul>
       <li><b><code>prune_9</code> — t = +5.13.</b> <em>Delete</em> layer 9 and the model gets better at mental math.</li>
@@ -433,7 +480,7 @@
     </figure>
 
     <h3>You can read the anatomy off the failure modes</h3>
-    <p>Each prune breaks the model in a characteristically different way — the best vignettes in the whole specimen:</p>
+    <p>Each prune breaks the model in a characteristically different way:</p>
     <ul>
       <li><b><code>prune_9</code></b> produces terse, direct equations: <code>8273645928374659 + 9384756192847362 =
       17658401121221921</code> — no wrappers, and on <code>add_huge</code> a single seed landed <b>one digit off</b>. Its
@@ -455,7 +502,7 @@
 
   <section id="control">
     <h2><span class="num">§3</span>The control test: the model already knew (it mostly wouldn't say)</h2>
-    <p class="dropcap">Here's the result that recolours everything above. The natural reading of "surgery improved mental
+    <p class="dropcap">This control recolours everything above. The natural reading of "surgery improved mental
     math" is <em>the surgery added arithmetic capability</em>. A control test says mostly no.</p>
     <p>Force the bare baseline to commit — logit-bias the <code>&lt;think&gt;</code> token to −100 and stop on the
     reasoning-wrapper strings, so it physically cannot open a deliberation — and the bare model's m|g jumps to
@@ -478,7 +525,7 @@
       </tbody>
     </table>
 
-    <p>The forced-commit row is n=1, from the biased singles phase. Its punch: forcing the bare model to answer barely
+    <p>The forced-commit row is n=1, from the biased singles phase: forcing the bare model to answer barely
     moved the <em>rate</em> (0.194→0.244) yet lifted quality to m|g <b>0.522</b> — nearly top-RYS's <b>0.582</b>. So what
     suppression was hiding was mostly <em>intuition the model already had</em>, not just the willingness to use it. One
     caveat on <code>m|g</code> itself: it's conditional on the answers the model actually emits, so it's a selection
@@ -487,7 +534,7 @@
     <p>Both axes lift ~3×. The <b>rate</b> lift is a compliance story — the surgery makes the model stop narrating and
     commit. The <b>m|g</b> lift can't be compliance — when the surgical model <em>does</em> guess, its guesses are
     individually closer. So there's a real residual: a small genuine-computation component (the 0.52 → 0.58 gap) riding on
-    a large willingness-to-commit component. The honest headline isn't "surgery taught it math"; it's
+    a large willingness-to-commit component. So the headline isn't "surgery taught it math"; it's
     <span class="hl-acc">"surgery mostly unlocked intuition the model already had, and sharpened it a little."</span></p>
 
     <figure class="figure" id="fig3">
@@ -606,7 +653,7 @@
 
   <section id="disconnect">
     <h2><span class="num">§4</span>The disconnect (why this isn't shippable yet)</h2>
-    <p>Now the caveat that keeps this honest, and the reason there's no GGUF attached. The no-CoT sweep measures
+    <p>Now the caveat, and the reason there's no GGUF attached. The no-CoT sweep measures
     <em>intuition under suppressed deliberation</em>. That is <b>not</b> the same axis as "is this a better model to chat
     with" — and they can move in opposite directions.</p>
     <p>Spin up the <code>17_21_x2</code> GGUF and talk to it in normal thinking mode, and it drives <em>more</em> thinking
@@ -628,7 +675,7 @@
       <span class="olabel inf">interpretation — offered as a frame, not a finding</span></p>
     </div>
 
-    <p>This is exactly the kind of thing the lab refuses to paper over. The phase-3 work reframes the metric to
+    <p>This is the kind of result I'm not willing to paper over. The phase-3 work reframes the metric to
     <em>efficiency</em> (score per thinking-token) and adds the missing axes — easy-math (does it preserve trivial
     ability?), EQ (did a useful "doubt circuit" get removed?), and conversational sanity (did we make a math
     autoencoder?). Until those land, and until the whole thing re-runs on the v4 battery for cross-model comparability,
@@ -636,8 +683,7 @@
 
     <blockquote class="nb-pull nb-pull--wide"><b>On no-CoT arithmetic intuition, two opposite surgeries each produce a
     real lift — t ≈ +5 apiece — mostly by unlocking commitment and partly by sharpening magnitude-intuition — and it is
-    not yet shown that this transfers to deployed chat behaviour.</b> A genuine contribution, stated at exactly the
-    confidence the evidence supports.</blockquote>
+    not yet shown that this transfers to deployed chat behaviour.</b></blockquote>
   </section>
 
   <section id="contributes">
