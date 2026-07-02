@@ -455,9 +455,14 @@ body.cat-systems      .site-bar__cat::after { content: " · Systems"; }
 }
 .page-toc::-webkit-scrollbar { display: none; }
 .page-toc__label { color: var(--text-muted); white-space: nowrap; padding-right: var(--sp-2); }
-.page-toc a { display: block; padding: 0.55rem 0.8rem; color: var(--text-dim); white-space: nowrap; }
+.page-toc a { position: relative; display: block; padding: 0.55rem 0.8rem; color: var(--text-dim); white-space: nowrap; }
 .page-toc a:hover { color: var(--accent); text-decoration: none; }
 .page-toc a.is-active { color: var(--accent-bright); }
+/* progress underline that fills through the active section (--seg from nb.js) */
+.page-toc a.is-active::before {
+  content: ""; position: absolute; left: 0; bottom: 0; height: 2px;
+  width: var(--seg, 0); background: var(--accent); transition: width 0.12s linear;
+}
 
 /* Wide (>= 1500px): enough left margin to float it into a fixed sidebar
    without hugging the window edge. Below this it stays the sticky strip. */
@@ -472,4 +477,5 @@ body.cat-systems      .site-bar__cat::after { content: " · Systems"; }
   .page-toc__label { padding: 0; margin-bottom: var(--sp-2); }
   .page-toc a { padding: 0.35rem 0; border-left: 2px solid transparent; padding-left: var(--sp-3); }
   .page-toc a.is-active { border-left-color: var(--accent); }
+  .page-toc a.is-active::before { display: none; }   /* sidebar uses the left keyline, not the underline */
 }
