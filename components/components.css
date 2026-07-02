@@ -133,7 +133,7 @@ a.nb-card:hover .nb-card__go { color: var(--accent-bright); }
 .nb-card__tag .st { color: var(--accent); }
 .nb-card__tag .st--draft { color: var(--caution); }
 .nb-card h3 { font-size: 1.4rem; line-height: 1.08; margin: 0 0 var(--sp-2); font-weight: var(--w-med); }
-.nb-card__dek { font-style: italic; color: var(--text-dim); font-size: var(--fs-sm); line-height: 1.45; margin: 0 0 var(--sp-4); }
+.nb-card__dek { color: var(--text-dim); font-size: var(--fs-sm); line-height: 1.45; margin: 0 0 var(--sp-4); }
 .nb-card__find {
   font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.5; color: var(--text-dim);
   border-top: var(--bw) solid var(--border); padding-top: var(--sp-3); margin-top: auto;
@@ -373,3 +373,42 @@ a.nb-card:hover .nb-card__go { color: var(--accent-bright); }
 .nb-nav a:hover, .nb-nav a.is-active { color: var(--accent); text-decoration: none; }
 .nb-nav .nb-nav__home { color: var(--text); font-weight: var(--w-semi); letter-spacing: 0.12em; }
 .nb-nav .nb-nav__spacer { flex: 1; }
+
+/* ── PROTOTYPE: site bar + page TOC ───────────────────────────────────────
+   .site-bar = constant site chrome (same markup every page). .page-toc =
+   per-page section nav as a sticky left sidebar on wide screens only. On
+   mobile the section links collapse into a no-JS <details> disclosure.
+   Scroll-spy highlight (.is-active) is set by nb.js (IntersectionObserver);
+   links still work with JS off. */
+.site-bar {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 0;
+  position: sticky; top: 0; z-index: var(--z-nav);
+  border-bottom: var(--bw) solid var(--border-strong);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: var(--tk-nav);
+  text-transform: uppercase;
+}
+.site-bar a { display: block; padding: 0.7rem 1rem; color: var(--text-dim); white-space: nowrap; }
+.site-bar a:hover, .site-bar a.is-active { color: var(--accent); text-decoration: none; }
+.site-bar__home { color: var(--text); font-weight: var(--w-semi); letter-spacing: 0.12em; }
+.site-bar__spacer { flex: 1; }
+.site-bar__links { display: flex; flex-wrap: wrap; }
+/* NOTE: mobile currently wraps the section links to a second row (old nav
+   behavior). A true tap-to-open dropdown is a follow-up — the robust no-JS
+   route is the checkbox hack (native <details> hides content cross-engine). */
+
+.page-toc { display: none; }
+@media (min-width: 1400px) {
+  .page-toc {
+    display: block; position: fixed; top: 5.5rem;
+    left: calc((100vw - var(--page-max)) / 2 - 10.5rem);
+    width: 9rem;
+    font-family: var(--font-mono); font-size: 0.66rem;
+    letter-spacing: var(--tk-nav); text-transform: uppercase;
+  }
+  .page-toc__label { color: var(--text-muted); margin-bottom: var(--sp-2); }
+  .page-toc a { display: block; padding: 0.35rem 0; color: var(--text-dim); border-left: 2px solid transparent; padding-left: var(--sp-3); }
+  .page-toc a:hover { color: var(--accent); text-decoration: none; }
+  .page-toc a.is-active { color: var(--accent-bright); border-left-color: var(--accent); }
+}

@@ -89,6 +89,10 @@
         color: var(--text-dim);
     }
 
+    /* the "How I work" marginalia has no label element, so its body was
+       landing in the narrow 8.5rem label column — span it full width. */
+    .work .nb-marginalia__body { grid-column: 1 / -1; }
+
     footer {
         max-width: var(--page-max);
         margin: 0 auto;
@@ -137,25 +141,68 @@
     .nb-spec dt { margin: 0; color: var(--text-muted); text-transform: lowercase; }
     .nb-spec dd { margin: 0; color: var(--text-dim); }
     .nb-spec dd.op { color: var(--accent-bright); }   /* the pop */
+    .nb-spec dd.draft { color: var(--caution); }      /* only exception flagged; published is implicit */
     /* optional — recolor keyline by architecture for at-a-glance sorting:
     .nb-spec[data-arch="dense"]     { border-left-color: var(--accent); }
     .nb-spec[data-arch="moe"]       { border-left-color: var(--accent-bright); }
     .nb-spec[data-arch="recurrent"] { border-left-color: #E3C24A; }
     */
+
+    /* ── nb-card__head: title + spec sidebar ─────────────────────────────
+       Header row for teardown cards: title takes the left ~66% (wraps when
+       it hits it), the spec strip sits in the right column and stacks
+       vertically (a horizontal 3-cell strip can't survive that width). The
+       card itself stays a flex column, so .nb-card__find keeps its
+       margin-top:auto bottom-pin across a row. On mobile the head stacks and
+       the strip goes back to a full-width horizontal band. */
+    .nb-card__head {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--sp-5);
+        margin-bottom: var(--sp-3);
+    }
+    .nb-card__head h3 { flex: 1 1 auto; max-width: 66%; margin: 0; }
+    .nb-card__head .nb-spec {
+        flex: 0 0 auto;
+        max-width: 36%;
+        margin: 0 0 0 auto;          /* pin to the right */
+        flex-direction: column;
+    }
+    .nb-card__head .nb-spec > div {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+        justify-content: flex-start;
+    }
+    .nb-card__head .nb-spec > div:last-child { border-bottom: 0; }
+
+    @media (max-width: 760px) {
+        .nb-card__head { flex-direction: column; gap: var(--sp-3); }
+        .nb-card__head h3 { max-width: 100%; }
+        .nb-card__head .nb-spec {
+            max-width: 100%; margin: 0;
+            flex-direction: row; flex-wrap: wrap;
+        }
+        .nb-card__head .nb-spec > div { border-right: 1px solid var(--border); border-bottom: 0; }
+        .nb-card__head .nb-spec > div:last-child { border-right: 0; }
+    }
     </style>
 </head>
 <body>
 
-    <nav class="nb-nav">
-        <a class="nb-nav__home" href="/">ANYA · EXPERIMENTATION NOTEBOOKS</a>
-        <a href="#intervention">Intervention</a>
-        <a href="#observation">Observation</a>
-        <a href="#method">Method</a>
-        <a href="#systems">Systems</a>
-        <span class="nb-nav__spacer"></span>
-        <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
-        <a href="#" data-theme-toggle>☼ Light</a>
+    <!-- SITE-BAR:START — managed by tools/sync-nav.py; edit components/_site-bar.html -->
+    <nav class="site-bar">
+      <a class="site-bar__home" href="/">ANYA · EXPERIMENTATION NOTEBOOKS</a>
+      <div class="site-bar__links">
+        <a href="/#intervention">Intervention</a>
+        <a href="/#observation">Observation</a>
+        <a href="/#method">Method</a>
+        <a href="/#systems">Systems</a>
+      </div>
+      <span class="site-bar__spacer"></span>
+      <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
+      <a href="#" data-theme-toggle>☼ Light</a>
     </nav>
+    <!-- SITE-BAR:END -->
 
     <main>
         <header class="masthead">
@@ -180,12 +227,14 @@
             <p class="sec-note">The model layer experiments are inspired by the work of David Ng, and while I haven't had the same amount of success on leaderboards, I have been expanding on his method and tackling the ever present difficulty of evaluating model performance.</p>
             <div class="cards">
                 <a class="nb-card" href="/lab/01_minicpm5_sigma_alpha.html">
-                    <dl class="nb-spec" data-arch="dense">
-                        <div><dt>arch</dt><dd>dense · llama-style · 1B</dd></div>
-                        <div><dt>runtime</dt><dd>MLX · f16</dd></div>
-                        <div><dt>op</dt><dd class="op">layer dup/prune · damping</dd></div>
-                    </dl>
-                    <h3>MiniCPM5 — the lightweight prototype</h3>
+                    <div class="nb-card__head">
+                        <h3>MiniCPM5 — the lightweight prototype</h3>
+                        <dl class="nb-spec" data-arch="dense">
+                            <div><dt>arch</dt><dd>dense · 1B</dd></div>
+                            <div><dt>runtime</dt><dd>MLX · f16</dd></div>
+                            <div><dt>op</dt><dd class="op">layer dup/prune · damping</dd></div>
+                        </dl>
+                    </div>
                     <p class="nb-card__dek">The model didn't produce an unambiguous success, but the instrumentation was built here, and one empirical regularity held up across every later specimen.</p>
                     <div class="nb-card__find">
                         <b>Results: </b>
@@ -194,10 +243,14 @@
                     <div class="nb-card__go">Read more →</div>
                 </a>
                 <a class="nb-card" href="/lab/03_nanbeige.html">
-                    <div class="nb-card__tag">
-                        <span>Dense · layer surgery</span>
+                    <div class="nb-card__head">
+                        <h3>Nanbeige — the overthinking curiosity</h3>
+                        <dl class="nb-spec" data-arch="dense">
+                            <div><dt>arch</dt><dd>dense · 3B</dd></div>
+                            <div><dt>runtime</dt><dd>llama.cpp · Q8_0</dd></div>
+                            <div><dt>op</dt><dd class="op">layer dup/swap</dd></div>
+                        </dl>
                     </div>
-                    <h3>Nanbeige — the overthinking curiosity</h3>
                     <p class="nb-card__dek">The one specimen where inference-time surgery measurably helped, albeit in a roundabout way.</p>
                     <div class="nb-card__find">
                         <b>Results: </b>
@@ -206,10 +259,14 @@
                     <div class="nb-card__go">Read more →</div>
                 </a>
                 <a class="nb-card" href="/lab/05_granite.html">
-                    <div class="nb-card__tag">
-                        <span>Dense · correction</span>
+                    <div class="nb-card__head">
+                        <h3>Granite — revisited and overturned</h3>
+                        <dl class="nb-spec" data-arch="dense">
+                            <div><dt>arch</dt><dd>dense · 3B</dd></div>
+                            <div><dt>runtime</dt><dd>MLX · 4-bit</dd></div>
+                            <div><dt>op</dt><dd class="op">dup/prune · Σα damping</dd></div>
+                        </dl>
                     </div>
-                    <h3>Granite — revisited and overturned</h3>
                     <p class="nb-card__dek">This page showed me just how far my instrumentation had come, and it required more than just a few edits to address. Both the original and addendum update coexist to demonstrate how a rigorous approach matters. And, of course, the revised result isn't kind to the hypothesis of altering the granite model.</p>
                     <div class="nb-card__find">
                         <b>Finding: </b>
@@ -218,11 +275,14 @@
                     <div class="nb-card__go">Read more →</div>
                 </a>
                 <a class="nb-card" href="/lab/gemma.html">
-                    <div class="nb-card__tag">
-                        <span>Dense · shared-KV</span>
-                        <span class="st">published</span>
+                    <div class="nb-card__head">
+                        <h3>Gemma 4 E4B — a unique design</h3>
+                        <dl class="nb-spec" data-arch="dense">
+                            <div><dt>arch</dt><dd>dense · shared-KV</dd></div>
+                            <div><dt>runtime</dt><dd>llama.cpp · IQ4_XS</dd></div>
+                            <div><dt>op</dt><dd class="op">dup/prune/swap</dd></div>
+                        </dl>
                     </div>
-                    <h3>Gemma 4 E4B — a unique design</h3>
                     <p class="nb-card__dek">The original disection and published page, and one of the larger models to receive an extensive sweep of its layers. This model also demonstrated the fragility of the evaluator and the necessity of interpreting the results correctly. The lenient grader handed back a tidy list of winners, but the strict regrade culled most of them.
 This model also served as a proof of concept as RYS layer edits don't play well with models structured like this. Unlike the dense isotropic models where each layer just interfaces with its neighbors, this model required some careful editing and remapping to work correctly, and certain layers remain off limits.</p>
                     <div class="nb-card__find">
@@ -232,11 +292,14 @@ This model also served as a proof of concept as RYS layer edits don't play well 
                     <div class="nb-card__go">Read more →</div>
                 </a>
                 <a class="nb-card" href="/lab/gemma31b.html">
-                    <div class="nb-card__tag">
-                        <span>Dense · negative result</span>
-                        <span class="st">published</span>
+                    <div class="nb-card__head">
+                        <h3>Gemma 4 31B — the heavyweight</h3>
+                        <dl class="nb-spec" data-arch="dense">
+                            <div><dt>arch</dt><dd>dense · 31B</dd></div>
+                            <div><dt>runtime</dt><dd>llama.cpp · IQ2_M</dd></div>
+                            <div><dt>op</dt><dd class="op">dup/prune sweep · 176 cfg</dd></div>
+                        </dl>
                     </div>
-                    <h3>Gemma 4 31B — the heavyweight</h3>
                     <p class="nb-card__dek">This is a report of a 176-config dup/prune sweep of a flagship 31B model squeezed into 16 GB at IQ2_M, and not one surgery won. This model stressed my machine and my patience, but given its size I had hoped to finally see a notable result. The original method suggests that a model with more layers develops a real language-independent section of layers that could be duplicated to improve reasoning without disturbing its processing. These findings suggest minimal to no improvement.</p>
                     <div class="nb-card__find">
                         <b>Results: </b>
@@ -246,11 +309,13 @@ This model also served as a proof of concept as RYS layer edits don't play well 
                     <div class="nb-card__go">Read more →</div>
                 </a>
                 <a class="nb-card" href="/lab/08_moe_expert_surgery.html">
-                    <div class="nb-card__tag">
-                        <span>MoE · intervention</span>
-                        <span class="st">published</span>
+                    <div class="nb-card__head">
+                        <h3>MoE - Experts, not layers</h3>
+                        <dl class="nb-spec" data-arch="moe">
+                            <div><dt>arch</dt><dd>MoE · multi-model</dd></div>
+                            <div><dt>op</dt><dd class="op">expert removal · REAP/SEC</dd></div>
+                        </dl>
                     </div>
-                    <h3>MoE - Experts, not layers</h3>
                     <p class="nb-card__dek">Every other experiment treats a model as a stack of layers, but there may be a different lever to try on mixture-of-experts models. This isn't a new idea either, and it has more institutional support in the form of Cerebras REAP, but I'm curious what happens when you take it further than they suggest.</p>
                     <div class="nb-card__find">
                         <b>Results: </b>
@@ -259,11 +324,15 @@ This model also served as a proof of concept as RYS layer edits don't play well 
                     <div class="nb-card__go">Read more →</div>
                 </a>
                 <a class="nb-card" href="/lab/hrm.html">
-                    <div class="nb-card__tag">
-                        <span>Recurrent · negative result</span>
-                        <span class="st">draft</span>
+                    <div class="nb-card__head">
+                        <h3>HRM — a promising idea, not model</h3>
+                        <dl class="nb-spec" data-arch="recurrent">
+                            <div><dt>arch</dt><dd>recurrent · 1B</dd></div>
+                            <div><dt>runtime</dt><dd>MLX · bf16</dd></div>
+                            <div><dt>op</dt><dd class="op">loop depth · recurrence</dd></div>
+                            <div><dt>status</dt><dd class="draft">draft</dd></div>
+                        </dl>
                     </div>
-                    <h3>HRM — a promising idea, not model</h3>
                     <p class="nb-card__dek">A Hierarchical Recurrent Model sounds like the perfect experimentation platform for me. After all, my whole hypothesis is increasing reasoning depth through looping layers rather than just making a bigger model or training it. This is a novel class of transformer LLMs that's not ready for prime time yet, but that didn't stop me from exploring the exact promise of looped transformers - a built in system to multiply the number of passes the token takes through layers.The first overnight test delivered outstanding and exciting results, but as is a recurring theme here, upon further inspection and more rigorous testing, it turned out to be a fluke.</p>
                     <div class="nb-card__find">
                         <b>Results: </b>
@@ -281,11 +350,13 @@ This model also served as a proof of concept as RYS layer edits don't play well 
             <p class="sec-note">The other side of layer edits is the hidden layer scanning that led to the hypothesis behind RYS. <a href="https://dnhkng.github.io/">David Ng</a> showed cosine similarity charts for paired phrases, layer by layer, that illustrated the potential of a &ldquo;reasoning zone.&rdquo; It's a powerful visualization that demonstrates how the model transforms all inputs into intermediate values that don't correspond to our language or understanding, and I enjoy seeing these visualizations for each of the models.</p>
             <div class="cards">
                 <a class="nb-card" href="/lab/geometry.html">
-                    <div class="nb-card__tag">
-                        <span>9 models · centered cosine/delta</span>
-                        <span class="st">published</span>
+                    <div class="nb-card__head">
+                        <h3>Internal Geometry - Visualizing nine models' hidden states</h3>
+                        <dl class="nb-spec" data-arch="dense">
+                            <div><dt>arch</dt><dd>9 models</dd></div>
+                            <div><dt>op</dt><dd class="op">centered cosine · delta</dd></div>
+                        </dl>
                     </div>
-                    <h3>Internal Geometry - Visualizing nine models' hidden states</h3>
                     <p class="nb-card__dek">The RYS literature says smaller models don't develop a convergent reasoning zone in the middle layers. I scanned them anyway, and disappointingly it's true, but there are some interesting standouts, namely in the Gemma 4 family.</p>
                     <div class="nb-card__find">
                         <b>Finding: </b>
@@ -294,11 +365,14 @@ This model also served as a proof of concept as RYS layer edits don't play well 
                     <div class="nb-card__go">View the figures →</div>
                 </a>
                 <a class="nb-card" href="/lab/vivarium_geometry.html">
-                    <div class="nb-card__tag">
-                        <span>Hidden-state · geometry</span>
-                        <span class="st">published</span>
+                    <div class="nb-card__head">
+                        <h3>The Vivarium - Gemma 4 12B on day zero</h3>
+                        <dl class="nb-spec" data-arch="dense">
+                            <div><dt>arch</dt><dd>dense · 12B</dd></div>
+                            <div><dt>runtime</dt><dd>MLX · mxfp4</dd></div>
+                            <div><dt>op</dt><dd class="op">hidden-state scan</dd></div>
+                        </dl>
                     </div>
-                    <h3>The Vivarium - Gemma 4 12B on day zero</h3>
                     <p class="nb-card__dek">This brand-new dense Gemma model dropped right as I was refining the MLX hidden-state extraction script, and it seemed like a perfect opportunity to crack the model open before even a single fine-tune came out. The scan was interesting, but I took it further by investigating per-token hidden states - comparing two sentences that differ by barely a word but whose meanings diverge widely. This created a visual demonstration of where in the model a token takes on meaning, rather than being a number corresponding to a dictionary entry.</p>
                     <div class="nb-card__find">
                         <b>Finding: </b>
@@ -323,7 +397,6 @@ This model also served as a proof of concept as RYS layer edits don't play well 
                 <a class="nb-card" href="/lab/02_anatomy_of_a_sweep.html">
                     <div class="nb-card__tag">
                         <span>Methods · measurement</span>
-                        <span class="st">published</span>
                     </div>
                     <h3>Anatomy of a sweep</h3>
                     <p class="nb-card__dek">Running the surgery isn't difficult once you establish the mechanics of it; extracting and evaluating the resulting model's response is where it turns into work. Three traps do most of the damage: a lenient grader inflates partial credit, the model can echo the answer straight back, and format-compliance passes for capability if you don't check. So before spending compute I profile how much headroom the baseline even leaves to measure, then calibrate the grading channel against it.</p>
@@ -336,7 +409,6 @@ This model also served as a proof of concept as RYS layer edits don't play well 
                 <a class="nb-card" href="/lab/04_quant_bench.html">
                     <div class="nb-card__tag">
                         <span>Runtime · benchmark</span>
-                        <span class="st">published</span>
                     </div>
                     <h3>MLX is the fastest local runtime*</h3>
                     <p class="nb-card__dek">The asterisk is the whole point: 1B dense model, batched decode only, M4 Mini, custom generation loop, raw tok/s - every qualifier is on the label. The more interesting result, outside that narrow use case, is that MLX and llama.cpp are pretty evenly matched, so there isn't really a headline about which runtime is better.</p>
@@ -357,7 +429,6 @@ This model also served as a proof of concept as RYS layer edits don't play well 
                 <a class="nb-card" href="/lab/06_duologue.html">
                     <div class="nb-card__tag">
                         <span>Orchestration · emergent comm</span>
-                        <span class="st">published</span>
                     </div>
                     <h3>duologue - one model, two agents</h3>
                     <p class="nb-card__dek">Duologue is more in the spirit of the model experimentation in the previous sections than a functional use for agents, but it did submerge me into the tricky world of context management and orchestration. It started with two models in RAM concurrently. I can't run two Qwen-27Bs at once, though, so the trick became feeding a single model a carefully crafted history that makes it believe it's talking to someone else. That resolved the mechanistic aspect. The fun part ended up being setting up various scenarios for it: first to see whether it recognizes the other agent as AI, and later whether the two agents could communicate under strict restrictions on their messages to each other.</p>
@@ -370,7 +441,6 @@ This model also served as a proof of concept as RYS layer edits don't play well 
                 <a class="nb-card" href="/lab/07_mem0_processor.html">
                     <div class="nb-card__tag">
                         <span>Systems · ETL pipeline</span>
-                        <span class="st">published</span>
                     </div>
                     <h3>mem0-processor</h3>
                     <p class="nb-card__dek">The project that kicked off everything else here. I wanted a persistent memory store kept current by LLMs, but the options were flawed: claude.ai's user memories are occasionally wrong, Claude Code has the model write its own unreliably, the two don't even talk to each other, and everything I found leaned on paid Claude to generate the memories. So I built a pipeline that uses free open-weight models to summarize my sessions and upload them to mem0, keeping close control over the transcript and prompt. Trusting those local summaries meant scoring the models to see which were any good, and that scoring rig quietly became a 60+ model evaluation harness.</p>
@@ -383,7 +453,6 @@ This model also served as a proof of concept as RYS layer edits don't play well 
                 <a class="nb-card" href="/lab/09_self_improving_memory.html">
                     <div class="nb-card__tag">
                         <span>Systems · agent memory</span>
-                        <span class="st">published</span>
                     </div>
                     <h3>Teaching an agent to read its own logs</h3>
                     <p class="nb-card__dek">What do you do when you have 1200 session summaries from hundreds of different local models sitting on your storage drive from testing the mem0 pipeline? I couldn't let that go to waste, and I'd been meaning to optimize my CLAUDE.md empirically from past experience. The summaries are meant to be small enough to parse easily, but cumulatively they add up to a corpus too large for any model to process at once. Through several layers of aggregation, I used Claude to distill them into meaningful observations that measurably improved my system prompt and memory system, to the point where starting a new session can feel frictionless.</p>

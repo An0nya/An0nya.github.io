@@ -31,6 +31,27 @@
         try { localStorage.setItem(AKEY, on ? '1' : '0'); } catch (e) {}
       });
     });
+    spy();
+  }
+
+  /* Scroll-spy: light up the page-TOC link for the section in view. Pure
+     progressive enhancement — the links are plain anchors without this. */
+  function spy() {
+    var links = document.querySelectorAll('.page-toc a[data-spy]');
+    if (!links.length || !('IntersectionObserver' in window)) return;
+    var byId = {};
+    links.forEach(function (a) {
+      var t = document.querySelector(a.getAttribute('href'));
+      if (t) byId[t.id] = a;
+    });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        links.forEach(function (a) { a.classList.remove('is-active'); });
+        if (byId[e.target.id]) byId[e.target.id].classList.add('is-active');
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    Object.keys(byId).forEach(function (id) { io.observe(document.getElementById(id)); });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
