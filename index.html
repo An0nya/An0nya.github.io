@@ -57,6 +57,12 @@
         background: var(--surface);
     }
     .sec-index a:hover { border-color: var(--accent); text-decoration: none; }
+    .sec-index__icon {
+        display: block; width: 1.3rem; height: 1.3rem;
+        color: var(--accent);
+        margin-bottom: var(--sp-3);
+    }
+    .sec-index a:hover .sec-index__icon { color: var(--accent-bright); }
     .sec-index__label {
         font-family: var(--font-mono);
         font-size: var(--fs-label);
@@ -333,10 +339,26 @@
         <section id="map" aria-label="Sections">
             <div class="sec-label">Sections</div>
             <nav class="sec-index">
-                <a href="#intervention"><span class="sec-index__label">Intervention <span class="sec-index__n">7</span></span><p>Cutting into nine open-weight models — layer surgery, damping, expert edits.</p></a>
-                <a href="#observation"><span class="sec-index__label">Observation <span class="sec-index__n">2</span></span><p>Watching without cutting: hidden-state geometry and day-zero probes.</p></a>
-                <a href="#method"><span class="sec-index__label">Method <span class="sec-index__n">3</span></span><p>How the sweeps, graders, and quant benchmarks actually work.</p></a>
-                <a href="#systems"><span class="sec-index__label">Systems <span class="sec-index__n">3</span></span><p>Agent tooling around the models: memory pipelines and self-play.</p></a>
+                <a href="#intervention">
+                    <svg class="sec-index__icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 14.5 L12 6"/><path d="M12 6 L15.5 2.5 L15.5 5.5 L12.5 8.5 Z"/><path d="M2.5 15.5 L6 12" stroke-dasharray="1.2 1.6"/></svg>
+                    <span class="sec-index__label">Intervention <span class="sec-index__n">7</span></span>
+                    <p>Cutting into nine open-weight models — layer surgery, damping, expert edits.</p>
+                </a>
+                <a href="#observation">
+                    <svg class="sec-index__icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 9 C4.5 4, 13.5 4, 16.5 9 C13.5 14, 4.5 14, 1.5 9 Z"/><circle cx="9" cy="9" r="2.3"/></svg>
+                    <span class="sec-index__label">Observation <span class="sec-index__n">2</span></span>
+                    <p>Watching without cutting: hidden-state geometry and day-zero probes.</p>
+                </a>
+                <a href="#method">
+                    <svg class="sec-index__icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="14" height="6" rx="0.6"/><path d="M5.5 6 V9"/><path d="M9 6 V9.5"/><path d="M12.5 6 V9"/></svg>
+                    <span class="sec-index__label">Method <span class="sec-index__n">3</span></span>
+                    <p>How the sweeps, graders, and quant benchmarks actually work.</p>
+                </a>
+                <a href="#systems">
+                    <svg class="sec-index__icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5 L14 5"/><path d="M4 5 L9 14"/><path d="M14 5 L9 14"/><circle cx="4" cy="5" r="1.7"/><circle cx="14" cy="5" r="1.7"/><circle cx="9" cy="14" r="1.7"/></svg>
+                    <span class="sec-index__label">Systems <span class="sec-index__n">3</span></span>
+                    <p>Agent tooling around the models: memory pipelines and self-play.</p>
+                </a>
             </nav>
         </section>
 
