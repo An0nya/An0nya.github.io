@@ -412,6 +412,13 @@ body.cat-systems      .site-bar__cat::after { content: " · Systems"; }
 .nav-group > summary::-webkit-details-marker { display: none; }
 .nav-group > summary::after { content: " ▾"; opacity: 0.55; }
 .nav-group > summary:hover, .nav-group[open] > summary { color: var(--accent); }
+/* hub scroll indicator: active category + a progress underline that fills as
+   you move through its section (--seg set by nb.js navProgress) */
+.site-bar .nav-group > summary.is-active { color: var(--accent-bright); }
+.site-bar .nav-group > summary.is-active::before {
+  content: ""; position: absolute; left: 0; bottom: 0; height: 2px;
+  width: var(--seg, 0); background: var(--accent); transition: width 0.12s linear;
+}
 .nav-group > ul {
   list-style: none; margin: 0; padding: var(--sp-2) 0;
   position: absolute; top: 100%; left: 0; min-width: 12rem;

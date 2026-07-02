@@ -33,6 +33,41 @@
     });
     spy();
     menus();
+    navProgress();
+  }
+
+  /* Hub only: light up the site-bar category whose section is in view and fill
+     a thin progress underline as you scroll through it. The nav triggers ARE
+     the four sections here, so the bar doubles as the section indicator. On lab
+     pages those sections don't exist, so this no-ops and the page-TOC stays. */
+  function navProgress() {
+    var secs = [];
+    document.querySelectorAll('.site-bar .nav-group').forEach(function (g) {
+      var ov = g.querySelector('a[href*="#"]');
+      if (!ov) return;
+      var el = document.getElementById(ov.getAttribute('href').split('#')[1]);
+      if (el) secs.push({ el: el, sum: g.querySelector('summary') });
+    });
+    if (!secs.length) return;
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var line = window.scrollY + window.innerHeight * 0.35, active = null;
+      secs.forEach(function (s) {
+        s.sum.classList.remove('is-active');
+        s.sum.style.removeProperty('--seg');
+        if (line >= s.el.offsetTop && line < s.el.offsetTop + s.el.offsetHeight) {
+          active = s;
+          var p = (line - s.el.offsetTop) / s.el.offsetHeight;
+          s.sum.style.setProperty('--seg', (Math.max(0, Math.min(1, p)) * 100).toFixed(1) + '%');
+        }
+      });
+      if (active) active.sum.classList.add('is-active');
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
   }
 
   /* Nav dropdowns work with JS off (native <details>). This just makes them
