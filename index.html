@@ -7,7 +7,18 @@
     <title>Anya — research notebooks</title>
     <meta name="description" content="Independent ML-evaluation research: small open-weight models taken apart and watched, on a 16 GB Mac Mini. Negative and corrected results kept on purpose.">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E141A'/%3E%3Cpath d='M6 16 H15' stroke='%236F7C88' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 9' stroke='%236FCBD8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 23' stroke='%23E3C24A' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='15' cy='16' r='2.6' fill='%23ECEFF3'/%3E%3C/svg%3E">
-    <link rel="stylesheet" href="/styles.css">
+    <!-- tokens + components linked directly (not the /styles.css @import manifest)
+         so the preload scanner sees every sheet up front instead of discovering
+         them serially. Same files, same order: fonts → colors → type → spacing →
+         base → components. Lab pages still use /styles.css until their pass. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=JetBrains+Mono:wght@400;500;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+    <link rel="stylesheet" href="/tokens/colors.css">
+    <link rel="stylesheet" href="/tokens/typography.css">
+    <link rel="stylesheet" href="/tokens/spacing.css">
+    <link rel="stylesheet" href="/tokens/base.css">
+    <link rel="stylesheet" href="/components/components.css">
     <style>
     main {
         max-width: var(--page-max);
@@ -316,7 +327,7 @@
     <main>
         <header class="masthead">
             <div class="masthead__id">
-                <img class="masthead__avatar" src="/assets/profile.png" alt="Anya Ilyina" width="40" height="40" onerror="this.remove()">
+                <img class="masthead__avatar" src="/assets/profile.webp" alt="Anya Ilyina" width="40" height="40" onerror="this.remove()">
                 <span class="masthead__name">Anya Ilyina</span>
                 <span class="masthead__links">
                     <a href="https://github.com/An0nya" target="_blank" rel="noopener"><svg class="masthead__ico" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 012-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
@@ -328,7 +339,7 @@
                 Local AI models, torn down, modified, and tested.
             </h1>
             <p class="bridge">
-      I'm a software engineer (professionally .NET, personally omni-curious) that's been trying out local LLMs, partially in hopes of finding a way to reduce my cloud usage, and partially in order to learn more about how they work by modifying them. You can learn a lot about how many things function by disassembling them, and LLMs are all the rage these days, which makes them a great candidate that won't end up in the landfill when I do something wrong.
+      I'm a software engineer (professionally .NET, personally omni-curious) who's been trying out local LLMs, partially in hopes of finding a way to reduce my cloud usage, and partially in order to learn more about how they work by modifying them. You can learn a lot about how so many things function by disassembling them, and LLMs are all the rage these days, which makes them a great candidate that won't end up in the landfill when I do something wrong.
             </p>
         </header>
 
