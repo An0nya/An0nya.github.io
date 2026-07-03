@@ -391,6 +391,15 @@ a.nb-card:hover .nb-card__go { color: var(--accent-bright); }
 }
 .site-bar a { display: block; padding: 0.7rem 1rem; color: var(--text-dim); white-space: nowrap; }
 .site-bar a:hover, .site-bar a.is-active { color: var(--accent); text-decoration: none; }
+/* the Font/Light toggles are <button>s (they change state, they don't navigate);
+   dressed to sit flush with the nav links. */
+.site-bar button {
+  background: none; border: 0; font: inherit;
+  text-transform: inherit; letter-spacing: inherit;
+  display: block; padding: 0.7rem 1rem; color: var(--text-dim);
+  white-space: nowrap; cursor: pointer;
+}
+.site-bar button:hover { color: var(--accent); }
 .site-bar__home { color: var(--text); font-weight: var(--w-semi); letter-spacing: 0.12em; }
 /* per-page category label: markup stays identical everywhere (the bar is synced
    from one fragment); each page names its category via a body.cat-* class. */
@@ -427,9 +436,21 @@ body.cat-systems      .site-bar__cat::after { content: " · Systems"; }
 .nav-group > ul a { padding: 0.5rem 1rem; text-transform: none; letter-spacing: 0; font-size: 0.72rem; white-space: nowrap; }
 .nav-group > ul a:hover { background: color-mix(in srgb, var(--accent) 12%, transparent); }
 
-/* mobile: checkbox-hack hamburger reveals the categories stacked full-width */
+/* mobile: checkbox-hack hamburger reveals the categories stacked full-width.
+   The checkbox is visually hidden but stays FOCUSABLE — display:none (or the
+   `hidden` attribute) would cut keyboard users off from the menu entirely.
+   Its focus ring is painted onto the burger label via the sibling selector. */
+.site-bar__toggle { display: none; }
 .site-bar__burger { display: none; cursor: pointer; padding: 0.7rem 1rem; }
 @media (max-width: 760px) {
+  .site-bar__toggle {
+    display: block; position: absolute;
+    width: 1px; height: 1px; margin: -1px; padding: 0;
+    overflow: hidden; clip-path: inset(50%); border: 0;
+  }
+  .site-bar__toggle:focus-visible ~ .site-bar__burger {
+    outline: 2px solid var(--focus-ring); outline-offset: -2px;
+  }
   .site-bar__burger { display: block; }
   .site-bar__cat { display: none; }
   .site-bar__links { order: 10; width: 100%; display: none; flex-direction: column; }
@@ -477,3 +498,77 @@ body.cat-systems      .site-bar__cat::after { content: " · Systems"; }
   .page-toc a.is-active { border-left-color: var(--accent); }
   .page-toc a.is-active::before { display: none; }   /* sidebar uses the left keyline, not the underline */
 }
+
+/* ── nb-spec: specimen readout ────────────────────────────────────────────
+   Compact mono key/value strip for teardown cards (arch / runtime / op — the
+   facts a research index gets scanned for; the op value carries the single
+   accent). Used WHERE those facts exist; essay/systems cards keep the plain
+   .nb-card__tag genre label. Promoted from the hub page 2026-07-03. */
+.nb-spec {
+    display: flex; flex-wrap: wrap; gap: 0;
+    margin: var(--sp-3) 0 0;
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--accent);
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    line-height: 1.4;
+}
+.nb-spec > div { display: flex; gap: .5ch; padding: .25rem .6rem; border-right: 1px solid var(--border); }
+.nb-spec > div:last-child { border-right: 0; }
+.nb-spec dt { margin: 0; color: var(--text-muted); text-transform: lowercase; }
+.nb-spec dd { margin: 0; color: var(--text-dim); }
+.nb-spec dd.op { color: var(--accent-bright); }   /* the pop */
+.nb-spec dd.draft { color: var(--caution); }      /* only the exception is flagged; published is implicit */
+
+/* ── nb-card__head: title + spec sidebar ─────────────────────────────────
+   Header row for teardown cards: title takes the left ~66%, the spec strip
+   stacks vertically in the right column. The card stays a flex column, so
+   .nb-card__find keeps its margin-top:auto bottom-pin across a row. On
+   mobile the head stacks and the strip returns to a horizontal band. */
+.nb-card__head {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-5);
+    margin-bottom: var(--sp-3);
+}
+.nb-card__head h3 { flex: 1 1 auto; max-width: 66%; margin: 0; }
+.nb-card__head .nb-spec {
+    flex: 0 0 auto;
+    max-width: 36%;
+    margin: 0 0 0 auto;          /* pin to the right */
+    flex-direction: column;
+}
+.nb-card__head .nb-spec > div {
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+    justify-content: flex-start;
+}
+.nb-card__head .nb-spec > div:last-child { border-bottom: 0; }
+
+@media (max-width: 760px) {
+    .nb-card__head { flex-direction: column; gap: var(--sp-3); }
+    .nb-card__head h3 { max-width: 100%; }
+    .nb-card__head .nb-spec {
+        max-width: 100%; margin: 0;
+        flex-direction: row; flex-wrap: wrap;
+    }
+    .nb-card__head .nb-spec > div { border-right: 1px solid var(--border); border-bottom: 0; }
+    .nb-card__head .nb-spec > div:last-child { border-right: 0; }
+}
+
+/* ── skip link: first tab stop, off-screen until focused ─────────────────
+   Markup lives at the top of <body> before the site-bar, targeting the page's
+   <main id="main">. Kept out of the synced nav fragment so a page only carries
+   it once it has a matching main landmark. */
+.skip-link {
+  position: absolute; left: var(--sp-3); top: var(--sp-3);
+  z-index: calc(var(--z-nav) + 1);
+  transform: translateY(-160%);
+  background: var(--surface); color: var(--accent);
+  border: var(--bw) solid var(--border-strong);
+  padding: 0.5rem 0.9rem;
+  font-family: var(--font-mono); font-size: 0.72rem;
+  letter-spacing: var(--tk-nav); text-transform: uppercase;
+  transition: transform var(--dur-fast) var(--ease);
+}
+.skip-link:focus { transform: translateY(0); outline: 2px solid var(--focus-ring); text-decoration: none; }

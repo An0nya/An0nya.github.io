@@ -31,7 +31,7 @@
   --paper:     #141D26;   /* card fill (cool keeps cards flush with panels) */
   --ink:       #DCE4EC;
   --ink2:      #A4B0BC;
-  --muted:     #6F7C88;
+  --muted:     #7C8993;
   --rule:      #1C2630;   /* hairline */
   --rule2:     #27323D;   /* slightly stronger hairline */
 
@@ -61,7 +61,7 @@ html.light {
   --paper:     #E9EEF2;
   --ink:       #16222C;
   --ink2:      #3A4853;
-  --muted:     #69757F;
+  --muted:     #5A666F;
   --rule:      #CBD5DD;
   --rule2:     #D8E0E6;
 
@@ -89,7 +89,7 @@ html.lab {
   --paper:     #25201A;   /* warm cards sit on their own paper, lifted off bg */
   --ink:       #ECE5D6;
   --ink2:      #C9C0AC;
-  --muted:     #8A8270;
+  --muted:     #948C7A;
   --rule:      #3D362C;
   --rule2:     #322C24;
 
@@ -117,7 +117,7 @@ html.lab.light {
   --paper:     #F6F2E9;
   --ink:       #221E18;
   --ink2:      #443D31;
-  --muted:     #7C7466;
+  --muted:     #665E50;
   --rule:      #C7BDA9;
   --rule2:     #D9D1BE;
 

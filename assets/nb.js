@@ -5,8 +5,13 @@
   var root = document.documentElement;
   var KEY = 'nb-theme', AKEY = 'nb-a11y-font';
 
+  // Saved choice wins; with none, follow the OS. On pages that carry the inline
+  // head snippet this has already run pre-paint (no flash); here it's the
+  // fallback for any page that doesn't.
   try {
-    if (localStorage.getItem(KEY) === 'light') root.classList.add('light');
+    var saved = localStorage.getItem(KEY);
+    var sysLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    if (saved ? saved === 'light' : sysLight) root.classList.add('light');
     if (localStorage.getItem(AKEY) === '1') root.classList.add('a11y-font');
   } catch (e) {}
 

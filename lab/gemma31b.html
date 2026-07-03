@@ -581,7 +581,7 @@ main { overflow-x: clip; }
 <!-- SITE-BAR:START — managed by tools/sync-nav.py; edit components/_site-bar.html -->
 <nav class="site-bar" aria-label="Site">
   <a class="site-bar__home" href="/">ANYA<span class="site-bar__cat"></span></a>
-  <input type="checkbox" id="nav-toggle" class="site-bar__toggle" hidden>
+  <input type="checkbox" id="nav-toggle" class="site-bar__toggle" aria-label="Toggle navigation menu">
   <div class="site-bar__links">
     <details class="nav-group">
       <summary>Intervention</summary>
@@ -624,8 +624,8 @@ main { overflow-x: clip; }
     </details>
   </div>
   <span class="site-bar__spacer"></span>
-  <a href="#" data-font-toggle title="Toggle a high-legibility font">⊚ Font</a>
-  <a href="#" data-theme-toggle>☼ Light</a>
+  <button type="button" data-font-toggle aria-label="Toggle a high-legibility font">⊚ Font</button>
+  <button type="button" data-theme-toggle aria-label="Switch to light theme">☼ Light</button>
   <label for="nav-toggle" class="site-bar__burger">☰ Menu</label>
 </nav>
 <!-- SITE-BAR:END -->
