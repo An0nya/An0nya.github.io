@@ -448,13 +448,11 @@ body.cat-systems      .site-bar__cat::after { content: " · Systems"; }
   font-family: var(--font-mono); font-size: 0.62rem;
   letter-spacing: var(--tk-nav); text-transform: uppercase;
   scrollbar-width: none;
-  /* align the strip's content start with the body text column (page container
-     margin + the container's own inner gutter) */
-  padding-left: calc(var(--gutter) + max(0px, (100vw - var(--page-max)) / 2));
-  padding-right: var(--gutter);
 }
 .page-toc::-webkit-scrollbar { display: none; }
-.page-toc__label { color: var(--text-muted); white-space: nowrap; padding-right: var(--sp-2); }
+/* first item sits at 1rem, matching the site-bar's home-link inset, so the two
+   stacked chrome bars share a left edge (the article column is centered below). */
+.page-toc__label { color: var(--text-muted); white-space: nowrap; padding: 0 var(--sp-2) 0 1rem; }
 .page-toc a { position: relative; display: block; padding: 0.55rem 0.8rem; color: var(--text-dim); white-space: nowrap; }
 .page-toc a:hover { color: var(--accent); text-decoration: none; }
 .page-toc a.is-active { color: var(--accent-bright); }

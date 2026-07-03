@@ -77,9 +77,10 @@
     update();
   }
 
-  /* Nav dropdowns work with JS off (native <details>). This just makes them
-     behave like a menu bar: opening one closes the others, and a click
-     outside closes them all. */
+  /* Nav dropdowns work with JS off (native <details>). This makes them behave
+     like a menu bar: opening one closes the others, a click outside closes all,
+     and on hover-capable pointers they open on hover (with a small intent delay
+     so brushing past doesn't flap them). */
   function menus() {
     var groups = document.querySelectorAll('.nav-group');
     if (!groups.length) return;
@@ -92,6 +93,22 @@
     document.addEventListener('click', function (e) {
       if (e.target.closest('.nav-group')) return;
       groups.forEach(function (g) { g.open = false; });
+    });
+
+    // hover-intent (desktop pointers only) — open after 90ms in, close after 220ms out
+    if (!window.matchMedia || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var closeT;
+    groups.forEach(function (g) {
+      g.addEventListener('mouseenter', function () {
+        clearTimeout(closeT);
+        g._openT = setTimeout(function () {
+          groups.forEach(function (o) { o.open = (o === g); });
+        }, 90);
+      });
+      g.addEventListener('mouseleave', function () {
+        clearTimeout(g._openT);
+        closeT = setTimeout(function () { g.open = false; }, 220);
+      });
     });
   }
 
