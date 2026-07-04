@@ -102,15 +102,21 @@
 
     // hover-intent (desktop pointers only) — open after 90ms in, close after 220ms out
     if (!window.matchMedia || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    // ...but NOT while the burger layout is active: a mouse at a narrow (e.g.
+    // split-screen) width still has hover, and auto-opening the stacked <details>
+    // on hover makes the mobile menu flap. Checked live so resizing behaves.
+    var wide = window.matchMedia('(min-width: 761px)');
     var closeT;
     groups.forEach(function (g) {
       g.addEventListener('mouseenter', function () {
+        if (!wide.matches) return;
         clearTimeout(closeT);
         g._openT = setTimeout(function () {
           groups.forEach(function (o) { o.open = (o === g); });
         }, 90);
       });
       g.addEventListener('mouseleave', function () {
+        if (!wide.matches) return;
         clearTimeout(g._openT);
         closeT = setTimeout(function () { g.open = false; }, 220);
       });
