@@ -473,7 +473,7 @@ body.cat-systems      .site-bar__cat::after { content: " · Systems"; }
 .page-toc::-webkit-scrollbar { display: none; }
 /* first item sits at 1rem, matching the site-bar's home-link inset, so the two
    stacked chrome bars share a left edge (the article column is centered below). */
-.page-toc__label { color: var(--text-muted); white-space: nowrap; padding: 0 var(--sp-2) 0 1rem; }
+.page-toc__label { margin: 0; color: var(--text-muted); white-space: nowrap; padding: 0 var(--sp-2) 0 1rem; }
 .page-toc a { position: relative; display: block; padding: 0.55rem 0.8rem; color: var(--text-dim); white-space: nowrap; }
 .page-toc a:hover { color: var(--accent); text-decoration: none; }
 .page-toc a.is-active { color: var(--accent-bright); }
