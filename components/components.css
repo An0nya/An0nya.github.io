@@ -413,6 +413,11 @@ body.cat-systems      .site-bar__cat::after { content: " · Systems"; }
 
 /* category dropdowns — native <details>, work with JS off (click/tap to open).
    nb.js adds accordion + click-away as progressive enhancement. */
+/* plain top-level site-bar link (no dropdown) — matches a nav-group summary */
+.site-bar__link {
+  display: block; padding: 0.7rem 1rem; color: var(--text-dim);
+  white-space: nowrap; cursor: pointer;
+}
 .nav-group { position: relative; }
 .nav-group > summary {
   display: block; padding: 0.7rem 1rem; color: var(--text-dim);
