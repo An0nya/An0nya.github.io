@@ -675,10 +675,12 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
                  global-layer marks = #3A4650 thin verticals.
    figWiC: same-sense = cyan #4FB2C2 ; different-sense = violet #B98AD6.
 
- NOTE: figures/*.svg currently shipped are palette-REMAPPED stand-ins of the
- earlier (warm) draft — good enough to ship, but regenerate from the scan JSON
- for correct data. figCrane is faithful (real geometry, reoriented). figCrossLang
- & figStaircase stand-ins collapse two series to citron — regenerate first.
+ NOTE (2026-07-05): the shipped figures are DATA-FAITHFUL — verified against
+ rys-tools/scans/data/ (figCrossLang vs gemma4_12b_crosslang_curves.json,
+ figStaircase vs gemma4_12b_staircase_series.json T_cos; max deviation ~0.01,
+ a constant axis-calibration offset). The earlier "stand-ins collapse two
+ series to citron, regenerate first" warning described the pre-regeneration
+ palette remaps and is obsolete.
 
 ═══════════════════════════════════════════════════════════════════════════════
  MOBILE FLOW NOTES (bake in the responsivization pass)
