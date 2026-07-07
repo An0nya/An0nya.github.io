@@ -219,7 +219,23 @@ a.nb-card:hover .nb-card__go { color: var(--accent-bright); }
 .nb-figcap b { color: var(--text); font-weight: var(--w-semi); }
 
 /* ───────────────────────────────  Data table  ─────────────────────────── */
-.nb-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.78rem; }
+/* overflow-x scrolls a too-wide table in place on mobile instead of blowing
+   out the document width; hidden scrollbar matches .page-toc's treatment. */
+.nb-table {
+  display: block; overflow-x: auto; width: 100%; max-width: 100%;
+  border-collapse: collapse; font-family: var(--font-mono); font-size: 0.78rem;
+  scrollbar-width: none;
+}
+.nb-table::-webkit-scrollbar { display: none; }
+
+/* ────────────────────────────────  Code block  ────────────────────────── */
+/* pre.code had no rules at all before this — pure UA default (white-space:
+   pre, no wrap), which let long lines blow out the document width on
+   mobile instead of scrolling. Same hidden-scrollbar treatment as above. */
+pre.code {
+  overflow-x: auto; max-width: 100%; scrollbar-width: none;
+}
+pre.code::-webkit-scrollbar { display: none; }
 .nb-table th, .nb-table td { padding: 8px 12px; text-align: left; border-bottom: var(--bw) solid var(--border); }
 .nb-table th {
   font-weight: var(--w-semi); color: var(--text); text-transform: uppercase;
@@ -278,12 +294,21 @@ a.nb-card:hover .nb-card__go { color: var(--accent-bright); }
   border-bottom: var(--bw) solid var(--border-strong);
   padding-bottom: var(--sp-4);
 }
-.nb-record__field { display: flex; flex-direction: column; gap: 3px; }
+/* min-width:0 overrides the grid item's default min-width:auto — without it,
+   a long unbroken value (a filename, a dotted path) forces its track past
+   the minmax(150px,…) minimum to its own content width, blowing out
+   .nb-record__grid (and the document) at narrow widths. overflow-wrap on
+   the value lets long tokens actually break instead of just being allowed
+   to overflow now that the column can shrink. */
+.nb-record__field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .nb-record__k {
   font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: var(--tk-label);
   text-transform: uppercase; color: var(--text-muted);
 }
-.nb-record__v { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text); line-height: 1.4; }
+.nb-record__v {
+  font-family: var(--font-mono); font-size: 0.78rem; color: var(--text); line-height: 1.4;
+  overflow-wrap: break-word;
+}
 
 /* confidence chip — high / medium / low */
 .nb-conf {
@@ -363,7 +388,14 @@ a.nb-card:hover .nb-card__go { color: var(--accent-bright); }
   font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.02em;
   color: var(--text-muted); margin-top: var(--sp-2); display: flex; flex-wrap: wrap; gap: 0 0.9em;
 }
-.nb-prov span { white-space: nowrap; }
+/* was white-space:nowrap — a long value (e.g. a source filename + long
+   description) couldn't shrink and blew out the document width on mobile.
+   A viewport-width media query can't gate this reliably: once content
+   overflows, mobile browsers widen the reported viewport past the
+   breakpoint to fit it, undoing the fix. Just allow wrap unconditionally;
+   flex-wrap on the parent already keeps "label value" together when
+   there's room. */
+.nb-prov span { white-space: normal; }
 .nb-prov b { color: var(--text-dim); font-weight: var(--w-med); }
 
 /* ──────────────────────────────  Lab nav  ─────────────────────────────── */
@@ -387,9 +419,17 @@ a.nb-card:hover .nb-card__go { color: var(--accent-bright); }
    mobile the section links collapse into a no-JS <details> disclosure.
    Scroll-spy highlight (.is-active) is set by nb.js (IntersectionObserver);
    links still work with JS off. */
+/* .nb-header-sticky wraps .site-bar + .page-toc as the single sticky
+   ancestor (< 1500px). Previously each bar was independently
+   `position: sticky` with .page-toc's offset hardcoded to `top: 2.6rem`,
+   assuming .site-bar is always exactly one row tall — but .site-bar wraps
+   to two rows on medium-narrow widths, so it grew taller than that
+   assumption and covered .page-toc on scroll. Stacking them in normal flow
+   under one sticky parent removes the hardcoded offset entirely, so there's
+   nothing to go stale. */
+.nb-header-sticky { position: sticky; top: 0; z-index: var(--z-nav); }
 .site-bar {
   display: flex; align-items: center; flex-wrap: wrap; gap: 0;
-  position: sticky; top: 0; z-index: var(--z-nav);
   border-bottom: var(--bw) solid var(--border-strong);
   background: color-mix(in srgb, var(--surface) 90%, transparent);
   backdrop-filter: blur(8px);
@@ -474,7 +514,6 @@ body.cat-systems      .site-bar__cat::after { content: " · Systems"; }
    so in-page section nav is present at laptop/tablet/phone widths too. */
 .page-toc {
   display: flex; align-items: center; overflow-x: auto;
-  position: sticky; top: 2.6rem; z-index: calc(var(--z-nav) - 1);
   border-bottom: var(--bw) solid var(--border);
   background: color-mix(in srgb, var(--surface) 92%, transparent);
   backdrop-filter: blur(6px);

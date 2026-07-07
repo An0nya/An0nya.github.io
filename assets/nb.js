@@ -61,7 +61,7 @@
       if (sec) items.push({ sec: sec, el: a });
     });
     if (!items.length) return;
-    var ticking = false;
+    var ticking = false, lastActiveEl = null;
     function update() {
       ticking = false;
       var line = window.scrollY + window.innerHeight * 0.35, active = null;
@@ -75,6 +75,16 @@
         }
       });
       if (active) active.el.classList.add('is-active');
+      // .page-toc scrolls horizontally on narrow/mid widths (no visible
+      // scrollbar) — keep the active link scrolled into view as you read
+      // down the page, so it doesn't drift off the edge of the strip.
+      var activeEl = active ? active.el : null;
+      if (activeEl !== lastActiveEl) {
+        lastActiveEl = activeEl;
+        if (activeEl && activeEl.closest('.page-toc')) {
+          activeEl.scrollIntoView({ inline: 'center', block: 'nearest' });
+        }
+      }
     }
     function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
     window.addEventListener('scroll', onScroll, { passive: true });
