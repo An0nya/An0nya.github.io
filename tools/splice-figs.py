@@ -21,6 +21,11 @@ import sys
 FIGDIR = os.path.join(os.path.dirname(__file__), "..", "figures-src")
 
 MAPS = {
+    "lab/03_nanbeige.html": {
+        "fig1": "fig_03_echo_dumbbell",
+        "fig2": "fig_03_layer_fingerprint",
+        "fig3": "fig_03_willingness_capability",
+    },
     "lab/01_minicpm5_sigma_alpha.html": {
         "fig1": "fig_01_residual_highway",
         "fig2": "fig_01_arithmetic_cliff",
