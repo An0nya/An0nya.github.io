@@ -430,6 +430,9 @@ pre.code::-webkit-scrollbar { display: none; }
 .nb-header-sticky { position: sticky; top: 0; z-index: var(--z-nav); }
 .site-bar {
   display: flex; align-items: center; flex-wrap: wrap; gap: 0;
+  /* both bars' backdrop-filter creates a stacking context; without this the
+     later-in-DOM .page-toc paints over open dropdown menus */
+  position: relative; z-index: 1;
   border-bottom: var(--bw) solid var(--border-strong);
   background: color-mix(in srgb, var(--surface) 90%, transparent);
   backdrop-filter: blur(8px);

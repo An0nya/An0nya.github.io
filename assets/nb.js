@@ -78,11 +78,15 @@
       // .page-toc scrolls horizontally on narrow/mid widths (no visible
       // scrollbar) — keep the active link scrolled into view as you read
       // down the page, so it doesn't drift off the edge of the strip.
+      // Only the toc's own scrollLeft is touched: scrollIntoView also
+      // scrolls ancestor containers, which yanked the page back to the
+      // toc whenever it wasn't pinned on screen.
       var activeEl = active ? active.el : null;
       if (activeEl !== lastActiveEl) {
         lastActiveEl = activeEl;
-        if (activeEl && activeEl.closest('.page-toc')) {
-          activeEl.scrollIntoView({ inline: 'center', block: 'nearest' });
+        var toc = activeEl && activeEl.closest('.page-toc');
+        if (toc) {
+          toc.scrollLeft = activeEl.offsetLeft - (toc.clientWidth - activeEl.offsetWidth) / 2;
         }
       }
     }
