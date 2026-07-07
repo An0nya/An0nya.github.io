@@ -1,0 +1,105 @@
+<svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .normlab { fill: var(--accent,#4FB2C2); }
+    .enlab   { fill: var(--cause,#E3C24A); }
+    .normline { stroke: var(--accent,#4FB2C2); fill: none; }
+    .normdot  { fill: var(--accent,#4FB2C2); }
+    .enline   { stroke: var(--cause,#E3C24A); fill: none; }
+    .endot    { fill: var(--cause,#E3C24A); }
+  </style>
+
+  <rect x="0" y="0" width="400" height="700" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="22" y="34" font-size="18">The residual-norm highway</text>
+  <text class="mut" x="22" y="52" font-size="9">MiniCPM5-1B &#183; last-token residual stream</text>
+  <text class="mut" x="22" y="64" font-size="9">norm log-climb (left) + top-1 energy share (right) &#183; 4 probes</text>
+
+  <!-- gridlines -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="58" y1="130" x2="348" y2="130"/>
+    <line x1="58" y1="215" x2="348" y2="215"/>
+    <line x1="58" y1="300" x2="348" y2="300"/>
+    <line x1="58" y1="385" x2="348" y2="385"/>
+  </g>
+
+  <!-- left (norm) axis -->
+  <line x1="58" y1="130" x2="58" y2="470" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="normlab" font-size="8.5" text-anchor="end">
+    <text x="52" y="133">316</text><text x="52" y="218">100</text><text x="52" y="303">32</text><text x="52" y="388">10</text><text x="52" y="473">3</text>
+  </g>
+  <text x="16" y="300" transform="rotate(-90 16 300)" text-anchor="middle" class="normlab" font-size="9.5">residual L2 norm &#8212; log</text>
+
+  <!-- right (energy) axis -->
+  <line x1="348" y1="130" x2="348" y2="470" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="enlab" font-size="8.5" text-anchor="start">
+    <text x="354" y="159">0.6</text><text x="354" y="264">0.4</text><text x="354" y="368">0.2</text><text x="354" y="473">0</text>
+  </g>
+  <text x="388" y="300" transform="rotate(90 388 300)" text-anchor="middle" class="enlab" font-size="9.5">top-1 energy share</text>
+
+  <!-- x axis -->
+  <line x1="58" y1="470" x2="348" y2="470" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="middle">
+    <text x="40" y="485">emb</text><text x="58" y="485">L0</text><text x="108.4" y="485">L4</text><text x="158.9" y="485">L8</text><text x="209.3" y="485">L12</text><text x="259.7" y="485">L16</text><text x="310.2" y="485">L20</text><text x="348" y="485">L23</text>
+  </g>
+  <text x="200" y="500" text-anchor="middle" class="mut" font-size="9">layer index (residual leaving layer i)</text>
+
+  <!-- L1 marker -->
+  <line x1="70.61" y1="110" x2="70.61" y2="470" stroke="var(--ink2,#A4B0BC)" stroke-width="0.8" stroke-dasharray="2 3"/>
+  <text class="ink2" x="73" y="115" font-size="8">L1 &#8212; the active layer on this page</text>
+
+  <!-- NORM series -->
+  <polyline class="normline" stroke-width="1.8"
+    points="58.00,458.75 70.61,435.05 83.22,405.83 95.83,381.13 108.43,370.28 121.04,354.43 133.65,347.18 146.26,325.59 158.87,327.51 171.48,310.25 184.09,295.28 196.70,286.99 209.30,273.03 221.91,262.19 234.52,249.96 247.13,236.11 259.74,220.15 272.35,207.72 284.96,193.67 297.57,182.51 310.17,175.5 322.78,162.44 335.39,153.98 348.00,148.82"/>
+  <g class="normdot">
+    <circle cx="58.00" cy="458.75" r="2"/><circle cx="70.61" cy="435.05" r="2"/><circle cx="83.22" cy="405.83" r="2"/><circle cx="95.83" cy="381.13" r="2"/><circle cx="108.43" cy="370.28" r="2"/><circle cx="121.04" cy="354.43" r="2"/><circle cx="133.65" cy="347.18" r="2"/><circle cx="146.26" cy="325.59" r="2"/><circle cx="158.87" cy="327.51" r="2"/><circle cx="171.48" cy="310.25" r="2"/><circle cx="184.09" cy="295.28" r="2"/><circle cx="196.70" cy="286.99" r="2"/><circle cx="209.30" cy="273.03" r="2"/><circle cx="221.91" cy="262.19" r="2"/><circle cx="234.52" cy="249.96" r="2"/><circle cx="247.13" cy="236.11" r="2"/><circle cx="259.74" cy="220.15" r="2"/><circle cx="272.35" cy="207.72" r="2"/><circle cx="284.96" cy="193.67" r="2"/><circle cx="297.57" cy="182.51" r="2"/><circle cx="310.17" cy="175.5" r="2"/><circle cx="322.78" cy="162.44" r="2"/><circle cx="335.39" cy="153.98" r="2"/><circle cx="348.00" cy="148.82" r="2"/>
+  </g>
+
+  <!-- ENERGY series -->
+  <polyline class="enline" stroke-width="1.8" stroke-dasharray="5 3"
+    points="58.00,155.37 70.61,221.38 83.22,243.3 95.83,266.0 108.43,319.56 121.04,372.29 133.65,447.04 146.26,419.78 158.87,427.32 171.48,409.58 184.09,410.58 196.70,399.12 209.30,432.81 221.91,423.97 234.52,410.89 247.13,379.82 259.74,347.65 272.35,368.16 284.96,345.82 297.57,320.4 310.17,304.45 322.78,267.83 335.39,267.15 348.00,386.26"/>
+  <g class="endot">
+    <rect x="56.20" y="153.57" width="3.6" height="3.6"/><rect x="68.81" y="219.58" width="3.6" height="3.6"/><rect x="81.42" y="241.50" width="3.6" height="3.6"/><rect x="94.03" y="264.20" width="3.6" height="3.6"/><rect x="106.63" y="317.76" width="3.6" height="3.6"/><rect x="119.24" y="370.49" width="3.6" height="3.6"/><rect x="131.85" y="445.24" width="3.6" height="3.6"/><rect x="144.46" y="417.98" width="3.6" height="3.6"/><rect x="157.07" y="425.52" width="3.6" height="3.6"/><rect x="169.68" y="407.78" width="3.6" height="3.6"/><rect x="182.29" y="408.78" width="3.6" height="3.6"/><rect x="194.90" y="397.32" width="3.6" height="3.6"/><rect x="207.50" y="431.01" width="3.6" height="3.6"/><rect x="220.11" y="422.17" width="3.6" height="3.6"/><rect x="232.72" y="409.09" width="3.6" height="3.6"/><rect x="245.33" y="378.02" width="3.6" height="3.6"/><rect x="257.94" y="345.85" width="3.6" height="3.6"/><rect x="270.55" y="366.36" width="3.6" height="3.6"/><rect x="283.16" y="344.02" width="3.6" height="3.6"/><rect x="295.77" y="318.60" width="3.6" height="3.6"/><rect x="308.37" y="302.65" width="3.6" height="3.6"/><rect x="320.98" y="266.03" width="3.6" height="3.6"/><rect x="333.59" y="265.35" width="3.6" height="3.6"/><rect x="346.20" y="384.46" width="3.6" height="3.6"/>
+  </g>
+
+  <!-- emb energy point + leap connector -->
+  <defs>
+    <marker id="upm" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--cause,#E3C24A)"/>
+    </marker>
+  </defs>
+  <line x1="44" y1="462.62" x2="56" y2="162" class="enline" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#upm)"/>
+  <rect class="endot" x="42" y="460.82" width="3.6" height="3.6"/>
+  <text class="enlab" x="40" y="458" font-size="8" text-anchor="end">.01</text>
+
+  <!-- annotations -->
+  <text class="enlab" x="64" y="150" font-size="8.5">0.60 &#8212; born at L0</text>
+  <text class="normlab" x="150" y="178" font-size="8.5">norm: 3.7&#8594;245</text>
+  <text class="normlab" x="150" y="190" font-size="8.5">&#8776; 66&#215; climb</text>
+  <text class="normlab" x="346" y="142" font-size="8.5" text-anchor="end">L23 &#183; &#916;/resid .96</text>
+  <text class="mut" x="150" y="352" font-size="7.5">top dim 745&#8594;288 @L7</text>
+  <text class="enlab" x="133" y="460" font-size="7.5" text-anchor="middle">floor .04</text>
+
+  <!-- legend -->
+  <g font-size="9">
+    <line x1="22" y1="522" x2="46" y2="522" class="normline" stroke-width="2"/>
+    <circle cx="34" cy="522" r="2" class="normdot"/>
+    <text x="52" y="525" class="ink2">residual L2 norm (log, left)</text>
+    <line x1="22" y1="540" x2="46" y2="540" class="enline" stroke-width="2" stroke-dasharray="5 3"/>
+    <rect x="32" y="538" width="3.6" height="3.6" class="endot"/>
+    <text x="52" y="543" class="ink2">top-1 energy share (right)</text>
+  </g>
+
+  <!-- takeaway -->
+  <line x1="22" y1="562" x2="378" y2="562" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="22" y="582" class="ink2" font-size="10.5">Vanilla-Llama highway: residual norm climbs</text>
+  <text x="22" y="597" class="ink2" font-size="10.5"><tspan class="normlab">~66&#215;</tspan> (3.7&#8594;245) down the 24 layers, and one</text>
+  <text x="22" y="612" class="ink2" font-size="10.5">dimension holds <tspan class="enlab">60%</tspan> of the energy at L0.</text>
+  <text x="22" y="633" class="ink2" font-size="10.5">But the embedding is diffuse (0.01): the massive</text>
+  <text x="22" y="648" class="ink2" font-size="10.5">activation is <tspan class="enlab">born at layer 0</tspan>, not in the</text>
+  <text x="22" y="663" class="ink2" font-size="10.5">embedding &#8212; it then spreads, then re-concentrates.</text>
+</svg>

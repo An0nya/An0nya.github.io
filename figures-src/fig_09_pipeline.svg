@@ -1,0 +1,83 @@
+<svg viewBox="0 0 860 420" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .stage{ fill: none; stroke: var(--rule2,#27323D); stroke-width: 1.4; }
+    .slab { fill: var(--bg,#0E141A); stroke: var(--rule2,#27323D); stroke-width: 1; }
+  </style>
+
+  <defs>
+    <marker id="fa" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="var(--accent,#4FB2C2)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="860" height="420" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="32" y="34" font-size="18">The pipeline — map-reduce over an agent's own session logs</text>
+  <text class="mut" x="32" y="55" font-size="11">Many small readers on clean batches beat one model squinting at 800k tokens. Judgment lives only at the end.</text>
+
+  <!-- ===== STAGE 1: corpus (two stacked sources) ===== -->
+  <text x="92" y="96" text-anchor="middle" class="ink2" font-size="11" letter-spacing="0.5">CORPUS</text>
+  <rect x="24" y="108" width="136" height="40" rx="3" class="slab"/>
+  <text x="92" y="126" text-anchor="middle" font-size="10">model summaries</text>
+  <text x="92" y="139" text-anchor="middle" class="mut" font-size="8.5">opinionated · biased</text>
+  <rect x="24" y="156" width="136" height="40" rx="3" class="slab"/>
+  <text x="92" y="174" text-anchor="middle" font-size="10">compaction summaries</text>
+  <text x="92" y="187" text-anchor="middle" class="mut" font-size="8.5">factual · neutral</text>
+
+  <line x1="160" y1="152" x2="196" y2="152" stroke="var(--accent,#4FB2C2)" stroke-width="2" marker-end="url(#fa)"/>
+
+  <!-- ===== STAGE 2: N parallel map agents ===== -->
+  <text x="270" y="96" text-anchor="middle" class="ink2" font-size="11" letter-spacing="0.5">MAP  ×N parallel</text>
+  <rect x="200" y="108" width="140" height="26" rx="3" class="slab"/>
+  <text x="270" y="125" text-anchor="middle" font-size="9.5">batch 1 → observations</text>
+  <rect x="200" y="138" width="140" height="26" rx="3" class="slab"/>
+  <text x="270" y="155" text-anchor="middle" font-size="9.5">batch 2 → observations</text>
+  <rect x="200" y="168" width="140" height="26" rx="3" class="slab"/>
+  <text x="270" y="185" text-anchor="middle" class="mut" font-size="9.5">… ~30 summaries each</text>
+  <!-- gate annotation -->
+  <text x="270" y="214" text-anchor="middle" font-size="9.5" fill="var(--cause,#E3C24A)">⊘ no tiering · no cross-session claims</text>
+
+  <line x1="346" y1="152" x2="382" y2="152" stroke="var(--accent,#4FB2C2)" stroke-width="2" marker-end="url(#fa)"/>
+
+  <!-- ===== STAGE 3: mechanical reduce ===== -->
+  <text x="455" y="96" text-anchor="middle" class="ink2" font-size="11" letter-spacing="0.5">REDUCE · mechanical</text>
+  <rect x="386" y="108" width="138" height="88" rx="3" class="stage"/>
+  <text x="455" y="132" text-anchor="middle" font-size="10">cluster similar</text>
+  <text x="455" y="148" text-anchor="middle" font-size="10">observations</text>
+  <text x="455" y="170" text-anchor="middle" font-size="10">count distinct</text>
+  <text x="455" y="186" text-anchor="middle" font-size="10">sessions / cluster</text>
+  <text x="455" y="214" text-anchor="middle" font-size="9" fill="var(--cause,#E3C24A)">an LLM never hand-copies a UUID</text>
+
+  <line x1="524" y1="152" x2="560" y2="152" stroke="var(--accent,#4FB2C2)" stroke-width="2" marker-end="url(#fa)"/>
+
+  <!-- ===== STAGE 4: judgment reduce ===== -->
+  <text x="632" y="96" text-anchor="middle" class="ink2" font-size="11" letter-spacing="0.5">REDUCE · judgment</text>
+  <rect x="564" y="108" width="138" height="88" rx="3" class="stage"/>
+  <text x="633" y="130" text-anchor="middle" font-size="10" fill="var(--accent,#4FB2C2)">human + agent</text>
+  <text x="633" y="150" text-anchor="middle" font-size="10">assign tiers</text>
+  <text x="633" y="166" text-anchor="middle" font-size="10">bias-screen</text>
+  <text x="633" y="182" text-anchor="middle" font-size="10">draft rules</text>
+  <text x="633" y="214" text-anchor="middle" font-size="9" fill="var(--cause,#E3C24A)">the only step allowed to judge</text>
+
+  <line x1="702" y1="152" x2="738" y2="152" stroke="var(--accent,#4FB2C2)" stroke-width="2" marker-end="url(#fa)"/>
+
+  <!-- ===== STAGE 5: output ===== -->
+  <text x="800" y="96" text-anchor="middle" class="ink2" font-size="11" letter-spacing="0.5">MEMORY</text>
+  <rect x="742" y="108" width="100" height="88" rx="3" fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="1.6"/>
+  <text x="792" y="146" text-anchor="middle" font-size="10" fill="var(--accent,#4FB2C2)">CLAUDE.md</text>
+  <text x="792" y="164" text-anchor="middle" font-size="10" fill="var(--accent,#4FB2C2)">+ memory</text>
+
+  <!-- one-way gate banner -->
+  <line x1="32" y1="250" x2="828" y2="250" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="32" y="278" class="ink2" font-size="11.5">The non-obvious constraint: <tspan fill="var(--cause,#E3C24A)">map must not tier.</tspan> A pattern that appears once per batch across six</text>
+  <text x="32" y="296" class="ink2" font-size="11.5">batches looks single-incident to every map agent — only the post-aggregation global view sees it recurred.</text>
+  <text x="32" y="314" class="mut" font-size="11">Tiering before aggregation structurally cannot work, so it is forbidden at the map step.</text>
+
+  <text x="32" y="348" class="ink2" font-size="11.5">And frequency is never trusted on its own: any high-count cluster matching the summarizer's known bias</text>
+  <text x="32" y="366" class="ink2" font-size="11.5">profile is <tspan fill="var(--neg,#B98AD6)">disqualified</tspan> until transcript-verified. User-action signals stay trusted regardless of who surfaced them.</text>
+</svg>

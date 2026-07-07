@@ -1,0 +1,116 @@
+<svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); } .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); } .cit { fill: var(--cause,#E3C24A); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); } .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="720" height="460" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="32" font-size="18">Pairing cancels common-mode noise</text>
+<text class="mut" x="40" y="51" font-size="10">minicpm5 · sa1_S100_k2 vs baseline · 16 seeds, math · left: marginal spread · right: paired Δ</text>
+<text x="205" y="97" text-anchor="middle" class="ink2" font-size="11">looks like noise</text>
+<rect x="155.1" y="113" width="81.8" height="109" fill="var(--accent,#4FB2C2)" opacity="0.07"/>
+<text x="196.0" y="113" text-anchor="middle" class="mut" font-size="8">ranges overlap</text>
+<line x1="70" y1="218" x2="340" y2="218" class="axis" stroke-width="1"/>
+<line x1="106.0" y1="218" x2="106.0" y2="222" class="axis" stroke-width="1"/>
+<text x="106.0" y="233" text-anchor="middle" class="mut" font-size="8">0.4</text>
+<line x1="196.0" y1="218" x2="196.0" y2="222" class="axis" stroke-width="1"/>
+<text x="196.0" y="233" text-anchor="middle" class="mut" font-size="8">0.5</text>
+<line x1="286.0" y1="218" x2="286.0" y2="222" class="axis" stroke-width="1"/>
+<text x="286.0" y="233" text-anchor="middle" class="mut" font-size="8">0.6</text>
+<text x="340" y="247" text-anchor="end" class="mut" font-size="8">mean score →</text>
+<line x1="155.1" y1="135" x2="277.8" y2="135" class="accs" stroke-width="1" opacity="0.5"/>
+<circle cx="196.0" cy="129.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="196.0" cy="132.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="223.3" cy="135.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="209.6" cy="138.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="209.6" cy="141.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="236.9" cy="129.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="236.9" cy="132.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="223.3" cy="135.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="155.1" cy="138.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="277.8" cy="141.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="223.3" cy="129.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="236.9" cy="132.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="236.9" cy="135.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="264.2" cy="138.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="264.2" cy="141.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="209.6" cy="129.0" r="2.6" class="acc" opacity="0.85"/>
+<line x1="194.7" y1="135" x2="255.2" y2="135" class="accs" stroke-width="2.2"/>
+<line x1="225.0" y1="128" x2="225.0" y2="142" class="accs" stroke-width="2.2"/>
+<text x="149.1" y="138" text-anchor="end" class="acc" font-size="9">config</text>
+<line x1="100.5" y1="200" x2="236.9" y2="200" class="slas" stroke-width="1" opacity="0.5"/>
+<path d="M138.9,194.0 h5.2 M141.5,191.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M138.9,197.0 h5.2 M141.5,194.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M152.5,200.0 h5.2 M155.1,197.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M179.8,203.0 h5.2 M182.4,200.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M138.9,206.0 h5.2 M141.5,203.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M179.8,194.0 h5.2 M182.4,191.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M138.9,197.0 h5.2 M141.5,194.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M179.8,200.0 h5.2 M182.4,197.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M97.9,203.0 h5.2 M100.5,200.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M234.3,206.0 h5.2 M236.9,203.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M179.8,194.0 h5.2 M182.4,191.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M166.1,197.0 h5.2 M168.7,194.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M179.8,200.0 h5.2 M182.4,197.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M220.7,203.0 h5.2 M223.3,200.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M220.7,206.0 h5.2 M223.3,203.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M152.5,194.0 h5.2 M155.1,191.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<line x1="135.3" y1="200" x2="207.3" y2="200" class="slas" stroke-width="2.2"/>
+<line x1="171.3" y1="193" x2="171.3" y2="207" class="slas" stroke-width="2.2"/>
+<text x="94.5" y="203" text-anchor="end" class="sla" font-size="9">baseline</text>
+<text x="555" y="77" text-anchor="middle" class="ink2" font-size="11">the actual test</text>
+<line x1="430" y1="95" x2="430" y2="250" class="axis" stroke-width="1"/>
+<line x1="430" y1="250" x2="680" y2="250" class="rule" stroke-width="1"/>
+<text x="424" y="253" text-anchor="end" class="mut" font-size="8">0</text>
+<line x1="427" y1="199.2" x2="430" y2="199.2" class="axis" stroke-width="1"/>
+<text x="424" y="202.2" text-anchor="end" class="mut" font-size="8">0.04</text>
+<line x1="427" y1="148.3" x2="430" y2="148.3" class="axis" stroke-width="1"/>
+<text x="424" y="151.3" text-anchor="end" class="mut" font-size="8">0.08</text>
+<line x1="427" y1="97.5" x2="430" y2="97.5" class="axis" stroke-width="1"/>
+<text x="424" y="100.5" text-anchor="end" class="mut" font-size="8">0.12</text>
+<line x1="430" y1="174.2" x2="680" y2="174.2" class="accs" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
+<line x1="430.0" y1="250" x2="430.0" y2="173.0" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="430.0" cy="173.0" r="2.6" class="acc"/>
+<line x1="446.7" y1="250" x2="446.7" y2="173.0" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="446.7" cy="173.0" r="2.6" class="acc"/>
+<line x1="463.3" y1="250" x2="463.3" y2="153.7" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="463.3" cy="153.7" r="2.6" class="acc"/>
+<line x1="480.0" y1="250" x2="480.0" y2="211.5" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="480.0" cy="211.5" r="2.6" class="acc"/>
+<line x1="496.7" y1="250" x2="496.7" y2="153.7" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="496.7" cy="153.7" r="2.6" class="acc"/>
+<line x1="513.3" y1="250" x2="513.3" y2="173.0" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="513.3" cy="173.0" r="2.6" class="acc"/>
+<line x1="530.0" y1="250" x2="530.0" y2="115.2" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="530.0" cy="115.2" r="2.6" class="acc"/>
+<line x1="546.7" y1="250" x2="546.7" y2="192.2" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="546.7" cy="192.2" r="2.6" class="acc"/>
+<line x1="563.3" y1="250" x2="563.3" y2="173.0" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="563.3" cy="173.0" r="2.6" class="acc"/>
+<line x1="580.0" y1="250" x2="580.0" y2="192.2" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="580.0" cy="192.2" r="2.6" class="acc"/>
+<line x1="596.7" y1="250" x2="596.7" y2="192.2" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="596.7" cy="192.2" r="2.6" class="acc"/>
+<line x1="613.3" y1="250" x2="613.3" y2="153.7" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="613.3" cy="153.7" r="2.6" class="acc"/>
+<line x1="630.0" y1="250" x2="630.0" y2="173.0" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="630.0" cy="173.0" r="2.6" class="acc"/>
+<line x1="646.7" y1="250" x2="646.7" y2="192.2" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="646.7" cy="192.2" r="2.6" class="acc"/>
+<line x1="663.3" y1="250" x2="663.3" y2="192.2" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="663.3" cy="192.2" r="2.6" class="acc"/>
+<line x1="680.0" y1="250" x2="680.0" y2="173.0" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="680.0" cy="173.0" r="2.6" class="acc"/>
+<text x="555" y="274" text-anchor="middle" class="mut" font-size="8">seed index · every Δ &gt; 0 (16/16)</text>
+<rect x="590" y="99" width="88" height="44" fill="var(--bg,#0E141A)" class="rule" stroke-width="1"/>
+<text x="634" y="117" text-anchor="middle" class="cit" font-size="11">r = 0.45 &lt; 1</text>
+<text x="634" y="133" text-anchor="middle" class="ink2" font-size="8.5">d 0.19 · t 6.1</text>
+<line x1="22" y1="420" x2="698" y2="420" class="rule" stroke-width="1"/>
+<text x="22" y="439" class="ink2" font-size="11">Overlapping ranges (left) are common-mode seed difficulty; the <tspan class="acc">per-seed difference</tspan> (right) is decisive.</text>
+</svg>

@@ -1,0 +1,67 @@
+<svg viewBox="0 0 720 450" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <rect x="0" y="0" width="720" height="450" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="32" font-size="18">Depth separation decides: separated treatments stack, proximate ones mask</text>
+  <text class="mut" x="40" y="52" font-size="11">Granite, 40 layers. Two surgeries compose constructively only when they sit far apart in depth.</text>
+
+  <!-- ===== STACKS arc (above spine, cyan) ===== -->
+  <path d="M456.7,124 Q300,62 144.4,124" fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2"/>
+  <text x="300" y="74" text-anchor="middle" font-size="11" fill="var(--accent,#4FB2C2)">21 layers apart → STACKS</text>
+
+  <!-- ===== layer spine ===== -->
+  <line x1="70" y1="130" x2="650" y2="130" stroke="var(--rule2,#27323D)" stroke-width="2"/>
+  <text x="70" y="148" text-anchor="middle" class="mut" font-size="8.5">L0</text>
+  <text x="650" y="148" text-anchor="middle" class="mut" font-size="8.5">L39</text>
+
+  <!-- treatment sites -->
+  <circle cx="144.4" cy="130" r="5" fill="var(--bg2,#141D26)" stroke="var(--accent,#4FB2C2)" stroke-width="2"/>
+  <text x="144.4" y="116" text-anchor="middle" font-size="9.5" fill="var(--accent,#4FB2C2)">L5 ↑α1.3</text>
+  <circle cx="307.9" cy="130" r="5" fill="var(--bg2,#141D26)" stroke="var(--neg,#B98AD6)" stroke-width="2"/>
+  <text x="307.9" y="172" text-anchor="middle" font-size="9.5" fill="var(--neg,#B98AD6)">L16 dup</text>
+  <circle cx="456.7" cy="130" r="5" fill="var(--bg2,#141D26)" stroke="var(--cause,#E3C24A)" stroke-width="2"/>
+  <text x="456.7" y="116" text-anchor="middle" font-size="9.5" fill="var(--cause,#E3C24A)">L26 prune</text>
+
+  <!-- ===== MASKS arc (below spine, violet) ===== -->
+  <path d="M456.7,136 Q382,196 307.9,136" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="382" y="208" text-anchor="middle" font-size="11" fill="var(--neg,#B98AD6)">10 apart → MASKS</text>
+
+  <!-- ===== bar insets (zoomed, with noise whiskers) ===== -->
+  <!-- LEFT: STACKS data -->
+  <text x="180" y="246" text-anchor="middle" class="ink2" font-size="11">dampL5a130 + pr26  (far)</text>
+  <line x1="100" y1="356" x2="260" y2="356" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <!-- prune_26 bar 0.566 -->
+  <rect x="120" y="286.7" width="46" height="69.3" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.4"/>
+  <text x="143" y="372" text-anchor="middle" class="mut" font-size="8.5">pr26 .566</text>
+  <!-- combined bar 0.570 -->
+  <rect x="194" y="273.3" width="46" height="82.7" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8"/>
+  <text x="217" y="372" text-anchor="middle" font-size="8.5" fill="var(--accent,#4FB2C2)">combo .570</text>
+  <!-- noise whiskers -->
+  <line x1="143" y1="270" x2="143" y2="303.3" stroke="var(--muted,#6F7C88)" stroke-width="1"/>
+  <line x1="217" y1="256.7" x2="217" y2="290" stroke="var(--accent,#4FB2C2)" stroke-width="1"/>
+
+  <!-- RIGHT: MASKS data -->
+  <text x="500" y="246" text-anchor="middle" class="ink2" font-size="11">pr26 + dup16  (near)</text>
+  <line x1="420" y1="356" x2="580" y2="356" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <rect x="440" y="286.7" width="46" height="69.3" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.4"/>
+  <text x="463" y="372" text-anchor="middle" class="mut" font-size="8.5">pr26 .566</text>
+  <rect x="514" y="313.3" width="46" height="42.7" fill="var(--bg,#0E141A)" stroke="var(--neg,#B98AD6)" stroke-width="1.8"/>
+  <text x="537" y="372" text-anchor="middle" font-size="8.5" fill="var(--neg,#B98AD6)">combo ↓</text>
+  <line x1="463" y1="270" x2="463" y2="303.3" stroke="var(--muted,#6F7C88)" stroke-width="1"/>
+  <line x1="537" y1="296.7" x2="537" y2="330" stroke="var(--neg,#B98AD6)" stroke-width="1"/>
+
+  <!-- zoom axis note -->
+  <text x="284" y="300" text-anchor="middle" class="mut" font-size="8.5" transform="rotate(-90 284 300)">math, zoomed .55–.58</text>
+  <text x="604" y="300" text-anchor="middle" class="mut" font-size="8.5" transform="rotate(-90 604 300)">math, zoomed .55–.58</text>
+
+  <!-- caption -->
+  <text x="40" y="404" class="mut" font-size="10">Whiskers ≈ seed noise: the stacking margin (.570 vs .566) sits inside it — suggestive, not established. </text>
+  <text x="40" y="418" class="mut" font-size="10">The masking drop is the cleaner effect. On in-band/gcore probes, not the floored/ceilinged 49-mean.</text>
+</svg>

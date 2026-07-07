@@ -1,0 +1,66 @@
+<svg viewBox="0 0 720 412" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+  <defs>
+    <pattern id="hatchU" width="7" height="7" patternUnits="userSpaceOnUse">
+      <path d="M0,7 L7,0" stroke="var(--muted,#6F7C88)" stroke-width="0.8" opacity="0.45"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="720" height="412" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="30" font-size="18">The M5/M4 speedup is GPU compute, not bandwidth</text>
+  <text class="mut" x="40" y="50" font-size="10">MLX decode ratio (M5 Air &#247; M4 Mini) vs batch width &#183; MiniCPM5-1B &#183; matched script + reboot on both machines</text>
+
+  <!-- gridlines -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="88" y1="263.3" x2="670" y2="263.3"/>
+    <line x1="88" y1="176.7" x2="670" y2="176.7"/>
+    <line x1="88" y1="90" x2="670" y2="90"/>
+  </g>
+  <!-- axes -->
+  <line x1="88" y1="90" x2="88" y2="350" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="88" y1="350" x2="670" y2="350" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="9" text-anchor="end">
+    <text x="82" y="353">1.0</text><text x="82" y="266">1.5</text><text x="82" y="180">2.0</text><text x="82" y="93">2.5</text>
+  </g>
+  <g class="mut" font-size="9.5" text-anchor="middle">
+    <text x="180" y="364">64</text><text x="276" y="364">96</text><text x="372" y="364">128</text><text x="468" y="364">192</text><text x="564" y="364">256</text><text x="660" y="364">384</text>
+  </g>
+
+  <!-- unmeasured zone (< 64) -->
+  <rect x="89" y="90" width="73" height="260" fill="url(#hatchU)"/>
+  <text class="mut" x="125" y="225" font-size="9.5" text-anchor="middle" transform="rotate(-90 125 225)">&#60;64: unmeasured</text>
+  <text class="mut" x="125" y="240" font-size="8" text-anchor="middle" transform="rotate(-90 125 240)">(harness floors at 64)</text>
+
+  <!-- reference lines -->
+  <line x1="162" y1="263.3" x2="670" y2="263.3" stroke="var(--fourth,#6E92C4)" stroke-width="1.4" stroke-dasharray="7 4"/>
+  <text class="ink2" x="170" y="259" font-size="9.5">1.27&#215; &#8212; memory-bandwidth ratio (153 vs 120 GB/s)</text>
+  <line x1="162" y1="124.7" x2="670" y2="124.7" stroke="var(--cause,#E3C24A)" stroke-width="1.4" stroke-dasharray="7 4"/>
+  <text class="ink2" x="170" y="120" font-size="9.5">~2.3&#215; &#8212; observed plateau (GPU-compute-bound)</text>
+
+  <!-- measured ratio line + points -->
+  <polyline style="fill:none" stroke="var(--accent,#4FB2C2)" stroke-width="2"
+    points="180,273.7 276,150.7 372,154.2 468,183.6 564,135.1 660,126.4"/>
+  <g fill="var(--accent,#4FB2C2)">
+    <circle cx="180" cy="273.7" r="4"/><circle cx="276" cy="150.7" r="4"/><circle cx="372" cy="154.2" r="4"/><circle cx="468" cy="183.6" r="4"/><circle cx="564" cy="135.1" r="4"/><circle cx="660" cy="126.4" r="4"/>
+  </g>
+  <!-- point value labels -->
+  <g class="ink2" font-size="9" text-anchor="middle">
+    <text x="180" y="288">1.44</text><text x="276" y="142">2.15</text><text x="372" y="146">2.13</text><text x="468" y="175">1.96</text><text x="564" y="127">2.24</text><text x="660" y="118">2.29</text>
+  </g>
+
+  <!-- annotations -->
+  <text class="mut" x="195" y="300" font-size="9">w64 sits low &#8212; nearest the bandwidth bound</text>
+  <text class="ink2" x="300" y="210" font-size="10">ratio rides the compute ceiling once batch &#8805; 96</text>
+
+  <!-- axis title + takeaway -->
+  <text x="372" y="384" text-anchor="middle" class="mut" font-size="10">batch width (concurrent streams)</text>
+  <text x="22" y="220" transform="rotate(-90 22 220)" text-anchor="middle" class="mut" font-size="10">M5 / M4 decode ratio</text>
+  <text x="40" y="400" class="mut" font-size="9">M5 Air = fanless burst, on battery (sustained TBD); M4 Mini sustained &#8212; direction holds, magnitude is a burst upper bound.</text>
+</svg>

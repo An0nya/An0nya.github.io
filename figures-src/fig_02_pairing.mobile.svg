@@ -1,0 +1,116 @@
+<svg viewBox="0 0 400 470" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); } .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); } .cit { fill: var(--cause,#E3C24A); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); } .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="400" height="470" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="22" y="32" font-size="16">Pairing cancels common-mode noise</text>
+<text class="mut" x="22" y="51" font-size="8.5">sa1_S100_k2 vs baseline · 16 seeds, math</text>
+<text x="208" y="75" text-anchor="middle" class="ink2" font-size="9">looks like noise</text>
+<rect x="151.1" y="86" width="92.4" height="86" fill="var(--accent,#4FB2C2)" opacity="0.07"/>
+<text x="197.3" y="86" text-anchor="middle" class="mut" font-size="8">ranges overlap</text>
+<line x1="55" y1="168" x2="360" y2="168" class="axis" stroke-width="1"/>
+<line x1="95.7" y1="168" x2="95.7" y2="172" class="axis" stroke-width="1"/>
+<text x="95.7" y="183" text-anchor="middle" class="mut" font-size="8">0.4</text>
+<line x1="197.3" y1="168" x2="197.3" y2="172" class="axis" stroke-width="1"/>
+<text x="197.3" y="183" text-anchor="middle" class="mut" font-size="8">0.5</text>
+<line x1="299.0" y1="168" x2="299.0" y2="172" class="axis" stroke-width="1"/>
+<text x="299.0" y="183" text-anchor="middle" class="mut" font-size="8">0.6</text>
+<text x="360" y="197" text-anchor="end" class="mut" font-size="8">score →</text>
+<line x1="151.1" y1="108" x2="289.8" y2="108" class="accs" stroke-width="1" opacity="0.5"/>
+<circle cx="197.3" cy="102.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="197.3" cy="105.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="228.1" cy="108.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="212.7" cy="111.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="212.7" cy="114.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="243.5" cy="102.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="243.5" cy="105.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="228.1" cy="108.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="151.1" cy="111.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="289.8" cy="114.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="228.1" cy="102.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="243.5" cy="105.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="243.5" cy="108.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="274.4" cy="111.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="274.4" cy="114.0" r="2.6" class="acc" opacity="0.85"/>
+<circle cx="212.7" cy="102.0" r="2.6" class="acc" opacity="0.85"/>
+<line x1="195.9" y1="108" x2="264.2" y2="108" class="accs" stroke-width="2.2"/>
+<line x1="230.1" y1="101" x2="230.1" y2="115" class="accs" stroke-width="2.2"/>
+<text x="145.1" y="111" text-anchor="end" class="acc" font-size="8">config</text>
+<line x1="89.5" y1="150" x2="243.5" y2="150" class="slas" stroke-width="1" opacity="0.5"/>
+<path d="M133.1,144.0 h5.2 M135.7,141.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M133.1,147.0 h5.2 M135.7,144.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M148.5,150.0 h5.2 M151.1,147.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M179.3,153.0 h5.2 M181.9,150.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M133.1,156.0 h5.2 M135.7,153.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M179.3,144.0 h5.2 M181.9,141.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M133.1,147.0 h5.2 M135.7,144.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M179.3,150.0 h5.2 M181.9,147.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M86.9,153.0 h5.2 M89.5,150.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M240.9,156.0 h5.2 M243.5,153.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M179.3,144.0 h5.2 M181.9,141.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M163.9,147.0 h5.2 M166.5,144.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M179.3,150.0 h5.2 M181.9,147.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M225.5,153.0 h5.2 M228.1,150.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M225.5,156.0 h5.2 M228.1,153.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<path d="M148.5,144.0 h5.2 M151.1,141.4 v5.2" class="slas" stroke-width="1.3" opacity="0.85"/>
+<line x1="128.8" y1="150" x2="210.1" y2="150" class="slas" stroke-width="2.2"/>
+<line x1="169.4" y1="143" x2="169.4" y2="157" class="slas" stroke-width="2.2"/>
+<text x="83.5" y="153" text-anchor="end" class="sla" font-size="8">baseline</text>
+<text x="208" y="290" text-anchor="middle" class="ink2" font-size="9">the actual test</text>
+<line x1="55" y1="300" x2="55" y2="400" class="axis" stroke-width="1"/>
+<line x1="55" y1="400" x2="360" y2="400" class="rule" stroke-width="1"/>
+<text x="49" y="403" text-anchor="end" class="mut" font-size="8">0</text>
+<line x1="52" y1="367.2" x2="55" y2="367.2" class="axis" stroke-width="1"/>
+<text x="49" y="370.2" text-anchor="end" class="mut" font-size="8">0.04</text>
+<line x1="52" y1="334.4" x2="55" y2="334.4" class="axis" stroke-width="1"/>
+<text x="49" y="337.4" text-anchor="end" class="mut" font-size="8">0.08</text>
+<line x1="52" y1="301.6" x2="55" y2="301.6" class="axis" stroke-width="1"/>
+<text x="49" y="304.6" text-anchor="end" class="mut" font-size="8">0.12</text>
+<line x1="55" y1="351.1" x2="360" y2="351.1" class="accs" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
+<line x1="55.0" y1="400" x2="55.0" y2="350.3" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="55.0" cy="350.3" r="2.6" class="acc"/>
+<line x1="75.3" y1="400" x2="75.3" y2="350.3" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="75.3" cy="350.3" r="2.6" class="acc"/>
+<line x1="95.7" y1="400" x2="95.7" y2="337.9" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="95.7" cy="337.9" r="2.6" class="acc"/>
+<line x1="116.0" y1="400" x2="116.0" y2="375.2" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="116.0" cy="375.2" r="2.6" class="acc"/>
+<line x1="136.3" y1="400" x2="136.3" y2="337.9" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="136.3" cy="337.9" r="2.6" class="acc"/>
+<line x1="156.7" y1="400" x2="156.7" y2="350.3" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="156.7" cy="350.3" r="2.6" class="acc"/>
+<line x1="177.0" y1="400" x2="177.0" y2="313.0" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="177.0" cy="313.0" r="2.6" class="acc"/>
+<line x1="197.3" y1="400" x2="197.3" y2="362.7" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="197.3" cy="362.7" r="2.6" class="acc"/>
+<line x1="217.7" y1="400" x2="217.7" y2="350.3" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="217.7" cy="350.3" r="2.6" class="acc"/>
+<line x1="238.0" y1="400" x2="238.0" y2="362.7" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="238.0" cy="362.7" r="2.6" class="acc"/>
+<line x1="258.3" y1="400" x2="258.3" y2="362.7" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="258.3" cy="362.7" r="2.6" class="acc"/>
+<line x1="278.7" y1="400" x2="278.7" y2="337.9" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="278.7" cy="337.9" r="2.6" class="acc"/>
+<line x1="299.0" y1="400" x2="299.0" y2="350.3" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="299.0" cy="350.3" r="2.6" class="acc"/>
+<line x1="319.3" y1="400" x2="319.3" y2="362.7" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="319.3" cy="362.7" r="2.6" class="acc"/>
+<line x1="339.7" y1="400" x2="339.7" y2="362.7" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="339.7" cy="362.7" r="2.6" class="acc"/>
+<line x1="360.0" y1="400" x2="360.0" y2="350.3" class="accs" stroke-width="1" opacity="0.7"/>
+<circle cx="360.0" cy="350.3" r="2.6" class="acc"/>
+<text x="208" y="424" text-anchor="middle" class="mut" font-size="8">seed index · every Δ &gt; 0 (16/16)</text>
+<rect x="271" y="302" width="88" height="44" fill="var(--bg,#0E141A)" class="rule" stroke-width="1"/>
+<text x="315" y="320" text-anchor="middle" class="cit" font-size="9.5">r = 0.45 &lt; 1</text>
+<text x="315" y="336" text-anchor="middle" class="ink2" font-size="8.5">d 0.19 · t 6.1</text>
+<line x1="4" y1="430" x2="378" y2="430" class="rule" stroke-width="1"/>
+<text x="4" y="449" class="ink2" font-size="9.5">Ranges overlap (left); the <tspan class="acc">per-seed Δ</tspan> (right) is decisive.</text>
+</svg>

@@ -133,21 +133,20 @@
   </header>
 
   <p class="dek">The model was the test subject; the <em>method</em> was the result. This specimen produced almost
-  nothing shippable — no capability win worth a GGUF — but the instrument was built here, and one empirical
+  nothing shippable (no capability win worth a GGUF), but the instrument was built here, and one empirical
   regularity, the Σα-law, held up across every later model. Read it for the ruler, not the result.</p>
 
   <section id="patient">
     <h2><span class="num">§0</span>The patient</h2>
     <div class="col-side">
       <div>
-        <p class="dropcap"><a href="https://huggingface.co/openbmb/MiniCPM5-1B">MiniCPM5-1B</a> is the small, plain
-        one. The OG release — not a conversion — and the config is exactly what it says: it dropped the old
-        muP machinery and genuinely declares <code>LlamaForCausalLM</code>, <code>model_type: llama</code>. A plain
-        Llama derivative — 24 dense GQA layers, untied embeddings, none of the muP <code>scale_emb</code> /
-        <code>scale_depth</code> scaffolding. That matters downstream: everything here is plain-Llama behaviour, and
-        the residual-norm pathology this model wears so openly is the textbook Llama one.</p>
+        <p class="dropcap"><a href="https://huggingface.co/openbmb/MiniCPM5-1B">MiniCPM5-1B</a> is the plainest model
+        in the lab. Unlike its sibling MiniCPM-V&nbsp;4.6 (a Qwen3.5 rebase), it's an original release, and the
+        config says it all: the muP machinery is gone, and it genuinely declares <code>LlamaForCausalLM</code> —
+        24 dense GQA layers, untied embeddings. Everything downstream is textbook-Llama behaviour, including
+        the residual-norm pathology it wears so openly.</p>
         <p>It is also the model where <span class="hl-acc">the engine changed</span>. Every earlier specimen was cut
-        with llama.cpp on a static GGUF — you can duplicate or delete whole blocks, but you can't turn a layer's
+        with llama.cpp on a static GGUF: you can duplicate or delete whole blocks, but you can't turn a layer's
         contribution down to 60%. The interesting surgery on MiniCPM5 is <em>continuous</em>, so the whole sweep
         moved into a live MLX process where the model's own Python objects get patched between forward passes. That
         sounds like a footnote, but it's the reason this page exists.</p>
@@ -164,7 +163,7 @@
     <figure class="figure" id="fig1">
       <p class="nb-plate__note">↳ the massive activation is <em>created by layer 0</em> — the embedding is diffuse; the spike is born, not carried</p>
       <div class="nb-plate">
-        <div class="fig-desktop"><svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-desktop"><svg role="img" aria-label="Fig 1 — the residual-norm highway (the stage)" viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
@@ -214,8 +213,8 @@
   <text x="355" y="441" text-anchor="middle" class="mut" font-size="10">layer index (residual leaving layer i)</text>
 
   <!-- L1 marker: this page's layer -->
-  <line x1="134.96" y1="80" x2="134.96" y2="410" stroke="var(--ink2,#A4B0BC)" stroke-width="0.8" stroke-dasharray="2 3"/>
-  <text class="ink2" x="138" y="90" font-size="8.5">L1 &#8212; this page&#8217;s layer</text>
+  <line x1="134.96" y1="70" x2="134.96" y2="410" stroke="var(--ink2,#A4B0BC)" stroke-width="0.8" stroke-dasharray="2 3"/>
+  <text class="ink2" x="138" y="75" font-size="8.5">L1 &#8212; this page&#8217;s layer</text>
 
   <!-- NORM series: cyan solid + circles -->
   <polyline class="normline" stroke-width="2"
@@ -271,7 +270,7 @@
   <text x="40" y="478" class="ink2" font-size="11">A vanilla-Llama highway: residual norm climbs <tspan class="normlab">~66&#215;</tspan> (3.7&#8594;245); one dim holds <tspan class="enlab">60%</tspan> of L0&#8217;s energy.</text>
   <text x="40" y="493" class="ink2" font-size="11">The embedding is diffuse (0.01) &#8212; the massive activation is <tspan class="enlab">born at layer 0</tspan>, not carried in the embedding.</text>
 </svg></div>
-        <div class="fig-mobile"><svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-mobile"><svg role="img" aria-label="Fig 1 — the residual-norm highway (the stage)" viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
@@ -322,8 +321,8 @@
   <text x="200" y="500" text-anchor="middle" class="mut" font-size="9">layer index (residual leaving layer i)</text>
 
   <!-- L1 marker -->
-  <line x1="70.61" y1="130" x2="70.61" y2="470" stroke="var(--ink2,#A4B0BC)" stroke-width="0.8" stroke-dasharray="2 3"/>
-  <text class="ink2" x="73" y="142" font-size="8">L1</text>
+  <line x1="70.61" y1="110" x2="70.61" y2="470" stroke="var(--ink2,#A4B0BC)" stroke-width="0.8" stroke-dasharray="2 3"/>
+  <text class="ink2" x="73" y="115" font-size="8">L1 &#8212; the active layer on this page</text>
 
   <!-- NORM series -->
   <polyline class="normline" stroke-width="1.8"
@@ -399,7 +398,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <p><code>Δ</code> is the layer's residual contribution. <code>α = 1</code> is the untouched model.
     <code>0 &lt; α &lt; 1</code> damps the layer — it still computes, but writes a fraction of its update into the
     stream. <code>α = 0</code> is a clean skip (identity). <code>α &gt; 1</code> over-amplifies. And
-    <code>α &lt; 0</code> is an <em>anti-update</em> — push the stream the opposite way the layer wanted — which is
+    <code>α &lt; 0</code> is an <em>anti-update</em> (push the stream the opposite way the layer wanted), which is
     <b>not</b> a functional inverse, because the block is nonlinear; it's a controlled way to ask "what does fighting
     this layer do?"</p>
 
@@ -421,7 +420,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
         1.0 — only ~8% sat in a band where a score could <em>move</em>. Baseline 0.33, no resolution. A sweep run on
         that ruler measures mostly nothing, precisely.</p>
         <p>So the ruler got calibrated. A difficulty ladder — 16 items per rung, both operands controlled, 8 seeds,
-        baseline-only — mapped where each operation breaks. The packed in-band set (<code>load_math_inband</code>, 48
+        baseline-only — mapped where each operation breaks. Rungs are operand digit-counts: <code>d5</code> means
+        both operands run 5 digits; mul/div shapes like <code>3×2</code> mean 3-digit × 2-digit. The packed in-band set (<code>load_math_inband</code>, 48
         items) all sits at p&nbsp;∈&nbsp;0.28–0.72, baseline ≈ 0.48: headroom in both directions, so a config can win
         <em>or</em> lose visibly.</p>
       </div>
@@ -446,7 +446,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <figure class="figure" id="fig2">
       <p class="nb-plate__note">↳ a shaded band marks the 0.3–0.7 region where a score can actually move — most of the wide set sat outside it</p>
       <div class="nb-plate">
-        <div class="fig-desktop"><svg viewBox="0 0 720 450" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-desktop"><svg role="img" aria-label="Fig 2 — the arithmetic cliff and the band carved out of it" viewBox="0 0 720 450" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
@@ -544,7 +544,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <circle cx="426" cy="-3" r="4" fill="none" stroke="var(--cause,#E3C24A)" stroke-width="2"/><text x="436" y="0" class="mut">bullseye (best-resolution rung)</text>
   </g>
 </svg></div>
-        <div class="fig-mobile"><svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-mobile"><svg role="img" aria-label="Fig 2 — the arithmetic cliff and the band carved out of it" viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
@@ -691,7 +691,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <figure class="figure" id="fig3">
       <p class="nb-plate__note">↳ the layer rotates its opinion 42° between sub-steps — a fresh read, not a scaled copy</p>
       <div class="nb-plate">
-        <div class="fig-desktop"><svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-desktop"><svg role="img" aria-label="Fig 3 — split-pass curvature (the geometry)" viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
@@ -716,8 +716,11 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
   <rect x="0" y="0" width="720" height="440" fill="var(--bg2,#141D26)"/>
 
   <text class="ttl" x="40" y="26" font-size="17">A single pass and a split pass at equal &#931;&#945; do not coincide</text>
-  <text class="mut" x="40" y="44" font-size="10">MiniCPM5-1B &#183; L1 residual at the answer token (probe &#8220;4827 + 3596&#8221;, &#931;&#945;=1.5) &#183; the split re-evaluates the layer between sub-steps</text>
+  <text class="mut" x="40" y="44" font-size="10">MiniCPM5-1B &#183; L1 residual at the answer token (probe &#8220;4827 + 3596&#8221;, &#931;&#945;=1.5)</text>
+  <text class="mut" x="40" y="56" font-size="10"> &#183; the split re-evaluates the layer between sub-steps</text>
 
+  <!-- all three panels shifted down together to give the subheader breathing room -->
+  <g transform="translate(0,14)">
   <!-- ===================== PANEL A: trajectory (PCA top-2, 99.6% var) ===================== -->
   <text class="ink2" x="40" y="72" font-size="10">&#9312; one shove vs split</text>
   <text class="mut"  x="40" y="84" font-size="8.5">L1 residual, PC1/PC2 &#183; &#931;&#945;=1.5</text>
@@ -729,7 +732,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 
   <!-- single shove: gray dashed arrow origin -> single_end, with hollow triangle endpoint -->
   <line x1="51.4" y1="165.7" x2="223.7" y2="227.5" stroke="var(--ink2,#A4B0BC)" stroke-width="1.6"
-        stroke-dasharray="5 3" marker-end="url(#cvah)"/>
+        stroke-dasharray="5 3"/>
   <!-- split paths -->
   <polyline class="k4" style="fill:none" stroke-width="1.6" points="51.4,165.7 94.4,181.2 137.1,178.5 183.3,162.8 237.4,133.7"/>
   <polyline class="k3" style="fill:none" stroke-width="1.6" points="51.4,165.7 109.1,186.3 165.5,176.4 229.6,146.3"/>
@@ -743,16 +746,17 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
   <rect x="225.6" y="142.3" width="8" height="8" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="1.6"/>
   <polygon points="237.4,128.7 231.4,137.7 243.4,137.7" fill="none" stroke="var(--fourth,#6E92C4)" stroke-width="1.6"/>
   <!-- origin (x) + baseline (alpha=1) -->
-  <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.6">
-    <line x1="47.4" y1="161.7" x2="55.4" y2="169.7"/><line x1="55.4" y1="161.7" x2="47.4" y2="169.7"/>
+  <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.6" fill="none">
+    <circle cx="51.4" cy="165.7" r="6.2"/>
+    <line x1="48.6" y1="162.9" x2="54.2" y2="168.5"/><line x1="54.2" y1="162.9" x2="48.6" y2="168.5"/>
   </g>
-  <text class="ink2" x="58" y="160" font-size="8">x (L1 in)</text>
-  <g stroke="var(--muted,#6F7C88)" stroke-width="1.4">
-    <line x1="162.4" y1="206.9" x2="170.4" y2="206.9"/><line x1="166.4" y1="202.9" x2="166.4" y2="210.9"/>
+  <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.3" fill="none">
+    <circle cx="166.4" cy="206.9" r="4.6"/>
+    <line x1="162.8" y1="206.9" x2="170" y2="206.9"/><line x1="166.4" y1="203.3" x2="166.4" y2="210.5"/>
   </g>
-  <text class="mut" x="150" y="220" font-size="8">baseline &#945;=1</text>
-  <polygon points="223.7,231.5 219.7,224.5 227.7,224.5" fill="none" stroke="var(--ink2,#A4B0BC)" stroke-width="1.4"/>
-  <text class="ink2" x="200" y="240" font-size="8" text-anchor="middle">single &#945;=1.5</text>
+  <text class="ink2" x="176" y="207" font-size="8">baseline &#945;=1</text>
+  <polygon points="223.7,223.6 219.2,231.4 228.2,231.4" fill="none" stroke="var(--ink2,#A4B0BC)" stroke-width="1.4"/>
+  <text class="ink2" x="155" y="235" font-size="8">single &#945;=1.5</text>
 
   <!-- ===================== PANEL B: opinion rotation cos(Di,D0) ===================== -->
   <text class="ink2" x="278" y="72" font-size="10">&#9313; opinion rotates per step</text>
@@ -823,16 +827,22 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <polygon points="146,335 142,342 150,342" class="k4" stroke="none"/><text x="154" y="341" class="ink2">k=4</text>
     <polygon points="196,335 200,339 196,343 192,339" class="k6" stroke="none"/><text x="206" y="341" class="ink2">k=6</text>
     <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.4"><line x1="250" y1="338" x2="266" y2="338" stroke-dasharray="5 3"/></g>
-    <polygon points="266,341 262,335 270,335" fill="none" stroke="var(--ink2,#A4B0BC)" stroke-width="1.2"/>
+    <polygon points="266,334.5 262,341.5 270,341.5" fill="none" stroke="var(--ink2,#A4B0BC)" stroke-width="1.2"/>
     <text x="276" y="341" class="ink2">single shove (&#931;&#945;=1.5)</text>
-    <g stroke="var(--muted,#6F7C88)" stroke-width="1.4"><line x1="430" y1="338" x2="438" y2="338"/><line x1="434" y1="334" x2="434" y2="342"/></g>
-    <text x="446" y="341" class="ink2">baseline (&#945;=1)</text>
+    <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.3" fill="none"><circle cx="424" cy="338" r="4.4"/><line x1="420.6" y1="338" x2="427.4" y2="338"/><line x1="424" y1="334.6" x2="424" y2="341.4"/></g>
+    <text x="436" y="341" class="ink2">baseline (&#945;=1)</text>
+    <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.5" fill="none">
+      <circle cx="540" cy="338" r="5"/>
+      <line x1="536.8" y1="334.8" x2="543.2" y2="341.2"/><line x1="543.2" y1="334.8" x2="536.8" y2="341.2"/>
+    </g>
+    <text x="550" y="341" class="ink2">x (L1 in)</text>
   </g>
 
   <text x="40" y="372" class="ink2" font-size="11">A single damped pass can only slide the residual along the &#916;(x) line; the split steps off it.</text>
   <text x="40" y="388" class="ink2" font-size="11">The effect is the layer re-reading the moved stream &#8212; more sub-steps, the further from a single shove.</text>
+  </g>
 </svg></div>
-        <div class="fig-mobile"><svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-mobile"><svg role="img" aria-label="Fig 3 — split-pass curvature (the geometry)" viewBox="0 0 400 900" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
@@ -843,6 +853,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     .k3 { stroke: var(--neg,#B98AD6);   fill: var(--neg,#B98AD6); }
     .k4 { stroke: var(--fourth,#6E92C4);fill: var(--fourth,#6E92C4); }
     .k6 { stroke: var(--cause,#E3C24A); fill: var(--cause,#E3C24A); }
+    /* keep stroke weights at their authored px regardless of group scaling */
+    .nss line, .nss polyline, .nss polygon, .nss circle, .nss rect { vector-effect: non-scaling-stroke; }
   </style>
   <defs>
     <marker id="cvahM" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -854,22 +866,25 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     </pattern>
   </defs>
 
-  <rect x="0" y="0" width="400" height="700" fill="var(--bg2,#141D26)"/>
+  <rect x="0" y="0" width="400" height="900" fill="var(--bg2,#141D26)"/>
 
-  <text class="ttl" x="16" y="24" font-size="15">One pass and a split pass</text>
-  <text class="ttl" x="16" y="42" font-size="15">at equal &#931;&#945; don&#8217;t coincide</text>
-  <text class="mut" x="16" y="58" font-size="8.5">MiniCPM5-1B &#183; L1 residual at the answer token</text>
-  <text class="mut" x="16" y="69" font-size="8.5">probe &#8220;4827 + 3596&#8221; &#183; &#931;&#945;=1.5 &#183; split re-evaluates per step</text>
+  <text class="ttl" x="16" y="29" font-size="15">One pass and a split pass</text>
+  <text class="ttl" x="16" y="47" font-size="15">at equal &#931;&#945; don&#8217;t coincide</text>
+  <text class="mut" x="16" y="68" font-size="8.5">MiniCPM5-1B &#183; L1 residual at the answer token</text>
+  <text class="mut" x="16" y="79" font-size="8.5">probe &#8220;4827 + 3596&#8221; &#183; &#931;&#945;=1.5 &#183; split re-evaluates per step</text>
 
   <!-- ===================== PANEL A: trajectory ===================== -->
+  <g transform="translate(0,16)">
   <text class="ink2" x="16" y="90" font-size="10">&#9312; one shove vs split &#8212; the paths peel apart</text>
+  <!-- panel A geometry uniformly scaled x1.156 about (48,100) to match panels 2/3 width -->
+  <g class="nss" transform="translate(-7.49,-15.6) scale(1.156)">
   <line x1="48" y1="100" x2="48" y2="255" stroke="var(--rule2,#27323D)" stroke-width="1"/>
   <line x1="48" y1="255" x2="335" y2="255" stroke="var(--rule2,#27323D)" stroke-width="1"/>
   <text x="190" y="268" text-anchor="middle" class="mut" font-size="8.5">PC1 (residual at answer token)</text>
   <text x="40" y="177" transform="rotate(-90 40 177)" text-anchor="middle" class="mut" font-size="8.5">PC2</text>
 
   <line x1="52.1" y1="161.5" x2="302.4" y2="251.2" stroke="var(--ink2,#A4B0BC)" stroke-width="1.6"
-        stroke-dasharray="5 3" marker-end="url(#cvahM)"/>
+        stroke-dasharray="5 3"/>
   <polyline class="k4" style="fill:none" stroke-width="1.6" points="52.1,161.5 114.6,183.9 176.5,180.0 243.6,157.2 322.3,115.1"/>
   <polyline class="k3" style="fill:none" stroke-width="1.6" points="52.1,161.5 135.8,191.4 217.8,177.0 310.9,133.2"/>
   <polyline class="k2" style="fill:none" stroke-width="1.6" points="52.1,161.5 177.4,206.4 301.1,162.1"/>
@@ -879,72 +894,91 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
   <circle cx="301.1" cy="162.1" r="4.2" fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="1.6"/>
   <rect x="307.4" y="129.7" width="8" height="8" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="1.6"/>
   <polygon points="322.3,110.1 316.3,119.1 328.3,119.1" fill="none" stroke="var(--fourth,#6E92C4)" stroke-width="1.6"/>
-  <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.6">
-    <line x1="48.1" y1="157.5" x2="56.1" y2="165.5"/><line x1="56.1" y1="157.5" x2="48.1" y2="165.5"/>
+  <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.6" fill="none">
+    <circle cx="52.1" cy="161.5" r="6.2"/>
+    <line x1="49.3" y1="158.7" x2="54.9" y2="164.3"/><line x1="54.9" y1="158.7" x2="49.3" y2="164.3"/>
   </g>
-  <text class="ink2" x="58" y="155" font-size="8">x (L1 in)</text>
-  <g stroke="var(--muted,#6F7C88)" stroke-width="1.4">
-    <line x1="215.1" y1="221.3" x2="223.1" y2="221.3"/><line x1="219.1" y1="217.3" x2="219.1" y2="225.3"/>
+  <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.3" fill="none">
+    <circle cx="219.1" cy="221.3" r="4.6"/>
+    <line x1="215.5" y1="221.3" x2="222.7" y2="221.3"/><line x1="219.1" y1="217.7" x2="219.1" y2="224.9"/>
   </g>
-  <text class="mut" x="226" y="224" font-size="8">baseline &#945;=1</text>
-  <polygon points="302.4,255.2 296.4,248.2 308.4,248.2" fill="none" stroke="var(--ink2,#A4B0BC)" stroke-width="1.4"/>
-  <text class="ink2" x="298" y="245" font-size="8" text-anchor="end">single &#945;=1.5</text>
+  <text class="ink2" x="229" y="221" font-size="8">baseline &#945;=1</text>
+  <polygon points="302.4,244.6 296.4,255 308.4,255" fill="none" stroke="var(--ink2,#A4B0BC)" stroke-width="1.4"/>
+  <text class="ink2" x="338" y="240" font-size="8" text-anchor="end">single &#945;=1.5</text>
+  </g>
 
+  </g>
   <!-- ===================== PANEL B: opinion rotation ===================== -->
-  <text class="ink2" x="16" y="284" font-size="10">&#9313; opinion rotates per sub-step</text>
-  <text class="mut" x="378" y="314" text-anchor="end" font-size="8">avg cos(&#916;&#8321;,&#916;&#8320;) = 0.745</text>
+  <g transform="translate(0,62)">
+  <text class="ink2" x="16" y="274" font-size="10">&#9313; opinion rotates per sub-step</text>
+  <text class="mut" x="378" y="319" text-anchor="end" font-size="8">avg cos(&#916;&#8321;,&#916;&#8320;) = 0.745</text>
+  <!-- panel B plot geometry stretched x1.25 vertically about y=293 (top of value axis) -->
+  <g class="nss" transform="translate(0,-73.25) scale(1,1.25)">
   <g stroke="var(--rule2,#27323D)" stroke-width="1">
     <line x1="55" y1="321.7" x2="380" y2="321.7"/>
     <line x1="55" y1="349.8" x2="380" y2="349.8"/>
     <line x1="55" y1="377.8" x2="380" y2="377.8"/>
     <line x1="55" y1="405.9" x2="380" y2="405.9"/>
   </g>
-  <line x1="55" y1="293" x2="55" y2="420" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="55" y1="289" x2="55" y2="420" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
   <line x1="55" y1="420" x2="380" y2="420" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  </g>
   <g class="mut" font-size="8" text-anchor="end">
-    <text x="51" y="296.6">1.0</text><text x="51" y="324.7">0.9</text><text x="51" y="352.8">0.8</text><text x="51" y="380.8">0.7</text><text x="51" y="408.9">0.6</text>
+    <text x="51" y="297.5">1.0</text><text x="51" y="332.6">0.9</text><text x="51" y="367.8">0.8</text><text x="51" y="402.8">0.7</text><text x="51" y="437.9">0.6</text>
   </g>
   <g class="mut" font-size="8.5" text-anchor="middle">
-    <text x="55" y="432">0</text><text x="120" y="432">1</text><text x="185" y="432">2</text><text x="250" y="432">3</text><text x="315" y="432">4</text><text x="380" y="432">5</text>
+    <text x="55" y="464">0</text><text x="120" y="464">1</text><text x="185" y="464">2</text><text x="250" y="464">3</text><text x="315" y="464">4</text><text x="380" y="464">5</text>
   </g>
-  <text x="217" y="444" text-anchor="middle" class="mut" font-size="8.5">sub-step i</text>
+  <text x="217" y="476" text-anchor="middle" class="mut" font-size="8.5">sub-step i</text>
 
+  <g class="nss" transform="translate(0,-73.25) scale(1,1.25)">
   <polyline class="k6" style="fill:none" stroke-width="1.6" points="55,293.6 120,306.5 185,329.8 250,355.7 315,382.6 380,408.5"/>
   <polyline class="k4" style="fill:none" stroke-width="1.6" points="55,293.6 120,318.9 185,354.6 250,389.1"/>
   <polyline class="k3" style="fill:none" stroke-width="1.6" points="55,293.6 120,332.9 185,375.6"/>
   <polyline class="k2" style="fill:none" stroke-width="1.6" points="55,293.6 120,360.5"/>
-  <g class="k2"><circle cx="55" cy="293.6" r="2.6"/><circle cx="120" cy="360.5" r="2.6"/></g>
-  <g class="k3"><rect x="52" y="290.6" width="6" height="6"/><rect x="117" y="329.9" width="6" height="6"/><rect x="182" y="372.6" width="6" height="6"/></g>
-  <g class="k4"><polygon points="120,314.9 116,321.9 124,321.9"/><polygon points="185,350.6 181,357.6 189,357.6"/><polygon points="250,385.1 246,392.1 254,392.1"/></g>
-  <g class="k6"><polygon points="120,302.5 124,306.5 120,310.5 116,306.5"/><polygon points="185,325.8 189,329.8 185,333.8 181,329.8"/><polygon points="250,351.7 254,355.7 250,359.7 246,355.7"/><polygon points="315,378.6 319,382.6 315,386.6 311,382.6"/><polygon points="380,404.5 384,408.5 380,412.5 376,408.5"/></g>
+  </g>
+  <!-- markers kept unscaled (true shape) at the stretched vertex y = 1.25*y - 73.25 -->
+  <g class="k2"><circle cx="55" cy="293.75" r="2.6"/><circle cx="120" cy="377.375" r="2.6"/></g>
+  <g class="k3"><rect x="52" y="290.75" width="6" height="6"/><rect x="117" y="339.875" width="6" height="6"/><rect x="182" y="393.25" width="6" height="6"/></g>
+  <g class="k4"><polygon points="120,321.375 116,328.375 124,328.375"/><polygon points="185,366.0 181,373.0 189,373.0"/><polygon points="250,409.125 246,416.125 254,416.125"/></g>
+  <g class="k6"><polygon points="120,305.875 124,309.875 120,313.875 116,309.875"/><polygon points="185,335.0 189,339.0 185,343.0 181,339.0"/><polygon points="250,367.375 254,371.375 250,375.375 246,371.375"/><polygon points="315,401.0 319,405.0 315,409.0 311,405.0"/><polygon points="380,433.375 384,437.375 380,441.375 376,437.375"/></g>
 
+  </g>
   <!-- ===================== PANEL C: gap_frac bars ===================== -->
-  <text class="ink2" x="16" y="450" font-size="10">&#9314; gap grows with splitting</text>
+  <g transform="translate(0,124)">
+  <text class="ink2" x="16" y="440" font-size="10">&#9314; gap grows with splitting</text>
+  <!-- panel C plot geometry stretched x1.35 vertically about y=458 (top of value axis) -->
+  <g class="nss" transform="translate(0,-160.3) scale(1,1.35)">
   <g stroke="var(--rule2,#27323D)" stroke-width="1">
     <line x1="55" y1="526" x2="380" y2="526"/>
     <line x1="55" y1="492" x2="380" y2="492"/>
     <line x1="55" y1="458" x2="380" y2="458"/>
   </g>
-  <line x1="55" y1="458" x2="55" y2="560" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="55" y1="454" x2="55" y2="560" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
   <line x1="55" y1="560" x2="380" y2="560" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
-  <g class="mut" font-size="8" text-anchor="end">
-    <text x="51" y="563">0</text><text x="51" y="529">.2</text><text x="51" y="495">.4</text><text x="51" y="461">.6</text>
   </g>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="51" y="600">0</text><text x="51" y="554">.2</text><text x="51" y="508">.4</text><text x="51" y="462">.6</text>
+  </g>
+  <g class="nss" transform="translate(0,-160.3) scale(1,1.35)">
   <rect x="97"  y="514.4" width="22" height="45.6" fill="url(#s10HatchM)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
   <rect x="121" y="499"   width="22" height="61"   fill="var(--accent,#4FB2C2)"/>
   <rect x="187" y="501.7" width="22" height="58.3" fill="url(#s10HatchM)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
   <rect x="211" y="481.6" width="22" height="78.4" fill="var(--accent,#4FB2C2)"/>
   <rect x="277" y="494.9" width="22" height="65.1" fill="url(#s10HatchM)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
   <rect x="301" y="469.6" width="22" height="90.4" fill="var(--accent,#4FB2C2)"/>
+  </g>
   <g class="mut" font-size="8.5" text-anchor="middle">
-    <text x="120" y="574">k=2</text><text x="210" y="574">k=3</text><text x="300" y="574">k=4</text>
+    <text x="120" y="610">k=2</text><text x="210" y="610">k=3</text><text x="300" y="610">k=4</text>
   </g>
   <rect x="246" y="451.5" width="11" height="9" fill="url(#s10HatchM)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
   <text x="261" y="459.5" class="ink2" font-size="8">&#931;&#945;=1.0</text>
   <rect x="312" y="451.5" width="11" height="9" fill="var(--accent,#4FB2C2)"/>
   <text x="327" y="459.5" class="ink2" font-size="8">&#931;&#945;=1.5</text>
 
+  </g>
   <!-- ===================== legend + takeaway ===================== -->
+  <g transform="translate(0,166)">
   <text x="16" y="596" class="mut" font-size="8">closed form: single &#8722; split = (&#931;&#945;/k)&#183;&#931;&#7522;(&#916;(x)&#8722;&#916;(x&#7522;)) &#8212; held to 1.6%</text>
   <line x1="16" y1="608" x2="384" y2="608" stroke="var(--rule2,#27323D)" stroke-width="1"/>
   <g font-size="8.5">
@@ -953,14 +987,18 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <polygon points="104,623 100,630 108,630" class="k4" stroke="none"/><text x="112" y="629" class="ink2">k4</text>
     <polygon points="148,623 152,627 148,631 144,627" class="k6" stroke="none"/><text x="158" y="629" class="ink2">k6</text>
     <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.4"><line x1="196" y1="626" x2="210" y2="626" stroke-dasharray="5 3"/></g>
-    <polygon points="210,629 206,623 214,623" fill="none" stroke="var(--ink2,#A4B0BC)" stroke-width="1.2"/>
+    <polygon points="210,622.5 206,629.5 214,629.5" fill="none" stroke="var(--ink2,#A4B0BC)" stroke-width="1.2"/>
     <text x="220" y="629" class="ink2">single shove</text>
-    <g stroke="var(--muted,#6F7C88)" stroke-width="1.4"><line x1="304" y1="626" x2="312" y2="626"/><line x1="308" y1="622" x2="308" y2="630"/></g>
-    <text x="318" y="629" class="ink2">baseline &#945;=1</text>
+    <!-- baseline + origin share the second line -->
+    <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.3" fill="none"><circle cx="22" cy="646" r="4.6"/><line x1="18.4" y1="646" x2="25.6" y2="646"/><line x1="22" y1="642.4" x2="22" y2="649.6"/></g>
+    <text x="32" y="649" class="ink2">baseline &#945;=1</text>
+    <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.5" fill="none"><circle cx="120" cy="646" r="4.6"/><line x1="116.8" y1="642.8" x2="123.2" y2="649.2"/><line x1="123.2" y1="642.8" x2="116.8" y2="649.2"/></g>
+    <text x="130" y="649" class="ink2">x (L1 in) &#183; origin</text>
   </g>
-  <text x="16" y="654" class="ink2" font-size="9.5">A single damped pass can only slide the residual along</text>
-  <text x="16" y="668" class="ink2" font-size="9.5">&#916;(x); the split steps off it &#8212; the layer re-reads the</text>
-  <text x="16" y="682" class="ink2" font-size="9.5">moved stream, landing further off with every sub-step.</text>
+  <text x="16" y="684" class="ink2" font-size="9.5">A single damped pass can only slide the residual along</text>
+  <text x="16" y="698" class="ink2" font-size="9.5">&#916;(x); the split steps off it &#8212; the layer re-reads the</text>
+  <text x="16" y="712" class="ink2" font-size="9.5">moved stream, landing further off with every sub-step.</text>
+  </g>
 </svg></div>
       </div>
       <figcaption class="nb-figcap"><b>Fig 3 —</b> split-pass curvature (the geometry). The L1 residual at one answer token.
@@ -973,18 +1011,18 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     </figure>
 
     <p>And it isn't only those three controls. We swept a <em>single</em> damped pass of L1 across the whole
-    single-knob range — α = 0.5 → 1.5, the entire envelope a single α can reach. It tops out at <b>+0.028</b> (α ≈ 0.6)
+    single-knob range (α = 0.5 → 1.5, the entire envelope a single α can reach). It tops out at <b>+0.028</b> (α ≈ 0.6)
     and craters under amplification (α = 1.5 → <b>−0.115</b>); it never clears baseline by more than noise. The best
-    split/stack sits at <b>+0.153</b>. No single α comes close — a <b>+0.125</b> gap, ~5×. And at the
+    split/stack sits at <b>+0.153</b>. No single α comes close: a <b>+0.125</b> gap, ~5×. And at the
     <em>same</em> total dose <b>Σα = 1.5</b>, one pass scores −0.115 and the split scores +0.153, a <b>0.27 swing</b>
-    that is pure re-evaluation. (Cross-checked across two independent sweep files — L1 at α = 1.30 gives Δ −0.080 in
-    <em>both</em> to four decimals — so the comparison rides on Δ-vs-baseline, where the constant harness offset
+    that is pure re-evaluation. (Cross-checked across two independent sweep files: L1 at α = 1.30 gives Δ −0.080 in
+    <em>both</em> to four decimals, so the comparison rides on Δ-vs-baseline, where the constant harness offset
     cancels.)</p>
 
     <div class="negresult">
       <span class="nb-kicker">Where single-α is trapped — the off-axis claim</span>
-      <p><span class="olabel obs">obs</span> a single α on L1 buys at most +0.03 and is actively harmful when amplified;
-      the split at identical Σα buys +0.15. <span class="olabel inf">inf</span> a single α can only slide the residual
+      <p><span class="olabel obs">observation</span> a single α on L1 buys at most +0.03 and is actively harmful when amplified;
+      the split at identical Σα buys +0.15. <span class="olabel inf">interpretation</span> a single α can only slide the residual
       along the Δ(x) line, and that line never gets above baseline — the gain lives <em>off-axis</em>, where only the
       re-evaluating split can reach. The split isn't a tidier route to a place single-α could reach; it reaches a place
       single-α can't. This is the behavioural face of the geometry in Fig 1.</p>
@@ -993,7 +1031,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <figure class="figure" id="fig4">
       <p class="nb-plate__note">↳ same knob budget, opposite outcomes — the split stays above the single at every dose</p>
       <div class="nb-plate">
-        <div class="fig-desktop"><svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-desktop"><svg role="img" aria-label="Fig 4 — single-α vs split, on the 18 shared math probes (each config against its own baseline)" viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
@@ -1099,7 +1137,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
   <text x="40" y="478" class="ink2" font-size="11">Same budget, opposite outcomes. A single &#945; buys at most +0.03 and turns <tspan class="foil" stroke="none">harmful</tspan> when amplified.</text>
   <text x="40" y="493" class="ink2" font-size="11">Splitting the same &#931;&#945; across re-evaluated passes <tspan class="obs" stroke="none">holds +0.15</tspan> &#8212; a place a single &#945; can&#8217;t reach.</text>
 </svg></div>
-        <div class="fig-mobile"><svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-mobile"><svg role="img" aria-label="Fig 4 — single-α vs split, on the 18 shared math probes (each config against its own baseline)" viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
@@ -1182,20 +1220,22 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 
   <!-- legend (lower-left empty quadrant) -->
   <g font-size="8.5">
-    <line x1="56" y1="446" x2="78" y2="446" class="foil" stroke-width="2" stroke-dasharray="6 4"/>
-    <circle cx="67" cy="446" r="2.5" class="foil" stroke="none"/>
-    <text x="84" y="449" class="ink2">single damped pass (&#931;&#945; = &#945;)</text>
-    <line x1="56" y1="462" x2="78" y2="462" class="obs" stroke-width="2"/>
-    <circle cx="67" cy="462" r="2.5" class="obs" stroke="none"/>
-    <text x="84" y="465" class="ink2">split, k = 2 (&#931;&#945; sweep)</text>
+    <line x1="56" y1="456" x2="78" y2="456" class="foil" stroke-width="2" stroke-dasharray="6 4"/>
+    <circle cx="67" cy="456" r="2.5" class="foil" stroke="none"/>
+    <text x="84" y="453" class="ink2">single damped pass</text>
+    <text x="84" y="463" class="ink2">(&#931;&#945; = &#945;)</text>
+    <line x1="56" y1="478" x2="78" y2="478" class="obs" stroke-width="2"/>
+    <circle cx="67" cy="478" r="2.5" class="obs" stroke="none"/>
+    <text x="84" y="475" class="ink2">split, k = 2</text>
+    <text x="84" y="485" class="ink2">(&#931;&#945; sweep)</text>
     <g class="stk" stroke="none">
-      <rect x="62" y="474" width="8" height="8"/>
-      <polygon points="112,474 107,483 117,483"/>
-      <polygon points="154,478.5 159,474 164,478.5 159,483"/>
+      <rect x="62" y="497" width="8" height="8"/>
+      <polygon points="112,497 107,506 117,506"/>
+      <polygon points="154,501.5 159,497 164,501.5 159,506"/>
     </g>
-    <text x="84" y="481" class="ink2" font-size="8">k3</text>
-    <text x="135" y="481" class="ink2" font-size="8">k4</text>
-    <text x="170" y="481" class="ink2" font-size="8">k6 (stacks)</text>
+    <text x="84" y="504" class="ink2" font-size="8">k3</text>
+    <text x="135" y="504" class="ink2" font-size="8">k4</text>
+    <text x="170" y="504" class="ink2" font-size="8">k6 (stacks)</text>
   </g>
 
   <!-- takeaway -->
@@ -1261,7 +1301,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <figure class="figure" id="fig5">
       <p class="nb-plate__note">↳ the signature plot — k spreads the curve <em>vertically</em> (gain), it does not move the peak horizontally</p>
       <div class="nb-plate">
-        <div class="fig-desktop"><svg viewBox="0 0 720 520" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-desktop"><svg role="img" aria-label="Fig 5 — the Σα curve (the signature plot of the whole specimen)" viewBox="0 0 720 520" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
@@ -1305,8 +1345,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <line x1="150" y1="112" x2="150" y2="360"/><line x1="203.3" y1="112" x2="203.3" y2="360"/>
   </g>
   <g font-size="8.5" text-anchor="middle" class="mut">
-    <text x="110" y="160">conserve</text>
-    <text x="177" y="160" fill="var(--accent,#4FB2C2)">repair</text>
+    <text x="120" y="160">conserve</text>
+    <text x="187" y="160" fill="var(--accent,#4FB2C2)">repair</text>
     <text x="303" y="160">over-drive</text>
     <text x="537" y="160" fill="var(--neg,#B98AD6)">norm-collapse</text>
   </g>
@@ -1351,7 +1391,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
   <text x="40" y="458" class="ink2" font-size="11"> fits the hump at R² = 0.74; a concentration penalty (Σa²)  </text>
   <text x="40" y="474" class="ink2" font-size="11">explains why flat beats ramp and k6 beats k4 at the same dose.</text>
 </svg></div>
-        <div class="fig-mobile"><svg viewBox="0 0 400 580" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-mobile"><svg role="img" aria-label="Fig 5 — the Σα curve (the signature plot of the whole specimen)" viewBox="0 0 400 580" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
@@ -1463,8 +1503,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 
     <div class="negresult">
       <span class="nb-kicker">Refuted — "the stack absorbs divergence"</span>
-      <p><span class="olabel obs">obs</span> a divergence sandwich <code>diverge_567</code> (+.7 / −.5 / +.8 on L5/6/7)
-      collapses to 0.00, while the control (+.7 / +.5 / +.8) holds at 0.27. <span class="olabel inf">inf</span> it's the
+      <p><span class="olabel obs">observation</span> a divergence sandwich <code>diverge_567</code> (+.7 / −.5 / +.8 on L5/6/7)
+      collapses to 0.00, while the control (+.7 / +.5 / +.8) holds at 0.27. <span class="olabel inf">interpretation</span> it's the
       <em>negation</em>, not the perturbation, that kills it — and the bracketing positive layers do <b>not</b> absorb
       a reversed middle layer. The verbatim of the collapsed run shows the same <code>0.0000…0</code> norm-collapse
       signature as over-drive: the two doors open onto the same room.</p>
@@ -1484,9 +1524,9 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
       <div>
         <p class="dropcap">This is the result I'm fondest of, and it cost no compute — a metric computed over generations
         that were already stored. Different probe channels disagreed about whether a config was good: math liked
-        high-k; the emotional-intelligence (eq) channel hated it. <span class="olabel obs">obs</span> diffing the
+        high-k; the emotional-intelligence (eq) channel hated it. <span class="olabel obs">observation</span> diffing the
         verbatim responses showed the disagreement is about length — math answers are ~16 tokens, eq answers ~96.
-        <span class="olabel inf">inf</span> the explanation is not "math and eq need different surgery"; it's
+        <span class="olabel inf">interpretation</span> the explanation is not "math and eq need different surgery"; it's
         <b>exposure</b>: a low per-token derailment probability is invisible in 16 tokens and <em>compounds</em> into a
         visible loss across 96.</p>
         <p>So define a <b>degeneration rate</b>: the fraction of stored responses that derail (special-token leak +
@@ -1514,7 +1554,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <figure class="figure" id="fig6">
       <p class="nb-plate__note">↳ throw out the derailed responses and the clean ones sit at/above baseline — the cost is risk, not quality</p>
       <div class="nb-plate">
-        <div class="fig-desktop"><svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-desktop"><svg role="img" aria-label="Fig 6 — exposure, not capability" viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
@@ -1631,21 +1671,24 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
   <!-- callouts -->
   <text class="ink2" x="688" y="150" text-anchor="end" font-size="9.5">clean-only stays</text>
   <text class="ink2" x="688" y="162" text-anchor="end" font-size="9.5">&#8805; baseline at every k</text>
-  <text class="mut" x="688" y="300" text-anchor="end" font-size="8.5">aggregate dips below:</text>
-  <text class="mut" x="688" y="311" text-anchor="end" font-size="8.5">the derail tax</text>
+  <text class="mut" x="628" y="345" text-anchor="end" font-size="8.5">aggregate dips below:</text>
+  <text class="mut" x="628" y="356" text-anchor="end" font-size="8.5">the derail tax</text>
 
   <!-- legend -->
-  <rect x="406" y="100" width="14" height="11" fill="var(--cause,#E3C24A)"/>
-  <text x="424" y="109" class="ink2" font-size="9">aggregate (all responses)</text>
-  <rect x="406" y="116" width="14" height="11" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
-  <text x="424" y="125" class="ink2" font-size="9">clean-only (derails dropped)</text>
+  <rect x="406" y="90" width="14" height="11" fill="var(--cause,#E3C24A)"/>
+  <text x="424" y="99" class="ink2" font-size="9">aggregate</text>
+  <text x="424" y="108" class="ink2" font-size="9">(all responses)</text>
+  <rect x="406" y="115" width="14" height="11" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <text x="424" y="124" class="ink2" font-size="9">clean-only</text>
+  <text x="424" y="133" class="ink2" font-size="9">(derails dropped)</text>
 
   <!-- ======================= takeaway ======================= -->
   <line x1="40" y1="432" x2="680" y2="432" stroke="var(--rule2,#27323D)" stroke-width="1"/>
-  <text x="40" y="453" class="ink2" font-size="11">Past the k6 peak the aggregate eq score falls &#8212; but the non-derailed responses hold at baseline. The model isn&#8217;t getting</text>
-  <text x="40" y="470" class="ink2" font-size="11">dumber as you stack copies; it&#8217;s derailing more often. The cost is <tspan class="obs" fill="var(--accent,#4FB2C2)">exposure</tspan>, not capability &#8212; and a special-token ban would buy it back.</text>
+  <text x="40" y="453" class="ink2" font-size="11">Past the k6 peak the aggregate eq score falls &#8212; but the non-derailed responses hold at baseline.</text>
+  <text x="40" y="470" class="ink2" font-size="11">The model isn&#8217;t getting dumber as you stack copies; it&#8217;s derailing more often. The cost is <tspan class="obs" fill="var(--accent,#4FB2C2)">exposure</tspan>,</text>
+  <text x="40" y="487" class="ink2" font-size="11">not capability &#8212; and a special-token ban would buy it back.</text>
 </svg></div>
-        <div class="fig-mobile"><svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-mobile"><svg role="img" aria-label="Fig 6 — exposure, not capability" viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
@@ -1811,8 +1854,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <p>This is why the next fork was built to <em>falsify</em> the capability story — a chain-of-thought battery. If a
     config's win survives when the model is actually reasoning step-by-step, it's capability; if it evaporates, it was
     compliance relief. That fork is built but not fully run. The one suggestive smoke result is worth flagging as a
-    <em>hypothesis, not a finding</em>: <span class="olabel obs">obs</span> <code>dampall_a90</code> beat baseline in
-    CoT smoke (0.074 vs 0.046). <span class="olabel inf">inf</span> if a 1B can't sustain chain-of-thought
+    <em>hypothesis, not a finding</em>: <span class="olabel obs">observation</span> <code>dampall_a90</code> beat baseline in
+    CoT smoke (0.074 vs 0.046). <span class="olabel inf">interpretation</span> if a 1B can't sustain chain-of-thought
     <em>because</em> it collapses into loops, then de-collapse surgery might be a <b>reasoning prosthesis</b> — not a
     capability test but a capability <em>enabler</em>. Unproven. The most interesting thread left on the table when the
     model was closed out.</p>

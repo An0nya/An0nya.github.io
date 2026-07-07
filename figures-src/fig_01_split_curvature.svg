@@ -1,0 +1,151 @@
+<svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .k2 { stroke: var(--accent,#4FB2C2); fill: var(--accent,#4FB2C2); }
+    .k3 { stroke: var(--neg,#B98AD6);   fill: var(--neg,#B98AD6); }
+    .k4 { stroke: var(--fourth,#6E92C4);fill: var(--fourth,#6E92C4); }
+    .k6 { stroke: var(--cause,#E3C24A); fill: var(--cause,#E3C24A); }
+  </style>
+  <defs>
+    <marker id="cvah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="var(--ink2,#A4B0BC)"/>
+    </marker>
+    <pattern id="s10Hatch" width="5" height="5" patternUnits="userSpaceOnUse">
+      <rect width="5" height="5" fill="var(--accent,#4FB2C2)" opacity="0.14"/>
+      <path d="M0,5 L5,0" stroke="var(--accent,#4FB2C2)" stroke-width="1.2"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="720" height="440" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="26" font-size="17">A single pass and a split pass at equal &#931;&#945; do not coincide</text>
+  <text class="mut" x="40" y="44" font-size="10">MiniCPM5-1B &#183; L1 residual at the answer token (probe &#8220;4827 + 3596&#8221;, &#931;&#945;=1.5)</text>
+  <text class="mut" x="40" y="56" font-size="10"> &#183; the split re-evaluates the layer between sub-steps</text>
+
+  <!-- all three panels shifted down together to give the subheader breathing room -->
+  <g transform="translate(0,14)">
+  <!-- ===================== PANEL A: trajectory (PCA top-2, 99.6% var) ===================== -->
+  <text class="ink2" x="40" y="72" font-size="10">&#9312; one shove vs split</text>
+  <text class="mut"  x="40" y="84" font-size="8.5">L1 residual, PC1/PC2 &#183; &#931;&#945;=1.5</text>
+  <!-- L-frame -->
+  <line x1="48" y1="100" x2="48" y2="250" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="48" y1="250" x2="245" y2="250" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="146" y="263" text-anchor="middle" class="mut" font-size="8.5">PC1 (residual at answer token)</text>
+  <text x="40" y="175" transform="rotate(-90 40 175)" text-anchor="middle" class="mut" font-size="8.5">PC2</text>
+
+  <!-- single shove: gray dashed arrow origin -> single_end, with hollow triangle endpoint -->
+  <line x1="51.4" y1="165.7" x2="223.7" y2="227.5" stroke="var(--ink2,#A4B0BC)" stroke-width="1.6"
+        stroke-dasharray="5 3"/>
+  <!-- split paths -->
+  <polyline class="k4" style="fill:none" stroke-width="1.6" points="51.4,165.7 94.4,181.2 137.1,178.5 183.3,162.8 237.4,133.7"/>
+  <polyline class="k3" style="fill:none" stroke-width="1.6" points="51.4,165.7 109.1,186.3 165.5,176.4 229.6,146.3"/>
+  <polyline class="k2" style="fill:none" stroke-width="1.6" points="51.4,165.7 137.7,196.6 222.8,166.1"/>
+  <!-- substep markers -->
+  <g class="k2"><circle cx="137.7" cy="196.6" r="2.4"/></g>
+  <g class="k3"><rect x="106.1" y="183.3" width="6" height="6"/><rect x="162.5" y="173.4" width="6" height="6"/></g>
+  <g class="k4"><polygon points="94.4,177.2 90.4,184.2 98.4,184.2"/><polygon points="137.1,174.5 133.1,181.5 141.1,181.5"/><polygon points="183.3,158.8 179.3,165.8 187.3,165.8"/></g>
+  <!-- endpoints: hollow rings in series colour -->
+  <circle cx="222.8" cy="166.1" r="4" fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="1.6"/>
+  <rect x="225.6" y="142.3" width="8" height="8" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="1.6"/>
+  <polygon points="237.4,128.7 231.4,137.7 243.4,137.7" fill="none" stroke="var(--fourth,#6E92C4)" stroke-width="1.6"/>
+  <!-- origin (x) + baseline (alpha=1) -->
+  <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.6" fill="none">
+    <circle cx="51.4" cy="165.7" r="6.2"/>
+    <line x1="48.6" y1="162.9" x2="54.2" y2="168.5"/><line x1="54.2" y1="162.9" x2="48.6" y2="168.5"/>
+  </g>
+  <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.3" fill="none">
+    <circle cx="166.4" cy="206.9" r="4.6"/>
+    <line x1="162.8" y1="206.9" x2="170" y2="206.9"/><line x1="166.4" y1="203.3" x2="166.4" y2="210.5"/>
+  </g>
+  <text class="ink2" x="176" y="207" font-size="8">baseline &#945;=1</text>
+  <polygon points="223.7,223.6 219.2,231.4 228.2,231.4" fill="none" stroke="var(--ink2,#A4B0BC)" stroke-width="1.4"/>
+  <text class="ink2" x="155" y="235" font-size="8">single &#945;=1.5</text>
+
+  <!-- ===================== PANEL B: opinion rotation cos(Di,D0) ===================== -->
+  <text class="ink2" x="278" y="72" font-size="10">&#9313; opinion rotates per step</text>
+  <text class="mut"  x="278" y="84" font-size="8.5">cos(&#916;&#7522;, &#916;&#8320;) &#183; &#931;&#945;=1.5</text>
+  <text class="mut"  x="458" y="112" text-anchor="end" font-size="8">avg cos(&#916;&#8321;,&#916;&#8320;) = 0.745</text>
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="290" y1="138.3" x2="460" y2="138.3"/>
+    <line x1="290" y1="170.2" x2="460" y2="170.2"/>
+    <line x1="290" y1="202.1" x2="460" y2="202.1"/>
+    <line x1="290" y1="234.0" x2="460" y2="234.0"/>
+  </g>
+  <line x1="290" y1="100" x2="290" y2="250" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="290" y1="250" x2="460" y2="250" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="286" y="109">1.0</text><text x="286" y="141">0.9</text><text x="286" y="173">0.8</text><text x="286" y="205">0.7</text><text x="286" y="237">0.6</text>
+  </g>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="290" y="262">0</text><text x="324" y="262">1</text><text x="358" y="262">2</text><text x="392" y="262">3</text><text x="426" y="262">4</text><text x="460" y="262">5</text>
+  </g>
+  <text x="375" y="276" text-anchor="middle" class="mut" font-size="8.5">sub-step i</text>
+  <!-- curves -->
+  <polyline class="k6" style="fill:none" stroke-width="1.6" points="290,106.4 324,121.1 358,147.5 392,176.9 426,207.5 460,236.9"/>
+  <polyline class="k4" style="fill:none" stroke-width="1.6" points="290,106.4 324,135.1 358,175.6 392,214.9"/>
+  <polyline class="k3" style="fill:none" stroke-width="1.6" points="290,106.4 324,151.1 358,199.6"/>
+  <polyline class="k2" style="fill:none" stroke-width="1.6" points="290,106.4 324,182.3"/>
+  <g class="k2"><circle cx="290" cy="106.4" r="2.4"/><circle cx="324" cy="182.3" r="2.4"/></g>
+  <g class="k3"><rect x="287" y="103.4" width="6" height="6"/><rect x="321" y="148.1" width="6" height="6"/><rect x="355" y="196.6" width="6" height="6"/></g>
+  <g class="k4"><polygon points="324,131.1 320,138.1 328,138.1"/><polygon points="358,171.6 354,178.6 362,178.6"/><polygon points="392,210.9 388,217.9 396,217.9"/></g>
+  <g class="k6"><polygon points="324,117.1 328,121.1 324,125.1 320,121.1"/><polygon points="358,143.5 362,147.5 358,151.5 354,147.5"/><polygon points="392,172.9 396,176.9 392,180.9 388,176.9"/><polygon points="426,203.5 430,207.5 426,211.5 422,207.5"/><polygon points="460,232.9 464,236.9 460,240.9 456,236.9"/></g>
+
+  <!-- ===================== PANEL C: gap_frac vs k, two doses ===================== -->
+  <text class="ink2" x="498" y="72" font-size="10">&#9314; gap grows with splitting</text>
+  <text class="mut"  x="498" y="84" font-size="8.5">gap_frac &#183; avg over 4 probes</text>
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="510" y1="200" x2="680" y2="200"/>
+    <line x1="510" y1="150" x2="680" y2="150"/>
+    <line x1="510" y1="100" x2="680" y2="100"/>
+  </g>
+  <line x1="510" y1="100" x2="510" y2="250" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="510" y1="250" x2="680" y2="250" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="506" y="253">0</text><text x="506" y="203">.2</text><text x="506" y="153">.4</text><text x="506" y="103">.6</text>
+  </g>
+  <!-- bars: Sigma1.0 cyan hatch (left), Sigma1.5 cyan solid (right) -->
+  <rect x="524" y="183"    width="15" height="67"    fill="url(#s10Hatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <rect x="541" y="160.25" width="15" height="89.75" fill="var(--accent,#4FB2C2)"/>
+  <rect x="584" y="164.25" width="15" height="85.75" fill="url(#s10Hatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <rect x="601" y="134.75" width="15" height="115.25" fill="var(--accent,#4FB2C2)"/>
+  <rect x="644" y="154.25" width="15" height="95.75" fill="url(#s10Hatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <rect x="661" y="117"    width="15" height="133"    fill="var(--accent,#4FB2C2)"/>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="540" y="262">k=2</text><text x="600" y="262">k=3</text><text x="660" y="262">k=4</text>
+  </g>
+  <!-- panel C inline legend -->
+  <rect x="516" y="108" width="11" height="9" fill="url(#s10Hatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <text x="531" y="116" class="ink2" font-size="8">&#931;&#945;=1.0</text>
+  <rect x="572" y="108" width="11" height="9" fill="var(--accent,#4FB2C2)"/>
+  <text x="587" y="116" class="ink2" font-size="8">&#931;&#945;=1.5</text>
+
+  <!-- ===================== closed-form note + legend + takeaway ===================== -->
+  <text x="40" y="300" class="mut" font-size="9">The endpoint gap has a closed form &#8212; <tspan class="ink2">single &#8722; split = (&#931;&#945;/k)&#183;&#931;&#7522;(&#916;(x) &#8722; &#916;(x&#7522;))</tspan> &#8212; which held numerically to <tspan class="ink2">1.6%</tspan>.</text>
+
+  <line x1="40" y1="318" x2="680" y2="318" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <!-- shared k-series legend -->
+  <g font-size="9">
+    <circle cx="46" cy="338" r="2.6" class="k2" stroke="none"/><text x="54" y="341" class="ink2">k=2</text>
+    <rect x="92" y="335" width="6" height="6" class="k3" stroke="none"/><text x="104" y="341" class="ink2">k=3</text>
+    <polygon points="146,335 142,342 150,342" class="k4" stroke="none"/><text x="154" y="341" class="ink2">k=4</text>
+    <polygon points="196,335 200,339 196,343 192,339" class="k6" stroke="none"/><text x="206" y="341" class="ink2">k=6</text>
+    <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.4"><line x1="250" y1="338" x2="266" y2="338" stroke-dasharray="5 3"/></g>
+    <polygon points="266,334.5 262,341.5 270,341.5" fill="none" stroke="var(--ink2,#A4B0BC)" stroke-width="1.2"/>
+    <text x="276" y="341" class="ink2">single shove (&#931;&#945;=1.5)</text>
+    <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.3" fill="none"><circle cx="424" cy="338" r="4.4"/><line x1="420.6" y1="338" x2="427.4" y2="338"/><line x1="424" y1="334.6" x2="424" y2="341.4"/></g>
+    <text x="436" y="341" class="ink2">baseline (&#945;=1)</text>
+    <g stroke="var(--ink2,#A4B0BC)" stroke-width="1.5" fill="none">
+      <circle cx="540" cy="338" r="5"/>
+      <line x1="536.8" y1="334.8" x2="543.2" y2="341.2"/><line x1="543.2" y1="334.8" x2="536.8" y2="341.2"/>
+    </g>
+    <text x="550" y="341" class="ink2">x (L1 in)</text>
+  </g>
+
+  <text x="40" y="372" class="ink2" font-size="11">A single damped pass can only slide the residual along the &#916;(x) line; the split steps off it.</text>
+  <text x="40" y="388" class="ink2" font-size="11">The effect is the layer re-reading the moved stream &#8212; more sub-steps, the further from a single shove.</text>
+  </g>
+</svg>

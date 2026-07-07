@@ -1,0 +1,143 @@
+<svg viewBox="0 0 720 480" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <rect x="0" y="0" width="720" height="480" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="34" font-size="18">Capability is a few flipped bugs, not a risen tide</text>
+  <text class="mut" x="40" y="52" font-size="10.5">Granite-4.1-3B · no-CoT math · strict per-probe success across seeds. The baseline fails certain probes</text>
+  <text class="mut" x="40" y="66" font-size="10.5">every run; a winning surgery flips a few of them. The 49-probe average dilutes each concentrated flip.</text>
+
+  <!-- ============ column headers ============ -->
+  <text x="40" y="100" class="ink2" font-size="11">probe</text>
+  <text x="297" y="100" class="ink2" font-size="11" text-anchor="middle">baseline ○ → best fixer ●  (strict success)</text>
+  <text x="565" y="100" class="ink2" font-size="11" text-anchor="middle"># configs that reach it</text>
+
+  <!-- success axis frame -->
+  <line x1="195" y1="112" x2="195" y2="320" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="400" y1="112" x2="400" y2="320" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="195" y="333">0%</text><text x="297" y="333">50%</text><text x="400" y="333">100%</text>
+  </g>
+
+  <!-- fix-count log axis gridlines (1 / 10 / 100) -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="2 3" opacity="0.6">
+    <line x1="440" y1="112" x2="440" y2="320"/>
+    <line x1="538" y1="112" x2="538" y2="320"/>
+    <line x1="637" y1="112" x2="637" y2="320"/>
+  </g>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="440" y="333">1</text><text x="538" y="333">10</text><text x="637" y="333">100</text>
+    <text x="565" y="346" letter-spacing="0.5">configs (log)</text>
+  </g>
+
+  <!-- ============ rows ============ -->
+  <!-- r1 add_d3_05  bl8/15 fix12/12 nfix197 -->
+  <g font-size="9.5">
+    <text x="40" y="135" class="mut">add_d3_05</text>
+    <line x1="304.3" y1="132" x2="395" y2="132" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="400,132 393,128.8 393,135.2" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="304.3" cy="132" r="3.4" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="400" cy="132" r="3.6" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="127.5" width="225" height="9" fill="var(--fourth,#6E92C4)" opacity="0.85"/>
+    <text x="670" y="135" class="mut">197</text>
+  </g>
+  <!-- r2 div_1x2_01 bl6/15 fix12/12 nfix87 -->
+  <g font-size="9.5">
+    <text x="40" y="160" class="mut">div_1x2_01</text>
+    <line x1="277" y1="157" x2="395" y2="157" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="400,157 393,153.8 393,160.2" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="277" cy="157" r="3.4" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="400" cy="157" r="3.6" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="152.5" width="191" height="9" fill="var(--fourth,#6E92C4)" opacity="0.85"/>
+    <text x="636" y="160" class="mut">87</text>
+  </g>
+  <!-- r3 div_1x2_06 bl0/15 fix11/12 nfix15 -->
+  <g font-size="9.5">
+    <text x="40" y="185" class="mut">div_1x2_06</text>
+    <line x1="200" y1="182" x2="377.8" y2="182" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="382.8,182 375.8,178.8 375.8,185.2" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="195" cy="182" r="3.4" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="382.8" cy="182" r="3.6" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="177.5" width="116" height="9" fill="var(--fourth,#6E92C4)" opacity="0.85"/>
+    <text x="561" y="185" class="mut">15</text>
+  </g>
+  <!-- r4 add_d3_02 bl0/15 fix11/12 nfix13 (carry-drop) -->
+  <g font-size="9.5">
+    <text x="40" y="210" class="mut">add_d3_02</text>
+    <line x1="200" y1="207" x2="377.8" y2="207" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="382.8,207 375.8,203.8 375.8,210.2" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="195" cy="207" r="3.4" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="382.8" cy="207" r="3.6" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="202.5" width="109" height="9" fill="var(--fourth,#6E92C4)" opacity="0.85"/>
+    <text x="554" y="210" class="mut">13</text>
+  </g>
+  <!-- r5 mul_2x1_06 bl0/15 fix11/12 nfix13 -->
+  <g font-size="9.5">
+    <text x="40" y="235" class="mut">mul_2x1_06</text>
+    <line x1="200" y1="232" x2="377.8" y2="232" stroke="var(--cause,#E3C24A)" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="382.8,232 375.8,228.8 375.8,235.2" fill="var(--cause,#E3C24A)" opacity="0.7"/>
+    <circle cx="195" cy="232" r="3.4" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.6"/>
+    <circle cx="382.8" cy="232" r="3.6" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="227.5" width="109" height="9" fill="var(--fourth,#6E92C4)" opacity="0.85"/>
+    <text x="554" y="235" class="mut">13</text>
+  </g>
+  <!-- r6 sub_d3_00 bl0/15 fix12/12 nfix7  HEADLINE 907-131, specialist -->
+  <g font-size="9.5">
+    <text x="36" y="260" fill="var(--cause,#E3C24A)" text-anchor="end" font-size="9">◆</text>
+    <text x="40" y="260" fill="var(--ink2,#A4B0BC)">sub_d3_00</text>
+    <line x1="200" y1="257" x2="395" y2="257" stroke="var(--cause,#E3C24A)" stroke-width="1.6"/>
+    <polygon points="400,257 393,253.8 393,260.2" fill="var(--cause,#E3C24A)"/>
+    <circle cx="195" cy="257" r="3.6" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.8"/>
+    <circle cx="400" cy="257" r="4" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="252.5" width="83" height="9" fill="var(--cause,#E3C24A)" opacity="0.85"/>
+    <text x="528" y="260" fill="var(--cause,#E3C24A)">7</text>
+  </g>
+  <!-- r7 mul_2x1_02 bl0/15 fix8/12 nfix3 specialist -->
+  <g font-size="9.5">
+    <text x="36" y="285" fill="var(--cause,#E3C24A)" text-anchor="end" font-size="9">◆</text>
+    <text x="40" y="285" fill="var(--ink2,#A4B0BC)">mul_2x1_02</text>
+    <line x1="200" y1="282" x2="326.7" y2="282" stroke="var(--cause,#E3C24A)" stroke-width="1.6"/>
+    <polygon points="331.7,282 324.7,278.8 324.7,285.2" fill="var(--cause,#E3C24A)"/>
+    <circle cx="195" cy="282" r="3.6" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.8"/>
+    <circle cx="331.7" cy="282" r="4" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="277.5" width="47" height="9" fill="var(--cause,#E3C24A)" opacity="0.85"/>
+    <text x="492" y="285" fill="var(--cause,#E3C24A)">3</text>
+  </g>
+  <!-- r8 mul_2x2_01 (stretch) bl0/15 fix9/12 nfix2 specialist -->
+  <g font-size="9.5">
+    <text x="36" y="310" fill="var(--cause,#E3C24A)" text-anchor="end" font-size="9">◆</text>
+    <text x="40" y="310" fill="var(--ink2,#A4B0BC)">mul_2x2_01</text>
+    <text x="118" y="310" class="mut" font-size="7.5">(stretch)</text>
+    <line x1="200" y1="307" x2="343.8" y2="307" stroke="var(--cause,#E3C24A)" stroke-width="1.6"/>
+    <polygon points="348.8,307 341.8,303.8 341.8,310.2" fill="var(--cause,#E3C24A)"/>
+    <circle cx="195" cy="307" r="3.6" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.8"/>
+    <circle cx="348.8" cy="307" r="4" fill="var(--accent,#4FB2C2)" stroke="var(--accent,#4FB2C2)"/>
+    <rect x="440" y="302.5" width="30" height="9" fill="var(--cause,#E3C24A)" opacity="0.85"/>
+    <text x="475" y="310" fill="var(--cause,#E3C24A)">2</text>
+  </g>
+
+  <!-- ◆ specialist bracket annotation -->
+  <text x="690" y="285" class="mut" font-size="8.5" text-anchor="end">◆ rare-fix</text>
+  <text x="690" y="296" class="mut" font-size="8.5" text-anchor="end">specialists</text>
+
+  <!-- ============ headline callout: the real 907−131 bug (row 6) ============ -->
+  <line x1="195" y1="257" x2="150" y2="370" stroke="var(--muted,#6F7C88)" stroke-width="1" stroke-dasharray="3 2" opacity="0.7"/>
+  <text x="40" y="383" class="ink2" font-size="10.5"><tspan font-family="var(--font-mono)">907 − 131 = 776</tspan>, but the baseline never reaches it:</text>
+  <text x="40" y="397" class="mut" font-size="10">it lands on <tspan fill="var(--neg,#B98AD6)">676</tspan> (9/15, hundreds-column slip) or <tspan fill="var(--neg,#B98AD6)">131</tspan></text>
+  <text x="40" y="411" class="mut" font-size="10">(6/15, echoes the subtrahend) — 0/15, two basins.</text>
+  <text x="40" y="425" class="mut" font-size="10"><tspan fill="var(--cause,#E3C24A)">dampall_a120</tspan> snaps it to 776 on 12/12.</text>
+
+  <!-- ============ caption (right) ============ -->
+  <text x="400" y="383" class="ink2" font-size="11">The action is discrete bug-flips, not a</text>
+  <text x="400" y="398" class="ink2" font-size="11">diffuse lift. Fix-counts are <tspan fill="var(--cause,#E3C24A)">bimodal</tspan>: of</text>
+  <text x="400" y="413" class="ink2" font-size="11">all 14 swing probes, 9 are easy (≤21</text>
+  <text x="400" y="428" class="ink2" font-size="11">configs) and 5 trivial (≥87) — nothing</text>
+  <text x="400" y="443" class="ink2" font-size="11">lands between. The rare-fix probes are</text>
+  <text x="400" y="458" class="ink2" font-size="11">the genuine disjoint specialists.</text>
+</svg>

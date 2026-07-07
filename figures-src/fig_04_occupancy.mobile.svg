@@ -1,0 +1,76 @@
+<svg viewBox="0 0 400 398" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .mlx  { stroke: var(--cause,#E3C24A); fill: var(--cause,#E3C24A); }
+    .lla  { stroke: var(--accent,#4FB2C2); fill: var(--accent,#4FB2C2); }
+    .pyt  { stroke: var(--neg,#B98AD6); fill: var(--neg,#B98AD6); }
+  </style>
+
+  <rect x="0" y="0" width="400" height="398" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="16" y="22" font-size="14">MLX's batched-decode lead is</text>
+  <text class="ttl" x="16" y="39" font-size="14">occupancy, not faster kernels</text>
+  <text class="mut" x="16" y="55" font-size="8.5">Decode tok/s vs concurrent streams &#183; MiniCPM5-1B, M4 Mini</text>
+  <text class="mut" x="16" y="66" font-size="8.5">line = 4-bit quant &#183; band = spread across all quants</text>
+
+  <!-- gridlines -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="46" y1="120" x2="385" y2="120"/>
+    <line x1="46" y1="180" x2="385" y2="180"/>
+    <line x1="46" y1="240" x2="385" y2="240"/>
+  </g>
+  <line x1="46" y1="90" x2="46" y2="300" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="46" y1="300" x2="388" y2="300" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="42" y="303">0</text><text x="42" y="243">500</text><text x="42" y="183">1000</text><text x="42" y="123">1500</text>
+  </g>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="58" y="313">1</text><text x="112.5" y="313">8</text><text x="167" y="313">32</text><text x="221.5" y="313">64</text><text x="276" y="313">128</text><text x="330.5" y="313">192</text><text x="385" y="313">256</text>
+  </g>
+
+  <!-- bands -->
+  <polygon class="mlx" stroke="none" opacity="0.11"
+    points="58,273.8 112.5,247.3 167,140.4 221.5,124.4 276,107.0 330.5,100.9 385,99.5 385,133.8 330.5,131.4 276,134.5 221.5,138.5 167,206.3 112.5,271.7 58,294.0"/>
+  <polygon class="lla" stroke="none" opacity="0.13"
+    points="58,285.0 112.5,272.3 167,220.1 221.5,210.1 276,206.6 330.5,206.9 385,208.8 385,219.8 330.5,218.6 276,217.4 221.5,217.6 167,228.6 112.5,282.7 58,294.0"/>
+
+  <!-- MLX -->
+  <polyline class="mlx" style="fill:none" stroke-width="2"
+    points="58,281.4 112.5,247.8 167,140.5 221.5,131.3 276,127.8 330.5,124.9 385,129.4"/>
+  <g class="mlx" stroke="none">
+    <circle cx="58" cy="281.4" r="2.5"/><circle cx="112.5" cy="247.8" r="2.5"/><circle cx="167" cy="140.5" r="2.5"/><circle cx="221.5" cy="131.3" r="2.5"/><circle cx="276" cy="127.8" r="2.5"/><circle cx="330.5" cy="124.9" r="2.5"/><circle cx="385" cy="129.4" r="2.5"/>
+  </g>
+  <!-- llama -->
+  <polyline class="lla" style="fill:none" stroke-width="2" stroke-dasharray="6 4"
+    points="58,287.5 112.5,279.5 167,220.8 221.5,214.0 276,213.5 330.5,214.2 385,216.0"/>
+  <g class="lla" stroke="none">
+    <rect x="55.5" y="285" width="5" height="5"/><rect x="110" y="277" width="5" height="5"/><rect x="164.5" y="218.3" width="5" height="5"/><rect x="219" y="211.5" width="5" height="5"/><rect x="273.5" y="211" width="5" height="5"/><rect x="328" y="211.7" width="5" height="5"/><rect x="382.5" y="213.5" width="5" height="5"/>
+  </g>
+  <!-- pytorch (capped @32) -->
+  <polyline class="pyt" style="fill:none" stroke-width="1.8" stroke-dasharray="2 3"
+    points="58,295.9 112.5,293.4 167,255.8"/>
+  <g class="pyt" stroke="none">
+    <polygon points="58,293.4 55,298.4 61,298.4"/><polygon points="112.5,290.9 109.5,295.9 115.5,295.9"/><polygon points="167,253.3 164,258.3 170,258.3"/>
+  </g>
+
+  <!-- endpoint value labels -->
+  <text class="ink2" x="368" y="118" font-size="9" text-anchor="end">1671</text>
+  <text class="ink2" x="372" y="206" font-size="9" text-anchor="end">~750</text>
+
+  <!-- legend -->
+  <g font-size="9">
+    <line x1="20" y1="332" x2="40" y2="332" class="mlx" stroke-width="2"/><circle cx="30" cy="332" r="2.5" class="mlx" stroke="none"/>
+    <text x="46" y="335" class="ink2">MLX &#183; 4-bit line, 12-quant band</text>
+    <line x1="20" y1="346" x2="40" y2="346" class="lla" stroke-width="2" stroke-dasharray="6 4"/><rect x="27.5" y="343.5" width="5" height="5" class="lla" stroke="none"/>
+    <text x="46" y="349" class="ink2">llama.cpp &#183; 22-quant band</text>
+    <line x1="20" y1="360" x2="40" y2="360" class="pyt" stroke-width="1.8" stroke-dasharray="2 3"/><polygon points="30,357.5 27,362.5 33,362.5" class="pyt" stroke="none"/>
+    <text x="46" y="363" class="ink2">PyTorch fp16 (capped @32)</text>
+  </g>
+
+  <text x="16" y="382" class="ink2" font-size="8.5">Single-stream they tie; MLX's lead is filling a larger</text>
+  <text x="16" y="393" class="ink2" font-size="8.5">shared-KV batch &#8212; occupancy, not arithmetic.</text>
+</svg>

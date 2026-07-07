@@ -1,0 +1,83 @@
+<svg viewBox="0 0 400 580" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <defs>
+    <pattern id="craterCm" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="var(--neg,#B98AD6)" stroke-width="1" opacity="0.45"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="400" height="580" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="18">The Σα-law — one</text>
+  <text class="ttl" x="20" y="54" font-size="18">dose-response governs all</text>
+  <text class="mut" x="20" y="72" font-size="10">Layer 1 of MiniCPM5-1B. x = Σα (cumulative damping).</text>
+  <text class="mut" x="20" y="86" font-size="10">y = strict-math Δ vs baseline (v3, base 0.417).</text>
+
+  <!-- crater zone Σα>=3 -->
+  <rect x="232.2" y="120" width="138" height="220" fill="url(#craterCm)"/>
+  <rect x="232.2" y="120" width="138" height="220" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+
+  <!-- axes -->
+  <line x1="60" y1="120" x2="60" y2="340" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="60" y1="177.3" x2="370" y2="177.3" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="54" y="180" text-anchor="end" class="mut" font-size="8.5">Δ0</text>
+  <text x="54" y="133" text-anchor="end" class="mut" font-size="8.5">+.13</text>
+  <text x="54" y="237" text-anchor="end" class="mut" font-size="8.5">−.16</text>
+  <text x="54" y="332" text-anchor="end" class="mut" font-size="8.5">−.42</text>
+
+  <!-- x ticks -->
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="94.4" y="356">1</text><text x="163.4" y="356">2</text><text x="232.2" y="356">3</text><text x="301.1" y="356">4</text><text x="356.1" y="356">5</text>
+    <text x="215" y="372" letter-spacing="1">Σα →</text>
+  </g>
+
+  <!-- peak guide -->
+  <line x1="111.7" y1="130" x2="111.7" y2="340" stroke="var(--cause,#E3C24A)" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>
+  <text x="111.7" y="110" text-anchor="middle" font-size="9.5" fill="var(--cause,#E3C24A)">Σα ≈ 1.25</text>
+  <text x="111.7" y="121" text-anchor="middle" font-size="8" class="mut">ridge 1.1–1.5</text>
+
+  <!-- regime labels -->
+  <g font-size="8" text-anchor="middle" class="mut">
+    <text x="82" y="168">conserve</text>
+    <text x="200" y="168">over-drive</text>
+    <text x="300" y="168" fill="var(--neg,#B98AD6)">norm-collapse</text>
+  </g>
+
+  <!-- response curve -->
+  <path d="M60,162 C65.73,157.4 85.78,139.73 94.4,134.4 C103.02,129.07 106.5,130 111.7,130 C122.5,130 139.12,151.5 159.2,168.9 C179.28,186.3 199.38,207.73 232.2,234.4 C265.02,261.07 333.13,312.97 356.1,328.9 L370,330"
+        fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2.4"/>
+
+  <!-- markers -->
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8">
+    <circle cx="94.4" cy="134.4" r="3.2"/>
+    <circle cx="159.2" cy="168.9" r="3.2"/>
+    <circle cx="232.2" cy="234.4" r="3.2"/>
+    <circle cx="356.1" cy="328.9" r="3.2"/>
+  </g>
+  <circle cx="111.7" cy="130" r="4" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+  <circle cx="232.2" cy="270.7" r="3.2" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="1.6" stroke-dasharray="2 2"/>
+
+  <text x="325" y="320" text-anchor="end" font-size="8.5" fill="var(--neg,#B98AD6)">Σα 4.8: floor</text>
+  <text x="325" y="330" text-anchor="end" font-size="8.5" fill="var(--neg,#B98AD6)">score 0.0</text>
+
+  <!-- k callout -->
+  <rect x="20" y="392" width="360" height="80" rx="4" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="34" y="412" class="ink2" font-size="10.5">k is a gain multiplier, Σα is the sign:</text>
+  <text x="34" y="432" class="mut" font-size="9.5">below peak  k2 → k6 lifts  +7.6 → +9.7</text>
+  <text x="34" y="444" class="mut" font-size="9.5">above peak  k deepens the crater</text>
+  <text x="34" y="456" class="mut" font-size="8.5">(L11 @ Σα 2:  k2 −9.5 → k3 −17.9 · back-loaded ∘ = worse)</text>
+
+  <!-- caption -->
+  <text x="20" y="494" class="ink2" font-size="11">Score tracks the Σα axis, not the copy count or</text>
+  <text x="20" y="510" class="ink2" font-size="11">ramp shape. Pooled regression over 35 L1 configs</text>
+  <text x="20" y="526" class="ink2" font-size="11">fits the hump at R² = 0.74; a concentration penalty</text>
+  <text x="20" y="542" class="ink2" font-size="11">(Σa²) explains why flat beats ramp and k6 beats k4</text>
+  <text x="20" y="558" class="ink2" font-size="11">at the same dose.</text>
+</svg>

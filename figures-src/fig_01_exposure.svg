@@ -1,0 +1,134 @@
+<svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .obs  { stroke: var(--accent,#4FB2C2); fill: var(--accent,#4FB2C2); }
+  </style>
+  <defs>
+    <pattern id="cleanHatch" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect width="6" height="6" fill="var(--accent,#4FB2C2)" opacity="0.16"/>
+      <path d="M0,6 L6,0" stroke="var(--accent,#4FB2C2)" stroke-width="1.4"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="720" height="500" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="30" font-size="18">Derailment is a probability tax, not a capability loss</text>
+  <text class="mut" x="40" y="49" font-size="10">MiniCPM5-1B &#183; L1 split-pass damping &#183; eq channel (96-tok) &#183; &#8220;derail&#8221; = special-token leak or repeated-line loop</text>
+
+  <!-- ======================= LEFT: two stacked mini-panels (shared degen% y, 0-12) ======================= -->
+  <!-- shared y axis label -->
+  <text x="24" y="222" transform="rotate(-90 24 222)" text-anchor="middle" class="mut" font-size="10">degeneration rate (%)</text>
+
+  <!-- Mini-A: derail vs k -->
+  <text class="ink2" x="80" y="78" font-size="10">&#9312; rises with copy-count k <tspan class="mut">(&#931;&#945; fixed 1.5)</tspan></text>
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="80" y1="158.3" x2="330" y2="158.3"/>
+    <line x1="80" y1="121.7" x2="330" y2="121.7"/>
+  </g>
+  <line x1="80" y1="85" x2="80" y2="195" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="80" y1="195" x2="330" y2="195" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="76" y="198">0</text><text x="76" y="161">4</text><text x="76" y="125">8</text><text x="76" y="88">12</text>
+  </g>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="80" y="207">4</text><text x="142.5" y="207">6</text><text x="205" y="207">8</text><text x="267.5" y="207">10</text><text x="330" y="207">12</text>
+  </g>
+  <text x="205" y="220" text-anchor="middle" class="mut" font-size="9">copies k</text>
+  <polyline class="obs" style="fill:none" stroke-width="2"
+    points="80,195 142.5,187.4 205,175.9 267.5,164.5 330,149.2"/>
+  <g class="obs" stroke="none">
+    <circle cx="80" cy="195" r="3"/><circle cx="142.5" cy="187.4" r="3"/><circle cx="205" cy="175.9" r="3"/><circle cx="267.5" cy="164.5" r="3"/><circle cx="330" cy="149.2" r="3"/>
+  </g>
+  <text class="ink2" x="330" y="143" font-size="9" text-anchor="end">5.0%</text>
+
+  <!-- Mini-B: derail vs Sigma-alpha -->
+  <text class="ink2" x="80" y="243" font-size="10">&#9313; rises with dose &#931;&#945; <tspan class="mut">(k fixed 6)</tspan></text>
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="80" y1="323.3" x2="330" y2="323.3"/>
+    <line x1="80" y1="286.7" x2="330" y2="286.7"/>
+  </g>
+  <line x1="80" y1="250" x2="80" y2="360" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="80" y1="360" x2="330" y2="360" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="76" y="363">0</text><text x="76" y="326">4</text><text x="76" y="290">8</text><text x="76" y="253">12</text>
+  </g>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="80" y="372">1.5</text><text x="142.5" y="372">1.75</text><text x="205" y="372">2.0</text><text x="267.5" y="372">2.25</text><text x="330" y="372">2.5</text>
+  </g>
+  <text x="205" y="385" text-anchor="middle" class="mut" font-size="9">cumulative &#931;&#945;</text>
+  <polyline class="obs" style="fill:none" stroke-width="2" stroke-dasharray="6 4"
+    points="80,352.4 142.5,333.2 205,318 267.5,287.4 330,253"/>
+  <g class="obs" stroke="none">
+    <rect x="77" y="349.4" width="6" height="6"/><rect x="139.5" y="330.2" width="6" height="6"/><rect x="202" y="315" width="6" height="6"/><rect x="264.5" y="284.4" width="6" height="6"/><rect x="327" y="250" width="6" height="6"/>
+  </g>
+  <text class="ink2" x="330" y="247" font-size="9" text-anchor="end">11.7%</text>
+
+  <!-- ======================= RIGHT: eq score Delta-from-baseline, agg vs clean ======================= -->
+  <text class="ink2" x="398" y="78" font-size="10">&#9314; eq score, change from baseline (per copy-count k)</text>
+
+  <!-- zero (baseline) gridline + ticks -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="398" y1="173.6" x2="690" y2="173.6"/>
+    <line x1="398" y1="330.7" x2="690" y2="330.7"/>
+  </g>
+  <line x1="398" y1="95" x2="398" y2="370" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="394" y="98">+.020</text><text x="394" y="176.6">+.010</text><text x="394" y="333.7">&#8722;.010</text>
+  </g>
+  <!-- baseline zero line (prominent) -->
+  <line x1="398" y1="252.1" x2="690" y2="252.1" stroke="var(--ink2,#A4B0BC)" stroke-width="1.4" stroke-dasharray="2 2"/>
+  <text class="ink2" x="694" y="255" font-size="8.5">baseline (.472)</text>
+
+  <!-- bars: agg solid citron, clean cyan hatch. width 16, agg left / clean right of center -->
+  <!-- base c422 -->
+  <rect x="406" y="260.0" width="16" height="-7.9" fill="var(--cause,#E3C24A)"/>
+  <rect x="424" y="252.1" width="16" height="0" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <!-- k4 c468 -->
+  <rect x="452" y="181.4" width="16" height="70.7" fill="var(--cause,#E3C24A)"/>
+  <rect x="470" y="181.4" width="16" height="70.7" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <!-- k6 c514 -->
+  <rect x="498" y="142.1" width="16" height="110.0" fill="var(--cause,#E3C24A)"/>
+  <rect x="516" y="110.7" width="16" height="141.4" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <!-- k8 c560 (agg negative) -->
+  <rect x="544" y="252.1" width="16" height="39.3" fill="var(--cause,#E3C24A)"/>
+  <rect x="562" y="228.6" width="16" height="23.5" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <!-- k10 c606 (agg negative) -->
+  <rect x="590" y="252.1" width="16" height="78.6" fill="var(--cause,#E3C24A)"/>
+  <rect x="608" y="205.0" width="16" height="47.1" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <!-- k12 c652 (agg negative) -->
+  <rect x="636" y="252.1" width="16" height="94.3" fill="var(--cause,#E3C24A)"/>
+  <rect x="654" y="228.6" width="16" height="23.5" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+
+  <!-- x labels + degen% under each group -->
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="422" y="384">base</text><text x="468" y="384">k4</text><text x="514" y="384">k6</text><text x="560" y="384">k8</text><text x="606" y="384">k10</text><text x="652" y="384">k12</text>
+  </g>
+  <g class="mut" font-size="7.5" text-anchor="middle">
+    <text x="422" y="394">0.8%</text><text x="468" y="394">0%</text><text x="514" y="394">0.8%</text><text x="560" y="394">2.1%</text><text x="606" y="394">3.3%</text><text x="652" y="394">5.0%</text>
+  </g>
+  <text x="544" y="406" text-anchor="middle" class="mut" font-size="8">copies k  (with derail rate)</text>
+
+  <!-- callouts -->
+  <text class="ink2" x="688" y="150" text-anchor="end" font-size="9.5">clean-only stays</text>
+  <text class="ink2" x="688" y="162" text-anchor="end" font-size="9.5">&#8805; baseline at every k</text>
+  <text class="mut" x="628" y="345" text-anchor="end" font-size="8.5">aggregate dips below:</text>
+  <text class="mut" x="628" y="356" text-anchor="end" font-size="8.5">the derail tax</text>
+
+  <!-- legend -->
+  <rect x="406" y="90" width="14" height="11" fill="var(--cause,#E3C24A)"/>
+  <text x="424" y="99" class="ink2" font-size="9">aggregate</text>
+  <text x="424" y="108" class="ink2" font-size="9">(all responses)</text>
+  <rect x="406" y="115" width="14" height="11" fill="url(#cleanHatch)" stroke="var(--accent,#4FB2C2)" stroke-width="0.8"/>
+  <text x="424" y="124" class="ink2" font-size="9">clean-only</text>
+  <text x="424" y="133" class="ink2" font-size="9">(derails dropped)</text>
+
+  <!-- ======================= takeaway ======================= -->
+  <line x1="40" y1="432" x2="680" y2="432" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="40" y="453" class="ink2" font-size="11">Past the k6 peak the aggregate eq score falls &#8212; but the non-derailed responses hold at baseline.</text>
+  <text x="40" y="470" class="ink2" font-size="11">The model isn&#8217;t getting dumber as you stack copies; it&#8217;s derailing more often. The cost is <tspan class="obs" fill="var(--accent,#4FB2C2)">exposure</tspan>,</text>
+  <text x="40" y="487" class="ink2" font-size="11">not capability &#8212; and a special-token ban would buy it back.</text>
+</svg>

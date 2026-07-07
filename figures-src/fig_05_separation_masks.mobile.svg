@@ -1,0 +1,64 @@
+<svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <rect x="0" y="0" width="400" height="700" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="30" y="32" font-size="18">Depth separation decides</text>
+  <text class="mut" x="30" y="52" font-size="10">Granite, 40 layers. Two surgeries compose only when</text>
+  <text class="mut" x="30" y="66" font-size="10">they sit far apart in depth — separated stack, near mask.</text>
+
+  <!-- STACKS arc (above spine) -->
+  <path d="M253,134 Q167,86 81,134" fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2"/>
+  <text x="167" y="96" text-anchor="middle" font-size="10" fill="var(--accent,#4FB2C2)">21 apart → STACKS</text>
+
+  <!-- spine -->
+  <line x1="40" y1="140" x2="360" y2="140" stroke="var(--rule2,#27323D)" stroke-width="2"/>
+  <text x="40" y="158" text-anchor="middle" class="mut" font-size="8">L0</text>
+  <text x="360" y="158" text-anchor="middle" class="mut" font-size="8">L39</text>
+
+  <circle cx="81" cy="140" r="5" fill="var(--bg2,#141D26)" stroke="var(--accent,#4FB2C2)" stroke-width="2"/>
+  <text x="81" y="126" text-anchor="middle" font-size="9" fill="var(--accent,#4FB2C2)">L5 ↑</text>
+  <circle cx="171" cy="140" r="5" fill="var(--bg2,#141D26)" stroke="var(--neg,#B98AD6)" stroke-width="2"/>
+  <text x="171" y="182" text-anchor="middle" font-size="9" fill="var(--neg,#B98AD6)">L16 dup</text>
+  <circle cx="253" cy="140" r="5" fill="var(--bg2,#141D26)" stroke="var(--cause,#E3C24A)" stroke-width="2"/>
+  <text x="253" y="126" text-anchor="middle" font-size="9" fill="var(--cause,#E3C24A)">L26 prune</text>
+
+  <!-- MASKS arc (below spine) -->
+  <path d="M253,146 Q212,190 171,146" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="212" y="204" text-anchor="middle" font-size="10" fill="var(--neg,#B98AD6)">10 apart → MASKS</text>
+
+  <!-- ===== STACKS bar inset ===== -->
+  <text x="200" y="248" text-anchor="middle" class="ink2" font-size="11">far pair: dampL5a130 + pr26</text>
+  <line x1="120" y1="360" x2="280" y2="360" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <rect x="130" y="290" width="48" height="70" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.4"/>
+  <text x="154" y="376" text-anchor="middle" class="mut" font-size="9">pr26 .566</text>
+  <rect x="222" y="276" width="48" height="84" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8"/>
+  <text x="246" y="376" text-anchor="middle" font-size="9" fill="var(--accent,#4FB2C2)">combo .570</text>
+  <line x1="154" y1="272" x2="154" y2="308" stroke="var(--muted,#6F7C88)" stroke-width="1"/>
+  <line x1="246" y1="258" x2="246" y2="294" stroke="var(--accent,#4FB2C2)" stroke-width="1"/>
+  <text x="104" y="320" text-anchor="middle" class="mut" font-size="8" transform="rotate(-90 104 320)">math .55–.58</text>
+
+  <!-- ===== MASKS bar inset ===== -->
+  <text x="200" y="430" text-anchor="middle" class="ink2" font-size="11">near pair: pr26 + dup16</text>
+  <line x1="120" y1="540" x2="280" y2="540" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <rect x="130" y="470" width="48" height="70" fill="var(--bg,#0E141A)" stroke="var(--muted,#6F7C88)" stroke-width="1.4"/>
+  <text x="154" y="556" text-anchor="middle" class="mut" font-size="9">pr26 .566</text>
+  <rect x="222" y="497" width="48" height="43" fill="var(--bg,#0E141A)" stroke="var(--neg,#B98AD6)" stroke-width="1.8"/>
+  <text x="246" y="556" text-anchor="middle" font-size="9" fill="var(--neg,#B98AD6)">combo ↓</text>
+  <line x1="154" y1="452" x2="154" y2="488" stroke="var(--muted,#6F7C88)" stroke-width="1"/>
+  <line x1="246" y1="480" x2="246" y2="514" stroke="var(--neg,#B98AD6)" stroke-width="1"/>
+  <text x="104" y="500" text-anchor="middle" class="mut" font-size="8" transform="rotate(-90 104 500)">math .55–.58</text>
+
+  <!-- caption -->
+  <text x="30" y="600" class="mut" font-size="9.5">Whiskers ≈ seed noise. The stacking margin (.570 vs</text>
+  <text x="30" y="615" class="mut" font-size="9.5">.566) sits inside it — suggestive, not established.</text>
+  <text x="30" y="630" class="mut" font-size="9.5">The masking drop is the cleaner effect. Measured on</text>
+  <text x="30" y="645" class="mut" font-size="9.5">in-band / gcore probes, not the floored/ceilinged</text>
+  <text x="30" y="660" class="mut" font-size="9.5">49-probe mean.</text>
+</svg>

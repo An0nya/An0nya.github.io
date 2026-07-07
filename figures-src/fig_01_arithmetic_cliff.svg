@@ -1,0 +1,98 @@
+<svg viewBox="0 0 720 450" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .ln   { fill: none; stroke: var(--accent,#4FB2C2); stroke-width: 2; }
+    .mk   { fill: var(--bg,#0E141A); stroke: var(--accent,#4FB2C2); stroke-width: 1.8; }
+  </style>
+
+  <rect x="0" y="0" width="720" height="450" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="32" font-size="18">The arithmetic cliff — where each operation breaks</text>
+  <text class="mut" x="40" y="53" font-size="11">Baseline strict-correct rate vs difficulty. Shaded = the 0.3–0.7 band where a score can actually move.</text>
+
+  <!-- shared y guide labels (panel A only) -->
+  <g class="mut" font-size="9" text-anchor="end">
+    <text x="44" y="93">1.0</text><text x="44" y="198">0.5</text><text x="44" y="303">0</text>
+  </g>
+
+  <!-- ============ PANEL A: add (circles) ============ -->
+  <g>
+    <rect x="50" y="153" width="130" height="84" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+    <line x1="50" y1="90" x2="50" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <line x1="50" y1="300" x2="180" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <text x="115" y="80" text-anchor="middle" class="ink2" font-size="12">add · gentle slope</text>
+    <polyline class="ln" points="65,90 115,199.2 165,253.8"/>
+    <circle class="mk" cx="65" cy="90" r="3.6"/>
+    <circle cx="115" cy="199.2" r="4.6" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+    <circle class="mk" cx="165" cy="253.8" r="3.6"/>
+    <g class="mut" font-size="9" text-anchor="middle">
+      <text x="65" y="315">d2</text><text x="115" y="315">d5</text><text x="165" y="315">d7</text>
+    </g>
+    <text x="115" y="333" text-anchor="middle" font-size="8.5" fill="var(--cause,#E3C24A)">◦ bullseye d5 = 0.48</text>
+  </g>
+
+  <!-- ============ PANEL B: sub (squares) ============ -->
+  <g>
+    <rect x="220" y="153" width="130" height="84" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+    <line x1="220" y1="90" x2="220" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <line x1="220" y1="300" x2="350" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <text x="285" y="80" text-anchor="middle" class="ink2" font-size="12">sub · near-monotone</text>
+    <polyline class="ln" points="235,113.1 268,174 301,237 334,264.3"/>
+    <g class="mk">
+      <rect x="231.6" y="109.5" width="7.2" height="7.2"/><rect x="264.4" y="170.4" width="7.2" height="7.2"/><rect x="297.4" y="233.4" width="7.2" height="7.2"/><rect x="330.4" y="260.7" width="7.2" height="7.2"/>
+    </g>
+    <g class="mut" font-size="9" text-anchor="middle">
+      <text x="235" y="315">d2</text><text x="268" y="315">d3</text><text x="301" y="315">d4</text><text x="334" y="315">d5</text>
+    </g>
+  </g>
+
+  <!-- ============ PANEL C: mul (triangles) ============ -->
+  <g>
+    <rect x="390" y="153" width="130" height="84" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+    <line x1="390" y1="90" x2="390" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <line x1="390" y1="300" x2="520" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <text x="455" y="80" text-anchor="middle" class="ink2" font-size="12">mul · the razor cliff</text>
+    <polyline class="ln" points="405,132 455,197.1 505,291.6"/>
+    <polygon class="mk" points="405,127.4 401,135 409,135"/>
+    <polygon points="455,191.5 450.4,200.7 459.6,200.7" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+    <polygon class="mk" points="505,287 501,294.6 509,294.6"/>
+    <g class="mut" font-size="9" text-anchor="middle">
+      <text x="405" y="315">2×2</text><text x="455" y="315">3×2</text><text x="505" y="315">3×3</text>
+    </g>
+    <text x="455" y="333" text-anchor="middle" font-size="8.5" fill="var(--cause,#E3C24A)">▿ only 3×2 = 0.49 usable</text>
+  </g>
+
+  <!-- ============ PANEL D: div (diamonds) ============ -->
+  <g>
+    <rect x="560" y="153" width="130" height="84" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+    <line x1="560" y1="90" x2="560" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <line x1="560" y1="300" x2="690" y2="300" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+    <text x="625" y="80" text-anchor="middle" class="ink2" font-size="12">div · broad channel</text>
+    <polyline class="ln" points="575,94.2 625,148.8 675,241.2"/>
+    <polygon class="mk" points="575,89.6 570.4,94.2 575,98.8 579.6,94.2"/>
+    <polygon class="mk" points="625,144.2 620.4,148.8 625,153.4 629.6,148.8"/>
+    <polygon class="mk" points="675,236.6 670.4,241.2 675,245.8 679.6,241.2"/>
+    <g class="mut" font-size="9" text-anchor="middle">
+      <text x="575" y="315">1×2</text><text x="625" y="315">2×2</text><text x="675" y="315">2×3</text>
+    </g>
+  </g>
+
+  <!-- caption -->
+  <text x="40" y="372" class="ink2" font-size="11">The packed in-band set (mul 3×2, add d5/d6, sub d3/d4, div 2×2/2×3) all sit at p ∈ 0.28–0.72,</text>
+  <text x="40" y="388" class="ink2" font-size="11">baseline ≈ 0.48 — a ruler with headroom both ways, so a config can win <tspan font-style="italic">or</tspan> lose visibly.</text>
+  <text x="40" y="412" class="mut" font-size="10">Marker = operation (● add · ■ sub · ▲ mul · ◆ div). Lesson: n=4 per rung is a lottery; ≥12, all operands controlled.</text>
+
+  <!-- legend -->
+  <g transform="translate(40,432)" font-size="9.5">
+    <circle cx="6" cy="-3" r="3.6" class="mk"/><text x="16" y="0" class="mut">add</text>
+    <rect x="62" y="-6.6" width="7.2" height="7.2" class="mk"/><text x="76" y="0" class="mut">sub</text>
+    <polygon points="126,-7 122,0 130,0" class="mk"/><text x="136" y="0" class="mut">mul</text>
+    <polygon points="186,-7 181.4,-3 186,1 190.6,-3" class="mk"/><text x="198" y="0" class="mut">div</text>
+    <rect x="244" y="-9" width="14" height="11" fill="var(--accent,#4FB2C2)" opacity="0.10"/><text x="264" y="0" class="mut">usable band 0.3–0.7</text>
+    <circle cx="426" cy="-3" r="4" fill="none" stroke="var(--cause,#E3C24A)" stroke-width="2"/><text x="436" y="0" class="mut">bullseye (best-resolution rung)</text>
+  </g>
+</svg>

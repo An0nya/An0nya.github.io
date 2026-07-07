@@ -1,0 +1,49 @@
+<svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="720" height="420" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="34" font-size="18">The echo correction grows the effect</text>
+<text class="mut" x="40" y="53" font-size="10">Partial-credit score · raw → de-echoed (Nanbeige no-CoT math)</text>
+<text x="118" y="204" text-anchor="end" class="ink2" font-size="11">baseline</text>
+<line x1="176.8" y1="200" x2="358.0" y2="200" class="slas" stroke-width="2"/>
+<circle cx="358.0" cy="200" r="6" fill="var(--bg,#0E141A)" class="slas" stroke-width="2.2"/>
+<circle cx="176.8" cy="200" r="6" class="acc"/>
+<text x="368.0" y="190.0" class="sla" font-size="10">0.190</text>
+<text x="176.8" y="190.0" text-anchor="middle" class="acc" font-size="10">0.039</text>
+<text x="118" y="294" text-anchor="end" class="ink2" font-size="11">top config</text>
+<line x1="558.4" y1="290" x2="614.8" y2="290" class="slas" stroke-width="2"/>
+<circle cx="614.8" cy="290" r="6" fill="var(--bg,#0E141A)" class="slas" stroke-width="2.2"/>
+<circle cx="558.4" cy="290" r="6" class="acc"/>
+<text x="624.8" y="280.0" class="sla" font-size="10">0.404</text>
+<text x="558.4" y="280.0" text-anchor="middle" class="acc" font-size="10">0.357</text>
+<line x1="614.8" y1="174" x2="614.8" y2="290" class="rule" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="358.0" y1="200" x2="358.0" y2="174" class="rule" stroke-width="1" stroke-dasharray="3 3"/>
+<text x="490.0" y="150" text-anchor="middle" class="sla" font-size="10">raw gap +0.214</text>
+<text x="370.0" y="285" text-anchor="middle" class="acc" font-size="11">de-echoed gap +0.318 ↑</text>
+<line x1="130" y1="340" x2="670" y2="340" class="axis" stroke-width="1"/>
+<text x="130.0" y="356" text-anchor="middle" class="mut" font-size="10">0.0</text>
+<text x="250.0" y="356" text-anchor="middle" class="mut" font-size="10">0.1</text>
+<text x="370.0" y="356" text-anchor="middle" class="mut" font-size="10">0.2</text>
+<text x="490.0" y="356" text-anchor="middle" class="mut" font-size="10">0.3</text>
+<text x="610.0" y="356" text-anchor="middle" class="mut" font-size="10">0.4</text>
+<text x="400" y="372" text-anchor="middle" class="ink2" font-size="10">partial-credit score</text>
+<circle cx="490" cy="90" r="5" fill="var(--bg,#0E141A)" class="slas" stroke-width="2"/><text x="500" y="94" class="ink2" font-size="10">raw</text>
+<circle cx="560" cy="90" r="5" class="acc"/><text x="570" y="94" class="ink2" font-size="10">de-echoed</text>
+<line x1="40" y1="378" x2="680" y2="378" class="rule" stroke-width="1"/>
+<text x="40" y="396" class="ink2" font-size="11">The correction moves the <tspan class="sla">baseline</tspan> far more — it was the bigger cheater, so the gap widens.</text>
+</svg>

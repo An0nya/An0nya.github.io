@@ -1,0 +1,82 @@
+<svg viewBox="0 0 400 640" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .gly  { font-size: 16px; }
+  </style>
+
+  <rect x="0" y="0" width="400" height="640" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="17">Turn-taking without</text>
+  <text class="ttl" x="20" y="52" font-size="17">shared meaning</text>
+  <text class="mut" x="20" y="70" font-size="10">Same glyph up the middle, two private languages.</text>
+
+  <!-- column headers -->
+  <text x="150" y="100" text-anchor="end" class="ink2" font-size="10">A reads</text>
+  <text x="200" y="100" text-anchor="middle" class="ink2" font-size="10">wire</text>
+  <text x="250" y="100" text-anchor="start" class="ink2" font-size="10">B reads</text>
+
+  <!-- spine -->
+  <line x1="200" y1="112" x2="200" y2="404" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+
+  <!-- row 1: agreement (citron) -->
+  <circle cx="200" cy="126" r="10" fill="var(--bg2,#141D26)" stroke="var(--cause,#E3C24A)" stroke-width="2"/>
+  <text x="200" y="131" text-anchor="middle" class="gly" fill="var(--cause,#E3C24A)">▲</text>
+  <text x="176" y="130" text-anchor="end" font-size="10.5" fill="var(--cause,#E3C24A)">greeting</text>
+  <text x="224" y="130" text-anchor="start" font-size="10.5" fill="var(--cause,#E3C24A)">greeting</text>
+
+  <g font-size="10.5">
+    <circle cx="200" cy="164" r="8.5" fill="var(--bg2,#141D26)" stroke="var(--muted,#6F7C88)" stroke-width="1.4"/>
+    <text x="200" y="169" text-anchor="middle" class="gly mut">▼</text>
+    <text x="176" y="168" text-anchor="end" class="ink2">ANSWER</text>
+    <text x="224" y="168" text-anchor="start" class="ink2">Acknowledge</text>
+
+    <circle cx="200" cy="202" r="8.5" fill="var(--bg2,#141D26)" stroke="var(--muted,#6F7C88)" stroke-width="1.4"/>
+    <text x="200" y="207" text-anchor="middle" class="gly mut">◆</text>
+    <text x="176" y="206" text-anchor="end" class="ink2">SELF</text>
+    <text x="224" y="206" text-anchor="start" class="ink2">Question</text>
+
+    <circle cx="200" cy="240" r="8.5" fill="var(--bg2,#141D26)" stroke="var(--muted,#6F7C88)" stroke-width="1.4"/>
+    <text x="200" y="245" text-anchor="middle" class="gly mut">○</text>
+    <text x="176" y="244" text-anchor="end" class="ink2">OTHER</text>
+    <text x="224" y="244" text-anchor="start" class="ink2">Information</text>
+
+    <circle cx="200" cy="278" r="8.5" fill="var(--bg2,#141D26)" stroke="var(--muted,#6F7C88)" stroke-width="1.4"/>
+    <text x="200" y="283" text-anchor="middle" class="gly mut">□</text>
+    <text x="176" y="282" text-anchor="end" class="ink2">SAFE</text>
+    <text x="224" y="282" text-anchor="start" class="ink2">Status</text>
+  </g>
+
+  <!-- row 6: ✕ theory-of-mind failure (violet) -->
+  <rect x="96" y="300" width="208" height="32" rx="4" fill="var(--neg,#B98AD6)" opacity="0.08"/>
+  <circle cx="200" cy="316" r="11" fill="var(--bg2,#141D26)" stroke="var(--neg,#B98AD6)" stroke-width="2.4"/>
+  <text x="200" y="321" text-anchor="middle" class="gly" fill="var(--neg,#B98AD6)">✕</text>
+  <text x="176" y="320" text-anchor="end" font-size="10.5" fill="var(--neg,#B98AD6)">DANGER</text>
+  <text x="224" y="320" text-anchor="start" font-size="10.5" fill="var(--neg,#B98AD6)">(never decoded)</text>
+
+  <g font-size="10.5">
+    <circle cx="200" cy="354" r="8.5" fill="var(--bg2,#141D26)" stroke="var(--muted,#6F7C88)" stroke-width="1.4"/>
+    <text x="200" y="359" text-anchor="middle" class="gly mut">⬟</text>
+    <text x="176" y="358" text-anchor="end" class="ink2">NOW</text>
+    <text x="224" y="358" text-anchor="start" class="ink2">Positive</text>
+
+    <circle cx="200" cy="392" r="8.5" fill="var(--bg2,#141D26)" stroke="var(--muted,#6F7C88)" stroke-width="1.4"/>
+    <text x="200" y="397" text-anchor="middle" class="gly mut">⬠</text>
+    <text x="176" y="396" text-anchor="end" class="ink2">LATER</text>
+    <text x="224" y="396" text-anchor="start" class="ink2">Threat</text>
+  </g>
+
+  <!-- callout -->
+  <rect x="20" y="425" width="340" height="168" rx="5" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.9"/>
+  <text x="34" y="454" font-size="11" fill="var(--neg,#B98AD6)">A theory-of-mind failure, not a</text>
+  <text x="34" y="470" font-size="11" fill="var(--neg,#B98AD6)">vocabulary mismatch:</text>
+  <text x="34" y="492" class="ink2" font-size="10.5">A sends ✕ = DANGER. B never decodes the</text>
+  <text x="34" y="508" class="ink2" font-size="10.5">glyph and simply doesn't respond. A then</text>
+  <text x="34" y="524" class="ink2" font-size="10.5">invents a mental state for B — "resets to</text>
+  <text x="34" y="540" class="ink2" font-size="10.5">safe mode when challenged" — to explain a</text>
+  <text x="34" y="556" class="ink2" font-size="10.5">non-response that was just a failed decode.</text>
+  <text x="34" y="572" class="ink2" font-size="10.5">A models an interlocutor that isn't there.</text>
+</svg>

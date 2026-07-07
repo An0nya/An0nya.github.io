@@ -1,0 +1,94 @@
+<svg viewBox="0 0 400 640" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <rect x="0" y="0" width="400" height="640" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="18">The U-shaped layer the</text>
+  <text class="ttl" x="20" y="54" font-size="18">endpoint map can't see</text>
+  <text class="mut" x="20" y="74" font-size="9">Granite. Math Δ on gcore in-band probes vs base 0.628.</text>
+  <text class="mut" x="20" y="88" font-size="9">x = α: 0 prune → 1 baseline → 2 dup. Dense α-grid</text>
+  <text class="mut" x="20" y="102" font-size="9">0.5–1.5 measured (n=348/pt); prune/dup structural.</text>
+
+  <!-- axes -->
+  <line x1="60" y1="150" x2="60" y2="340" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="60" y1="200" x2="372" y2="200" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 3"/>
+  <g class="mut" font-size="8.5" text-anchor="end">
+    <text x="54" y="175">+.05</text>
+    <text x="54" y="203">Δ0</text>
+    <text x="54" y="231">−.05</text>
+    <text x="54" y="259">−.10</text>
+    <text x="54" y="315">−.20</text>
+  </g>
+
+  <!-- x ticks -->
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="60" y="358">0</text><text x="135" y="358" font-size="7.5">0.5</text><text x="210" y="358">1</text><text x="285" y="358" font-size="7.5">1.5</text><text x="360" y="358">2</text>
+    <text x="60" y="370" font-size="8">prune</text><text x="210" y="370" font-size="8">base</text><text x="360" y="370" font-size="8">dup</text>
+    <text x="215" y="388" letter-spacing="1">α →</text>
+  </g>
+
+  <!-- ===== 3-point endpoint map (faint) ===== -->
+  <polyline points="210,200 360,258.8" fill="none" stroke="var(--muted,#6F7C88)" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.7"/>
+  <line x1="210" y1="200" x2="158" y2="344" stroke="var(--muted,#6F7C88)" stroke-width="1.6" stroke-dasharray="5 4" opacity="0.85"/>
+  <polygon points="156,348 157,335 164,338" fill="var(--muted,#6F7C88)"/>
+  <g fill="var(--muted,#6F7C88)">
+    <circle cx="210" cy="200" r="2.8"/><circle cx="360" cy="258.8" r="2.8"/>
+  </g>
+  <text x="356" y="270" text-anchor="end" class="mut" font-size="8">dup_6 −.105</text>
+  <text x="70" y="324" class="mut" font-size="8.5">prune_6 → 0.00</text>
+  <text x="70" y="336" class="mut" font-size="8.5">Δ−0.63, off scale</text>
+
+  <!-- ===== L5 dense curve (slate dashed) ===== -->
+  <path d="M135.0,257.1 C145.0,246.9 155.0,235.7 165.0,226.3 C172.5,219.3 180.0,212.6 187.5,207.3 C192.5,203.8 197.5,201.3 202.5,198.9 C207.5,196.5 212.5,195.6 217.5,192.7 C222.5,189.8 227.5,184.3 232.5,181.5 C240.0,177.3 247.5,173.1 255.0,173.1 C265.0,173.1 275.0,180.6 285.0,184.3"
+        fill="none" stroke="var(--fourth,#6E92C4)" stroke-width="2" stroke-dasharray="7 4"/>
+  <g fill="var(--bg,#0E141A)" stroke="var(--fourth,#6E92C4)" stroke-width="1.5">
+    <rect x="131.8" y="253.9" width="6.4" height="6.4"/><rect x="161.8" y="223.1" width="6.4" height="6.4"/><rect x="184.3" y="204.1" width="6.4" height="6.4"/><rect x="199.3" y="195.7" width="6.4" height="6.4"/><rect x="214.3" y="189.5" width="6.4" height="6.4"/><rect x="229.3" y="178.3" width="6.4" height="6.4"/><rect x="281.8" y="181.1" width="6.4" height="6.4"/>
+  </g>
+  <rect x="251.4" y="169.5" width="7.2" height="7.2" fill="var(--bg,#0E141A)" stroke="var(--fourth,#6E92C4)" stroke-width="2"/>
+  <text x="255" y="162" text-anchor="middle" font-size="9" fill="var(--fourth,#6E92C4)">L5 peak α≈1.3 (+.048)</text>
+
+  <!-- ===== L6 dense curve (cyan solid) ===== -->
+  <path d="M135.0,194.4 C145.0,184.7 155.0,165.3 165.0,165.3 C172.5,165.3 180.0,173.2 187.5,178.2 C192.5,181.5 197.5,186.2 202.5,189.4 C207.5,192.5 212.5,197.2 217.5,197.2 C222.5,197.2 227.5,194.4 232.5,194.4 C240.0,194.4 247.5,194.4 255.0,211.8 C265.0,234.9 275.0,291.3 285.0,331.0"
+        fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2.6"/>
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8">
+    <circle cx="135" cy="194.4" r="3"/><circle cx="187.5" cy="178.2" r="3"/><circle cx="202.5" cy="189.4" r="3"/><circle cx="217.5" cy="197.2" r="3"/><circle cx="232.5" cy="194.4" r="3"/><circle cx="255" cy="211.8" r="3"/><circle cx="285" cy="331" r="3"/>
+  </g>
+  <line x1="165" y1="165.3" x2="165" y2="340" stroke="var(--cause,#E3C24A)" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.8"/>
+  <circle cx="165" cy="165.3" r="4.2" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+  <text x="165" y="146" text-anchor="middle" font-size="10" fill="var(--cause,#E3C24A)">α≈0.7 → +0.062</text>
+  <text x="165" y="135" text-anchor="middle" font-size="8" class="mut">top single-site math move</text>
+  <text x="289" y="328" text-anchor="start" font-size="8" fill="var(--neg,#B98AD6)">α1.5: −.234</text>
+
+  <!-- caption -->
+  <text x="20" y="418" class="ink2" font-size="11">Endpoints and the dense grid <tspan fill="var(--cause,#E3C24A)">disagree on</tspan></text>
+  <text x="20" y="434" class="ink2" font-size="11"><tspan fill="var(--cause,#E3C24A)">the sign</tspan>. prune says dead, dup says bad — both</text>
+  <text x="20" y="450" class="ink2" font-size="11">below baseline — so a 3-point probe reads L6</text>
+  <text x="20" y="466" class="ink2" font-size="11">as "touch it and it dies." The dense grid finds</text>
+  <text x="20" y="482" class="ink2" font-size="11">the opposite: a partial damp at α≈0.7 is the</text>
+  <text x="20" y="498" class="ink2" font-size="11">best single-site math move on the model.</text>
+  <text x="20" y="520" class="mut" font-size="10">A two-point instrument doesn't lose precision —</text>
+  <text x="20" y="534" class="mut" font-size="10">it returns the wrong direction. Sensitivity needs</text>
+  <text x="20" y="548" class="mut" font-size="10">the dense single-pass grid, not dup/prune.</text>
+
+  <!-- legend -->
+  <g transform="translate(20,584)" font-size="9.5">
+    <line x1="0" y1="-3" x2="22" y2="-3" stroke="var(--accent,#4FB2C2)" stroke-width="2.6"/>
+    <circle cx="11" cy="-3" r="3.2" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8"/>
+    <text x="28" y="0" class="mut">L6 (● dense α-grid)</text>
+  </g>
+  <g transform="translate(20,606)" font-size="9.5">
+    <line x1="0" y1="-3" x2="22" y2="-3" stroke="var(--fourth,#6E92C4)" stroke-width="2" stroke-dasharray="7 4"/>
+    <rect x="7.4" y="-6.6" width="7.2" height="7.2" fill="var(--bg,#0E141A)" stroke="var(--fourth,#6E92C4)" stroke-width="1.5"/>
+    <text x="28" y="0" class="mut">L5 (■ peak α1.3)</text>
+  </g>
+  <g transform="translate(220,584)" font-size="9.5">
+    <line x1="0" y1="-3" x2="20" y2="-3" stroke="var(--muted,#6F7C88)" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="26" y="0" class="mut">3-pt map</text>
+  </g>
+</svg>

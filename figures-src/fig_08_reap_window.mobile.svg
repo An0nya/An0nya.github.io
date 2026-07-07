@@ -1,0 +1,91 @@
+<svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The REAP usability window</title>
+  <desc>A curve of model capability against the fraction of experts pruned. Capability holds well through roughly 30 to 50 percent pruning, declines past a cliff near 60 percent where pruning exceeds what the router was trained for, and at 75 percent — the Huihui teardown point — perplexity has risen 55 percent but the model still functions, sitting well above the broken floor.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .estlab { fill: var(--ink2,#A4B0BC); }
+    .meas { fill: var(--accent,#4FB2C2); }
+    .estband { fill: var(--ink2,#A4B0BC); opacity: 0.14; }
+    .estline { stroke: var(--ink2,#A4B0BC); fill: none; stroke-dasharray: 6 4; }
+    .cliff { fill: var(--neg,#B98AD6); opacity: 0.10; }
+    .clab  { fill: var(--neg,#B98AD6); }
+  </style>
+
+  <rect x="0" y="0" width="400" height="720" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="17">The REAP usability window</text>
+  <text class="mut" x="20" y="50" font-size="9">Pruning is graceful to ~30&#8211;50%, then a cliff past</text>
+  <text class="mut" x="20" y="62" font-size="9">the trained router-k. One measured point: Huihui.</text>
+
+  <!-- plot box x 70..360 (prune 0..80), y 130..430 (retained 0..1.05) -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="70" y1="144.29" x2="360" y2="144.29"/>
+    <line x1="70" y1="201.43" x2="360" y2="201.43"/>
+    <line x1="70" y1="287.14" x2="360" y2="287.14"/>
+    <line x1="70" y1="372.86" x2="360" y2="372.86"/>
+  </g>
+  <line x1="70" y1="130" x2="70" y2="430" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="70" y1="430" x2="360" y2="430" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="8.5" text-anchor="end">
+    <text x="64" y="147">1.0</text><text x="64" y="204">0.8</text><text x="64" y="290">0.5</text><text x="64" y="376">0.2</text>
+  </g>
+  <text x="30" y="280" transform="rotate(-90 30 280)" text-anchor="middle" class="ink2" font-size="9">retained cap. (inv. PPL, base = 1.0)</text>
+  <g class="mut" font-size="8.5" text-anchor="middle">
+    <text x="70" y="445">0</text><text x="142.5" y="445">20</text><text x="215" y="445">40</text><text x="287.5" y="445">60</text><text x="360" y="445">80</text>
+  </g>
+  <text x="215" y="461" text-anchor="middle" class="mut" font-size="9">% of experts pruned</text>
+
+  <!-- reliable window 30-50% -->
+  <rect x="178.75" y="130" width="72.5" height="300" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+  <text class="meas" x="215" y="142" font-size="8" text-anchor="middle" opacity="0.85">graceful</text>
+
+  <!-- cliff zone ~55-65% -->
+  <rect x="269.375" y="130" width="36.25" height="300" class="cliff"/>
+  <text class="clab" x="287.5" y="142" font-size="8" text-anchor="middle">cliff &#8776;60%</text>
+
+  <!-- estimated band -->
+  <polygon class="estband"
+    points="70,144.29 178.75,155.71 251.25,167.14 287.5,184.29 341.875,230.0 341.875,264.29 287.5,224.29 251.25,190.0 178.75,172.86 70,144.29"/>
+  <polyline class="estline" stroke-width="1.8"
+    points="70,144.29 178.75,164.29 251.25,178.57 287.5,204.29 341.875,247.14"/>
+  <text class="estlab" x="74" y="158" font-size="7.5">estimated (REAP lit, soft band)</text>
+
+  <!-- base reference -->
+  <line x1="70" y1="144.29" x2="360" y2="144.29" stroke="var(--accent,#4FB2C2)" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>
+  <text class="meas" x="356" y="139" font-size="7" text-anchor="end" opacity="0.85">base=1.0 &#183; parity untestable on 16GB</text>
+
+  <!-- broken floor -->
+  <line x1="70" y1="372.86" x2="360" y2="372.86" stroke="var(--ink2,#A4B0BC)" stroke-width="1" stroke-dasharray="4 3"/>
+  <text class="mut" x="74" y="386" font-size="8">&#8220;broken&#8221; floor</text>
+
+  <!-- Huihui measured point @ 75% / 0.643 -->
+  <line x1="341.875" y1="246.29" x2="341.875" y2="430" stroke="var(--accent,#4FB2C2)" stroke-width="0.8" stroke-dasharray="2 3" opacity="0.6"/>
+  <path d="M341.875,239 L348.5,246.29 L341.875,253.58 L335.25,246.29 Z" fill="var(--accent,#4FB2C2)"/>
+  <text class="meas" x="333" y="232" font-size="8.5" text-anchor="end">Huihui4-8B</text>
+  <text class="meas" x="333" y="244" font-size="7.5" text-anchor="end">75% cull (measured)</text>
+  <text class="meas" x="333" y="255" font-size="7.5" text-anchor="end">PPL +55%, not broken</text>
+
+  <!-- legend -->
+  <g font-size="8.5">
+    <line x1="20" y1="486" x2="40" y2="486" class="estline" stroke-width="1.6"/>
+    <text x="46" y="489" class="ink2">estimated window (literature)</text>
+    <path d="M30,498 L35,502.5 L30,507 L25,502.5 Z" fill="var(--accent,#4FB2C2)"/>
+    <text x="46" y="506" class="ink2">measured datapoint (Huihui card)</text>
+    <rect x="22" y="514" width="16" height="9" class="cliff" opacity="0.5"/>
+    <text x="46" y="522" class="ink2">estimated cliff (router-k limit)</text>
+  </g>
+
+  <!-- takeaway -->
+  <line x1="20" y1="542" x2="380" y2="542" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="20" y="562" class="ink2" font-size="10.5">The only <tspan class="meas">measured</tspan> point sits <tspan class="meas">past</tspan></text>
+  <text x="20" y="577" class="ink2" font-size="10.5"><tspan class="meas">the cliff</tspan> (75% cull) yet <tspan class="meas">well above</tspan></text>
+  <text x="20" y="592" class="ink2" font-size="10.5">the broken floor &#8212; deep excision lands a</text>
+  <text x="20" y="607" class="ink2" font-size="10.5">usable, sub-parity model.</text>
+  <text x="20" y="628" class="mut" font-size="9.5">The real baseline isn&#8217;t the unpruned model</text>
+  <text x="20" y="641" class="mut" font-size="9.5">(un-runnable on 16GB) &#8212; it&#8217;s non-existence.</text>
+  <text x="20" y="654" class="mut" font-size="9.5">An accessibility result, not a capability claim.</text>
+</svg>

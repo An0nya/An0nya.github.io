@@ -1,0 +1,219 @@
+<svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Recovering a clone map by diffing routers against the base model</title>
+  <desc>A grid of expert slots by layer. Cells are marked by whether each router column matches the base model or differs from it. Columns that differ — the overwritten victims — cluster in the low-index slots across 39 of 40 layers, while one layer is entirely unchanged. Because the router is full-precision in every quant, diffing it against the base recovers exactly which experts were cloned where, without the original surgery code.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .vlab { fill: var(--cause,#E3C24A); }
+    .vic  { fill: var(--cause,#E3C24A); }
+    .donor{ fill: var(--accent,#4FB2C2); }
+  </style>
+
+  <rect x="0" y="0" width="400" height="720" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="16">Recovering a clone map from routers</text>
+  <text class="mut" x="20" y="50" font-size="9">The router is F32 in every quant &#8212; diff it against</text>
+  <text class="mut" x="20" y="62" font-size="9">the base to recover which experts were overwritten.</text>
+
+  <!-- diff rule legend -->
+  <g font-size="9">
+    <rect x="20" y="78" width="12" height="12" rx="2" class="donor"/>
+    <text x="38" y="88" class="ink2">== base &#8594; donor</text>
+    <rect x="170" y="78" width="12" height="12" rx="2" class="vic"/>
+    <text x="188" y="88" class="ink2">&#8800; base &#8594; victim</text>
+  </g>
+
+  <!-- plot box x 70..330 (expert 0..230), y 130..560 (layer 0..39) -->
+  <rect x="70" y="130" width="260" height="430" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <rect x="70" y="130" width="260" height="430" fill="var(--accent,#4FB2C2)" opacity="0.05"/>
+  <g stroke="var(--accent,#4FB2C2)" stroke-width="0.5" opacity="0.18">
+    <line x1="120" y1="130" x2="120" y2="560"/>
+    <line x1="190" y1="130" x2="190" y2="560"/>
+    <line x1="260" y1="130" x2="260" y2="560"/>
+  </g>
+  <text class="donor" x="225" y="350" font-size="8.5" text-anchor="middle" opacity="0.6">donor field &#8212; ~226 untouched/layer</text>
+
+  <!-- victim zone 0..17 -->
+  <rect x="70" y="130" width="20" height="430" fill="var(--cause,#E3C24A)" opacity="0.08"/>
+  <text class="vlab" x="80" y="576" font-size="8" text-anchor="middle">0&#8211;17</text>
+
+  <text class="mut" x="225" y="576" font-size="8.5" text-anchor="middle">expert slot index &#8594; (0 &#8230; 229)</text>
+  <text x="55" y="345" transform="rotate(-90 55 345)" text-anchor="middle" class="mut" font-size="8.5">layer 0 &#8594; 39</text>
+
+  <!-- victim marks (mobile) -->
+  <g>
+    <rect x="69.1" y="148.0" width="4" height="4" class="vic"/>
+    <rect x="73.7" y="148.0" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="148.0" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="148.0" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="158.5" width="4" height="4" class="vic"/>
+    <rect x="69.1" y="158.5" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="158.5" width="4" height="4" class="vic"/>
+    <rect x="79.3" y="158.5" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="169.0" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="169.0" width="4" height="4" class="vic"/>
+    <rect x="78.2" y="169.0" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="169.0" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="179.5" width="4" height="4" class="vic"/>
+    <rect x="70.3" y="179.5" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="179.5" width="4" height="4" class="vic"/>
+    <rect x="78.2" y="179.5" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="190.1" width="4" height="4" class="vic"/>
+    <rect x="73.7" y="190.1" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="190.1" width="4" height="4" class="vic"/>
+    <rect x="81.6" y="190.1" width="4" height="4" class="vic"/>
+    <rect x="69.1" y="200.6" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="200.6" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="200.6" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="200.6" width="4" height="4" class="vic"/>
+    <rect x="75.9" y="211.1" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="211.1" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="211.1" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="211.1" width="4" height="4" class="vic"/>
+    <rect x="69.1" y="221.6" width="4" height="4" class="vic"/>
+    <rect x="70.3" y="221.6" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="221.6" width="4" height="4" class="vic"/>
+    <rect x="78.2" y="221.6" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="232.1" width="4" height="4" class="vic"/>
+    <rect x="79.3" y="232.1" width="4" height="4" class="vic"/>
+    <rect x="82.7" y="232.1" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="232.1" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="242.6" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="242.6" width="4" height="4" class="vic"/>
+    <rect x="73.7" y="242.6" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="242.6" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="253.1" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="253.1" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="253.1" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="253.1" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="263.6" width="4" height="4" class="vic"/>
+    <rect x="78.2" y="263.6" width="4" height="4" class="vic"/>
+    <rect x="79.3" y="263.6" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="263.6" width="4" height="4" class="vic"/>
+    <rect x="70.3" y="274.2" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="274.2" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="274.2" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="274.2" width="4" height="4" class="vic"/>
+    <rect x="73.7" y="284.7" width="4" height="4" class="vic"/>
+    <rect x="75.9" y="284.7" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="284.7" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="284.7" width="4" height="4" class="vic"/>
+    <rect x="79.3" y="295.2" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="295.2" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="295.2" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="295.2" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="305.7" width="4" height="4" class="vic"/>
+    <rect x="75.9" y="305.7" width="4" height="4" class="vic"/>
+    <rect x="82.7" y="305.7" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="305.7" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="316.2" width="4" height="4" class="vic"/>
+    <rect x="75.9" y="316.2" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="316.2" width="4" height="4" class="vic"/>
+    <rect x="81.6" y="316.2" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="326.7" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="326.7" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="326.7" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="326.7" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="337.2" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="337.2" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="337.2" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="337.2" width="4" height="4" class="vic"/>
+    <rect x="73.7" y="347.7" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="347.7" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="347.7" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="347.7" width="4" height="4" class="vic"/>
+    <rect x="70.3" y="358.3" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="358.3" width="4" height="4" class="vic"/>
+    <rect x="75.9" y="358.3" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="358.3" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="368.8" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="368.8" width="4" height="4" class="vic"/>
+    <rect x="79.3" y="368.8" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="368.8" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="379.3" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="379.3" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="379.3" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="379.3" width="4" height="4" class="vic"/>
+    <rect x="70.3" y="389.8" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="389.8" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="389.8" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="389.8" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="400.3" width="4" height="4" class="vic"/>
+    <rect x="81.6" y="400.3" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="400.3" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="400.3" width="4" height="4" class="vic"/>
+    <rect x="69.1" y="410.8" width="4" height="4" class="vic"/>
+    <rect x="73.7" y="410.8" width="4" height="4" class="vic"/>
+    <rect x="79.3" y="410.8" width="4" height="4" class="vic"/>
+    <rect x="82.7" y="410.8" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="421.3" width="4" height="4" class="vic"/>
+    <rect x="81.6" y="421.3" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="421.3" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="421.3" width="4" height="4" class="vic"/>
+    <rect x="70.3" y="431.8" width="4" height="4" class="vic"/>
+    <rect x="73.7" y="431.8" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="431.8" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="431.8" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="442.4" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="442.4" width="4" height="4" class="vic"/>
+    <rect x="81.6" y="442.4" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="442.4" width="4" height="4" class="vic"/>
+    <rect x="70.3" y="452.9" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="452.9" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="452.9" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="452.9" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="463.4" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="463.4" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="463.4" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="463.4" width="4" height="4" class="vic"/>
+    <rect x="71.4" y="473.9" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="473.9" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="473.9" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="473.9" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="484.4" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="484.4" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="484.4" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="484.4" width="4" height="4" class="vic"/>
+    <rect x="74.8" y="494.9" width="4" height="4" class="vic"/>
+    <rect x="75.9" y="494.9" width="4" height="4" class="vic"/>
+    <rect x="78.2" y="494.9" width="4" height="4" class="vic"/>
+    <rect x="81.6" y="494.9" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="505.4" width="4" height="4" class="vic"/>
+    <rect x="79.3" y="505.4" width="4" height="4" class="vic"/>
+    <rect x="82.7" y="505.4" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="505.4" width="4" height="4" class="vic"/>
+    <rect x="69.1" y="515.9" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="515.9" width="4" height="4" class="vic"/>
+    <rect x="80.4" y="515.9" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="515.9" width="4" height="4" class="vic"/>
+    <rect x="82.7" y="526.5" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="526.5" width="4" height="4" class="vic"/>
+    <rect x="85.0" y="526.5" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="526.5" width="4" height="4" class="vic"/>
+    <rect x="72.5" y="537.0" width="4" height="4" class="vic"/>
+    <rect x="77.0" y="537.0" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="537.0" width="4" height="4" class="vic"/>
+    <rect x="87.2" y="537.0" width="4" height="4" class="vic"/>
+    <rect x="68.0" y="547.5" width="4" height="4" class="vic"/>
+    <rect x="81.6" y="547.5" width="4" height="4" class="vic"/>
+    <rect x="83.8" y="547.5" width="4" height="4" class="vic"/>
+    <rect x="86.1" y="547.5" width="4" height="4" class="vic"/>
+  </g>
+
+  <!-- layer 39 clean row -->
+  <line x1="70" y1="558" x2="330" y2="558" stroke="var(--ink2,#A4B0BC)" stroke-width="0.8" stroke-dasharray="3 3"/>
+  <text class="ink2" x="330" y="554" font-size="7.5" text-anchor="end">L39 untouched</text>
+
+  <!-- result block -->
+  <text class="vlab" x="20" y="600" font-size="11">39 of 40 layers recovered cleanly</text>
+  <text class="mut" x="20" y="616" font-size="9">4 victims/layer, all in low slots 0&#8211;17; donors</text>
+  <text class="mut" x="20" y="628" font-size="9">spread 1&#8211;229 &#8594; confirms &#8220;lowest-firing = victim&#8221;.</text>
+
+  <line x1="20" y1="644" x2="380" y2="644" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="20" y="664" class="ink2" font-size="10.5">Replay: 39 &#215; 4 = 156 mmap slab copies onto a</text>
+  <text x="20" y="679" class="ink2" font-size="10.5">runnable IQ2_M &#8212; a gatekept surgery, reproduced</text>
+  <text x="20" y="694" class="ink2" font-size="10.5">on hardware you own, without their code.</text>
+</svg>

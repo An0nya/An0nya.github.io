@@ -1,0 +1,49 @@
+<svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="720" height="420" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="34" font-size="18">The baseline saturation map</text>
+<text class="mut" x="40" y="53" font-size="10">A channel can only measure what its baseline leaves room to measure</text>
+<rect x="392.0" y="84" width="144.0" height="250" fill="var(--accent,#4FB2C2)" opacity="0.08"/>
+<text x="464.0" y="78" text-anchor="middle" class="acc" font-size="10">usable band 0.4–0.7</text>
+<line x1="200" y1="110" x2="680" y2="110" class="rule" stroke-width="1"/>
+<text x="190" y="114" text-anchor="end" class="ink2" font-size="11">math-strict</text>
+<circle cx="219.2" cy="110" r="5.5" fill="var(--bg,#0E141A)" stroke="var(--cause,#E3C24A)" stroke-width="2.2"/>
+<text x="231.2" y="114" text-anchor="start" class="mut" font-size="9.5">0.04 · floored — dead</text>
+<line x1="200" y1="176" x2="680" y2="176" class="rule" stroke-width="1"/>
+<text x="190" y="180" text-anchor="end" class="ink2" font-size="11">multiple-choice</text>
+<circle cx="665.6" cy="176" r="5.5" fill="var(--bg,#0E141A)" stroke="var(--neg,#B98AD6)" stroke-width="2.2"/>
+<text x="653.6" y="180" text-anchor="end" class="mut" font-size="9.5">0.97 · ceilinged — damage only</text>
+<line x1="200" y1="242" x2="680" y2="242" class="rule" stroke-width="1"/>
+<text x="190" y="246" text-anchor="end" class="ink2" font-size="11">EQ</text>
+<line x1="297.4" y1="242" x2="563.4" y2="242" class="vios" stroke-width="2.4" opacity="0.8"/>
+<line x1="297.4" y1="237" x2="297.4" y2="247" class="vios" stroke-width="1.6"/><line x1="563.4" y1="237" x2="563.4" y2="247" class="vios" stroke-width="1.6"/>
+<polygon points="430.4,237 435.4,242 430.4,247 425.4,242" class="vio"/>
+<text x="571.4" y="246" class="vio" font-size="9.5">σ=0.277 · live but dirtiest</text>
+<line x1="200" y1="308" x2="680" y2="308" class="rule" stroke-width="1"/>
+<text x="190" y="312" text-anchor="end" class="ink2" font-size="11">easy-math</text>
+<circle cx="430.4" cy="308" r="5.5" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="2.2"/>
+<text x="442.4" y="312" text-anchor="start" class="mut" font-size="9.5">0.48 · the usable channel</text>
+<line x1="200" y1="352" x2="680" y2="352" class="axis" stroke-width="1"/>
+<text x="200.0" y="368" text-anchor="middle" class="mut" font-size="10">0.0</text>
+<text x="440.0" y="368" text-anchor="middle" class="mut" font-size="10">0.5</text>
+<text x="680.0" y="368" text-anchor="middle" class="mut" font-size="10">1.0</text>
+<text x="440" y="384" text-anchor="middle" class="ink2" font-size="10">baseline pass-rate</text>
+<line x1="40" y1="380" x2="680" y2="380" class="rule" stroke-width="1"/>
+<text x="40" y="398" class="ink2" font-size="11">Only <tspan class="acc">EQ &amp; easy-math</tspan> sit where a score can move — strict is floored, MC ceilinged.</text>
+</svg>

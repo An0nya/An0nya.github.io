@@ -1,0 +1,69 @@
+<svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .acc  { fill: var(--accent,#4FB2C2); }
+    .cit  { fill: var(--cause,#E3C24A); }
+    .vio  { fill: var(--neg,#B98AD6); }
+    .sla  { fill: var(--fourth,#6E92C4); }
+    .accs { stroke: var(--accent,#4FB2C2); fill:none; }
+    .cits { stroke: var(--cause,#E3C24A); fill:none; }
+    .vios { stroke: var(--neg,#B98AD6); fill:none; }
+    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
+    .rule { stroke: var(--rule2,#27323D); }
+    .axis { stroke: var(--ink2,#A4B0BC); }
+  </style>
+  <rect x="0" y="0" width="720" height="440" fill="var(--bg2,#141D26)"/>
+<text class="ttl" x="40" y="34" font-size="18">The per-layer surgery fingerprint</text>
+<text class="mut" x="40" y="53" font-size="10">Effect of duplicating vs pruning each layer (paired t vs baseline)</text>
+<line x1="60" y1="279.3" x2="690" y2="279.3" class="axis" stroke-width="1"/>
+<line x1="60" y1="110" x2="60" y2="370" class="axis" stroke-width="1"/>
+<line x1="60" y1="339.8" x2="690" y2="339.8" class="rule" stroke-width="0.6"/>
+<text x="54" y="342.8" text-anchor="end" class="mut" font-size="9">-2</text>
+<line x1="60" y1="279.3" x2="690" y2="279.3" class="rule" stroke-width="0"/>
+<text x="54" y="282.3" text-anchor="end" class="mut" font-size="9">+0</text>
+<line x1="60" y1="218.8" x2="690" y2="218.8" class="rule" stroke-width="0.6"/>
+<text x="54" y="221.8" text-anchor="end" class="mut" font-size="9">+2</text>
+<line x1="60" y1="158.4" x2="690" y2="158.4" class="rule" stroke-width="0.6"/>
+<text x="54" y="161.4" text-anchor="end" class="mut" font-size="9">+4</text>
+<text x="90.0" y="385" text-anchor="middle" class="mut" font-size="9">6</text>
+<text x="150.0" y="385" text-anchor="middle" class="mut" font-size="9">8</text>
+<text x="210.0" y="385" text-anchor="middle" class="mut" font-size="9">10</text>
+<text x="270.0" y="385" text-anchor="middle" class="mut" font-size="9">12</text>
+<text x="330.0" y="385" text-anchor="middle" class="mut" font-size="9">14</text>
+<text x="390.0" y="385" text-anchor="middle" class="mut" font-size="9">16</text>
+<text x="450.0" y="385" text-anchor="middle" class="mut" font-size="9">18</text>
+<text x="510.0" y="385" text-anchor="middle" class="mut" font-size="9">20</text>
+<text x="570.0" y="385" text-anchor="middle" class="mut" font-size="9">22</text>
+<text x="630.0" y="385" text-anchor="middle" class="mut" font-size="9">24</text>
+<text x="690.0" y="385" text-anchor="middle" class="mut" font-size="9">26</text>
+<text x="375" y="402" text-anchor="middle" class="ink2" font-size="9">layer index</text>
+<polyline points="60.0,345.8 180.0,258.1 240.0,197.7 300.0,176.5 330.0,185.6 510.0,206.7 540.0,277.8 690.0,351.9" class="accs" stroke-width="1.2" opacity="0.5"/>
+<polyline points="60.0,270.2 180.0,124.2 240.0,324.7 300.0,297.4 330.0,339.8 450.0,294.4 540.0,179.5 690.0,309.5" class="cits" stroke-width="1.2" opacity="0.5" stroke-dasharray="5 3"/>
+<circle cx="60.0" cy="345.8" r="3.4" class="acc"/>
+<circle cx="180.0" cy="258.1" r="3.4" class="acc"/>
+<circle cx="240.0" cy="197.7" r="3.4" class="acc"/>
+<circle cx="300.0" cy="176.5" r="3.4" class="acc"/>
+<circle cx="330.0" cy="185.6" r="3.4" class="acc"/>
+<circle cx="510.0" cy="206.7" r="3.4" class="acc"/>
+<circle cx="540.0" cy="277.8" r="3.4" class="acc"/>
+<circle cx="690.0" cy="351.9" r="3.4" class="acc"/>
+<polygon points="60.0,266.2325581395349 56.52,272.2325581395349 63.48,272.2325581395349" class="cit"/>
+<polygon points="180.0,120.2093023255814 176.52,126.2093023255814 183.48,126.2093023255814" class="cit"/>
+<polygon points="240.0,320.6511627906977 236.52,326.6511627906977 243.48,326.6511627906977" class="cit"/>
+<polygon points="300.0,293.4418604651163 296.52,299.4418604651163 303.48,299.4418604651163" class="cit"/>
+<polygon points="330.0,335.7674418604651 326.52,341.7674418604651 333.48,341.7674418604651" class="cit"/>
+<polygon points="450.0,290.4186046511628 446.52,296.4186046511628 453.48,296.4186046511628" class="cit"/>
+<polygon points="540.0,175.53488372093025 536.52,181.53488372093025 543.48,181.53488372093025" class="cit"/>
+<polygon points="690.0,305.5348837209302 686.52,311.5348837209302 693.48,311.5348837209302" class="cit"/>
+<text x="180.0" y="116.2" text-anchor="middle" class="cit" font-size="9">L9 prune +5.13</text>
+<text x="330.0" y="355.8" text-anchor="middle" class="vio" font-size="9">L14 amplify-or-die</text>
+<line x1="330.0" y1="185.6" x2="330.0" y2="339.8" class="vios" stroke-width="1" stroke-dasharray="2 2"/>
+<circle cx="490" cy="108" r="3.4" class="acc"/><text x="500" y="111" class="ink2" font-size="9">duplicate (dup_t)</text>
+<polygon points="610,104 606.52,110.0 613.48,110.0" class="cit"/><text x="620" y="111" class="ink2" font-size="9">prune (prune_t)</text>
+<line x1="40" y1="400" x2="690" y2="400" class="rule" stroke-width="1"/>
+<text x="40" y="418" class="ink2" font-size="11">Layer roles are legible and often <tspan class="vio">opposite-signed</tspan>: L9 overhead, L14 load-bearing both ways.</text>
+</svg>

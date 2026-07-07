@@ -1,0 +1,84 @@
+<svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <defs>
+    <pattern id="craterM" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="var(--neg,#B98AD6)" stroke-width="1" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="400" height="720" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="34" font-size="18">One law, two models — the Σα peak shifts left</text>
+  <text class="mut" x="20" y="52" font-size="10">x = Σα (cumulative per-pass damping dose)</text>
+  <text class="mut" x="20" y="66" font-size="10">y = math Δ vs baseline · identical axes</text>
+  <text class="mut" x="20" y="80" font-size="9">curve = law shape; peak + shift are the measured result</text>
+
+  <!-- ============ PANEL A: MiniCPM5 (top) ============ -->
+  <text x="50" y="115" class="ink2" font-size="12">MiniCPM5-1B · 24L dense</text>
+  <rect x="323.5" y="130" width="36.5" height="160" fill="url(#craterM)"/>
+  <rect x="323.5" y="130" width="36.5" height="160" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="50" y1="210" x2="360" y2="210" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="46" y="213" text-anchor="end" class="mut" font-size="9">0</text>
+  <line x1="50" y1="130" x2="50" y2="290" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="50" y="305">0</text><text x="141.2" y="305">1</text><text x="232.4" y="305">2</text><text x="323.5" y="305">3</text>
+    <text x="200" y="305">Σα →</text>
+  </g>
+  <line x1="164" y1="143.3" x2="164" y2="290" stroke="var(--cause,#E3C24A)" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>
+  <text x="164" y="135" text-anchor="middle" font-size="10.5" fill="var(--cause,#E3C24A)">Σα ≈ 1.25</text>
+  <path d="M50,210 C57.6,203.88 76.6,184.42 95.6,173.3 C114.6,162.18 141.2,143.3 164,143.3 C186.8,143.3 205.82,156.07 232.4,173.3 C258.98,190.53 302.23,230.58 323.5,246.7 C344.77,262.82 353.92,266.12 360,270"
+        fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2.4"/>
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8">
+    <circle cx="95.6" cy="173.3" r="3.2"/><circle cx="164" cy="143.3" r="3.6"/><circle cx="232.4" cy="173.3" r="3.2"/><circle cx="323.5" cy="246.7" r="3.2"/>
+  </g>
+  <text x="327" y="232" font-size="9" fill="var(--neg,#B98AD6)">≥3 craters</text>
+
+  <!-- ============ PANEL B: Granite (below) ============ -->
+  <text x="50" y="400" class="ink2" font-size="12">Granite-4.1-3B · 40L dense</text>
+  <rect x="323.5" y="410" width="36.5" height="160" fill="url(#craterM)"/>
+  <rect x="323.5" y="410" width="36.5" height="160" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="50" y1="490" x2="360" y2="490" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="46" y="493" text-anchor="end" class="mut" font-size="9">0</text>
+  <line x1="50" y1="410" x2="50" y2="570" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="50" y="585">0</text><text x="141.2" y="585">1</text><text x="232.4" y="585">2</text><text x="323.5" y="585">3</text>
+    <text x="200" y="585">Σα →</text>
+  </g>
+  <!-- ghost guide: where MiniCPM peaked -->
+  <line x1="164" y1="430" x2="164" y2="570" stroke="var(--muted,#6F7C88)" stroke-width="1" stroke-dasharray="2 4" opacity="0.6"/>
+  <text x="168" y="448" class="mut" font-size="8">← MiniCPM peak (1.25)</text>
+  <line x1="118.4" y1="448.6" x2="118.4" y2="570" stroke="var(--cause,#E3C24A)" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>
+  <text x="118.4" y="428" text-anchor="middle" font-size="10.5" fill="var(--cause,#E3C24A)">Σα ≈ 0.75</text>
+  <!-- shift arrow -->
+  <line x1="160" y1="448" x2="126" y2="448" stroke="var(--cause,#E3C24A)" stroke-width="1.3"/>
+  <polygon points="122,448 129,444.5 129,451.5" fill="var(--cause,#E3C24A)"/>
+  <path d="M50,490 C56.08,485.33 75.1,468.9 86.5,462 C97.9,455.1 100.17,448.6 118.4,448.6 C136.63,448.6 169.3,477.53 195.9,490 C222.5,502.47 250.65,513.95 278,523.4 C305.35,532.85 346.33,542.82 360,546.7"
+        fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="2.4" stroke-dasharray="8 4"/>
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8">
+    <rect x="83.3" y="458.8" width="6.4" height="6.4"/><rect x="115.2" y="445.4" width="6.4" height="6.4"/><rect x="192.7" y="486.8" width="6.4" height="6.4"/><rect x="274.8" y="520.2" width="6.4" height="6.4"/>
+  </g>
+  <text x="327" y="522" font-size="9" fill="var(--neg,#B98AD6)">≥3 craters</text>
+  <text x="50" y="610" font-size="10" fill="var(--cause,#E3C24A)">residual_multiplier = 0.22</text>
+  <text x="50" y="624" class="mut" font-size="9">smaller per-pass dose → earlier peak (called before the sweep)</text>
+
+  <!-- legend -->
+  <g transform="translate(20,660)">
+    <line x1="0" y1="-3" x2="26" y2="-3" stroke="var(--accent,#4FB2C2)" stroke-width="2.4"/>
+    <circle cx="13" cy="-3" r="3.2" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8"/>
+    <text x="32" y="0" class="mut" font-size="9.5">MiniCPM (solid · ●)</text>
+  </g>
+  <g transform="translate(20,682)">
+    <line x1="0" y1="-3" x2="26" y2="-3" stroke="var(--accent,#4FB2C2)" stroke-width="2.4" stroke-dasharray="8 4"/>
+    <rect x="9.8" y="-6.2" width="6.4" height="6.4" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.8"/>
+    <text x="32" y="0" class="mut" font-size="9.5">Granite (dashed · ■)</text>
+    <rect x="175" y="-9" width="14" height="12" fill="url(#craterM)"/>
+    <text x="194" y="0" class="mut" font-size="9.5">Σα ≥ 3 crater</text>
+  </g>
+</svg>

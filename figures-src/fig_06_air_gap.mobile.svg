@@ -1,0 +1,56 @@
+<svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+  </style>
+
+  <defs>
+    <pattern id="wallM" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="7" stroke="var(--muted,#6F7C88)" stroke-width="1" opacity="0.30"/>
+    </pattern>
+    <marker id="arrM" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="var(--accent,#4FB2C2)"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="400" height="700" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="32" font-size="18">The air gap — two minds,</text>
+  <text class="ttl" x="20" y="54" font-size="18">one symbol-at-a-time wire</text>
+  <text class="mut" x="20" y="74" font-size="10">Nothing crosses but the chosen symbols.</text>
+
+  <!-- ===== AGENT A (top) ===== -->
+  <rect x="24" y="90" width="352" height="170" rx="6" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1.5"/>
+  <text x="42" y="114" class="ink2" font-size="13" letter-spacing="1">AGENT A</text>
+  <rect x="44" y="124" width="312" height="36" rx="3" fill="url(#wallM)" stroke="var(--muted,#6F7C88)" stroke-width="1" stroke-dasharray="3 3" opacity="0.85"/>
+  <text x="200" y="146" text-anchor="middle" class="mut" font-size="11">private history</text>
+  <rect x="44" y="166" width="312" height="36" rx="3" fill="url(#wallM)" stroke="var(--muted,#6F7C88)" stroke-width="1" stroke-dasharray="3 3" opacity="0.85"/>
+  <text x="200" y="188" text-anchor="middle" class="mut" font-size="11">private lexicon</text>
+  <text x="200" y="232" text-anchor="middle" class="mut" font-size="9.5">turn cycle: assistant(tool_call) ⟳ tool(response)</text>
+
+  <!-- ===== THE WIRE (vertical, the only crossing) ===== -->
+  <line x1="186" y1="262" x2="186" y2="356" stroke="var(--accent,#4FB2C2)" stroke-width="2.4" marker-end="url(#arrM)"/>
+  <line x1="214" y1="356" x2="214" y2="262" stroke="var(--accent,#4FB2C2)" stroke-width="2.4" marker-end="url(#arrM)"/>
+  <text x="234" y="304" text-anchor="start" font-size="11" fill="var(--accent,#4FB2C2)">transmit(message)</text>
+  <text x="234" y="320" text-anchor="start" class="mut" font-size="9.5">the only shared surface</text>
+
+  <!-- ===== AGENT B (bottom) ===== -->
+  <rect x="24" y="358" width="352" height="170" rx="6" fill="none" stroke="var(--rule2,#27323D)" stroke-width="1.5"/>
+  <text x="358" y="382" text-anchor="end" class="ink2" font-size="13" letter-spacing="1">AGENT B</text>
+  <rect x="44" y="392" width="312" height="36" rx="3" fill="url(#wallM)" stroke="var(--muted,#6F7C88)" stroke-width="1" stroke-dasharray="3 3" opacity="0.85"/>
+  <text x="200" y="414" text-anchor="middle" class="mut" font-size="11">private history</text>
+  <rect x="44" y="434" width="312" height="36" rx="3" fill="url(#wallM)" stroke="var(--muted,#6F7C88)" stroke-width="1" stroke-dasharray="3 3" opacity="0.85"/>
+  <text x="200" y="456" text-anchor="middle" class="mut" font-size="11">private lexicon</text>
+  <text x="200" y="500" text-anchor="middle" class="mut" font-size="9.5">turn cycle: assistant(tool_call) ⟳ tool(response)</text>
+
+  <!-- caption -->
+  <line x1="20" y1="556" x2="380" y2="556" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="20" y="584" class="ink2" font-size="11">Internal state on both sides is walled off</text>
+  <text x="20" y="602" class="ink2" font-size="11">(hatched). Errors come back in-universe —</text>
+  <text x="20" y="620" class="ink2" font-size="11">`channel_error`, never "invalid JSON" — so</text>
+  <text x="20" y="638" class="ink2" font-size="11">the model stays in the channel, not the</text>
+  <text x="20" y="656" class="ink2" font-size="11">debugger.</text>
+</svg>

@@ -1,0 +1,91 @@
+<svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The REAP usability window</title>
+  <desc>A curve of model capability against the fraction of experts pruned. Capability holds well through roughly 30 to 50 percent pruning, declines past a cliff near 60 percent where pruning exceeds what the router was trained for, and at 75 percent — the Huihui teardown point — perplexity has risen 55 percent but the model still functions, sitting well above the broken floor.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .estlab { fill: var(--ink2,#A4B0BC); }
+    .meas { fill: var(--accent,#4FB2C2); }
+    .estband { fill: var(--ink2,#A4B0BC); opacity: 0.14; }
+    .estline { stroke: var(--ink2,#A4B0BC); fill: none; stroke-dasharray: 6 4; }
+    .cliff { fill: var(--neg,#B98AD6); opacity: 0.10; }
+    .clab  { fill: var(--neg,#B98AD6); }
+  </style>
+
+  <rect x="0" y="0" width="720" height="500" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="32" font-size="18">The REAP usability window</text>
+  <text class="mut" x="40" y="51" font-size="10">Expert pruning is graceful to ~30&#8211;50%, then a cliff past the trained router-k. One measured point: Huihui at 75% cull.</text>
+
+  <!-- plot box: x 80..650 (prune 0..80%), y 90..410 (retained 0..1.05) -->
+  <!-- gridlines -->
+  <g stroke="var(--rule2,#27323D)" stroke-width="1">
+    <line x1="80" y1="105.24" x2="650" y2="105.24"/>
+    <line x1="80" y1="166.19" x2="650" y2="166.19"/>
+    <line x1="80" y1="257.62" x2="650" y2="257.62"/>
+    <line x1="80" y1="349.05" x2="650" y2="349.05"/>
+  </g>
+
+  <!-- axes -->
+  <line x1="80" y1="90" x2="80" y2="410" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <line x1="80" y1="410" x2="650" y2="410" stroke="var(--ink2,#A4B0BC)" stroke-width="1"/>
+  <g class="mut" font-size="9" text-anchor="end">
+    <text x="74" y="108">1.0</text><text x="74" y="169">0.8</text><text x="74" y="261">0.5</text><text x="74" y="352">0.2</text>
+  </g>
+  <text x="34" y="245" transform="rotate(-90 34 245)" text-anchor="middle" class="ink2" font-size="10">retained capability (inv. PPL, base = 1.0)</text>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="80" y="425">0</text><text x="222.5" y="425">20</text><text x="365" y="425">40</text><text x="507.5" y="425">60</text><text x="650" y="425">80</text>
+  </g>
+  <text x="365" y="442" text-anchor="middle" class="mut" font-size="10">% of experts pruned</text>
+
+  <!-- reliable window 30-50% -->
+  <rect x="293.75" y="90" width="142.5" height="320" fill="var(--accent,#4FB2C2)" opacity="0.06"/>
+  <text class="meas" x="365" y="102" font-size="9" text-anchor="middle" opacity="0.85">graceful ~30&#8211;50%</text>
+
+  <!-- cliff zone ~55-65% (estimated, soft) -->
+  <rect x="471.875" y="90" width="71.25" height="320" class="cliff"/>
+  <text class="clab" x="507.5" y="102" font-size="9" text-anchor="middle">cliff &#8776;60%</text>
+  <text class="clab" x="507.5" y="392" font-size="8" text-anchor="middle">past trained router-k</text>
+
+  <!-- estimated uncertainty band (lit, NOT measured) -->
+  <polygon class="estband"
+    points="80,105.24 293.75,117.43 436.25,129.62 507.5,147.90 614.375,196.67 614.375,233.24 507.5,190.57 436.25,154.00 293.75,135.71 80,105.24"/>
+  <!-- estimated center line (dashed = estimated) -->
+  <polyline class="estline" stroke-width="1.8"
+    points="80,105.24 293.75,126.57 436.25,141.81 507.5,169.24 614.375,214.95"/>
+  <text class="estlab" x="200" y="118" font-size="8.5">estimated from REAP literature (soft band, not measured)</text>
+
+  <!-- base reference: not runnable locally -->
+  <line x1="80" y1="105.24" x2="650" y2="105.24" stroke="var(--accent,#4FB2C2)" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>
+  <text class="meas" x="646" y="100" font-size="8" text-anchor="end" opacity="0.85">base = 1.0 &#183; can&#8217;t run 100B on 16GB &#8594; parity untestable</text>
+
+  <!-- broken floor -->
+  <line x1="80" y1="349.05" x2="650" y2="349.05" stroke="var(--ink2,#A4B0BC)" stroke-width="1" stroke-dasharray="4 3"/>
+  <text class="mut" x="84" y="362" font-size="8.5">&#8220;broken&#8221; floor</text>
+
+  <!-- Huihui measured point @ 75% / retained 0.643 -->
+  <line x1="614.375" y1="220.13" x2="614.375" y2="410" stroke="var(--accent,#4FB2C2)" stroke-width="0.8" stroke-dasharray="2 3" opacity="0.6"/>
+  <path d="M614.375,213 L621,220.13 L614.375,227.26 L607.75,220.13 Z" fill="var(--accent,#4FB2C2)"/>
+  <text class="meas" x="606" y="206" font-size="9.5" text-anchor="end">Huihui4-8B (measured)</text>
+  <text class="meas" x="606" y="218" font-size="8.5" text-anchor="end">75% cull &#183; PPL 1.60&#8594;2.48 (+55%)</text>
+  <text class="meas" x="606" y="230" font-size="8.5" text-anchor="end">degraded, not broken</text>
+
+  <!-- legend -->
+  <g font-size="9">
+    <rect x="430" y="300" width="16" height="9" class="estband" opacity="0.4"/>
+    <line x1="430" y1="304.5" x2="446" y2="304.5" class="estline" stroke-width="1.6"/>
+    <text x="452" y="308" class="ink2">estimated window (literature)</text>
+    <path d="M438,318 L443,322.5 L438,327 L433,322.5 Z" fill="var(--accent,#4FB2C2)"/>
+    <text x="452" y="326" class="ink2">measured datapoint (Huihui card)</text>
+    <rect x="430" y="334" width="16" height="9" class="cliff" opacity="0.5"/>
+    <text x="452" y="342" class="ink2">estimated cliff (router-k limit)</text>
+  </g>
+
+  <!-- takeaway -->
+  <line x1="40" y1="458" x2="680" y2="458" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="40" y="478" class="ink2" font-size="11">The only <tspan class="meas">measured</tspan> point sits <tspan class="meas">past the cliff</tspan> (75% cull) yet <tspan class="meas">well above the broken floor</tspan> &#8212; deep excision lands a usable, sub-parity model.</text>
+  <text x="40" y="494" class="mut" font-size="10">The real baseline isn&#8217;t the unpruned model (un-runnable on 16GB) &#8212; it&#8217;s non-existence. An accessibility result, not a capability claim.</text>
+</svg>
