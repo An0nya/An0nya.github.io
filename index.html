@@ -196,6 +196,17 @@
         border-bottom: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
     }
 
+    .side-note {
+        font-size: var(--fs-sm);
+        line-height: 1.55;
+        color: var(--text-dim);
+        border-left: 1px solid var(--border-strong);
+        padding-left: var(--sp-4);
+        max-width: 52ch;
+        margin: var(--sp-5) 0;
+    }
+    .side-note .nb-kicker { display: block; margin-bottom: var(--sp-2); }
+
     .cards {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -325,6 +336,10 @@
             <h2 class="sec-label">The draw</h2>
             <p class="sec-note">I've been inspired by many people who spend their time and prodigious compute on fine-tuning, quantizing, and experimenting with models, and all the open source software they publish. I have no pretensions of creating models that can compete or eclipse those released by the big organizations, but I can attempt new experiments and share what I've come across for others to read.</p>
             <p class="sec-note">Another draw is the feel of hanging out at the raw edge of technological progress in the community driven space of local LLMs. It resembles to me past technology boom periods where anyone could become a wizard in a new technology and people cobbled together enterprise hardware to host free websites or services. For my part, I'm doing all this on a base model Mac mini, which admittedly is uniquely capable for LLMs, but still nothing on the scale of the compute available to frontier companies or even research groups. The ability to perform all this on my own device, no signups, no fees, and no worrying that a tweak I've tried will cost me wasted money on a rented server. All this runs in the background and I can pivot my tasks when I want.</p>
+            <aside class="side-note">
+                <span class="nb-kicker">The hoard</span>
+                I never thought I'd end up the unironic version of the datahoarder with a drive full of "linux ISOs", but here I am, 1.5&nbsp;TB of open-weight models on a shucked WD Red.
+            </aside>
         </section>
 
         <section id="map" aria-label="Sections">

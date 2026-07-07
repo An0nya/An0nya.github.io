@@ -186,14 +186,13 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
 
 <!-- ══ HERO ══ -->
 <section class="hero" data-screen-label="Hero">
-  <!-- DESLOP: kicker tail wording is a placeholder in the geometry.html mold — Anya to word -->
   <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · the vivarium, first specimen · <em>Gemma-4-12B-mxfp4 · base · 48 layers · day-zero scan</em></div>
   <header class="nb-record">
     <div class="nb-record__title">I probed Gemma-4-12B the day it dropped</div>
   </header>
   <p class="dek">
     Gemma 4 12B came out this afternoon. By the time the mxfp4 quant had landed on my drive
-    and I'd confirmed it wasn't a broken convert, I already had hidden-state scans running against
+    and I'd confirmed it wasn't a broken conversion, I already had hidden-state scans running against
     it. The method is fast enough to crack open a brand-new model the same day it ships — so this
     is a zero-day look inside a 48-layer dense model, while it still has the plastic film on.
   </p>
@@ -208,10 +207,12 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
     <div class="mlabel">The question</div>
     <div class="mbody">
       <p>
-        I went in with one question: <em>what does the model already know, and when in the stack
-        does it know it?</em> I started with the interlingua scan we run on every new model — a
-        multilingual cosine sweep to find where language gets stripped and meaning takes over. After
-        seeing a result similar to Gemma-4-31B, I started wondering how much two sentences with
+        I went in without a goal in mind and converged on one question: <em>what does the model 
+        already know about its context, and when in the stack does it know it?</em> 
+        I started with the interlingua scan we run on every new model — a multilingual cosine sweep
+        to find where language gets stripped and meaning takes over. After seeing a result
+         similar to Gemma-4-31B and trying a few tweaks to the shape of the scan,
+         I started wondering how much two sentences with
         <em>completely different words but the same meaning</em> would converge in the mid-stack. That
         one stray question kicked off about six hours of probes.
       </p>

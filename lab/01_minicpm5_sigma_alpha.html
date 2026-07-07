@@ -11,7 +11,7 @@
 <style>
   main { max-width: var(--page-max); margin: 0 auto; padding: var(--sp-7) var(--gutter) var(--sp-9); }
   section { padding: var(--sp-7) 0 0; }
-  .dek { font-family: var(--font-serif); font-style: italic; font-size: var(--fs-dek); line-height: 1.4; color: var(--text-dim); max-width: 64ch; margin: var(--sp-5) 0 0; }
+  .dek { font-family: var(--font-serif); font-style: italic; font-size: var(--fs-dek); line-height: 1.4; color: var(--text-dim); max-width: 64ch; margin: var(--sp-7) 0 0; }
   h2 { font-size: var(--fs-h2); margin: 0 0 var(--sp-4); }
   h2 .num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); letter-spacing: .1em; vertical-align: 0.7em; margin-right: var(--sp-3); }
   h3 { font-size: var(--fs-h3, 1.05rem); margin: var(--sp-6) 0 var(--sp-3); color: var(--text); }
@@ -19,8 +19,8 @@
   .dropcap { max-width: var(--measure); }
   .dropcap::first-letter { font-family: var(--font-serif); font-weight: 500; font-size: 3.4em; line-height: 0.82; float: left; padding: 0.04em 0.12em 0 0; color: var(--accent-bright); }
   .col-side { display: grid; grid-template-columns: 1fr 260px; gap: var(--sp-7); align-items: start; }
-  .col-side .aside { font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); border-left: 1px solid var(--border-strong); padding-left: var(--sp-4); font-style: italic; }
-  .col-side .aside .nb-kicker { font-style: normal; display: block; margin-bottom: var(--sp-2); }
+  .col-side .aside { font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); border-left: 1px solid var(--border-strong); padding-left: var(--sp-4); }
+  .col-side .aside .nb-kicker { display: block; margin-bottom: var(--sp-2); }
   .hl-acc { color: var(--accent); font-weight: 500; }
   .figure { margin: var(--sp-6) 0; }
   .nb-plate svg { display: block; width: 100%; height: auto; }
@@ -122,18 +122,13 @@
 </aside>
 
 <main>
-  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · continuous-damping branch · <em>closed out — the method is the deliverable</em></div>
+  <div class="nb-kicker" style="margin-bottom:var(--sp-5)">Observation notebook · Anya · 2026 · continuous-damping branch</div>
   <header class="nb-record">
     <div class="nb-record__title">MiniCPM5-1B — the husk, and the Σα-law it left behind</div>
     <div class="nb-record__grid">
-      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v">MiniCPM5-1B · 24-layer dense Llama (GQA) · no-CoT math / EQ / MC battery</span></div>
-      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">closed out · no shippable model win · the ruler + the Σα-law <em>are</em> the deliverable</span></div>
-      <div class="nb-record__field"><span class="nb-record__k">Last revised</span><span class="nb-record__v">2026-06-13 (closed out)</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v"><a href="https://huggingface.co/openbmb/MiniCPM5-1B">MiniCPM5-1B</a> · 24-layer dense Llama (GQA) · no-CoT math / EQ / MC battery</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">closed out 2026-06-13 · no shippable model win · the ruler + the Σα-law <em>are</em> the deliverable</span></div>
       <div class="nb-record__field"><span class="nb-record__k">Source</span><span class="nb-record__v">rys_minicpm5_damping.md · rys_minicpm5_1b.md · project_mlx_sweep_minicpm.md</span></div>
-      <div class="nb-record__field">
-        <span class="nb-record__k">Confidence</span>
-        <span class="nb-conf nb-conf--medium"><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span></span>medium — the Σα-law graduated (R²=0.74 + Granite transfer); its peak is a channel-dependent <em>ridge</em>, not a constant</span>
-      </div>
     </div>
   </header>
 
@@ -157,7 +152,7 @@
         moved into a live MLX process where the model's own Python objects get patched between forward passes. That
         sounds like a footnote, but it's the reason this page exists.</p>
       </div>
-      <aside class="aside">
+      <aside class="aside" style="align-self:end">
         <span class="nb-kicker">The frame</span>
         The network runs a narrow, high-norm representational cone — the residual norm climbs ~66× across the 24
         layers, with one or two dimensions hogging the energy at the ends. Layer 1 lives at the bottom of that climb
@@ -1840,22 +1835,21 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
   </section>
 
   <section id="caveats">
-    <div class="nb-limits">
-      <div class="nb-limits__head">
-        <span class="nb-limits__label">Caveats — the open gaps</span>
-        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — these bound the claims</span>
-      </div>
-      <ul>
-        <li><b>No shippable model win.</b> The headline is a husk: the best math specialist (<code>split_1_a50_a70</code>) loses overall to a de-collapse config, and even that is pathology relief. Don't read a capability claim into this page; read a method and a regularity.</li>
-        <li><b>The peak is a ridge, channel-dependent</b> (§4). Anyone quoting "Σα = 1.25" without the 1.25–1.65 range and the math-vs-balanced drift is over-claiming.</li>
-        <li><b>The CoT prosthesis hypothesis is a smoke-test hunch</b> (§8), not a result — flagged because it's the most promising unfinished thread, not because it's settled.</li>
-        <li><b>eq is a null-rate gauge, not a ranker</b> on the v4 battery (r &gt; 1, low signal); use it for derailment exposure, not leaderboards.</li>
-        <li><b>Numbers tagged <span class="vrfy">VERIFY</span></b> (<code>split_1_a50_a70</code>, <code>shp1_S150_k6_flat</code>) want a glance at the results JSONL before they ship.</li>
-      </ul>
-    </div>
+    <h2>Caveats</h2>
+    <p>Medium confidence, and here is what that means. The Σα-law itself graduated — R²&nbsp;=&nbsp;0.74 on the
+    fit, plus a predicted transfer to Granite — but its peak is a channel-dependent ridge, not a constant:
+    quoting "Σα&nbsp;=&nbsp;1.25" without the 1.25–1.65 range and the math-vs-balanced drift is over-claiming.
+    And there is no shippable model win here — the best math specialist (<code>split_1_a50_a70</code>) loses
+    overall to a de-collapse config, and even that is pathology relief. Read a method and a regularity into
+    this page, not a capability claim.</p>
+    <ul class="walkback">
+      <li><span class="wbhead">The CoT prosthesis hypothesis is a smoke-test hunch</span> (§8), not a result — flagged because it's the most promising unfinished thread, not because it's settled.</li>
+      <li><span class="wbhead">eq is a null-rate gauge, not a ranker</span> on the v4 battery (r &gt; 1, low signal); use it for derailment exposure, not leaderboards.</li>
+      <li><span class="wbhead">Numbers tagged <span class="vrfy">VERIFY</span></span> (<code>split_1_a50_a70</code>, <code>shp1_S150_k6_flat</code>) want a glance at the results JSONL before they ship.</li>
+    </ul>
 
     <div class="nb-marginalia" style="margin-top:var(--sp-7)">
-      <div class="nb-marginalia__label">Colophon &amp; lineage</div>
+      <div class="nb-marginalia__label">Build notes &amp; lineage</div>
       <div class="nb-marginalia__body">
         <p style="max-width:64ch">MiniCPM5 is the continuous-damping branch of the line — the model where the engine
         moved from llama.cpp static GGUFs to live MLX in-process patching, which is what made everything above possible.
@@ -1866,7 +1860,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
         <span class="mono">probes_combined_v3</span> / <span class="mono">probes_math_wide</span>
         (<span class="mono">load_math_inband</span>) / <span class="mono">probes_eq_bench_v4</span>; all generations
         stored for regrade. Technique credit and the grader-gaming taxonomy live on the shared
-        <a href="measuring.html">Methods &amp; references</a> page. Sibling specimens:
+        <a href="/lab/methods.html">Methods &amp; references</a> page. Sibling specimens:
         <a href="gemma.html">Gemma 4</a>, <a href="/lab/05_granite.html">Granite</a>, <a href="hrm.html">HRM</a>. Run locally
         on a 16&nbsp;GB Mac&nbsp;Mini.</p>
       </div>

@@ -351,6 +351,13 @@ a.nb-card:hover .nb-card__go { color: var(--accent-bright); }
 }
 .nb-limits li::before { content: "—"; position: absolute; left: 0; color: var(--caution); }
 
+/* ── Caveats walkback list — quiet successor to .nb-limits ────────────────
+   Confidence lives in a prose lead-in, not a chip; hairline left rules, no box.
+   (Originated page-local on hrm.html — its copy is identical and shadows this.) */
+.walkback { list-style: none; padding: 0; margin: var(--sp-5) 0 0; max-width: var(--measure); }
+.walkback li { font-size: var(--fs-sm); line-height: 1.6; color: var(--text-dim); padding-left: var(--sp-5); border-left: 1px solid var(--border); margin-bottom: var(--sp-4); }
+.wbhead { display: block; color: var(--text); font-weight: 600; }
+
 /* ── Provenance caption — "these charts came from files, not Illustrator" ──*/
 .nb-prov {
   font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.02em;
