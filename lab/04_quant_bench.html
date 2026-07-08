@@ -116,20 +116,23 @@
   </header>
 
   <p class="dek">* on a 1B dense model, batched decode only, M4 Mini, custom generation loop, raw tok/s.
-  † conditions definitely apply. Measure every axis uniformly and the popular "MLX&nbsp;≈&nbsp;llama.cpp"
-  turns out to be an artifact of only ever measuring single-stream decode.</p>
+  † conditions definitely apply. Measured uniformly, "MLX&nbsp;≈&nbsp;llama.cpp" holds for single-stream
+  decode; the gap only opens in batched decode, and it costs more than double the RAM.</p>
 
   <section id="gap">
     <h2><span class="num">§1</span>The table I couldn't find, and the flag that makes the RAM numbers comparable</h2>
     <div class="col-side">
       <div>
         <p class="dropcap">If you run local models on a Mac, you've read the common recommendation to use MLX
-        since it's native and faster. What I couldn't find anywhere was <em>the table</em> — runtime × quant
+        since it's native and faster. What I couldn't find was <em>the table</em> — runtime × quant
         method × batch size × {prefill, decode} × RAM, all measured in one equal environment on the same
-        model. It doesn't exist online for a mundane reason: collecting it needs the same model across a dozen
-        quant formats, three runtimes installed and warmed simultaneously, one harness measuring the
-        <em>same thing</em> across all of them, and a machine nobody bothers to benchmark on — a base M4 Mini,
-        16&nbsp;GB.</p>
+        model. Pieces of it exist — mostly single-stream, long-context runs, arguably the more realistic
+        workload — but nothing exhaustive focused on peak throughput, which is what a parallelizable sweep
+        harness actually spends. The full grid is missing for a mundane reason: collecting it needs the same
+        model across a dozen quant formats, three runtimes installed and warmed simultaneously, and one
+        harness measuring the <em>same thing</em> across all of them. The base M4 Mini, 16&nbsp;GB, gets
+        benchmarked plenty — it's a common starter local-LLM machine — but I'm apparently the only idiot
+        trying to run layer sweeps on small models on hardware better suited to browser tabs.</p>
         <p>So I built it myself: one driver (<code>unified_bench.py</code>), three backend adapters (MLX in-process,
         llama.cpp via <code>llama-server</code>, PyTorch/MPS in-process), identical sweep grids and schema,
         and <em>one</em> RAM metric applied identically to all three. The
