@@ -21,6 +21,33 @@ import sys
 FIGDIR = os.path.join(os.path.dirname(__file__), "..", "figures-src")
 
 MAPS = {
+    "lab/02_anatomy_of_a_sweep.html": {
+        "fig1": "fig_02_phantom_mover",
+        "fig2": "fig_02_pairing",
+        "fig3": "fig_02_saturation",
+    },
+    "lab/04_quant_bench.html": {
+        "fig1": "fig_04_occupancy",
+        "fig2": "fig_04_leaderboard_flips",
+        "fig3": "fig_04_roofline",
+    },
+    "lab/05_granite.html": {
+        "figA": "fig_05_a_flipped_bugs",
+        "figB": "fig_05_separation_masks",
+        "figC": "fig_05_ushape_layer",
+        "figD": "fig_05_sigma_alpha_downshift",
+    },
+    "lab/06_duologue.html": {
+        "fig1": "fig_06_air_gap",
+        "fig2": "fig_06_turn_taking",
+    },
+    "lab/07_mem0_processor.html": {
+        "fig1": "fig_07_zscore_inversion",
+    },
+    "lab/09_self_improving_memory.html": {
+        "fig1": "fig_09_pipeline",
+        "fig2": "fig_09_frequency",
+    },
     "lab/03_nanbeige.html": {
         "fig1": "fig_03_echo_dumbbell",
         "fig2": "fig_03_layer_fingerprint",
@@ -71,7 +98,8 @@ def main():
                       sub_svg, body, flags=re.S)
         return f'<figure class="figure" id="{fid}">{body}</figure>'
 
-    text = re.sub(r'<figure class="figure" id="(fig\d+)">(.*?)</figure>',
+    # \w+ not \d+: 05_granite uses letter ids (figA-figD)
+    text = re.sub(r'<figure class="figure" id="(fig\w+)">(.*?)</figure>',
                   splice_figure, text, flags=re.S)
     open(page, "w").write(text)
     print(f"spliced {len(spliced)} svgs into {page}:")
