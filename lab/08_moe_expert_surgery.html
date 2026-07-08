@@ -223,6 +223,8 @@
   <text class="mut" x="200" y="363" font-size="9" text-anchor="middle">a layer can be amplified.</text>
 
   <!-- ===================== RIGHT: MoE ===================== -->
+  <!-- shifted right so the inter-panel gap (58px) ≈ the dense panel's internal stack gap (60px) -->
+  <g transform="translate(56,0)">
   <text class="ink2" x="380" y="88" font-size="12" font-family="var(--font-serif,'Newsreader',Georgia,serif)">MoE &#183; the same dup re-runs the router</text>
 
   <!-- input residual -->
@@ -303,6 +305,7 @@
   <text class="bad" x="400" y="378" font-size="11" text-anchor="middle">&#10007; routing breaks</text>
   <text class="mut" x="500" y="398" font-size="9" text-anchor="middle">the route can&#8217;t be repeated &#8212; the</text>
   <text class="mut" x="500" y="411" font-size="9" text-anchor="middle">operable unit is the <tspan class="ok">expert</tspan>, not the layer.</text>
+  </g>
 
   <!-- takeaway -->
   <line x1="40" y1="430" x2="680" y2="430" stroke="var(--rule2,#27323D)" stroke-width="1"/>
@@ -310,7 +313,7 @@
   <text x="40" y="468" class="ink2" font-size="11">expert bank; duplicating it re-runs the router on a shifted residual, <tspan class="bad">mis-fires selection, and breaks the output</tspan>.</text>
   <text x="40" y="486" class="mut" font-size="10">To touch what the model knows, operate on the <tspan class="ok">expert</tspan> &#8212; the unit of capacity &#8212; not the layer.</text>
 </svg></div>
-        <div class="fig-mobile"><svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-mobile"><svg viewBox="0 0 340 620" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <title>The layer is the wrong handle on a Mixture-of-Experts model</title>
   <desc>On a dense model, duplicating a layer amplifies a unit of computation and capability shifts. On a mixture-of-experts model, the layer is a router selecting a few of many experts; duplicating the whole layer re-runs the router on a shifted input, mis-fires the expert selection, and breaks the output. The operable unit on an MoE is the expert, not the layer.</desc>
@@ -330,7 +333,7 @@
     .gdbad{ stroke: var(--neg,#B98AD6); fill: none; }
   </style>
 
-  <rect x="0" y="0" width="400" height="720" fill="var(--bg2,#141D26)"/>
+  <rect x="0" y="0" width="340" height="620" fill="var(--bg2,#141D26)"/>
 
   <text class="ttl" x="20" y="32" font-size="17">The layer is the wrong handle</text>
   <text class="mut" x="20" y="50" font-size="9">A layer is a computation you can repeat; an</text>
@@ -357,16 +360,16 @@
   <line x1="136" y1="134" x2="184" y2="134" class="gd" stroke-width="1.4" marker-end="url(#arm)"/>
   <text class="ok" x="160" y="127" font-size="8" text-anchor="middle">dup</text>
   <g>
-    <rect class="lyr"  x="190" y="92"  width="90" height="20" rx="3"/>
-    <rect class="lyrhi" x="190" y="116" width="90" height="20" rx="3"/>
-    <rect class="lyrhi" x="190" y="140" width="90" height="20" rx="3"/>
-    <rect class="lyr"  x="190" y="164" width="90" height="20" rx="3"/>
-    <text class="ok" x="235" y="130" font-size="8" text-anchor="middle">L</text>
-    <text class="ok" x="235" y="154" font-size="8" text-anchor="middle">L&#8242;</text>
+    <rect class="lyr"  x="190" y="100" width="90" height="20" rx="3"/>
+    <rect class="lyrhi" x="190" y="124" width="90" height="20" rx="3"/>
+    <rect class="lyrhi" x="190" y="148" width="90" height="20" rx="3"/>
+    <rect class="lyr"  x="190" y="172" width="90" height="20" rx="3"/>
+    <text class="ok" x="235" y="138" font-size="8" text-anchor="middle">L</text>
+    <text class="ok" x="235" y="162" font-size="8" text-anchor="middle">L&#8242;</text>
   </g>
   <text class="ok" x="85" y="190" font-size="10" text-anchor="middle">&#10003; capability shifts</text>
 
-  <line x1="20" y1="206" x2="380" y2="206" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 4"/>
+  <line x1="20" y1="206" x2="320" y2="206" stroke="var(--rule2,#27323D)" stroke-width="1" stroke-dasharray="3 4"/>
 
   <!-- ===== BOTTOM: MoE ===== -->
   <text class="ink2" x="20" y="232" font-size="11" font-family="var(--font-serif,'Newsreader',Georgia,serif)">MoE &#183; the same dup re-runs the router</text>
@@ -431,7 +434,7 @@
   <text class="bad" x="80" y="456" font-size="10" text-anchor="middle">&#10007; routing breaks</text>
 
   <!-- takeaway -->
-  <line x1="20" y1="478" x2="380" y2="478" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <line x1="20" y1="478" x2="320" y2="478" stroke="var(--rule2,#27323D)" stroke-width="1"/>
   <text x="20" y="500" class="ink2" font-size="10.5">Dense surgery works because a layer is a</text>
   <text x="20" y="515" class="ink2" font-size="10.5"><tspan class="ok">unit of computation</tspan> you can duplicate.</text>
   <text x="20" y="536" class="ink2" font-size="10.5">On an MoE the layer is a <tspan class="ok">router</tspan> + expert</text>

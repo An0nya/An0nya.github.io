@@ -26,6 +26,11 @@ MAPS = {
         "fig2": "fig_03_layer_fingerprint",
         "fig3": "fig_03_willingness_capability",
     },
+    "lab/08_moe_expert_surgery.html": {
+        "fig1": "fig_08_layer_wrong_handle",
+        "fig2": "fig_08_clone_map",
+        "fig3": "fig_08_reap_window",
+    },
     "lab/01_minicpm5_sigma_alpha.html": {
         "fig1": "fig_01_residual_highway",
         "fig2": "fig_01_arithmetic_cliff",

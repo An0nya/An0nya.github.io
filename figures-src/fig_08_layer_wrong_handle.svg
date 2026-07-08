@@ -67,6 +67,8 @@
   <text class="mut" x="200" y="363" font-size="9" text-anchor="middle">a layer can be amplified.</text>
 
   <!-- ===================== RIGHT: MoE ===================== -->
+  <!-- shifted right so the inter-panel gap (58px) ≈ the dense panel's internal stack gap (60px) -->
+  <g transform="translate(56,0)">
   <text class="ink2" x="380" y="88" font-size="12" font-family="var(--font-serif,'Newsreader',Georgia,serif)">MoE &#183; the same dup re-runs the router</text>
 
   <!-- input residual -->
@@ -147,6 +149,7 @@
   <text class="bad" x="400" y="378" font-size="11" text-anchor="middle">&#10007; routing breaks</text>
   <text class="mut" x="500" y="398" font-size="9" text-anchor="middle">the route can&#8217;t be repeated &#8212; the</text>
   <text class="mut" x="500" y="411" font-size="9" text-anchor="middle">operable unit is the <tspan class="ok">expert</tspan>, not the layer.</text>
+  </g>
 
   <!-- takeaway -->
   <line x1="40" y1="430" x2="680" y2="430" stroke="var(--rule2,#27323D)" stroke-width="1"/>
