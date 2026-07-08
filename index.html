@@ -514,7 +514,7 @@ This model also served as a proof of concept as RYS layer edits don't play well 
                             <div><dt>op</dt><dd class="op">centered cosine · delta</dd></div>
                         </dl>
                     </div>
-                    <p class="nb-card__dek">The RYS literature says smaller models don't develop a convergent reasoning zone in the middle layers. I scanned them anyway, and disappointingly it's true, but there are some interesting standouts, namely in the Gemma 4 family.</p>
+                    <p class="nb-card__dek">The RYS literature says smaller models don't develop a convergent reasoning zone in the middle layers. I scanned them anyway: the mid-stack zone shows up fine &mdash; what never shows up is any connection to RYS results, since the winning configs sat on layers the scans didn't flag. Still some interesting standouts, namely in the Gemma 4 family.</p>
                     <div class="nb-card__find">
                         <b>Finding: </b>
                          the 2-bit and 8-bit scans superimpose, so the concept space tracks training, not precision. The MoE is the holdout - its capacity sits in expert routing, so a layer-wise probe finds little to grab.
