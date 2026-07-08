@@ -181,6 +181,17 @@ details[open]>.geo-summary::before{transform:rotate(90deg)}
         different-meaning baseline.
       </p>
       <p>
+        The delta charts are the second lens: how much each layer actually <em>moves</em>
+        the hidden state (‖h_L − h_{L−1}‖) — a rough measure of how much work it does.
+        The ends always spike (embedding handoff on the way in, generation mode on the
+        way out); what matters is the middle, where low-delta layers barely touch the
+        stream. Those are the natural surgery candidates — duplicating or removing a
+        layer that changes little should hurt little — so where the cosine scan maps
+        what the mid-stack <em>holds</em>, the delta scan maps how hard each layer
+        <em>works</em> on it. Read it as a candidate picker, not a validated predictor:
+        it tells you where to try first, not where you&rsquo;ll win.
+      </p>
+      <p>
         The line that matters is <span class="hl-acc">same-content, cross-language</span>
         (e.g. EN ↔ ZH fact). When it rises above the same-language-different-content
         baselines in the middle layers, the model is representing meaning
