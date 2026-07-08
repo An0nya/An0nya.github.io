@@ -1,4 +1,4 @@
-<svg viewBox="0 0 400 460" xmlns="http://www.w3.org/2000/svg"
+<svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
@@ -16,7 +16,7 @@
     .rule { stroke: var(--rule2,#27323D); }
     .axis { stroke: var(--ink2,#A4B0BC); }
   </style>
-  <rect x="0" y="0" width="400" height="460" fill="var(--bg2,#141D26)"/>
+  <rect x="0" y="0" width="400" height="500" fill="var(--bg2,#141D26)"/>
 <text class="ttl" x="40" y="34" font-size="15">The per-layer surgery fingerprint</text>
 <text class="mut" x="40" y="52" font-size="8">Effect of duplicating vs pruning each layer (paired t vs baseline)</text>
 <line x1="60" y1="299.3" x2="370" y2="299.3" class="axis" stroke-width="1"/>
@@ -64,6 +64,7 @@
 <line x1="192.9" y1="205.6" x2="192.9" y2="359.8" class="vios" stroke-width="1" stroke-dasharray="2 2"/>
 <circle cx="60" cy="86" r="3.4" class="acc"/><text x="70" y="89" class="ink2" font-size="8">duplicate (dup_t)</text>
 <polygon points="60,100 56.52,106.0 63.48,106.0" class="cit"/><text x="70" y="107" class="ink2" font-size="8">prune (prune_t)</text>
-<line x1="40" y1="420" x2="370" y2="420" class="rule" stroke-width="1"/>
-<text x="40" y="438" class="ink2" font-size="9">Layer roles are legible and often <tspan class="vio">opposite-signed</tspan>: L9 overhead, L14 load-bearing both ways.</text>
+<line x1="40" y1="440" x2="370" y2="440" class="rule" stroke-width="1"/>
+<text x="40" y="458" class="ink2" font-size="9">Layer roles are legible and often <tspan class="vio">opposite-signed</tspan>:</text>
+<text x="40" y="470" class="ink2" font-size="9">L9 overhead, L14 load-bearing both ways.</text>
 </svg>

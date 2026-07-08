@@ -40,7 +40,7 @@
 
   <!-- reference lines -->
   <line x1="162" y1="263.3" x2="670" y2="263.3" stroke="var(--fourth,#6E92C4)" stroke-width="1.4" stroke-dasharray="7 4"/>
-  <text class="ink2" x="170" y="259" font-size="9.5">1.27&#215; &#8212; memory-bandwidth ratio (153 vs 120 GB/s)</text>
+  <text class="ink2" x="200" y="259" font-size="9.5">1.27&#215; &#8212; memory-bandwidth ratio (153 vs 120 GB/s)</text>
   <line x1="162" y1="124.7" x2="670" y2="124.7" stroke="var(--cause,#E3C24A)" stroke-width="1.4" stroke-dasharray="7 4"/>
   <text class="ink2" x="170" y="120" font-size="9.5">~2.3&#215; &#8212; observed plateau (GPU-compute-bound)</text>
 
@@ -52,7 +52,7 @@
   </g>
   <!-- point value labels -->
   <g class="ink2" font-size="9" text-anchor="middle">
-    <text x="180" y="288">1.44</text><text x="276" y="142">2.15</text><text x="372" y="146">2.13</text><text x="468" y="175">1.96</text><text x="564" y="127">2.24</text><text x="660" y="118">2.29</text>
+    <text x="180" y="288">1.44</text><text x="276" y="142">2.15</text><text x="372" y="146">2.13</text><text x="468" y="175">1.96</text><text x="564" y="117">2.24</text><text x="660" y="118">2.29</text>
   </g>
 
   <!-- annotations -->

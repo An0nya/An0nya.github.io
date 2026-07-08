@@ -23,11 +23,11 @@
 
   <!-- treatment sites -->
   <circle cx="144.4" cy="130" r="5" fill="var(--bg2,#141D26)" stroke="var(--accent,#4FB2C2)" stroke-width="2"/>
-  <text x="144.4" y="116" text-anchor="middle" font-size="9.5" fill="var(--accent,#4FB2C2)">L5 ↑α1.3</text>
+  <text x="134.4" y="116" text-anchor="middle" font-size="9.5" fill="var(--accent,#4FB2C2)">L5 ↑α1.3</text>
   <circle cx="307.9" cy="130" r="5" fill="var(--bg2,#141D26)" stroke="var(--neg,#B98AD6)" stroke-width="2"/>
   <text x="307.9" y="172" text-anchor="middle" font-size="9.5" fill="var(--neg,#B98AD6)">L16 dup</text>
   <circle cx="456.7" cy="130" r="5" fill="var(--bg2,#141D26)" stroke="var(--cause,#E3C24A)" stroke-width="2"/>
-  <text x="456.7" y="116" text-anchor="middle" font-size="9.5" fill="var(--cause,#E3C24A)">L26 prune</text>
+  <text x="466.7" y="116" text-anchor="middle" font-size="9.5" fill="var(--cause,#E3C24A)">L26 prune</text>
 
   <!-- ===== MASKS arc (below spine, violet) ===== -->
   <path d="M456.7,136 Q382,196 307.9,136" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="2" stroke-dasharray="6 4"/>

@@ -61,7 +61,7 @@
   </g>
   <!-- ghost guide at 1.25 to show the leftward move -->
   <line x1="519.4" y1="120" x2="519.4" y2="300" stroke="var(--muted,#6F7C88)" stroke-width="1" stroke-dasharray="2 4" opacity="0.6"/>
-  <text x="519.4" y="118" text-anchor="middle" class="mut" font-size="8.5">MiniCPM peak (1.25)</text>
+  <text x="574.4" y="268" text-anchor="middle" class="mut" font-size="8.5">← MiniCPM peak (1.25)</text>
   <!-- peak guide -->
   <line x1="479.6" y1="133.2" x2="479.6" y2="300" stroke="var(--cause,#E3C24A)" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>
   <text x="479.6" y="105" text-anchor="middle" font-size="10.5" fill="var(--cause,#E3C24A)">Σα ≈ 0.75</text>

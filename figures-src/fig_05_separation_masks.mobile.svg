@@ -27,7 +27,7 @@
   <circle cx="171" cy="140" r="5" fill="var(--bg2,#141D26)" stroke="var(--neg,#B98AD6)" stroke-width="2"/>
   <text x="171" y="182" text-anchor="middle" font-size="9" fill="var(--neg,#B98AD6)">L16 dup</text>
   <circle cx="253" cy="140" r="5" fill="var(--bg2,#141D26)" stroke="var(--cause,#E3C24A)" stroke-width="2"/>
-  <text x="253" y="126" text-anchor="middle" font-size="9" fill="var(--cause,#E3C24A)">L26 prune</text>
+  <text x="263" y="126" text-anchor="middle" font-size="9" fill="var(--cause,#E3C24A)">L26 prune</text>
 
   <!-- MASKS arc (below spine) -->
   <path d="M253,146 Q212,190 171,146" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="2" stroke-dasharray="6 4"/>

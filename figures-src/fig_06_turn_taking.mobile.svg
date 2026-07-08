@@ -70,13 +70,15 @@
   </g>
 
   <!-- callout -->
-  <rect x="20" y="425" width="340" height="168" rx="5" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.9"/>
-  <text x="34" y="454" font-size="11" fill="var(--neg,#B98AD6)">A theory-of-mind failure, not a</text>
-  <text x="34" y="470" font-size="11" fill="var(--neg,#B98AD6)">vocabulary mismatch:</text>
-  <text x="34" y="492" class="ink2" font-size="10.5">A sends ✕ = DANGER. B never decodes the</text>
-  <text x="34" y="508" class="ink2" font-size="10.5">glyph and simply doesn't respond. A then</text>
-  <text x="34" y="524" class="ink2" font-size="10.5">invents a mental state for B — "resets to</text>
-  <text x="34" y="540" class="ink2" font-size="10.5">safe mode when challenged" — to explain a</text>
-  <text x="34" y="556" class="ink2" font-size="10.5">non-response that was just a failed decode.</text>
-  <text x="34" y="572" class="ink2" font-size="10.5">A models an interlocutor that isn't there.</text>
+  <rect x="36" y="425" width="328" height="160" rx="5" fill="none" stroke="var(--neg,#B98AD6)" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.9"/>
+  <g>
+    <text x="65" y="450" font-size="11" fill="var(--neg,#B98AD6)">A theory-of-mind failure, not a</text>
+    <text x="65" y="466" font-size="11" fill="var(--neg,#B98AD6)">vocabulary mismatch:</text>
+    <text x="65" y="490" class="ink2" font-size="10.5">A sends ✕ = DANGER. B never decodes the</text>
+    <text x="65" y="506" class="ink2" font-size="10.5">glyph and simply doesn't respond. A then</text>
+    <text x="65" y="522" class="ink2" font-size="10.5">invents a mental state for B — "resets to</text>
+    <text x="65" y="538" class="ink2" font-size="10.5">safe mode when challenged" — to explain a</text>
+    <text x="65" y="554" class="ink2" font-size="10.5">non-response that was just a failed decode.</text>
+    <text x="65" y="570" class="ink2" font-size="10.5">A models an interlocutor that isn't there.</text>
+  </g>
 </svg>

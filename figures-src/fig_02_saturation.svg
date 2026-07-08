@@ -1,4 +1,4 @@
-<svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg"
+<svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
@@ -16,7 +16,7 @@
     .rule { stroke: var(--rule2,#27323D); }
     .axis { stroke: var(--ink2,#A4B0BC); }
   </style>
-  <rect x="0" y="0" width="720" height="420" fill="var(--bg2,#141D26)"/>
+  <rect x="0" y="0" width="720" height="440" fill="var(--bg2,#141D26)"/>
 <text class="ttl" x="40" y="34" font-size="18">The baseline saturation map</text>
 <text class="mut" x="40" y="53" font-size="10">A channel can only measure what its baseline leaves room to measure</text>
 <rect x="392.0" y="84" width="144.0" height="250" fill="var(--accent,#4FB2C2)" opacity="0.08"/>
@@ -34,7 +34,8 @@
 <line x1="297.4" y1="242" x2="563.4" y2="242" class="vios" stroke-width="2.4" opacity="0.8"/>
 <line x1="297.4" y1="237" x2="297.4" y2="247" class="vios" stroke-width="1.6"/><line x1="563.4" y1="237" x2="563.4" y2="247" class="vios" stroke-width="1.6"/>
 <polygon points="430.4,237 435.4,242 430.4,247 425.4,242" class="vio"/>
-<text x="571.4" y="246" class="vio" font-size="9.5">σ=0.277 · live but dirtiest</text>
+<text x="571.4" y="246" class="vio" font-size="9.5">σ=0.277 · </text>
+<text x="571.4" y="258" class="vio" font-size="9.5">live but dirtiest</text>
 <line x1="200" y1="308" x2="680" y2="308" class="rule" stroke-width="1"/>
 <text x="190" y="312" text-anchor="end" class="ink2" font-size="11">easy-math</text>
 <circle cx="430.4" cy="308" r="5.5" fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="2.2"/>
@@ -44,6 +45,6 @@
 <text x="440.0" y="368" text-anchor="middle" class="mut" font-size="10">0.5</text>
 <text x="680.0" y="368" text-anchor="middle" class="mut" font-size="10">1.0</text>
 <text x="440" y="384" text-anchor="middle" class="ink2" font-size="10">baseline pass-rate</text>
-<line x1="40" y1="380" x2="680" y2="380" class="rule" stroke-width="1"/>
-<text x="40" y="398" class="ink2" font-size="11">Only <tspan class="acc">EQ &amp; easy-math</tspan> sit where a score can move — strict is floored, MC ceilinged.</text>
+<line x1="40" y1="390" x2="680" y2="400" class="rule" stroke-width="1"/>
+<text x="40" y="418" class="ink2" font-size="11">Only <tspan class="acc">EQ &amp; easy-math</tspan> sit where a score can move — strict is floored, MC ceilinged.</text>
 </svg>

@@ -73,8 +73,10 @@
   <text class="ink2" x="475" y="100" font-size="10">MLX &#8594; 1671 @ 256, saturates late</text>
   <text class="ink2" x="395" y="258" font-size="10">llama.cpp plateaus by 128 (~750)</text>
   <text class="mut"  x="293" y="350" font-size="9">PyTorch capped @32</text>
-  <text class="mut"  x="120" y="335" font-size="9">1 stream: bands overlap,</text>
-  <text class="mut"  x="120" y="346" font-size="9">50&#8211;125 tok/s &#8212; no gap yet</text>
+  <text class="mut"  x="100" y="298" font-size="9">1 stream:</text>
+  <text class="mut"  x="100" y="309" font-size="9">bands overlap,</text>
+  <text class="mut"  x="100" y="320" font-size="9">50&#8211;125 tok/s &#8212;</text>
+  <text class="mut"  x="100" y="331" font-size="9">no gap yet</text>
 
   <!-- legend (lower-right empty zone) -->
   <rect x="432" y="305" width="224" height="52" rx="3" fill="var(--bg2,#141D26)" opacity="0.88" stroke="var(--rule2,#27323D)"/>
