@@ -41,6 +41,24 @@ body {
   text-transform: uppercase;
   color: var(--terracotta);
 }
+.placard {
+  border-top: 1px solid var(--rule-2);
+  border-bottom: 1px solid var(--rule-2);
+  padding: 0.9rem 0;
+  margin: 0 0 3rem;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 70ch;
+}
+.placard__label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  margin-right: 0.9em;
+}
 .rule { height: 1px; background: var(--rule); margin: 1.6rem 0; }
 .rule-tight { height: 1px; background: var(--rule-2); margin: 0.7rem 0; }
 .thick-rule { height: 2px; background: var(--ink); margin: 1.2rem 0; }
@@ -803,6 +821,15 @@ details[open] > .geo-summary::before { transform: rotate(90deg); }
 
 <!-- ─── HERO ───────────────────────────────────────────────────────── -->
 <section class="hero" data-screen-label="01 Hero">
+  <div class="placard" role="note">
+    <span class="placard__label">Preserved as-shipped</span>
+    <span>The lab's first record, before the methods existed. The confident tone is
+    excitement about getting the method working, and part of the artifact I'm hesitant
+    to update. <a href="/lab/01_minicpm5_sigma_alpha.html">Testing other models</a> and
+    <a href="/lab/methods.html">refining the methodology</a> has shown me how naive this
+    page reads; if I revisit Gemma E4B, I'll do it justice. (The design came from the
+    claude-design beta. I liked it a lot, until I started seeing it everywhere.)</span>
+  </div>
   <div class="topbar">
     <div><span class="dot"></span>Lab notebook · Anya · May 2026</div>
     <div class="right">n=247 configurations · 15&nbsp;seeds × 16&nbsp;probes · IQ4_XS · plus a 30-layer MoE sibling</div>
