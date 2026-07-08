@@ -63,7 +63,7 @@ p{margin:0 0 1.1rem;max-width:760px}p:last-child{margin-bottom:0}
 .geo-legend>span:first-child{color:var(--muted)}
 .geo-legend-item{display:flex;align-items:center;gap:6px}
 .geo-accordion{border-top:1px solid var(--rule2);margin:0}
-.geo-summary{display:flex;align-items:baseline;gap:20px;padding:14px 0;cursor:pointer;list-style:none;font-family:'JetBrains Mono',monospace}
+.geo-summary{display:flex;align-items:baseline;gap:20px;padding:14px 0;cursor:pointer;list-style:none;font-family:'JetBrains Mono',monospace;position:sticky;top:var(--hdr-h,0px);background:var(--bg);z-index:2}
 .geo-summary::-webkit-details-marker{display:none}
 .geo-summary::before{content:"▸";color:var(--acc);font-size:11px;transition:transform .15s}
 details[open]>.geo-summary::before{transform:rotate(90deg)}
@@ -150,10 +150,62 @@ details[open]>.geo-summary::before{transform:rotate(90deg)}
     hidden states at each layer. Where a model holds a shared concept space,
     same-content-different-language pairs converge in the middle of the stack — an
     interlingua — while the input and output ends stay in language-specific token
-    geometry. That mid-stack plateau lands in the same region the
+    geometry. This scan exists because of a hypothesis it was supposed to serve: if
+    models develop &ldquo;reasoning layers,&rdquo; the scan should find them, and RYS duplication
+    should pay off where the plateau sits. On these small models it doesn&rsquo;t cash out —
+    most of the winning configurations were active on layers the scans never flagged,
+    and the data collected here doesn&rsquo;t suggest any correlation between the interlingua
+    zone and where duplication helps. What survives is the map itself: the mid-stack
+    plateau lands in the same region the
     <a href="/lab/05_granite.html">lesion maps</a> flag as where meaning lives, and it
     shows up quant-invariant on every model below.
   </p>
+</section>
+
+<section data-screen-label="Reading">
+  <h2><span class="num">§</span>How to read it</h2>
+  <div class="col-side">
+    <div>
+      <p>
+        Each line tracks how similar the model&rsquo;s internal snapshots of two phrases
+        are, layer by layer — higher means the model treats them as more alike at that
+        depth. At the ends, the ranking is boring: cross-language pairs sit at the
+        bottom because they are literally different — different scripts, different
+        token counts — first as raw input, then again as the model rebuilds the output
+        language. The middle is where something interesting can happen: pairs that look
+        nothing alike but mean the same thing climb toward each other, which suggests
+        the model is translating both into an internal working representation of the
+        meaning — plausibly not any human language at all. The tell isn&rsquo;t convergence
+        by itself (deep in a network everything drifts somewhat closer; the scans are
+        centered to cancel exactly that) — it&rsquo;s same-meaning pairs rising above the
+        different-meaning baseline.
+      </p>
+      <p>
+        The line that matters is <span class="hl-acc">same-content, cross-language</span>
+        (e.g. EN ↔ ZH fact). When it rises above the same-language-different-content
+        baselines in the middle layers, the model is representing meaning
+        independently of language there. Where it peaks, and how sharply
+        it collapses back to token geometry at the output, is the structural
+        signature each architecture leaves.
+      </p>
+      <p>
+        Three things recur across the nine models: the interlingua is
+        <span class="hl-acc">mid-stack</span>, not distributed; the ends are token
+        I/O; and the whole picture is <span class="hl-acc">quant-invariant</span> —
+        2-bit and 8-bit scans of the same model superimpose. The geometry is a
+        property of training, not precision. The one thing that does <em>not</em>
+        recur: any relationship between this map and RYS results — the duplication
+        configs that won their sweeps mostly sat on layers no scan pointed at.
+      </p>
+    </div>
+    <aside class="aside">
+      <span class="kicker">Caveat</span>
+      EN↔FR pairs are confounded by shared Latin script and tokenizer overlap —
+      read the EN↔ZH (Chinese) series as the trustworthy cross-language signal.
+      Cosine magnitudes are comparable within a model, less so across models with
+      different tokenizers; the shape is the result.
+    </aside>
+  </div>
 </section>
 
 <section data-screen-label="Gallery">
@@ -4879,42 +4931,21 @@ details[open]>.geo-summary::before{transform:rotate(90deg)}
 
 </section>
 
-<section data-screen-label="Reading">
-  <h2><span class="num">§</span>How to read it</h2>
-  <div class="col-side">
-    <div>
-      <p>
-        The line that matters is <span class="hl-acc">same-content, cross-language</span>
-        (e.g. EN ↔ ZH fact). When it rises above the same-language-different-content
-        baselines in the middle layers, the model is representing meaning
-        independently of language there. Where it peaks, and how sharply
-        it collapses back to token geometry at the output, is the structural
-        signature each architecture leaves.
-      </p>
-      <p>
-        Three things recur across the nine models: the interlingua is
-        <span class="hl-acc">mid-stack</span>, not distributed; the ends are token
-        I/O; and the whole picture is <span class="hl-acc">quant-invariant</span> —
-        2-bit and 8-bit scans of the same model superimpose. The geometry is a
-        property of training, not precision.
-      </p>
-    </div>
-    <aside class="aside">
-      <span class="kicker">Caveat</span>
-      EN↔FR pairs are confounded by shared Latin script and tokenizer overlap —
-      read the EN↔ZH (Chinese) series as the trustworthy cross-language signal.
-      Cosine magnitudes are comparable within a model, less so across models with
-      different tokenizers; the shape is the result.
-    </aside>
-  </div>
-  <p class="small muted" style="margin-top:2rem">
-    Scan tools + data: <span class="mono">rys-tools/scans/</span> (mlx hidden-state extraction, centered cosine). Specimens: <a href="/lab/gemma.html">Gemma&nbsp;4</a> · <a href="/lab/05_granite.html">Granite</a> · <a href="/lab/hrm.html">HRM</a>.
-    Shared <a href="/lab/methods.html">methods &amp; references</a>.
-  </p>
-</section>
+<p class="small muted" style="margin-top:2rem">
+  Scan tools + data: <span class="mono">rys-tools/scans/</span> (mlx hidden-state extraction, centered cosine). Specimens: <a href="/lab/gemma.html">Gemma&nbsp;4</a> · <a href="/lab/05_granite.html">Granite</a> · <a href="/lab/hrm.html">HRM</a>.
+  Shared <a href="/lab/methods.html">methods &amp; references</a>.
+</p>
 
 </main>
 <script src="/assets/nb.js"></script>
+<script>
+(() => {
+  const hdr = document.querySelector('.nb-header-sticky');
+  if (!hdr) return;
+  const setH = () => document.documentElement.style.setProperty('--hdr-h', hdr.offsetHeight + 'px');
+  new ResizeObserver(setH).observe(hdr); setH();
+})();
+</script>
 <script data-goatcounter="https://an0nya.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
