@@ -1,5 +1,7 @@
 <svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Separation makes treatments add, proximity makes them cancel</title>
+  <desc>A schematic 40-layer spine with treatment sites marked. A widely-separated pair combines to exceed either treatment alone (stacking), while a closely-spaced pair combines to fall below the better single treatment (masking) — depth separation is the axis that decides whether two surgeries add or interfere.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

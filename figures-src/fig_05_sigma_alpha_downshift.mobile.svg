@@ -1,5 +1,7 @@
 <svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>One law, two models, the predicted downshift</title>
+  <desc>A two-panel Σα-response for MiniCPM5 and Granite on identical axes, each an inverted-U with its peak annotated — near 1.25 for MiniCPM5 and 0.75 for Granite — and a vertical guide marking the leftward shift. Granite's lower residual multiplier is carried as the cause named in advance, and the shared crater zone past Σα ≥ 3 is marked.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

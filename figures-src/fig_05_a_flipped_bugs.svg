@@ -1,5 +1,7 @@
 <svg viewBox="0 0 720 480" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Capability is a few flipped bugs, not a risen tide</title>
+  <desc>A per-probe strip: each metastable math probe's baseline rate, stuck at deterministic failure, beside its best fixer's rate, next to a log bar of how many configs fix that probe. The counts split bimodally — easy probes fixed by many configs, rare-fix specialists by only a handful — so capability moves as discrete bug-flips that a probe-set average hides.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

@@ -1,5 +1,7 @@
 <svg viewBox="0 0 720 520" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The U-shaped layer the endpoints hide</title>
+  <desc>Layer L6's response as α runs from prune through baseline to duplicate: a clear inverted-U peaking near α≈0.7, with both endpoints below baseline. A faint overlay connecting only the three endpoint doses draws a declining line that misses the interior peak entirely; L5's differently-marked curve peaks further right.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
