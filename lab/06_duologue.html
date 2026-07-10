@@ -99,6 +99,7 @@
   <a href="#zoo" data-spy>Tool-call zoo</a>
   <a href="#wire" data-spy>On the wire</a>
   <a href="#sits" data-spy>Where it sits</a>
+  <a href="#caveats" data-spy>Caveats</a>
 </aside>
 </div>
 
@@ -575,18 +576,17 @@
     semiotics.</p>
   </section>
 
-  <section id="methods">
-    <div class="nb-limits">
-      <div class="nb-limits__head">
-        <span class="nb-limits__label">Caveats &amp; reproduction</span>
-        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — open experiment, not a finished claim</span>
-      </div>
-      <ul>
-        <li><b>No convergence claim is made</b> — the runs show the opposite, and that negative is the result. The reconstructed lexicon table is grounded in the logs; a verbatim turn-by-turn excerpt would strengthen it but must not be allowed to imply emergent language was achieved.</li>
-        <li><b>Source memory is ~31 days old</b> — the scenario set, active-scenario pointer, and workaround details must be verified against current <code>duologue.py</code> / <code>scenarios.py</code> before publishing specifics.</li>
-        <li><b>Engine:</b> local <code>llama-server</code> at <code>:8081</code>; per-model launch flags are the <code>NOTES.md</code> matrix. Logs to <code>/tmp</code> + iCloud mirror.</li>
-      </ul>
-    </div>
+  <section id="caveats">
+    <h2>Caveats &amp; reproduction</h2>
+    <p>This project is less an attempt to prove that a model can beat the game and establish communication and
+    more a fun experiment that grew into a more rigorous harness for testing this type of agentic communication.
+    The interesting, frustrating, and face-palm worthy moments are incidental to the copious work that went
+    into carefully controlling each agent's context.</p>
+    <ul class="walkback">
+      <li><span class="wbhead">No convergence claim is made</span> — the runs show the opposite, and that negative is the result. The reconstructed lexicon table is grounded in the logs; a verbatim turn-by-turn excerpt would strengthen it but must not be allowed to imply emergent language was achieved.</li>
+      <li><span class="wbhead">The project is currently inactive.</span> Not all models were tested on the most recent iteration of the harness and scenario prompts — there's a real possibility a revisit turns up a more intriguing result.</li>
+      <li><span class="wbhead">Cloud model APIs aren't wired in.</span> Piping in hosted models would raise the ceiling on what "success" could look like here — those models have the best odds of actually establishing shared semantics, which would answer the core question more definitively than the local-only run can.</li>
+    </ul>
 
     <div class="nb-marginalia" style="margin-top:var(--sp-7)">
       <div class="nb-marginalia__label">Build notes &amp; method</div>
@@ -596,7 +596,8 @@
         <a href="/">vivisection lab</a> and the <a href="/lab/04_quant_bench.html">quant benchmark</a>: build
         the rig that lets you watch the thing instead of assuming it. Public repo:
         <a href="https://github.com/An0nya/duologue">github.com/An0nya/duologue</a>. Built and run locally on a
-        16&nbsp;GB Mac&nbsp;Mini.</p>
+        16&nbsp;GB Mac&nbsp;Mini, via <code>llama-server</code> at <code>:8081</code> (per-model launch flags
+        in the <code>NOTES.md</code> matrix); logs land in <code>/tmp</code> + an iCloud mirror.</p>
       </div>
     </div>
   </section>
