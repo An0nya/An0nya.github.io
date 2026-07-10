@@ -1,5 +1,7 @@
 <svg viewBox="0 0 720 520" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The Σα curve</title>
+  <desc>Strict-math change against total Σα on layer L1: one dose-response hump that peaks in the 1.25 to 1.5 ridge, crosses zero past 2, and flattens into a death floor near 4.8. Overlaid copy-count series show that k spreads the curve vertically without moving the peak, spanning four labelled regimes from conserve to norm-collapse.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

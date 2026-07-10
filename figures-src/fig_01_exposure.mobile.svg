@@ -1,5 +1,7 @@
 <svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Exposure, not capability</title>
+  <desc>Left: degeneration rate rising with both copy count and Σα. Right: for the eq channel the aggregate score falls with copy count, but scoring only the non-derailed responses holds flat at or above the untouched baseline — the surgery's cost is derailment risk, not content quality.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

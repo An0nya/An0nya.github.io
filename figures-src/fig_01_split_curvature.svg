@@ -1,5 +1,7 @@
 <svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Split-pass curvature</title>
+  <desc>The L1 residual at one answer token, showing how a single α=1.5 pass and a split pass at the same total Σα peel apart. The layer rotates its opinion about 42° between sub-steps, so the split re-evaluates rather than scaling one direction; the single-minus-split gap has a closed form that held to 1.6%.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

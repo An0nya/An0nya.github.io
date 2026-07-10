@@ -1,5 +1,7 @@
 <svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The residual-norm highway</title>
+  <desc>Last-token residual norm and top-1 energy share plotted down layers L0 to L23. The L2 norm climbs about 66-fold while the single-dimension energy share collapses to a floor by L6 and then re-concentrates; the massive activation is made at layer 0, not carried up from the diffuse embedding.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

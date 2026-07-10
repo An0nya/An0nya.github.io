@@ -1,5 +1,7 @@
 <svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Single-α versus split</title>
+  <desc>Math-probe score against dose for a single-α pass versus a split pass, each config measured against its own baseline. At the same total Σα the split stays above the single at every dose — the same knob budget, opposite outcomes — with a 0.27 swing at Σα = 1.5.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

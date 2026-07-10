@@ -170,6 +170,8 @@
       <div class="nb-plate">
         <div class="fig-desktop"><svg role="img" aria-label="Fig 1 — the residual-norm highway (the stage)" viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The residual-norm highway</title>
+  <desc>Last-token residual norm and top-1 energy share plotted down layers L0 to L23. The L2 norm climbs about 66-fold while the single-dimension energy share collapses to a floor by L6 and then re-concentrates; the massive activation is made at layer 0, not carried up from the diffuse embedding.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -277,6 +279,8 @@
 </svg></div>
         <div class="fig-mobile"><svg role="img" aria-label="Fig 1 — the residual-norm highway (the stage)" viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The residual-norm highway</title>
+  <desc>Last-token residual norm and top-1 energy share plotted down layers L0 to L23. The L2 norm climbs about 66-fold while the single-dimension energy share collapses to a floor by L6 and then re-concentrates; the massive activation is made at layer 0, not carried up from the diffuse embedding.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -453,6 +457,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
       <div class="nb-plate">
         <div class="fig-desktop"><svg role="img" aria-label="Fig 2 — the arithmetic cliff and the band carved out of it" viewBox="0 0 720 450" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The arithmetic cliff and the usable band</title>
+  <desc>One small-multiple panel per arithmetic operation: baseline strict-correct rate against difficulty rung, with the usable roughly 0.3 to 0.7 band shaded. Addition declines gently, multiplication falls almost vertically, and division declines broadly, so most difficulty rungs sit outside the band where a score can actually move.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -551,6 +557,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 </svg></div>
         <div class="fig-mobile"><svg role="img" aria-label="Fig 2 — the arithmetic cliff and the band carved out of it" viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The arithmetic cliff and the usable band</title>
+  <desc>One small-multiple panel per arithmetic operation: baseline strict-correct rate against difficulty rung, with the usable roughly 0.3 to 0.7 band shaded. Addition declines gently, multiplication falls almost vertically, and division declines broadly, so most difficulty rungs sit outside the band where a score can actually move.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -698,6 +706,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
       <div class="nb-plate">
         <div class="fig-desktop"><svg role="img" aria-label="Fig 3 — split-pass curvature (the geometry)" viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Split-pass curvature</title>
+  <desc>The L1 residual at one answer token, showing how a single α=1.5 pass and a split pass at the same total Σα peel apart. The layer rotates its opinion about 42° between sub-steps, so the split re-evaluates rather than scaling one direction; the single-minus-split gap has a closed form that held to 1.6%.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -849,6 +859,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 </svg></div>
         <div class="fig-mobile"><svg role="img" aria-label="Fig 3 — split-pass curvature (the geometry)" viewBox="0 0 400 900" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Split-pass curvature</title>
+  <desc>The L1 residual at one answer token, showing how a single α=1.5 pass and a split pass at the same total Σα peel apart. The layer rotates its opinion about 42° between sub-steps, so the split re-evaluates rather than scaling one direction; the single-minus-split gap has a closed form that held to 1.6%.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -1038,6 +1050,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
       <div class="nb-plate">
         <div class="fig-desktop"><svg role="img" aria-label="Fig 4 — single-α vs split, on the 18 shared math probes (each config against its own baseline)" viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Single-α versus split</title>
+  <desc>Math-probe score against dose for a single-α pass versus a split pass, each config measured against its own baseline. At the same total Σα the split stays above the single at every dose — the same knob budget, opposite outcomes — with a 0.27 swing at Σα = 1.5.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -1144,6 +1158,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 </svg></div>
         <div class="fig-mobile"><svg role="img" aria-label="Fig 4 — single-α vs split, on the 18 shared math probes (each config against its own baseline)" viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Single-α versus split</title>
+  <desc>Math-probe score against dose for a single-α pass versus a split pass, each config measured against its own baseline. At the same total Σα the split stays above the single at every dose — the same knob budget, opposite outcomes — with a 0.27 swing at Σα = 1.5.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -1308,6 +1324,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
       <div class="nb-plate">
         <div class="fig-desktop"><svg role="img" aria-label="Fig 5 — the Σα curve (the signature plot of the whole specimen)" viewBox="0 0 720 520" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The Σα curve</title>
+  <desc>Strict-math change against total Σα on layer L1: one dose-response hump that peaks in the 1.25 to 1.5 ridge, crosses zero past 2, and flattens into a death floor near 4.8. Overlaid copy-count series show that k spreads the curve vertically without moving the peak, spanning four labelled regimes from conserve to norm-collapse.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -1398,6 +1416,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 </svg></div>
         <div class="fig-mobile"><svg role="img" aria-label="Fig 5 — the Σα curve (the signature plot of the whole specimen)" viewBox="0 0 400 580" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The Σα curve</title>
+  <desc>Strict-math change against total Σα on layer L1: one dose-response hump that peaks in the 1.25 to 1.5 ridge, crosses zero past 2, and flattens into a death floor near 4.8. Overlaid copy-count series show that k spreads the curve vertically without moving the peak, spanning four labelled regimes from conserve to norm-collapse.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -1561,6 +1581,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
       <div class="nb-plate">
         <div class="fig-desktop"><svg role="img" aria-label="Fig 6 — exposure, not capability" viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Exposure, not capability</title>
+  <desc>Left: degeneration rate rising with both copy count and Σα. Right: for the eq channel the aggregate score falls with copy count, but scoring only the non-derailed responses holds flat at or above the untouched baseline — the surgery's cost is derailment risk, not content quality.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -1695,6 +1717,8 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 </svg></div>
         <div class="fig-mobile"><svg role="img" aria-label="Fig 6 — exposure, not capability" viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Exposure, not capability</title>
+  <desc>Left: degeneration rate rising with both copy count and Σα. Right: for the eq channel the aggregate score falls with copy count, but scoring only the non-derailed responses holds flat at or above the untouched baseline — the surgery's cost is derailment risk, not content quality.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

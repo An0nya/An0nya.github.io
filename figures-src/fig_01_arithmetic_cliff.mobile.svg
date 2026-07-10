@@ -1,5 +1,7 @@
 <svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The arithmetic cliff and the usable band</title>
+  <desc>One small-multiple panel per arithmetic operation: baseline strict-correct rate against difficulty rung, with the usable roughly 0.3 to 0.7 band shaded. Addition declines gently, multiplication falls almost vertically, and division declines broadly, so most difficulty rungs sit outside the band where a score can actually move.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
