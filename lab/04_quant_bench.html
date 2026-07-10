@@ -843,11 +843,11 @@
 
   <section id="caveats">
     <h2>Caveats</h2>
-    <p>Medium confidence, and here is what that means: the speed and RAM numbers are solid; the headline
-    numbers still want a verify pass. This benchmark's scope only covers speed and memory usage, and does not address the real accuracy
+    <p>This benchmark's scope only covers speed and memory usage, and does not address the real accuracy
     differences between quants. Accuracy is the axis that discriminates the quants for functional usage, but
     this sets aside that aspect in order to assess runtime factors since often the quant is dependent on
-    maximizing bit weight within hardware limitations.</p>
+    maximizing bit weight within hardware limitations. Within that scope the speed and RAM measurements
+    are solid; the headline numbers still want a verify pass.</p>
     <ul class="walkback">
       <li><span class="wbhead">RAM-measurement calibration.</span> MLX <code>phys_footprint</code> is a cumulative high-watermark, llama is per-config-fresh. The runtime-by-axis <em>direction</em> holds; a live Activity Monitor pass would tighten the magnitude claims.</li>
       <li><span class="wbhead"><code>IQ3_M</code> (llama) is EOS-broken</span> in this run — excluded from all comparisons.</li>
