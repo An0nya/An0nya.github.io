@@ -118,14 +118,9 @@
   <header class="nb-record">
     <div class="nb-record__title">Teaching an agent to read its own logs</div>
     <div class="nb-record__grid">
-      <div class="nb-record__field"><span class="nb-record__k">System</span><span class="nb-record__v">offline map-reduce trawl over an agent's own session transcripts → an evidence-based CLAUDE.md</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">System</span><span class="nb-record__v">offline map-reduce trawl over an agent's own session transcripts → a rewritten lean CLAUDE.md, rules promoted from evidence rather than memory</span></div>
       <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">Phase 1 shipped (single-summarizer, bias-screened) · Phase 2 multi-model panel designed &amp; deferred · human-in-the-loop by design</span></div>
-      <div class="nb-record__field"><span class="nb-record__k">Outcome</span><span class="nb-record__v">a rewritten lean CLAUDE.md, rules promoted from evidence rather than memory</span></div>
       <div class="nb-record__field"><span class="nb-record__k">Source</span><span class="nb-record__v">project_claudemd_aggregation.md · the live CLAUDE.md · tools/trawl/</span></div>
-      <div class="nb-record__field">
-        <span class="nb-record__k">Confidence</span>
-        <span class="nb-conf nb-conf--medium"><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span></span>medium — the method is the durable artifact; specific promoted-rule counts tagged <span class="vrfy">VERIFY</span> against the ledger</span>
-      </div>
     </div>
   </header>
 
@@ -738,7 +733,7 @@ deterministic script: tag → session-count   <span class="cm"># resolved from g
     <p>This is explicitly human-in-the-loop — decision-support, not an autonomous self-rewriting agent,
     because an LLM promoting its own behavioral rules unsupervised is how bias compounds. Phase 1 shipped
     single-summarizer, bias-screened; the multi-model panel that would cross-check it is designed but
-    deferred.</p>
+    deferred. Specific promoted-rule counts are tagged <span class="vrfy">VERIFY</span> against the ledger.</p>
     <ul class="walkback">
       <li><span class="wbhead">The summarizers are small local models</span> — they editorialize and occasionally fabricate; the whole confidence discipline exists <em>because</em> the readers are imperfect.</li>
       <li><span class="wbhead">The feeder pipeline is paused, not retired</span> — the <a href="/lab/07_mem0_processor.html">mem0-processor</a> that produces the summaries is on hold; sessions after its last run have no summaries yet, so extending the trawl today means reading raw transcripts directly. Either way the <em>method</em> is the durable artifact, not the running service.</li>
