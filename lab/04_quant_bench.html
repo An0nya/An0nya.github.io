@@ -105,14 +105,9 @@
   <header class="nb-record">
     <div class="nb-record__title">MLX is the fastest local inference runtime<span style="color:var(--cause)">*†</span></div>
     <div class="nb-record__grid">
-      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v">MiniCPM5-1B · MLX / llama.cpp / PyTorch-MPS</span></div>
-      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">speed + RAM measured · accuracy pending</span></div>
-      <div class="nb-record__field"><span class="nb-record__k">Last revised</span><span class="nb-record__v">2026-06-21</span></div>
-      <div class="nb-record__field"><span class="nb-record__k">Battery</span><span class="nb-record__v">unified_bench.py · 3 adapters · 438+ rows · base M4 Mini, 16 GB</span></div>
-      <div class="nb-record__field">
-        <span class="nb-record__k">Confidence</span>
-        <span class="nb-conf nb-conf--medium"><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span></span>medium — speed/RAM solid, headline numbers want a [VERIFY] pass</span>
-      </div>
+      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v"><a href="https://huggingface.co/openbmb/MiniCPM5-1B">MiniCPM5-1B</a> · MLX / llama.cpp / PyTorch-MPS · base M4 Mini, 16 GB</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">speed + RAM measured 2026-06-21 · accuracy pending</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Source</span><span class="nb-record__v">unified_bench.py · 3 adapters · 438+ rows</span></div>
     </div>
   </header>
 
@@ -848,7 +843,8 @@
 
   <section id="caveats">
     <h2>Caveats</h2>
-    <p>This benchmark's scope only covers speed and memory usage, and does not address the real accuracy
+    <p>Medium confidence, and here is what that means: the speed and RAM numbers are solid; the headline
+    numbers still want a verify pass. This benchmark's scope only covers speed and memory usage, and does not address the real accuracy
     differences between quants. Accuracy is the axis that discriminates the quants for functional usage, but
     this sets aside that aspect in order to assess runtime factors since often the quant is dependent on
     maximizing bit weight within hardware limitations.</p>
