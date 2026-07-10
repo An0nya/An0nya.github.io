@@ -166,8 +166,8 @@
         specific, reproducible ways. <code>907 − 131</code> (= 776) never comes back right across 15 seeds — it
         settles into one of <em>two</em> stable wrong answers, <b>676</b> (9/15, a hundreds-column slip) or
         <b>131</b> (6/15, echoing the subtrahend): 0 of 15 correct, two error basins. A particular carry-drop on
-        an addition probe, likewise. I call these <b>metastable bugs</b> — <span class="olabel obs">obs</span>
-        the 0/15 reproducibility is what's measured; <span class="olabel inf">inf</span> "basin / attractor" is
+        an addition probe, likewise. I call these <b>metastable bugs</b> — <span class="olabel obs">observation</span>
+        the 0/15 reproducibility is what's measured; <span class="olabel inf">interpretation</span> "basin / attractor" is
         the interpretation.</p>
         <p>A "winning" surgery doesn't lift a diffuse competence — it <span class="hl-acc">flips a few of these
         specific bugs to 12/12 right</span>. The measurement trap is that a balanced 49-probe average
@@ -469,7 +469,7 @@
     <div class="col-side">
       <div>
         <p class="dropcap">Once you know wins are disjoint bug-fixes, composition has an apparent rule and a
-        non-obvious failure mode. <span class="olabel obs">obs</span> depth-separated treatments tend to stack;
+        non-obvious failure mode. <span class="olabel obs">observation</span> depth-separated treatments tend to stack;
         same-region or redundant ones mask. I'm calling this a <b>heuristic, not a law</b> — earning the
         stronger word would take a regression of effect against layer-distance plus an effect-size
         distribution, and the margins below are thin.</p>
@@ -489,7 +489,7 @@
       <tbody>
         <tr><td class="first"><code>dampL5a130 + pr26</code></td><td>21 layers</td><td>math <b>0.570</b>, paired t +6.4 vs baseline</td><td>best math result of the entire sweep — edges <code>prune_26</code> alone (0.566). Compose without interfering.</td></tr>
         <tr><td class="first"><code>dampL6a70 + pr26</code></td><td>20 layers</td><td>clears <code>prune_26</code> on core probes; a hair under on full 49</td><td>depth-separated, roughly additive — but the margin over its best component is inside the noise.</td></tr>
-        <tr><td><code>pr26 + dup16</code></td><td><em>near</em></td><td>falls <b>below</b> <code>prune_26</code> alone</td><td><span class="olabel obs">obs</span> combining loses ground. <span class="olabel inf">inf</span> overlapping fixers reach for the same bugs, don't compound.</td></tr>
+        <tr><td><code>pr26 + dup16</code></td><td><em>near</em></td><td>falls <b>below</b> <code>prune_26</code> alone</td><td><span class="olabel obs">observation</span> combining loses ground. <span class="olabel inf">interpretation</span> overlapping fixers reach for the same bugs, don't compound.</td></tr>
       </tbody>
     </table>
 
@@ -883,10 +883,10 @@
         — and that downshift was <em>named in advance</em>: the pre-run note (2026-06-12, before the
         fair-battery run executed) flagged Granite's <code>residual_multiplier = 0.22</code> as the suspect, and
         the run confirmed Σα≈0.75.</p>
-        <p><span class="olabel inf">inf</span> The working mechanism: a smaller per-layer residual write means a
+        <p><span class="olabel inf">interpretation</span> The working mechanism: a smaller per-layer residual write means a
         lower cumulative-α budget before the residual leaves the norm band. Beyond peak: ≈2.0 fading, ≥3
-        cratering, the same one-death-two-doors collapse. <span class="olabel obs">obs</span> over-drive and
-        negative-α both produce digit / special-token / CJK leak; <span class="olabel inf">inf</span> residual-norm
+        cratering, the same one-death-two-doors collapse. <span class="olabel obs">observation</span> over-drive and
+        negative-α both produce digit / special-token / CJK leak; <span class="olabel inf">interpretation</span> residual-norm
         corruption is the proposed cause. <code>dampall</code> is neutral-to-negative on Granite (it isn't a
         collapsed model, so there's no pathology to relieve) — control behaviour consistent with MiniCPM's
         <code>dampall</code> "wins" having been de-collapse, not capability.</p>
