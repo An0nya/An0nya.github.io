@@ -1,5 +1,7 @@
 <svg viewBox="0 0 760 440" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Friction clusters ranked by session span</title>
+  <desc>A schematic bar chart of friction clusters ranked by how many sessions each spans, with cluster counts shown as representative. Some of the tallest bars are flagged suspect because they match the summarizing model's known editorial bias, while some shorter bars are trusted because a real user action backs them — frequency and trustworthiness are different axes.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

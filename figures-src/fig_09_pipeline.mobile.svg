@@ -1,5 +1,7 @@
 <svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The pipeline</title>
+  <desc>An architecture diagram of the map-reduce pipeline: two corpora feed a row of parallel map agents that emit flat observations, a mechanical reduce step clusters them and counts how many distinct sessions each cluster spans, and a final human-plus-agent judgment step assigns confidence tiers and writes rules into the memory file. One-way gates carry the discipline — map never tiers, and an LLM never hand-transcribes a UUID.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

@@ -199,6 +199,8 @@
       <div class="nb-plate">
         <div class="fig-desktop"><svg role="img" aria-label="Fig 1 — the pipeline" viewBox="0 0 860 420" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The pipeline</title>
+  <desc>An architecture diagram of the map-reduce pipeline: two corpora feed a row of parallel map agents that emit flat observations, a mechanical reduce step clusters them and counts how many distinct sessions each cluster spans, and a final human-plus-agent judgment step assigns confidence tiers and writes rules into the memory file. One-way gates carry the discipline — map never tiers, and an LLM never hand-transcribes a UUID.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -282,6 +284,8 @@
 </svg></div>
         <div class="fig-mobile"><svg role="img" aria-label="Fig 1 — the pipeline" viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The pipeline</title>
+  <desc>An architecture diagram of the map-reduce pipeline: two corpora feed a row of parallel map agents that emit flat observations, a mechanical reduce step clusters them and counts how many distinct sessions each cluster spans, and a final human-plus-agent judgment step assigns confidence tiers and writes rules into the memory file. One-way gates carry the discipline — map never tiers, and an LLM never hand-transcribes a UUID.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -394,6 +398,8 @@
       <div class="nb-plate">
         <div class="fig-desktop"><svg role="img" aria-label="Fig 2 — friction clusters ranked by how many sessions each spans" viewBox="0 0 760 440" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Friction clusters ranked by session span</title>
+  <desc>A schematic bar chart of friction clusters ranked by how many sessions each spans, with cluster counts shown as representative. Some of the tallest bars are flagged suspect because they match the summarizing model's known editorial bias, while some shorter bars are trusted because a real user action backs them — frequency and trustworthiness are different axes.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -561,6 +567,8 @@
 </svg></div>
         <div class="fig-mobile"><svg role="img" aria-label="Fig 2 — friction clusters ranked by how many sessions each spans" viewBox="0 0 420 460" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Friction clusters ranked by session span</title>
+  <desc>A schematic bar chart of friction clusters ranked by how many sessions each spans, with cluster counts shown as representative. Some of the tallest bars are flagged suspect because they match the summarizing model's known editorial bias, while some shorter bars are trusted because a real user action backs them — frequency and trustworthiness are different axes.</desc>
   <defs>
     <pattern id="stripeM" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
       <line x1="0" y1="0" x2="0" y2="6" stroke="var(--neg,#B98AD6)" stroke-width="1.1" opacity="0.5"/>
