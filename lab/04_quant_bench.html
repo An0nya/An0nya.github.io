@@ -96,6 +96,7 @@
   <a href="#perGB" data-spy>Per-GB flip</a>
   <a href="#prefill" data-spy>Prefill</a>
   <a href="#roofline" data-spy>M5 vs M4</a>
+  <a href="#caveats" data-spy>Caveats</a>
 </aside>
 </div>
 
@@ -845,21 +846,19 @@
     </figure>
   </section>
 
-  <section id="methods">
-    <div class="nb-limits">
-      <div class="nb-limits__head">
-        <span class="nb-limits__label">Pending — the open gaps</span>
-        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — don't ship without addressing these</span>
-      </div>
-      <ul>
-        <li><b>Accuracy is unmeasured</b>, and it's the <em>only</em> axis that discriminates the quants (speed is a wash in this run). The no-CoT math/EQ probe battery is the discriminator; until it runs, this post can say "speed and RAM" but must not imply a quality ranking.</li>
-        <li><b>RAM-measurement calibration.</b> MLX <code>phys_footprint</code> is a cumulative high-watermark, llama is per-config-fresh. The runtime-by-axis <em>direction</em> holds; a live Activity Monitor pass would tighten the magnitude claims.</li>
-        <li><b><code>IQ3_M</code> (llama) is EOS-broken</b> in this run — excluded from all comparisons.</li>
-        <li><b>The roofline crossover (Fig 3) is partly unrun</b> — needs sub-64 batch widths on both machines, and the M5 Air isn't currently accessible. The sub-64 region is the prediction; the w64–384 band is measured.</li>
-        <li><b>Sustained-vs-burst on the fanless Air is untested</b> — 3700 is a burst number; whether it holds under sustained load (or droops toward the Mini) is an open asterisk.</li>
-        <li><span class="vrfy">VERIFY</span> headline table numbers against <code>unified_results.jsonl</code>. M5 peak decode (3693–3699, plateau confirmed w384→w768) is verified from the run log.</li>
-      </ul>
-    </div>
+  <section id="caveats">
+    <h2>Caveats</h2>
+    <p>This benchmark's scope only covers speed and memory usage, and does not address the real accuracy
+    differences between quants. Accuracy is the axis that discriminates the quants for functional usage, but
+    this sets aside that aspect in order to assess runtime factors since often the quant is dependent on
+    maximizing bit weight within hardware limitations.</p>
+    <ul class="walkback">
+      <li><span class="wbhead">RAM-measurement calibration.</span> MLX <code>phys_footprint</code> is a cumulative high-watermark, llama is per-config-fresh. The runtime-by-axis <em>direction</em> holds; a live Activity Monitor pass would tighten the magnitude claims.</li>
+      <li><span class="wbhead"><code>IQ3_M</code> (llama) is EOS-broken</span> in this run — excluded from all comparisons.</li>
+      <li><span class="wbhead">The roofline crossover (Fig 3) is partly unrun</span> — needs sub-64 batch widths on both machines, and the M5 Air isn't currently accessible. The sub-64 region is the prediction; the w64–384 band is measured.</li>
+      <li><span class="wbhead">Sustained-vs-burst on the fanless Air is untested</span> — 3700 is a burst number; whether it holds under sustained load (or droops toward the Mini) is an open asterisk.</li>
+      <li><span class="wbhead">Numbers tagged <span class="vrfy">VERIFY</span></span> against <code>unified_results.jsonl</code>. M5 peak decode (3693–3699, plateau confirmed w384→w768) is verified from the run log.</li>
+    </ul>
 
     <div class="nb-marginalia" style="margin-top:var(--sp-7)">
       <div class="nb-marginalia__label">Build notes &amp; method</div>
