@@ -1,5 +1,7 @@
 <svg viewBox="0 0 400 640" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Turn-taking without shared meaning</title>
+  <desc>The centre column is the glyph that crossed the wire; the gutters are each agent's private gloss of that same glyph, which never match. A tidy protocol runs up the middle while two unrelated private languages sit in the gutters — the exchange looks like communication while no meaning is shared.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

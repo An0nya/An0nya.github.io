@@ -1,5 +1,7 @@
 <svg viewBox="0 0 720 430" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The air gap</title>
+  <desc>A schematic of two agents whose histories and private lexicons are walled off from each other. The only shared surface is the single one-symbol-at-a-time wire of messages they choose to send across transmit; everything else is sealed.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
