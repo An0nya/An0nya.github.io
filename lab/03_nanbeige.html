@@ -705,26 +705,22 @@
   </section>
 
   <section id="caveats">
-    <div class="nb-limits">
-      <div class="nb-limits__head">
-        <span class="nb-limits__label">Caveats &amp; reproduction</span>
-        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — these bound the claims</span>
-      </div>
-      <ul>
-        <li><b>Not published; not yet cross-validated.</b> No-CoT math is one axis; easy-math, EQ, CoT efficiency, and
-        chat quality are unmeasured or in-flight. The v4-battery re-run (Phase 2) is a hard pre-publish gate for
-        cross-model comparability.</li>
-        <li><b>All numbers are Q8 / May-2026 battery</b> and point-in-time from memory; confirm against the results JSONL
+    <h2>Caveats</h2>
+    <p>This is a preliminary result from ongoing model exploration, not an exhaustive or cross-model
+    comparable finding. The no-CoT math lift is one axis — easy-math, EQ, CoT efficiency, and chat quality
+    are unmeasured or still in-flight, and the v4-battery re-run (Phase 2) is what would extend this into a
+    cross-model comparison. Until then, read it as a single-model result.</p>
+    <ul class="walkback">
+      <li><span class="wbhead">All numbers are Q8 / May-2026 battery</span> and point-in-time from memory; confirm against the results JSONL
         (<code>nanbeige_nocot_math_followup*_results.jsonl</code>) <span class="vrfy">VERIFY</span> before shipping any
         figure.</li>
-        <li><b>Publish framing</b> (locked in the plan): documented result + reproducible tooling, <b>not</b> "custom
+      <li><span class="wbhead">Publish framing</span> (locked in the plan): documented result + reproducible tooling, <b>not</b> "custom
         model." Any uploaded GGUF is a <em>representative variant</em>, never "best." Credit chain: Nanbeige → David Ng
         (technique + probe design) → this lab (the inferential layer). License Apache-2.0 from base.</li>
-        <li><b>Engine</b>: llama.cpp / llama-server, build-on-demand GGUFs via <code>layer_path.py</code>,
+      <li><span class="wbhead">Engine</span>: llama.cpp / llama-server, build-on-demand GGUFs via <code>layer_path.py</code>,
         <code>-fa on</code>, Q8_0 KV cache. De-echo + magnitude regrade via <code>regrade_no_echo.py</code>. Closed-think
         prefill forces no-CoT.</li>
       </ul>
-    </div>
 
     <div class="nb-marginalia" style="margin-top:var(--sp-7)">
       <div class="nb-marginalia__label">Build notes &amp; lineage</div>
