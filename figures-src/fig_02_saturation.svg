@@ -1,5 +1,7 @@
 <svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The usable band across evaluation channels</title>
+  <desc>Each evaluation channel's baseline pass-rate against a shaded usable band from 0.4 to 0.7: strict math at the floor, multiple-choice at the ceiling, and emotional-intelligence in the middle with a large variance bar. Only the mid-difficulty middle region lets a configuration's effect show; the channel positions are illustrative, though the emotional-intelligence variance band is the real measured value.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

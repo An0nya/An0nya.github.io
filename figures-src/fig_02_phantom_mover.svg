@@ -1,5 +1,7 @@
 <svg viewBox="0 0 720 470" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Honest configurations and the phantom cloud</title>
+  <desc>A scatter of every configuration, partial-credit score against strict score, with the equality diagonal drawn. Honest configurations cluster near the diagonal while a cloud of phantom configurations sits far below it — high partial-credit scores paired with strict scores near or below zero, the labelled champion combo_2_36_39 at the bottom right.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

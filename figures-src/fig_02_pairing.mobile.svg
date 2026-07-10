@@ -1,5 +1,7 @@
 <svg viewBox="0 0 400 470" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Pairing cancels seed difficulty</title>
+  <desc>Left: two broad, heavily overlapping score distributions for a configuration and the baseline, visually indistinguishable. Right: the same comparison as per-seed differences, where nearly every seed shows the configuration above baseline by a consistent margin — the left-hand overlap is common-mode seed difficulty that the pairing cancels out.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
