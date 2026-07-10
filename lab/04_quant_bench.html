@@ -204,6 +204,8 @@
       <div class="nb-plate">
         <div class="fig-desktop"><svg role="img" aria-label="Fig 1 — the occupancy story" viewBox="0 0 720 442" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The occupancy story</title>
+  <desc>Aggregate decode throughput against concurrent streams, one curve per runtime: MLX climbs to about 1670 tok/s and saturates late, llama plateaus near 750 by 128 streams, and PyTorch stays low. All runtimes coincide at a single stream, so the MLX advantage is entirely about packing more concurrent streams; the faint per-line band is the spread across quants, tight enough to confirm throughput is quant-agnostic.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -300,6 +302,8 @@
 </svg></div>
         <div class="fig-mobile"><svg role="img" aria-label="Fig 1 — the occupancy story" viewBox="0 0 400 398" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The occupancy story</title>
+  <desc>Aggregate decode throughput against concurrent streams, one curve per runtime: MLX climbs to about 1670 tok/s and saturates late, llama plateaus near 750 by 128 streams, and PyTorch stays low. All runtimes coincide at a single stream, so the MLX advantage is entirely about packing more concurrent streams; the faint per-line band is the spread across quants, tight enough to confirm throughput is quant-agnostic.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -408,6 +412,8 @@
       <div class="nb-plate">
         <div class="fig-desktop"><svg role="img" aria-label="Fig 2 — the leaderboard flips when you divide by RAM" viewBox="0 0 720 588" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The leaderboard flips when you divide by RAM</title>
+  <desc>Two panels ranking the same eleven configurations, changing only the metric. Top: raw aggregate decode tok/s, where MLX configs win. Bottom: tok/s per GB of peak RAM, where every llama config now beats every MLX config by four to five times, with IQ3_M excluded as EOS-broken.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -554,6 +560,8 @@
 </svg></div>
         <div class="fig-mobile"><svg role="img" aria-label="Fig 2 — the leaderboard flips when you divide by RAM" viewBox="0 0 400 566" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The leaderboard flips when you divide by RAM</title>
+  <desc>Two panels ranking the same eleven configurations, changing only the metric. Top: raw aggregate decode tok/s, where MLX configs win. Bottom: tok/s per GB of peak RAM, where every llama config now beats every MLX config by four to five times, with IQ3_M excluded as EOS-broken.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -713,6 +721,8 @@
       <div class="nb-plate">
         <div class="fig-desktop"><svg role="img" aria-label="Fig 3 — the roofline crossover" viewBox="0 0 720 412" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The roofline crossover</title>
+  <desc>The measured M5/M4 decode-throughput ratio across batch widths 64 to 384, rising from 1.44 toward about 2.3, with reference lines at the 1.27× bandwidth ratio and the 2.3× compute ratio. Sub-64 widths are hatched as unmeasured with no curve drawn through them — the crossover below width 64 is a stated, unrun prediction, bandwidth-limited when narrow and compute-limited as the batch grows.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
@@ -779,6 +789,8 @@
 </svg></div>
         <div class="fig-mobile"><svg role="img" aria-label="Fig 3 — the roofline crossover" viewBox="0 0 406 330" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The roofline crossover</title>
+  <desc>The measured M5/M4 decode-throughput ratio across batch widths 64 to 384, rising from 1.44 toward about 2.3, with reference lines at the 1.27× bandwidth ratio and the 2.3× compute ratio. Sub-64 widths are hatched as unmeasured with no curve drawn through them — the crossover below width 64 is a stated, unrun prediction, bandwidth-limited when narrow and compute-limited as the batch grows.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

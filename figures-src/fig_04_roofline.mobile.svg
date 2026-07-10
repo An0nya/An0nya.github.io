@@ -1,5 +1,7 @@
 <svg viewBox="0 0 406 330" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The roofline crossover</title>
+  <desc>The measured M5/M4 decode-throughput ratio across batch widths 64 to 384, rising from 1.44 toward about 2.3, with reference lines at the 1.27× bandwidth ratio and the 2.3× compute ratio. Sub-64 widths are hatched as unmeasured with no curve drawn through them — the crossover below width 64 is a stated, unrun prediction, bandwidth-limited when narrow and compute-limited as the batch grows.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

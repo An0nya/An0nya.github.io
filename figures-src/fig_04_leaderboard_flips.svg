@@ -1,5 +1,7 @@
 <svg viewBox="0 0 720 588" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The leaderboard flips when you divide by RAM</title>
+  <desc>Two panels ranking the same eleven configurations, changing only the metric. Top: raw aggregate decode tok/s, where MLX configs win. Bottom: tok/s per GB of peak RAM, where every llama config now beats every MLX config by four to five times, with IQ3_M excluded as EOS-broken.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

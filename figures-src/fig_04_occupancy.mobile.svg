@@ -1,5 +1,7 @@
 <svg viewBox="0 0 400 398" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The occupancy story</title>
+  <desc>Aggregate decode throughput against concurrent streams, one curve per runtime: MLX climbs to about 1670 tok/s and saturates late, llama plateaus near 750 by 128 streams, and PyTorch stays low. All runtimes coincide at a single stream, so the MLX advantage is entirely about packing more concurrent streams; the faint per-line band is the spread across quants, tight enough to confirm throughput is quant-agnostic.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
