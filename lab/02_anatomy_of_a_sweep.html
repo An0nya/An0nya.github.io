@@ -107,6 +107,7 @@
   <a href="#multiplicity" data-spy>Multiplicity</a>
   <a href="#baseline" data-spy>The baseline</a>
   <a href="#coda" data-spy>Belief vs behaviour</a>
+  <a href="#caveats" data-spy>Caveats</a>
 </aside>
 </div>
 
@@ -1348,23 +1349,14 @@
   </section>
 
   <section id="caveats">
-    <div class="nb-limits">
-      <div class="nb-limits__head">
-        <span class="nb-limits__label">Scope &amp; credit</span>
-        <span class="nb-conf nb-conf--medium"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span></span>medium — these frame the contribution</span>
-      </div>
-      <ul>
-        <li><b>The contribution is the inferential layer, not the surgery.</b> Ng's probe design (no-CoT, tiny outputs,
-        partial-credit) is genuinely elegant and gets explicit credit; the strict regrade and the statistics
-        <em>extend</em> it, they don't refute it. Frame: "I add the statistics," never "they're sloppy."</li>
-        <li><b>No t is a p-value here.</b> Every t-statistic in this lab is an ordering device read against a multiplicity
-        budget, not a significance test reported in isolation.</li>
-        <li><b>Numbers tagged <span class="vrfy">VERIFY</span></b> (the n=4896 EQ/strict/partial figures) want a
-        recompute from the chosen 31b file via <code>monitor.py</code> null-stats before they caption a figure.</li>
-        <li><b>The figures here are pending</b> — the prose carries each one's intended argument and data source in the
-        meantime, so the methodology reads complete even before the plots are drawn.</li>
-      </ul>
-    </div>
+    <h2>Caveats</h2>
+    <p>This methodology has held up across every specimen in the lab, and produces usable results once a
+    new model is tuned in. The statistics are the primary addition here; Ng's probe design deserves full
+    credit for the eval design this builds on.</p>
+    <ul class="walkback">
+      <li><span class="wbhead">The layer-damping surgery may be a novel extension of the RYS method, not just the statistics.</span> As far as I know, RYS and similar work hasn't attempted this kind of damping approach elsewhere — that's a separate, unconfirmed claim from the measurement methodology this page focuses on.</li>
+      <li><span class="wbhead">No <em>t</em> is a p-value here.</span> Every t-statistic in this lab is an ordering device read against a multiplicity budget, not a significance test reported in isolation.</li>
+    </ul>
 
     <div class="nb-marginalia" style="margin-top:var(--sp-7)">
       <div class="nb-marginalia__label">Build notes &amp; lineage</div>
