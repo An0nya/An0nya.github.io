@@ -31,6 +31,18 @@ def extract(text):
     models = []
     for aid, name, body in accs:
         svg = re.search(r"<svg.*?</svg>", body, re.S).group(0)
+        # the emphasized full-width gridline (var(--ink2)) is the zero axis
+        zero_y = None
+        for lm in re.finditer(r'<line[^>]*stroke="var\(--ink2\)"[^>]*/?>', svg):
+            l = lm.group(0)
+            y1 = re.search(r'y1="([\d.]+)"', l)
+            y2 = re.search(r'y2="([\d.]+)"', l)
+            x1 = re.search(r'x1="([\d.]+)"', l)
+            x2 = re.search(r'x2="([\d.]+)"', l)
+            if (y1 and y2 and y1.group(1) == y2.group(1)
+                    and x1 and x2 and float(x2.group(1)) - float(x1.group(1)) > 200):
+                zero_y = float(y1.group(1))
+                break
         seen, series = set(), []
         for m in re.finditer(r"<(?:polyline|path)([^>]*?)/?>", svg):
             attrs = m.group(1)
@@ -47,18 +59,24 @@ def extract(text):
             if len(pts) > 5:
                 seen.add(sm.group(1))
                 series.append((sm.group(1), pts))
-        models.append((aid, name.strip(), series))
+        models.append((aid, name.strip(), series, zero_y))
     return models
 
 
-def spark(series):
+def spark(series, zero_y):
     xs = [x for _, pts in series for x, _ in pts]
     ys = [y for _, pts in series for _, y in pts]
+    if zero_y is not None:
+        ys = ys + [zero_y]  # keep the zero line in frame
     x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
     sx = lambda x: PAD + (x - x0) / (x1 - x0) * (W - 2 * PAD)
     sy = lambda y: PAD + (y - y0) / (y1 - y0) * (H - 2 * PAD)
     series = sorted(series, key=lambda s: ORDER.index(s[0]))
     lines = []
+    if zero_y is not None:
+        zy = sy(zero_y)
+        lines.append(f'<line x1="{PAD}" y1="{zy:.1f}" x2="{W - PAD}" y2="{zy:.1f}" '
+                     f'stroke="var(--rule)" stroke-width="1"/>')
     for var, pts in series:
         p = " ".join(f"{sx(x):.1f},{sy(y):.1f}" for x, y in pts)
         wdt = "1.6" if var in ("fact", "poem") else "1"
@@ -74,11 +92,11 @@ def main():
     if START not in text or END not in text:
         sys.exit("GEO-THUMBS markers not found in geometry.html")
     cards = []
-    for aid, name, series in extract(text):
+    for aid, name, series, zero_y in extract(text):
         model, _, note = (p.strip() for p in name.partition("·"))
         cards.append(
             f'<a class="geo-thumb" href="#{aid}">\n'
-            f"  {spark(series)}\n"
+            f"  {spark(series, zero_y)}\n"
             f'  <span class="geo-thumb-name">{model}</span>\n'
             f'  <span class="geo-thumb-note">{note}</span>\n'
             f"</a>")
