@@ -155,7 +155,7 @@
     <figure class="figure" id="fig1">
       <p class="nb-plate__note">↳ a layer is a computation you can repeat; an expert bank is a routed lookup you can't repeat without breaking the route</p>
       <div class="nb-plate">
-        <div class="fig-desktop"><svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-desktop"><svg role="img" aria-label="Fig 1 — the layer is the wrong handle" viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <title>The layer is the wrong handle on a Mixture-of-Experts model</title>
   <desc>Two diagrams. On a dense model, duplicating a layer amplifies a unit of computation and capability shifts. On a mixture-of-experts model, the layer is a router selecting a few of many experts; duplicating the whole layer re-runs the router on a shifted input, mis-fires the expert selection, and breaks the output. The operable unit on an MoE is the expert, not the layer.</desc>
@@ -314,7 +314,7 @@
   <text x="40" y="468" class="ink2" font-size="11">expert bank; duplicating it re-runs the router on a shifted residual, <tspan class="bad">mis-fires selection, and breaks the output</tspan>.</text>
   <text x="40" y="486" class="mut" font-size="10">To touch what the model knows, operate on the <tspan class="ok">expert</tspan> &#8212; the unit of capacity &#8212; not the layer.</text>
 </svg></div>
-        <div class="fig-mobile"><svg viewBox="0 0 340 620" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-mobile"><svg role="img" aria-label="Fig 1 — the layer is the wrong handle" viewBox="0 0 340 620" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <title>The layer is the wrong handle on a Mixture-of-Experts model</title>
   <desc>On a dense model, duplicating a layer amplifies a unit of computation and capability shifts. On a mixture-of-experts model, the layer is a router selecting a few of many experts; duplicating the whole layer re-runs the router on a shifted input, mis-fires the expert selection, and breaks the output. The operable unit on an MoE is the expert, not the layer.</desc>
@@ -508,7 +508,7 @@
     <figure class="figure" id="fig2">
       <p class="nb-plate__note">↳ victims hug the low-index slots across 39 of 40 layers; layer 39 is entirely donor</p>
       <div class="nb-plate">
-        <div class="fig-desktop"><svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-desktop"><svg role="img" aria-label="Fig 2 — recovering a clone map from the routers" viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <title>Recovering a clone map by diffing routers against the base model</title>
   <desc>A grid of expert slots by layer. Cells are marked by whether each router column matches the base model or differs from it. Columns that differ — the overwritten victims — cluster in the low-index slots across 39 of 40 layers, while one layer is entirely unchanged. Because the router is full-precision in every quant, diffing it against the base recovers exactly which experts were cloned where, without the original surgery code.</desc>
@@ -755,7 +755,7 @@
   <text x="40" y="480" class="ink2" font-size="10">Replay: 39 &#215; 4 = 156 mmap slab copies onto a</text>
   <text x="40" y="494" class="ink2" font-size="10">runnable IQ2_M &#8212; a gatekept surgery, reproduced.</text>
 </svg></div>
-        <div class="fig-mobile"><svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-mobile"><svg role="img" aria-label="Fig 2 — recovering a clone map from the routers" viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <title>Recovering a clone map by diffing routers against the base model</title>
   <desc>A grid of expert slots by layer. Cells are marked by whether each router column matches the base model or differs from it. Columns that differ — the overwritten victims — cluster in the low-index slots across 39 of 40 layers, while one layer is entirely unchanged. Because the router is full-precision in every quant, diffing it against the base recovers exactly which experts were cloned where, without the original surgery code.</desc>
@@ -1006,7 +1006,7 @@
     <figure class="figure" id="fig3">
       <p class="nb-plate__note">↳ the only measured point sits past the estimated cliff, yet well above the broken floor</p>
       <div class="nb-plate">
-        <div class="fig-desktop"><svg viewBox="0 0 720 550" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-desktop"><svg role="img" aria-label="Fig 3 — the REAP usability window" viewBox="0 0 720 550" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <title>The REAP usability window</title>
   <desc>A curve of model capability against the fraction of experts pruned. Capability holds well through roughly 30 to 50 percent pruning, declines past a cliff near 60 percent where pruning exceeds what the router was trained for, and at 75 percent — the Huihui teardown point — perplexity has risen 55 percent but the model still functions, sitting well above the broken floor.</desc>
@@ -1101,7 +1101,7 @@
   <text x="40" y="521" class="mut" font-size="10">The real baseline isn&#8217;t the unpruned model (un-runnable on 16GB) &#8212; it&#8217;s non-existence.</text>
   <text x="40" y="536" class="mut" font-size="10">An accessibility result, not a capability claim.</text>
 </svg></div>
-        <div class="fig-mobile"><svg viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
+        <div class="fig-mobile"><svg role="img" aria-label="Fig 3 — the REAP usability window" viewBox="0 0 400 720" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
   <title>The REAP usability window</title>
   <desc>A curve of model capability against the fraction of experts pruned. Capability holds well through roughly 30 to 50 percent pruning, declines past a cliff near 60 percent where pruning exceeds what the router was trained for, and at 75 percent — the Huihui teardown point — perplexity has risen 55 percent but the model still functions, sitting well above the broken floor.</desc>
