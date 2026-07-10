@@ -1,5 +1,7 @@
 <svg viewBox="0 0 400 430" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Removing echo-only responses widens the gap</title>
+  <desc>A before-and-after of the baseline and the top configuration. Removing echo-only responses collapses the baseline score from 0.19 to 0.04 while the top configuration barely moves, from 0.40 to 0.36, so the gap between them grows from 0.21 to 0.32 — cleaning the grader strengthened the result.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

@@ -1,5 +1,7 @@
 <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The per-layer duplication-and-prune fingerprint</title>
+  <desc>A per-layer chart from L5 to L26 plotting the effect size of duplicating each layer against that of pruning it. Layer 9 spikes when pruned but is flat when duplicated, layer 14 is the opposite, and the middle layers reward duplication while the edge layers are harmed by it — the roles are layer-specific and often opposite-signed.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }

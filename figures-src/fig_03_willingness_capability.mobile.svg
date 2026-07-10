@@ -1,5 +1,7 @@
 <svg viewBox="0 0 400 470" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Willingness to commit versus answer quality</title>
+  <desc>Willingness-to-commit plotted against answer quality for three configurations. The untouched baseline sits low on both; forcing the model to commit lifts quality sharply with little change in willingness, while the surgical configuration sits high on willingness and only slightly higher on quality — most of its gain is getting the model to answer, not making it smarter.</desc>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
