@@ -68,10 +68,6 @@
   /* pull quote */
   .pull { font-family: var(--font-serif); font-size: 1.25rem; line-height: 1.4; color: var(--text); border-left: 3px solid var(--accent); padding: var(--sp-3) 0 var(--sp-3) var(--sp-5); margin: var(--sp-6) 0; max-width: 60ch; }
   .pull cite { display: block; font-family: var(--font-mono); font-size: 0.7rem; font-style: normal; letter-spacing: .04em; color: var(--text-muted); margin-top: var(--sp-4); }
-  /* caveats */
-  .walkback { list-style: none; padding: 0; margin: var(--sp-5) 0 0; max-width: var(--measure); }
-  .walkback li { font-size: var(--fs-sm); line-height: 1.6; color: var(--text-dim); padding-left: var(--sp-5); border-left: 1px solid var(--border); margin-bottom: var(--sp-4); }
-  .wbhead { display: block; color: var(--text); font-weight: 600; }
   .rule { height: 1px; background: var(--border); border: 0; margin: var(--sp-7) 0 var(--sp-4); }
   a[href^="http"] { border-bottom: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); }
   @media (max-width: 760px) {
@@ -141,6 +137,7 @@
   <a href="#finding" data-spy>The finding</a>
   <a href="#turn" data-spy>Verification</a>
   <a href="#lesson" data-spy>The lesson</a>
+  <a href="#caveats" data-spy>Caveats</a>
 </aside>
 </div>
 
@@ -448,7 +445,10 @@ generations:    ordering CORRECT, but Cara→"Costa"→"Rice", answers truncate<
 
 <!-- ─── §9 CAVEATS / REPRO ────────────────────────────────────────── -->
 <section id="caveats">
-  <h2><span class="num">§9</span>Caveats &amp; reproduction</h2>
+  <h2>Caveats &amp; reproduction</h2>
+  <p>The verification pass that killed the headline finding is itself thin — N=3, on a battery calibrated
+  for within-model deltas, not a cross-model claim. Read what follows as the honest state of an
+  already-walked-back result, not fresh doubt on a stable one.</p>
   <ul class="walkback">
     <li><span class="wbhead">n is small even after the follow-up</span> (N=3 on verification); the deflation is clear but residual effects (a possible weak more-L → fencepost lift) are unresolved and need N≥8 on harder items.</li>
     <li><span class="wbhead">The battery is a vibes-grade yardstick</span>, fit for within-model deltas, not cross-model claims; the multi-hop items saturate baseline (limited headroom).</li>
