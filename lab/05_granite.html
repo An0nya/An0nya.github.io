@@ -104,6 +104,7 @@
   <a href="#stacking" data-spy>Stacking</a>
   <a href="#ushape" data-spy>U-shaped layers</a>
   <a href="#sigma" data-spy>The Σα-law</a>
+  <a href="#caveats" data-spy>Caveats</a>
 </aside>
 </div>
 
@@ -1106,18 +1107,16 @@
   </section>
 
   <section id="caveats">
-    <div class="nb-limits">
-      <div class="nb-limits__head">
-        <span class="nb-limits__label">Caveats — the open gaps</span>
-        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — these gate the constructive claims</span>
-      </div>
-      <ul>
-        <li><b>The constructive profile (<code>L5↑+L26↓+L14↑</code>) is not yet held-out-validated.</b> Present it as the emerging endgame, not a confirmed champion — argmax off noisy per-layer curves overfits.</li>
-        <li><b>The stacking heuristic lives on the in-band / gcore probes</b>, not the floored/ceilinged 49-probe mean. One combo marginally beats its best component, one masks — suggestive, not established. It's a <em>heuristic, not a law</em> until there's a regression of effect against layer-distance.</li>
-        <li><b>CoT remains unrun on Granite</b> (it decodes ~250 tok/s vs MiniCPM's ~1500 — an est. 10–20 h sweep, gated on a smoke test). The open question that would close the line: does reasoning fix the <em>same</em> metastable bugs the surgery does (redundant) or <em>different</em> ones (compound)? Compare fix-sets via the swing board.</li>
-        <li><b>Re-confirmed, with a caveat.</b> The combo numbers, the L6 α-peak, and the <code>combo_10_38</code> walkback were re-checked against <code>granite_nocot_v3_da50cdae_results.jsonl</code> on 2026-06-21. <span class="vrfy">VERIFY</span> any remaining v5/v6 figures still carried from memory against the same file before they ship.</li>
-      </ul>
-    </div>
+    <h2>Caveats</h2>
+    <p>The mechanism work here is solid — re-checked against the v3 results file, and unrelated to what
+    follows. What's still open is the constructive side: the profile and the stacking heuristic that replaced
+    the old leaderboard are early reads off noisy per-layer data, not confirmed findings yet.</p>
+    <ul class="walkback">
+      <li><span class="wbhead">The constructive profile (<code>L5↑+L26↓+L14↑</code>) is not yet held-out-validated.</span> Present it as the emerging endgame, not a confirmed champion — argmax off noisy per-layer curves overfits.</li>
+      <li><span class="wbhead">The stacking heuristic lives on the in-band / gcore probes</span>, not the floored/ceilinged 49-probe mean. One combo marginally beats its best component, one masks — suggestive, not established. It's a <em>heuristic, not a law</em> until there's a regression of effect against layer-distance.</li>
+      <li><span class="wbhead">CoT remains unrun on Granite</span> (it decodes ~250 tok/s vs MiniCPM's ~1500 — an est. 10–20 h sweep, gated on a smoke test). The open question that would close the line: does reasoning fix the <em>same</em> metastable bugs the surgery does (redundant) or <em>different</em> ones (compound)? Compare fix-sets via the swing board.</li>
+      <li><span class="wbhead">Re-confirmed, with a caveat.</span> The combo numbers, the L6 α-peak, and the <code>combo_10_38</code> walkback were re-checked against <code>granite_nocot_v3_da50cdae_results.jsonl</code> on 2026-06-21. <span class="vrfy">VERIFY</span> any remaining v5/v6 figures still carried from memory against the same file before they ship.</li>
+    </ul>
 
     <div class="nb-marginalia" style="margin-top:var(--sp-7)">
       <div class="nb-marginalia__label">Build notes &amp; lineage</div>
