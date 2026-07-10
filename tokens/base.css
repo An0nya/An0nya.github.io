@@ -62,3 +62,4 @@ hr, .rule {
 }
 
 img, svg { max-width: 100%; }
+code { overflow-wrap: break-word; }
