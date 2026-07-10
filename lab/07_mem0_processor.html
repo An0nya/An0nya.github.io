@@ -100,6 +100,7 @@
   <a href="#harness" data-spy>The harness</a>
   <a href="#worked" data-spy>Worked example</a>
   <a href="#zscore" data-spy>Why averages lie</a>
+  <a href="#caveats" data-spy>Caveats</a>
 </aside>
 </div>
 
@@ -475,18 +476,16 @@
     </div>
   </section>
 
-  <section id="methods">
-    <div class="nb-limits">
-      <div class="nb-limits__head">
-        <span class="nb-limits__label">Caveats &amp; reproduction</span>
-        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — this is an engineering notebook, not a product page</span>
-      </div>
-      <ul>
-        <li><b>Model count and version numbers are point-in-time</b> but re-confirmed 2026-06-21 by a fresh <code>tools/build-dataset.py</code> run: registry <b>145 entries</b>; <b>119 models scored</b>, <b>62</b> in the quality tier (avg ≥0.45), <b>31</b> with ≥5 shared sessions to rank head-to-head; 831 summaries across 23 ground-truthed sessions. The v9.4/v12 status still needs confirming against the repo before quoting.</li>
-        <li><b>This is infrastructure, not a product</b> — keep it in the engineering-notebook register; no "self-maintaining AI memory solution" framing. The defensible claims are the ETL inversion and the eval methodology; "it just works" is not one of them.</li>
-        <li>Stack: Mac&nbsp;Mini M4 (16&nbsp;GB), llama.cpp / LM&nbsp;Studio for inference, Node for the pipeline, SQLite for the dataset, Mem0 (current) → DynamoDB+Lambda (planned) for the store. The eval/scoring path (<code>scoring/</code>, <code>tools/</code>) runs without the upload path.</li>
-      </ul>
-    </div>
+  <section id="caveats">
+    <h2>Caveats &amp; reproduction</h2>
+    <p>The methodology holds up here — z-scored against ground truth, not raw averages — but the model
+    roster is smaller and shakier than the raw counts imply, and each grader is only as good as the
+    wording patterns it was tuned on.</p>
+    <ul class="walkback">
+      <li><span class="wbhead">The active model set is much smaller than the registry suggests.</span> Roughly 20–30 models get ongoing use; the rest of the scored total are one-off comparisons run to place a single model, not part of a maintained rotation. Treat the registry counts as a historical high-water mark, not a live roster.</li>
+      <li><span class="wbhead">The session-summary graders are regex, tuned per-model-family.</span> Each scorer was built against the specific wording patterns a given model family tends to use to hit a scored point — an untuned grader run against a new model's transcripts under-scores it, not because the summary is worse but because the phrasing doesn't match. New models need a tuning pass first: an LLM-as-judge read of a few transcripts to learn how that model frames the same points, and what a genuine miss looks like, before its regex grader is trustworthy.</li>
+      <li><span class="wbhead">This is infrastructure, not a product</span> — keep it in the engineering-notebook register; no "self-maintaining AI memory solution" framing. The defensible claims are the ETL inversion and the eval methodology; "it just works" is not one of them.</li>
+    </ul>
 
     <div class="nb-marginalia" style="margin-top:var(--sp-7)">
       <div class="nb-marginalia__label">Build notes &amp; method</div>
@@ -495,8 +494,10 @@
         <a href="/">layer-surgery lab</a>'s leaderboards honest — refuse the raw average, normalize
         the mix, log the config. Same reflex, different substrate: see also the
         <a href="/lab/04_quant_bench.html">quant benchmark</a> and <a href="/lab/06_duologue.html">duologue</a>. Built and run
-        locally on a 16&nbsp;GB Mac&nbsp;Mini; harness in <span class="mono">scoring/</span> +
-        <span class="mono">tools/</span>, dataset in <span class="mono">dataset.db</span>.</p>
+        locally on a 16&nbsp;GB Mac&nbsp;Mini M4 (llama.cpp / LM&nbsp;Studio for inference, Node for the
+        pipeline, SQLite for the dataset, Mem0 now → DynamoDB+Lambda planned); harness in
+        <span class="mono">scoring/</span> + <span class="mono">tools/</span>, dataset in
+        <span class="mono">dataset.db</span>. The eval/scoring path runs without the upload path.</p>
       </div>
     </div>
   </section>
