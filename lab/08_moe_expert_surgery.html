@@ -93,6 +93,7 @@
   <a href="#toolkit" data-spy>Toolkit</a>
   <a href="#clonemap" data-spy>Router diff</a>
   <a href="#teardown" data-spy>Teardown</a>
+  <a href="#caveats" data-spy>Caveats</a>
 </aside>
 </div>
 
@@ -1224,19 +1225,17 @@
     in MLX.</p>
   </section>
 
-  <section id="methods">
-    <div class="nb-limits">
-      <div class="nb-limits__head">
-        <span class="nb-limits__label">Known limitations</span>
-        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — this is a working log, not a results page</span>
-      </div>
-      <ul>
-        <li><b>SEC capability is preliminary</b> — extracted + replayed + vibe-tested, no fixed-seed paired battery run yet. The router-diff <em>method</em> is solid; the <em>quantified recovery</em> is the next step.</li>
-        <li><b>The lab's own REAP run has not happened</b> — the plan is reaped-no-SFT first (build a deep prune, eval the pure prune, only train if compelling). The Huihui numbers are <em>their</em> teardown, read off the card.</li>
-        <li><b>Training on a 16&nbsp;GB Mac is constrained</b> — full fp16 SFT of an 8B ≈ 100&nbsp;GB (impossible); QLoRA is CUDA-only (dead end on Apple Silicon); the only path is MLX-LM LoRA on a 4-bit quant, and <em>where</em> the adapters go to heal an MoE prune (router? surviving experts?) is unsettled.</li>
-        <li>All param / PPL / index numbers are point-in-time from memory — verify against the model cards and GGUF dumps before publishing. Fig 2's exact per-layer victim columns are illustrative; the clustering structure is the claim, not the specific indices.</li>
-      </ul>
-    </div>
+  <section id="caveats">
+    <h2>Caveats</h2>
+    <p>The router-diff method is solid; what it hasn't produced yet is a quantified capability result.
+    SEC extraction and the lab's own REAP run are still open — read this page as a working log of a pivot
+    in progress, not a finished result.</p>
+    <ul class="walkback">
+      <li><span class="wbhead">SEC capability is preliminary</span> — extracted + replayed + vibe-tested, no fixed-seed paired battery run, no probe battery or standardized benchmark run yet. I have a premade SEC-edited model but not the SEC tooling itself, so reproducing the method from scratch is still needed; so far the only test has been extracting the merged experts' routing and running it ad hoc. The router-diff <em>method</em> is solid; the <em>quantified recovery</em> is the next step.</li>
+      <li><span class="wbhead">The lab's own REAP run has not happened yet.</span> The point of REAP is exactly that no training is needed — scan activations, prune the unfired experts, done. Huihui's authors considered a retrain because their prune was deep; the bet here is that a bare reaped instruct model stays coherent without one, which is what would let a model too big for this Mac at full size run locally in a degraded but still-capable pruned form.</li>
+      <li><span class="wbhead">Huihui (the 26B→8B-A4B reap) isn't the model I'll actually test on</span> — it's just the one I happened to find with a deep prune already applied. I've also run a barely-perturbed-feeling Qwen3.5-A3B pruned from 35B down to 14B. The plan: validate REAP on models small enough to run at full size first, then extend it to 60B+ models that only become usable locally once pruned.</li>
+      <li>All param / PPL / index numbers are point-in-time from memory — verify against the model cards and GGUF dumps before publishing. Fig 2's exact per-layer victim columns are illustrative; the clustering structure is the claim, not the specific indices.</li>
+    </ul>
 
     <div class="nb-marginalia" style="margin-top:var(--sp-7)">
       <div class="nb-marginalia__label">Build notes &amp; method</div>
