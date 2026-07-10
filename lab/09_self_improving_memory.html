@@ -109,6 +109,7 @@
   <a href="#confidence" data-spy>Confidence</a>
   <a href="#failure" data-spy>The failure</a>
   <a href="#promoted" data-spy>What landed</a>
+  <a href="#caveats" data-spy>Caveats</a>
 </aside>
 </div>
 
@@ -732,27 +733,16 @@ deterministic script: tag → session-count   <span class="cm"># resolved from g
     </ol>
   </section>
 
-  <section>
-    <div class="nb-limits">
-      <div class="nb-limits__head">
-        <span class="nb-limits__label">Caveats &amp; status</span>
-        <span class="nb-conf nb-conf--low"><span class="nb-limits__label" style="color:var(--text-muted)">Confidence</span><span class="nb-conf__dots"><span class="nb-conf__dot on"></span><span class="nb-conf__dot"></span><span class="nb-conf__dot"></span></span>low — these bound the claims</span>
-      </div>
-      <ul>
-        <li><b>Human-in-the-loop by design</b> — decision-support, not an autonomous self-rewriting agent. An LLM
-        promoting its own behavioural rules unsupervised is how bias compounds.</li>
-        <li><b>Phase 1 was single-summarizer</b> — the multi-model panel (cross-model confidence) is designed and
-        deferred; the frequency trap is the explicit reason the single-summarizer results get bias-screened.</li>
-        <li><b>The summarizers are small local models</b> — they editorialize and occasionally fabricate; the whole
-        confidence discipline exists <em>because</em> the readers are imperfect.</li>
-        <li><b>The feeder pipeline is paused, not retired</b> — the <a href="/lab/07_mem0_processor.html">mem0-processor</a> that produces
-        the summaries is on hold; sessions after its last run have no summaries yet, so extending the trawl today means
-        reading raw transcripts directly. Either way the <em>method</em> is the durable artifact, not the running
-        service.</li>
-        <li><b>Promoted-rule specifics tagged <span class="vrfy">VERIFY</span></b> against the ledger and
-        <code>tools/trawl/</code> artifacts before they ship as counts.</li>
-      </ul>
-    </div>
+  <section id="caveats">
+    <h2>Caveats &amp; status</h2>
+    <p>This is explicitly human-in-the-loop — decision-support, not an autonomous self-rewriting agent,
+    because an LLM promoting its own behavioral rules unsupervised is how bias compounds. Phase 1 shipped
+    single-summarizer, bias-screened; the multi-model panel that would cross-check it is designed but
+    deferred.</p>
+    <ul class="walkback">
+      <li><span class="wbhead">The summarizers are small local models</span> — they editorialize and occasionally fabricate; the whole confidence discipline exists <em>because</em> the readers are imperfect.</li>
+      <li><span class="wbhead">The feeder pipeline is paused, not retired</span> — the <a href="/lab/07_mem0_processor.html">mem0-processor</a> that produces the summaries is on hold; sessions after its last run have no summaries yet, so extending the trawl today means reading raw transcripts directly. Either way the <em>method</em> is the durable artifact, not the running service.</li>
+    </ul>
 
     <div class="nb-marginalia" style="margin-top:var(--sp-7)">
       <div class="nb-marginalia__label">Build notes &amp; lineage</div>
