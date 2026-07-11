@@ -119,14 +119,14 @@
     <div class="col-side">
       <div>
         <p class="dropcap">If you run local models on a Mac, you've read the common recommendation to use MLX
-        since it's native and faster. What I couldn't find was <em>the table</em> — runtime × quant
+        since it's native and faster. What I couldn't find was <em>the table</em>: runtime × quant
         method × batch size × {prefill, decode} × RAM, all measured in one equal environment on the same
-        model. Pieces of it exist — mostly single-stream, long-context runs, arguably the more realistic
-        workload — but nothing exhaustive focused on peak throughput, which is what a parallelizable sweep
+        model. Pieces of it exist, mostly single-stream, long-context runs (arguably the more realistic
+        workload), but nothing exhaustive focused on peak throughput, which is what a parallelizable sweep
         harness actually spends. The full grid is missing for a mundane reason: collecting it needs the same
         model across a dozen quant formats, three runtimes installed and warmed simultaneously, and one
-        harness measuring the <em>same thing</em> across all of them. The base M4 Mini, 16&nbsp;GB, gets
-        benchmarked plenty — it's a common starter local-LLM machine — but I'm apparently the only idiot
+        harness measuring the same thing across all of them. The base M4 Mini, 16&nbsp;GB, gets
+        benchmarked plenty (it's a common starter local-LLM machine), but I'm apparently the only idiot
         trying to run layer sweeps on small models on hardware better suited to browser tabs.</p>
         <p>So I built it myself: one driver (<code>unified_bench.py</code>), three backend adapters (MLX in-process,
         llama.cpp via <code>llama-server</code>, PyTorch/MPS in-process), identical sweep grids and schema,
@@ -151,7 +151,7 @@
 
   <section id="headline">
     <h2><span class="num">§2</span>No overall winner — each runtime owns a different axis</h2>
-    <p>Measure every axis uniformly and there is no overall winner — each runtime owned a different axis in
+    <p>Measure every axis uniformly, and there is no overall winner. Each runtime owned a different axis in
     these runs:</p>
 
     <table class="nb-table" style="margin-top:var(--sp-5)">
@@ -169,8 +169,8 @@
     prefill-sequence sweep. Everything below is the unpacking, and most of it is
     more useful than the table.</p>
 
-    <p style="margin-top:var(--sp-5)"><b>Throughput was quant-agnostic.</b> At peak concurrency <em>all</em> MLX
-    quants landed at ~1400–1670 tok/s (a ~15% spread) and <em>all</em> healthy llama quants at ~690–750. The
+    <p style="margin-top:var(--sp-5)"><b>Throughput was quant-agnostic.</b> At peak concurrency all MLX
+    quants landed at ~1400–1670 tok/s (a ~15% spread) and all healthy llama quants at ~690–750. The
     M4 saturated on compute and bandwidth regardless of how the weights were packed. 2-bit, 4-bit, 8-bit,
     K-quants, IQ-quants — at batch, they converged. So throughput isn't a meaningful discriminator between
     quants in this run: pick on quality, RAM fit, and surgery-compatibility, not speed.</p>
@@ -180,12 +180,12 @@
     <h2><span class="num">§3</span>MLX's decode win is occupancy, not kernels</h2>
     <div class="col-side">
       <div>
-        <p class="dropcap">Why does MLX win batched decode if the quant doesn't matter? Not better arithmetic.
-        <span class="hl-acc">Single-stream, MLX and llama are tied</span> — same tok/s, same RAM. The gap opens
-        only as you add concurrent streams: MLX keeps filling a bigger shared-KV batch (saturating around
+        <p class="dropcap">Why does MLX win batched decode if the quant doesn't matter? Not better arithmetic:
+        <span class="hl-acc">single-stream, MLX and llama are tied</span>, same tok/s, same RAM. The gap opens
+        only as you add concurrent streams. MLX keeps filling a bigger shared-KV batch (saturating around
         192–256 streams) before it tops out, while in this run llama's continuous batcher plateaued earlier
-        and lighter (64–128 streams — whether that's an architectural limit or a tuning artifact wasn't
-        isolated). It's scheduler and allocator <em>aggressiveness</em> — MLX trades RAM for batch occupancy.
+        and lighter (64–128 streams; whether that's an architectural limit or a tuning artifact wasn't
+        isolated). It's scheduler and allocator aggressiveness: MLX trades RAM for batch occupancy.
         That's the whole mechanism, or at least the simplest one consistent with what was observed.</p>
       </div>
       <aside class="aside">
@@ -387,12 +387,12 @@
     <div class="col-side">
       <div>
         <p class="dropcap">MLX buys that decode throughput with <span class="hl-acc">~5–6× the RAM</span>. At
-        peak concurrency MLX sat at 10–12.7&nbsp;GB — the only runtime that flirts with the M4's 14&nbsp;GB
-        Metal wired limit — while llama held 1.2–2.3&nbsp;GB. On a 16&nbsp;GB box, <em>this</em>, not tok/s, is
+        peak concurrency MLX sat at 10–12.7&nbsp;GB (the only runtime that flirts with the M4's 14&nbsp;GB
+        Metal wired limit), while llama held 1.2–2.3&nbsp;GB. On a 16&nbsp;GB box, this, not tok/s, is
         the deciding factor, and it inverts the leaderboard.</p>
-        <p>Score by <span class="hl-acc">throughput per gigabyte</span> — the figure of merit that matters when memory
-        is the constraint, which on consumer Apple Silicon it always is — and llama.cpp dominates by 4–5×. Best
-        llama (IQ2_XS) hit ~615 tok/s/GB; <em>every</em> llama quant (~490–615) beat <em>every</em> MLX quant
+        <p>Score by throughput per gigabyte, the figure of merit that matters when memory
+        is the constraint (which on consumer Apple Silicon it always is), and llama.cpp dominates by 4–5×. Best
+        llama (IQ2_XS) hit ~615 tok/s/GB; every llama quant (~490–615) beat every MLX quant
         (~114–120); PyTorch trailed at ~56.
         <b>MLX is the raw-speed-at-any-RAM-cost choice; llama.cpp is the efficient choice, and on a 16&nbsp;GB
         machine efficiency is what runs.</b></p>
@@ -676,20 +676,20 @@
     <p>The fp16 fairness triad (identical weights, all three runtimes): MLX 1669 tok/s @ 256 streams /
     12.45&nbsp;GB; llama 778 @ 128 / 3.76&nbsp;GB; PyTorch 368 @ 32 / 6.63&nbsp;GB. PyTorch is ~4.5× behind MLX
     batched and ~3× behind llama, from eager/unfused-kernel overhead that persists even at matched precision.
-    "Don't serve inference through HuggingFace on a Mac" appears to be correct, and now it has numbers — at
+    "Don't serve inference through HuggingFace on a Mac" appears to be correct, and now it has numbers, at
     least for this model and batch configuration. (Note: the <code>IQ3_M</code> llama row is EOS-broken here,
-    <code>total_tokens=1</code> — its 182 tok/s reading is garbage and is excluded throughout.)</p>
+    <code>total_tokens=1</code>: its 182 tok/s reading is garbage and is excluded throughout.)</p>
     <p style="margin-top:var(--sp-4)"><b>Prefill was even more saturated than decode</b> — ~2000 tok/s at pp512
     with only ~12% spread across the whole quant ladder. Q4_0 tiles cleanest into Metal's GEMM and led;
     K-quants pay a block-structure tax and roll off after pp256; IQ types flatten or keep climbing. None of it
     was large enough to change a practical decision.</p>
-    <p style="margin-top:var(--sp-4)">Why quant choice doesn't move the needle — the workload is pinned to a
-    physical limit. <b>Single-stream decode is memory-bandwidth-bound:</b> a 4-bit 1.08B model is ~0.6&nbsp;GB,
-    so 120&nbsp;GB/s ÷ 0.6 ≈ <span class="hl-acc">200 tok/s</span>; observed best ~155 = ~78% of that bound.
-    2-bit (~0.35&nbsp;GB) predicts ~343, observed 218 ≈ 64%. <b>Prefill is compute-bound:</b> 2000 tok/s ×
-    ~2·1.08e9&nbsp;FLOP/tok ≈ <span class="hl-acc">4.3 TFLOP/s</span>, in the M4 10-core GPU's fp16 range. Which, I suppose,
+    <p style="margin-top:var(--sp-4)">Why quant choice doesn't move the needle: the workload is pinned to a
+    physical limit. Single-stream decode is memory-bandwidth-bound: a 4-bit 1.08B model is ~0.6&nbsp;GB,
+    so <span class="qx">120&nbsp;GB/s ÷ 0.6 ≈ <span class="qv">200</span> tok/s</span>; observed best ~155 = ~78% of that bound.
+    2-bit (~0.35&nbsp;GB) predicts ~343, observed 218 ≈ 64%. Prefill is compute-bound: <span class="qx">2000 tok/s ×
+    ~2·1.08e9&nbsp;FLOP/tok ≈ <span class="qv">4.3</span> TFLOP/s</span>, in the M4 10-core GPU's fp16 range. Which, I suppose,
     answers the question I couldn't find online: <b>for speed, quant choice wasn't a meaningful
-    discriminator — pick the quant on quality.</b></p>
+    discriminator, pick the quant on quality.</b></p>
   </section>
 
   <section id="roofline">
@@ -697,13 +697,13 @@
     <div class="col-side">
       <div>
         <p class="dropcap">A cross-machine run (same model, same MLX/mlx-lm stack, the lean decode loop) on a
-        borrowed <em>fanless</em> M5 MacBook Air against the M4 Mini: <span class="hl-acc">the M5 was ~2.3×
-        across the board</span> — decode (3700 vs 1615 peak tok/s), prefill (5350 vs 2200), wall (2700 vs
+        borrowed fanless M5 MacBook Air against the M4 Mini: <span class="hl-acc">the M5 was ~2.3×
+        across the board</span>, decode (3700 vs 1615 peak tok/s), prefill (5350 vs 2200), wall (2700 vs
         1162). That's far above the 1.27× memory-bandwidth ratio (153 vs 120&nbsp;GB/s).</p>
         <p>The leading hypothesis: the win is <em>GPU compute and dispatch, not bandwidth</em>. The ~200 tok/s
-        ceiling is <em>single-stream</em> (bandwidth-bound); at batch width 64–384 decode appears
-        <em>compute-bound</em> (weights reused across the batch, past the roofline knee), so it tracks prefill
-        at ~2.3× — both riding the M5's ~2× GPU compute. No decode-specific magic; just which side of the
+        ceiling is single-stream (bandwidth-bound); at batch width 64–384 decode appears
+        compute-bound (weights reused across the batch, past the roofline knee), so it tracks prefill
+        at ~2.3×, both riding the M5's ~2× GPU compute. No decode-specific magic; just which side of the
         roofline both kernels are on.</p>
       </div>
       <aside class="aside">
