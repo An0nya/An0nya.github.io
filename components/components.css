@@ -309,19 +309,6 @@ pre.code::-webkit-scrollbar { display: none; }
   font-family: var(--font-mono); font-size: 0.78rem; color: var(--text); line-height: 1.4;
   overflow-wrap: break-word;
 }
-
-/* confidence chip — high / medium / low */
-.nb-conf {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: var(--tk-label);
-  text-transform: uppercase; color: var(--text);
-}
-.nb-conf__dots { display: inline-flex; gap: 3px; }
-.nb-conf__dot { width: 7px; height: 7px; border-radius: var(--r-round); border: 1px solid var(--text-muted); }
-.nb-conf__dot.on { background: var(--accent); border-color: var(--accent); }
-.nb-conf--low .nb-conf__dot.on { background: var(--caution); border-color: var(--caution); }
-.nb-conf--medium .nb-conf__dot.on { background: var(--accent); border-color: var(--accent); }
-
 /* ── Correction / Dead-End card — the site's identity made structural ─────
    Hypothesis → why it looked true → why it failed → disposition. Violet/neg
    keyed. Place it NEAR THE TOP of a page; falsification is rewarded, not buried. */
@@ -352,30 +339,6 @@ pre.code::-webkit-scrollbar { display: none; }
 .nb-correction__b { font-family: var(--font-serif); font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.5; }
 .nb-correction__b b { color: var(--text); }
 @media (max-width: 600px) { .nb-correction__row { grid-template-columns: 1fr; gap: 1px; } }
-
-/* ── Confidence + Known-limitations block ────────────────────────────────
-   Renders uncertainty with visual weight instead of a closing caveat sentence. */
-.nb-limits {
-  border: var(--bw) solid var(--border-strong);
-  border-radius: var(--r-1);
-  padding: var(--sp-4) var(--sp-5);
-  margin: var(--sp-5) 0;
-}
-.nb-limits__head {
-  display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap;
-  border-bottom: var(--bw) solid var(--border); padding-bottom: var(--sp-3); margin-bottom: var(--sp-3);
-}
-.nb-limits__label {
-  font-family: var(--font-mono); font-size: var(--fs-label); letter-spacing: var(--tk-kicker);
-  text-transform: uppercase; color: var(--text-muted);
-}
-.nb-limits ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--sp-2); }
-.nb-limits li {
-  position: relative; padding-left: 1.3em; font-family: var(--font-serif);
-  font-size: var(--fs-sm); color: var(--text-dim); line-height: 1.5;
-}
-.nb-limits li::before { content: "—"; position: absolute; left: 0; color: var(--caution); }
-
 /* ── Caveats walkback list — quiet successor to .nb-limits ────────────────
    Confidence lives in a prose lead-in, not a chip; hairline left rules, no box.
    (Originated page-local on hrm.html — its copy is identical and shadows this.) */
