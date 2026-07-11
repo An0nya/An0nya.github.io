@@ -18,6 +18,15 @@ not prose styling, so it doesn't count toward the pop budget either — it's
 tallied separately as Q. <em>/<i> and span.hl-* always count as pops
 regardless of content.
 
+v3 additions (owner calibration 2026-07-11 night):
+  - LEAD rule: the page's first prose paragraph and the first paragraph after
+    each <h2> flag at dash >= 1 (priming: the opener sets the reader's prior,
+    so em-dashes there confirm "AI-written" for a suspicious reader).
+  - qx budget: span.qx / standalone span.qv marks count against a budget
+    proportional to the unit's quantitative-result density (numeric tokens N):
+    N<=2 -> N, N in 3..4 -> 2, N>=5 -> 3. Over budget flags for demotion to
+    bare prose numerals. Load-bearing sections may exceed — human call.
+
 This tool only FLAGS violations for human review. It never edits a page.
 
 Usage:
@@ -46,6 +55,12 @@ UNIT_TAGS = {"p", "li"}
 
 # "Pop" = a styled emphasis in running prose.
 POP_TAGS = {"em", "i", "b", "strong"}
+
+# HTML5 void elements: no end tag ever comes, so never push a Frame for them
+# (an unpopped frame skews the stack and can mark the whole rest of the page
+# exempt — this is why hrm/gemma31b scanned 0 units before v3.1).
+VOID_TAGS = {"br", "img", "hr", "input", "meta", "link", "source", "wbr",
+             "col", "area", "base", "embed", "track"}
 
 # b/strong are the only tags eligible for the quant-callout discount; em/i
 # always count as pops regardless of content (per owner calibration).
@@ -76,25 +91,40 @@ def classes_of(attrs):
 
 
 class Frame:
-    __slots__ = ("tag", "exempt")
+    __slots__ = ("tag", "exempt", "qx")
 
-    def __init__(self, tag, exempt):
+    def __init__(self, tag, exempt, qx=False):
         self.tag = tag
         self.exempt = exempt
+        self.qx = qx
 
 
 class Unit:
-    def __init__(self, tag, line):
+    def __init__(self, tag, line, lead=False):
         self.tag = tag
         self.line = line
+        self.lead = lead
         self.text_parts = []
         self.dash = 0
         self.pop = 0
         self.chip = 0
         self.quant = 0
+        self.qx = 0
 
     def text(self):
         return re.sub(r"\s+", " ", "".join(self.text_parts)).strip()
+
+    def num_tokens(self):
+        # rough count of distinct quantitative results in the unit's text
+        return len(re.findall(r"[+−–~≈±]?\d[\d.,]*", self.text()))
+
+    def qx_budget(self):
+        n = self.num_tokens()
+        if n <= 2:
+            return n
+        if n <= 4:
+            return 2
+        return 3
 
 
 class ProseLinter(HTMLParser):
@@ -104,23 +134,44 @@ class ProseLinter(HTMLParser):
         self.units_stack = []    # currently-open prose units (p/li)
         self.finished = []       # completed units
         self.quant_stack = []    # open b/strong elements pending quant classification
+        self.qx_depth = 0        # nesting depth of open span.qx (qv inside qx ≠ 2 marks)
+        self.lead_pending = True # next non-exempt <p> is a lead unit (page open / post-h2)
 
     def _exempt(self):
         return self.stack[-1].exempt if self.stack else False
 
     def handle_starttag(self, tag, attrs):
+        if tag in VOID_TAGS:
+            return
         parent_exempt = self._exempt()
         classes = classes_of(attrs)
         trigger = tag in EXEMPT_TAGS or bool(classes & EXEMPT_CLASSES)
         exempt = parent_exempt or trigger
-        self.stack.append(Frame(tag, exempt))
+
+        is_qx = tag == "span" and "qx" in classes and not exempt
+        self.stack.append(Frame(tag, exempt, qx=is_qx))
 
         if tag in UNIT_TAGS and not exempt:
             line, _ = self.getpos()
-            self.units_stack.append(Unit(tag, line))
+            lead = tag == "p" and self.lead_pending
+            if lead:
+                self.lead_pending = False
+            self.units_stack.append(Unit(tag, line, lead=lead))
             return
 
         if parent_exempt or not self.units_stack:
+            return
+
+        if is_qx:
+            # one qx statement = one mark, however many qv's it contains
+            for u in self.units_stack:
+                u.qx += 1
+            self.qx_depth += 1
+            return
+        if tag == "span" and "qv" in classes and self.qx_depth == 0:
+            # standalone qv (bare washed number) is its own mark
+            for u in self.units_stack:
+                u.qx += 1
             return
 
         if tag in QUANT_ELIGIBLE_TAGS:
@@ -142,9 +193,14 @@ class ProseLinter(HTMLParser):
         self.handle_starttag(tag, attrs)
 
     def handle_endtag(self, tag):
-        if not self.stack:
+        if tag in VOID_TAGS or not self.stack:
             return
         frame = self.stack.pop()
+        if frame.qx:
+            self.qx_depth -= 1
+
+        if frame.tag == "h2":
+            self.lead_pending = True
 
         if frame.tag in QUANT_ELIGIBLE_TAGS and self.quant_stack:
             entry = self.quant_stack.pop()
@@ -197,29 +253,41 @@ def lint_file(path):
 
     units = parser.finished
     violations = []
-    dash_v = pop_v = 0
+    dash_v = pop_v = lead_v = qx_v = 0
     chip_total = sum(u.chip for u in units)
     for u in units:
         # Chips are design grammar (observation/interpretation pairs by
-        # intent) — they never flag a unit, only dash and pop budgets do.
-        bad = u.dash > 1 or u.pop > 1
+        # intent) — they never flag a unit, only dash/pop/qx budgets do.
+        over_qx = u.qx > u.qx_budget()
+        lead_dash = u.lead and u.dash >= 1
+        bad = u.dash > 1 or u.pop > 1 or over_qx or lead_dash
         if not bad:
             continue
         if u.dash > 1:
             dash_v += 1
         if u.pop > 1:
             pop_v += 1
+        if lead_dash:
+            lead_v += 1
+        if over_qx:
+            qx_v += 1
         snippet = u.text()[:80]
-        line = f"{path}:{u.line}  [D:{u.dash} P:{u.pop} Q:{u.quant}]  {snippet}…"
+        line = (f"{path}:{u.line}  [D:{u.dash} P:{u.pop} Q:{u.quant} "
+                f"X:{u.qx}/{u.qx_budget()}]  {snippet}…")
         if u.dash > 1:
             line += " → rewrite: comma / parens / colon / sentence break / bullets"
+        elif lead_dash:
+            line += " → LEAD unit (page/section opener): restructure the dash out"
+        if over_qx:
+            line += " → qx over budget: demote surplus to bare numerals"
         violations.append(line)
 
     for line in violations:
         print(line)
     print(
         f"{path}: {len(units)} units scanned, {len(violations)} violations "
-        f"(dash:{dash_v} pop:{pop_v}) | chips:{chip_total} (informational, never flags)"
+        f"(dash:{dash_v} pop:{pop_v} lead:{lead_v} qx:{qx_v}) | "
+        f"chips:{chip_total} (informational, never flags)"
     )
 
 
