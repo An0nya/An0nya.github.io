@@ -145,12 +145,12 @@
       <div>
         <p class="dropcap"><a href="https://huggingface.co/openbmb/MiniCPM5-1B">MiniCPM5-1B</a> is the plainest model
         in the lab. Unlike its sibling MiniCPM-V&nbsp;4.6 (a Qwen3.5 rebase), it's an original release, and the
-        config says it all: the muP machinery is gone, and it genuinely declares <code>LlamaForCausalLM</code> —
+        config says it all: the muP machinery is gone, and it genuinely declares <code>LlamaForCausalLM</code>:
         24 dense GQA layers, untied embeddings. Everything downstream is textbook-Llama behaviour, including
         the residual-norm pathology it wears so openly.</p>
         <p>It is also the model where <span class="hl-acc">the engine changed</span>. Every earlier specimen was cut
         with llama.cpp on a static GGUF: you can duplicate or delete whole blocks, but you can't turn a layer's
-        contribution down to 60%. The interesting surgery on MiniCPM5 is <em>continuous</em>, so the whole sweep
+        contribution down to 60%. The interesting surgery on MiniCPM5 is continuous, so the whole sweep
         moved into a live MLX process where the model's own Python objects get patched between forward passes. That
         sounds like a footnote, but it's the reason this page exists.</p>
       </div>
@@ -395,7 +395,7 @@
 
   <section id="lever">
     <h2><span class="num">§1</span>The lever — continuous damping, not duplication</h2>
-    <p>Duplication and pruning are discrete — a layer is either in the stack or out. Damping makes layer surgery
+    <p>Duplication and pruning are discrete (a layer is either in the stack or out). Damping makes layer surgery
     <em>continuous</em>: you can turn a layer's contribution down to 60% instead of all-or-nothing. That's what
     needed the live MLX engine, and it's what the rest of this page is about. The surgery primitive is one line:</p>
 
@@ -403,19 +403,19 @@
 out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 
     <p><code>Δ</code> is the layer's residual contribution. <code>α = 1</code> is the untouched model.
-    <code>0 &lt; α &lt; 1</code> damps the layer — it still computes, but writes a fraction of its update into the
+    <code>0 &lt; α &lt; 1</code> damps the layer: it still computes, but writes a fraction of its update into the
     stream. <code>α = 0</code> is a clean skip (identity). <code>α &gt; 1</code> over-amplifies. And
     <code>α &lt; 0</code> is an <em>anti-update</em> (push the stream the opposite way the layer wanted), which is
-    <b>not</b> a functional inverse, because the block is nonlinear; it's a controlled way to ask "what does fighting
+    not a functional inverse, because the block is nonlinear; it's a controlled way to ask "what does fighting
     this layer do?"</p>
 
-    <p>Configs are composed in original-layer-index space, applied in the order <b>prune → blocks → dups → damp</b>.
+    <p>Configs are composed in original-layer-index space, applied in the order prune → blocks → dups → damp.
     A single layer can be duplicated <code>k</code> times, each copy given its own α, and the original pass damped
     too. That composition is the entire experimental vocabulary: a <b>split-pass</b> duplicates L and damps both the
-    original and the copy; a <b>stack</b> is <code>k</code> copies with a per-copy α profile; everything else (ramps,
+    original and the copy; a stack is <code>k</code> copies with a per-copy α profile; everything else (ramps,
     triples, multi-site chains) is the same trick with more knobs. Nothing here is trainable — it's all
-    inference-time. The question every config asks is the lab's usual one: <em>did capability move, or did the grader
-    just get fooled?</em></p>
+    inference-time. The question every config asks is the lab's usual one: did capability move, or did the grader
+    just get fooled?</p>
   </section>
 
   <section id="ruler">
@@ -424,10 +424,10 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
       <div>
         <p class="dropcap">The first real finding had nothing to do with surgery. <span class="hl-acc">The base
         model has a cliff.</span> On the original wide math set, ~50% of items floored to 0.0 and ~24% saturated to
-        1.0 — only ~8% sat in a band where a score could <em>move</em>. Baseline 0.33, no resolution. A sweep run on
+        1.0, leaving only ~8% in a band where a score could move. Baseline 0.33, no resolution. A sweep run on
         that ruler measures mostly nothing, precisely.</p>
-        <p>So the ruler got calibrated. A difficulty ladder — 16 items per rung, both operands controlled, 8 seeds,
-        baseline-only — mapped where each operation breaks. Rungs are operand digit-counts: <code>d5</code> means
+        <p>So the ruler got calibrated. A difficulty ladder (16 items per rung, both operands controlled, 8 seeds,
+        baseline-only) mapped where each operation breaks. Rungs are operand digit-counts: <code>d5</code> means
         both operands run 5 digits; mul/div shapes like <code>3×2</code> mean 3-digit × 2-digit. The packed in-band set (<code>load_math_inband</code>, 48
         items) all sits at p&nbsp;∈&nbsp;0.28–0.72, baseline ≈ 0.48: headroom in both directions, so a config can win
         <em>or</em> lose visibly.</p>
@@ -653,11 +653,11 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 
     <p>Two methodology lessons fell out of building this, and they generalise to every model in the lab.
     <b>(1) n=4 items per rung is a lottery.</b> A famous <code>sub_d4 = 0.03</code> "dip" turned out to be an artifact
-    of 4-item sampling <em>plus</em> a generator bug (only the minuend's digits were controlled, so each rung was a
-    difficulty grab-bag). Control all operands; ≥12 items per rung; the dip vanished. <b>(2) The cell cache had a
-    contamination bug.</b> The harness keyed result cells on <code>(config_id, probe_name, seed)</code> with no content
+    of 4-item sampling plus a generator bug (only the minuend's digits were controlled, so each rung was a
+    difficulty grab-bag). Control all operands; ≥12 items per rung; the dip vanished. (2) The cell cache had a
+    contamination bug. The harness keyed result cells on <code>(config_id, probe_name, seed)</code> with no content
     check — change a probeset while keeping the names (items-per-rung 4→16 shifts the RNG stream, so
-    <code>cal_sub_d4_i00</code> is now a <em>different</em> problem) and it silently resumed over stale cells. The fix:
+    <code>cal_sub_d4_i00</code> is now a different problem) and it silently resumed over stale cells. The fix:
     content-hash the battery into the results filename, so any change auto-forks a fresh file. Neither is glamorous;
     both would have quietly poisoned every number after them.</p>
   </section>
@@ -667,11 +667,11 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <div class="col-side">
       <div>
         <p class="dropcap">The first thing that actually moved the needle: take a layer, duplicate it, and damp
-        <b>both</b> the original pass and the copy. On <b>L1 and L10 specifically</b> — not the "refine zone" L5–12 we'd
-        guessed — this buys <span class="hl-acc">+0.11–0.12 strict math</span>, confirmed at 24 seeds, t ≈ +6.
+        both the original pass and the copy. On L1 and L10 specifically (not the "refine zone" L5–12 we'd
+        guessed), this buys <span class="hl-acc">+0.11–0.12 strict math</span>, confirmed at 24 seeds, t ≈ +6.
         <code>split_1_a50_a70 = 0.53 strict, t +6.2</code>.</p>
-        <p>Don't apply the layer's contribution in one go. Apply a <em>scaled-back</em> version, let the residual
-        stream move, then run the layer <em>again</em> on that moved stream and apply another scaled-back version —
+        <p>Don't apply the layer's contribution in one go. Apply a scaled-back version, let the residual
+        stream move, then run the layer again on that moved stream and apply another scaled-back version —
         two gentle nudges instead of one shove. What makes this its own mechanism is that on the second nudge the
         layer re-evaluates from the stream's <em>new</em> position, so it contributes a fresh opinion, not a scaled
         copy of its first.</p>
@@ -688,7 +688,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <details class="nbdetails">
       <summary>The arithmetic, precisely — why split ≠ a stronger single pass</summary>
       <p>α is the per-pass damping and Δ(x) = block(x) − x the layer's residual contribution. A single damped pass
-      computes the update <b>once</b>, at the original input <code>x</code>. A split pass computes it <b>twice</b>, and
+      computes the update once, at the original input <code>x</code>. A split pass computes it <b>twice</b>, and
       the second time the block sees the already-moved stream:</p>
       <pre class="code"><span class="cm"># single:</span>  x + α·Δ(x)
 
@@ -1283,10 +1283,10 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 
     <div class="col-side">
       <div>
-        <p class="dropcap">A caveat on the word "law." This is an empirical regularity, not a theorem — strong enough to
+        <p class="dropcap">A caveat on the word "law." This is an empirical regularity, not a theorem: strong enough to
         name, not proven universal. It earns the name here: the pooled regression (§6) fits it at R² = 0.74, and the
         same Σα-governance recurs on Granite. But it's one layer of one 1B model plus a cross-model echo; the crest
-        drifts by channel; nothing here derives it from first principles. That's the bar this lab holds — Σα
+        drifts by channel; nothing here derives it from first principles. That's the bar this lab holds. Σα
         <em>graduated</em> to a named law on the strength of the regression and the transfer, where Granite's weaker
         combo-stacking pattern stayed a "depth-separation heuristic" precisely because it hadn't.</p>
       </div>
@@ -1507,37 +1507,37 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
       <div class="nb-prov"><span><b>source</b> fig_sigma_law.json + sigma_kfill.py · in-band ruler, Δ vs own baseline</span><span><b>type</b> data-grounded dose-response</span><span><b>safety</b> k-series by marker shape; regimes labelled in text</span></div>
     </figure>
 
-    <p><b>Honesty about the peak.</b> "Σα ≈ 1.25" is the L1 finescan answer, but it's not clean across the board. A
+    <p>Honesty about the peak. "Σα ≈ 1.25" is the L1 finescan answer, but it's not clean across the board. A
     separate distributed sweep found Σ1.50 k6 stacks beating the Σ1.25 band at the very top
     (champion <code>shp1_S150_k6_flat</code>, t +7.33), and the pooled regression put
-    the <em>math</em> optimum nearer Σα ≈ 1.65 versus ~1.5 for the balanced battery. So the truthful statement is:
-    <b>a broad peak in the ~1.25–1.65 region, drifting higher for the narrow math channel</b> — not a single magic
-    constant. The ridge is real; its exact crest is channel-dependent. That tension is in the data and stays in the
+    the math optimum nearer Σα ≈ 1.65 versus ~1.5 for the balanced battery. So the truthful statement is:
+    <b>a broad peak in the ~1.25–1.65 region, drifting higher for the narrow math channel, not a single magic
+    constant.</b> The ridge is real; its exact crest is channel-dependent. That tension is in the data and stays in the
     writeup.</p>
   </section>
 
   <section id="death">
     <h2><span class="num">§5</span>One death, two doors</h2>
     <p>Over-drive (Σα ≫ 1) and negative-α reversal converge on the <b>same</b> failure. Grade the verbatim generations
-    along the Σα climb and you watch the model die the same way each time: at <span class="qx">Σα = <span class="qv">1</span></span> clean; at <span class="qx">Σα ≈ <span class="qv">2</span></span>
+    along the Σα climb and you watch the model die the same way each time: at <span class="qx">Σα = <span class="qv">1</span></span> clean; at Σα ≈ 2
     coherent but with arithmetic slips plus de-narration derail (the model wandering into MMLU-style narration); at
-    <span class="qx">Σα = <span class="qv">3</span></span> wounded (operand echo, CJK script leaking); at <span class="qx">Σα ≈ <span class="qv">4.8</span></span> dead — <code>500000…0</code>
+    Σα = 3 wounded (operand echo, CJK script leaking); at <span class="qx">Σα ≈ <span class="qv">4.8</span></span> dead: <code>500000…0</code>
     digit-repetition, special tokens, random scripts.</p>
 
     <div class="negresult">
       <span class="nb-kicker">Refuted — "the stack absorbs divergence"</span>
       <p><span class="olabel obs">observation</span> a divergence sandwich <code>diverge_567</code> (+.7 / −.5 / +.8 on L5/6/7)
       collapses to 0.00, while the control (+.7 / +.5 / +.8) holds at 0.27. <span class="olabel inf">interpretation</span> it's the
-      <em>negation</em>, not the perturbation, that kills it — and the bracketing positive layers do <b>not</b> absorb
+      <em>negation</em>, not the perturbation, that kills it: the bracketing positive layers do not absorb
       a reversed middle layer. The verbatim of the collapsed run shows the same <code>0.0000…0</code> norm-collapse
       signature as over-drive: the two doors open onto the same room.</p>
     </div>
 
     <p>The mechanistic reading, consistent with Fig 1: <b>L1's job is keeping the residual inside the norm band the
-    downstream layernorms expect.</b> You can break that from either side — pour too much in (over-drive) or push it
-    backwards (negation) — and either way the stream walks out of the band, the late layernorms see a vector they were
+    downstream layernorms expect.</b> You can break that from either side: pour too much in (over-drive) or push it
+    backwards (negation). Either way the stream walks out of the band, the late layernorms see a vector they were
     never trained on, and the output head spills digits, special tokens, and whatever script is nearest in embedding
-    space. L1 is simultaneously the most <em>split-helpful</em> layer and the most <em>negation-fragile</em> one (at
+    space. L1 is simultaneously the most split-helpful layer and the most negation-fragile one (at
     α = −0.1, L1 → 0.03 vs L5 → 0.12). The leverage cuts both ways because it's the same leverage.</p>
   </section>
 
@@ -1545,16 +1545,16 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <h2><span class="num">§6</span>The degeneration rate — exposure, not capability</h2>
     <div class="col-side">
       <div>
-        <p class="dropcap">This is the result I'm fondest of, and it cost no compute — a metric computed over generations
+        <p class="dropcap">This is the result I'm fondest of, and it cost no compute: a metric computed over generations
         that were already stored. Different probe channels disagreed about whether a config was good: math liked
         high-k; the emotional-intelligence (eq) channel hated it. <span class="olabel obs">observation</span> diffing the
-        verbatim responses showed the disagreement is about length — math answers are ~16 tokens, eq answers ~96.
+        verbatim responses showed the disagreement is about length: math answers are ~16 tokens, eq answers ~96.
         <span class="olabel inf">interpretation</span> the explanation is not "math and eq need different surgery"; it's
-        <b>exposure</b>: a low per-token derailment probability is invisible in 16 tokens and <em>compounds</em> into a
+        <b>exposure</b>: a low per-token derailment probability is invisible in 16 tokens and compounds into a
         visible loss across 96.</p>
         <p>So define a <b>degeneration rate</b>: the fraction of stored responses that derail (special-token leak +
-        name:number line-loops — the same crater signature, appearing subclinically). It's monotone in both knobs: in
-        k (0 → 5.0% from k4 → k12 at S150) and in Σα (0.8 → 11.7% from S150 → S250 at k6). Math sits near 0% — its
+        name:number line-loops, the same crater signature, appearing subclinically). It's monotone in both knobs: in
+        k (0 → 5.0% from k4 → k12 at S150) and in Σα (0.8 → 11.7% from S150 → S250 at k6). Math sits near 0%: its
         short answers just don't expose the risk.</p>
       </div>
       <aside class="aside">
@@ -1566,13 +1566,13 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
       </aside>
     </div>
 
-    <p>Take the eq channel, throw out only the derailed responses, and score the <em>clean</em>
-    ones (conditional mean): at k10/k12 the clean-only eq is <b>≥ baseline</b> (0.478 / 0.475 vs 0.472).
-    <span class="hl-acc">The clean responses hold at or above baseline on every channel</span> — including the one whose
-    aggregate score the surgery tanked. What the surgery costs isn't content quality; it's the <em>probability</em> of
+    <p>Take the eq channel, throw out only the derailed responses, and score the clean
+    ones (conditional mean): at k10/k12 the clean-only eq is ≥ baseline (0.478 / 0.475 vs 0.472).
+    <span class="hl-acc">The clean responses hold at or above baseline on every channel</span>, including the one whose
+    aggregate score the surgery tanked. What the surgery costs isn't content quality; it's the probability of
     derailing. The "eq champion" of the early board, <code>dampall_a65</code>, turns out to be a 14.6% derailment
-    machine; the genuine stable champion, <code>shp1_S150_k6_flat</code>, degenerates 0.4% of the time — <em>more stable
-    than baseline's own 2.1%.</em></p>
+    machine; the genuine stable champion, <code>shp1_S150_k6_flat</code>, degenerates 0.4% of the time, more stable
+    than baseline's own 2.1%.</p>
 
     <figure class="figure" id="fig6">
       <p class="nb-plate__note">↳ throw out the derailed responses and the clean ones sit at/above baseline — the cost is risk, not quality</p>
@@ -1849,42 +1849,42 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 
   <section id="regression">
     <h2><span class="num">§7</span>It's all one cost surface</h2>
-    <p>The separate observations — flat-beats-ramp, k6-beats-k4 below peak, the dose hump — are not separate. Pool
+    <p>The separate observations (flat-beats-ramp, k6-beats-k4 below peak, the dose hump) are not separate. Pool
     <b>all</b> 35 L1 finescan configs (flats, ramps, k-ladders) and fit:</p>
 
     <pre class="code">math  =  β₀ + β₁·Σα + β₂·Σα² + β₃·Σα²(profile)
       →  R² = 0.74,   β₃ = −0.041 ± 0.009  (t −4.9)</pre>
 
-    <p>The Σα² term gives the dose parabola (peak ≈ 1.65 for math); the <em>profile</em>-curvature term, Σa² summed
-    over the per-pass alphas, is a penalty for <b>concentration</b> — spreading the same Σα across flatter, smaller
+    <p>The Σα² term gives the dose parabola (peak ≈ 1.65 for math); the profile-curvature term, Σa² summed
+    over the per-pass alphas, is a penalty for <b>concentration</b>: spreading the same Σα across flatter, smaller
     passes costs less than dumping it into one big pass. "Flat beats ramp" and "k6 beats k4" are the same phenomenon:
     both lower Σa² at fixed Σα.</p>
 
-    <p>Where the regression <em>fails</em> is itself informative: the residual-norm wall is not smooth. A k1→k2 rescue
-    at Σ1.5 was observed at <span class="qv">+0.252</span> against a quadratic prediction of ~+0.05 — a single concentrated pass breaks
-    <em>beyond</em> what smooth curvature predicts. The model is approximately additive inside its trained envelope and
+    <p>Where the regression fails is itself informative: the residual-norm wall is not smooth. A k1→k2 rescue
+    at Σ1.5 was observed at <span class="qv">+0.252</span> against a quadratic prediction of ~+0.05: a single concentrated pass breaks
+    beyond what smooth curvature predicts. The model is approximately additive inside its trained envelope and
     catastrophically nonlinear at the norm walls: a regime-linear residual stream, polite in the middle, lethal at the
-    edges. Per-layer the additivity has a spectrum — <b>L0</b> is an extreme outlier (−0.19; it wants <em>one
-    concentrated write</em>, corroborating its amplification-site identity), <span class="qx">L1 (<span class="qv">+0.035</span>) and L23 (<span class="qv">+0.049</span>)</span> are the
-    only saturating layers (splitting the dose helps — exactly why L1 rewards high k, a suggestive bookend symmetry),
+    edges. Per-layer the additivity has a spectrum: <b>L0</b> is an extreme outlier (−0.19; it wants one
+    concentrated write, corroborating its amplification-site identity), <span class="qx">L1 (<span class="qv">+0.035</span>) and L23 (<span class="qv">+0.049</span>)</span> are the
+    only saturating layers (splitting the dose helps, exactly why L1 rewards high k, a suggestive bookend symmetry),
     and the mid-stack is near-additive.</p>
   </section>
 
   <section id="measured">
     <h2><span class="num">§8</span>What did it actually measure?</h2>
     <p>Mostly not new capability. The throughline of the whole MiniCPM5 board is that the gains are <b>de-collapse /
-    compliance relief</b> — surgery unclogs a model that was strangling its own output on a stalled valve, rather than
+    compliance relief</b>: surgery unclogs a model that was strangling its own output on a stalled valve, rather than
     teaching it arithmetic it didn't know. The overall v3-battery champ, <code>damp5_a80_damp23_a80</code> (L5 semantic
-    entry + L23 output gate, both α0.8, bal t +4.12), is an additivity bet that paid off — but it's relieving pathology,
+    entry + L23 output gate, both α0.8, bal t +4.12), is an additivity bet that paid off, but it's relieving pathology,
     not adding a skill. The multiple-choice "winners" (<code>dampall_a64/65/66</code>) are pure A-attractor de-collapse:
     the model stops defaulting to answer A.</p>
-    <p>This is why the next fork was built to <em>falsify</em> the capability story — a chain-of-thought battery. If a
+    <p>This is why the next fork was built to falsify the capability story: a chain-of-thought battery. If a
     config's win survives when the model is actually reasoning step-by-step, it's capability; if it evaporates, it was
     compliance relief. That fork is built but not fully run. The one suggestive smoke result is worth flagging as a
-    <em>hypothesis, not a finding</em>: <span class="olabel obs">observation</span> <code>dampall_a90</code> beat baseline in
+    hypothesis, not a finding: <span class="olabel obs">observation</span> <code>dampall_a90</code> beat baseline in
     CoT smoke (0.074 vs 0.046). <span class="olabel inf">interpretation</span> if a 1B can't sustain chain-of-thought
-    <em>because</em> it collapses into loops, then de-collapse surgery might be a <b>reasoning prosthesis</b> — not a
-    capability test but a capability <em>enabler</em>. Unproven. The most interesting thread left on the table when the
+    because it collapses into loops, then de-collapse surgery might be a <b>reasoning prosthesis</b>: not a
+    capability test but a capability enabler. Unproven. The most interesting thread left on the table when the
     model was closed out.</p>
   </section>
 
@@ -1906,10 +1906,10 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 
   <section id="caveats">
     <h2>Caveats</h2>
-    <p>Medium confidence, and here is what that means. The Σα-law itself graduated — R²&nbsp;=&nbsp;0.74 on the
-    fit, plus a predicted transfer to Granite — but its peak is a channel-dependent ridge, not a constant:
+    <p>Medium confidence, and here is what that means. The Σα-law itself graduated (R²&nbsp;=&nbsp;0.74 on the
+    fit, plus a predicted transfer to Granite), but its peak is a channel-dependent ridge, not a constant:
     quoting "Σα&nbsp;=&nbsp;1.25" without the 1.25–1.65 range and the math-vs-balanced drift is over-claiming.
-    And there is no shippable model win here — the best math specialist (<code>split_1_a50_a70</code>) loses
+    And there is no shippable model win here: the best math specialist (<code>split_1_a50_a70</code>) loses
     overall to a de-collapse config, and even that is pathology relief. Read a method and a regularity into
     this page, not a capability claim.</p>
     <ul class="walkback">
