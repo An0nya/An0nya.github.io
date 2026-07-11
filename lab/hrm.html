@@ -449,7 +449,7 @@ generations:    ordering CORRECT, but Cara→"Costa"→"Rice", answers truncate<
 
 <!-- ─── §9 CAVEATS / REPRO ────────────────────────────────────────── -->
 <section id="caveats">
-  <h2>Caveats &amp; reproduction</h2>
+  <h2>Caveats</h2>
   <p>The verification pass that killed the headline finding is itself thin — N=3, on a battery calibrated
   for within-model deltas, not a cross-model claim. Read what follows as the honest state of an
   already-walked-back result, not fresh doubt on a stable one.</p>
@@ -461,16 +461,20 @@ generations:    ordering CORRECT, but Cara→"Costa"→"Rice", answers truncate<
     <li><span class="wbhead">This is an under-trained base checkpoint without ACT.</span> The loop-scaling story may well be true on a properly-trained successor. None of this indicts the <em>architecture</em> — only this checkpoint, probed this way.</li>
   </ul>
 
-  <hr class="rule">
-  <p class="small muted">
-    Model: <span class="mono">Aryagm/HRM-Text-1B-MLX</span> (bf16 probing / 4bit serving), via
-    <a href="https://github.com/Aryagm/HRM-mlx">HRM-mlx</a>. Always <span class="mono">--static-cache</span>; bf16, never fp16.
-    Scripts: <span class="mono">extract_states.py</span> · <span class="mono">interlingua_scan.py</span> ·
-    <span class="mono">logit_lens.py</span> · <span class="mono">experiments.py</span> (sampling) ·
-    <span class="mono">regrade.py</span> (strict boxed) · <span class="mono">probe_coherence.py</span>. Full-generation JSONs in <span class="mono">figs/</span>.
-    Sibling specimens: <a href="/lab/05_granite.html">Granite</a> · <a href="/lab/gemma.html">Gemma 4</a>.
-    Shared <a href="/lab/methods.html">methods &amp; references</a>.
-  </p>
+  <div class="nb-marginalia" style="margin-top:var(--sp-7)">
+    <div class="nb-marginalia__label">Build notes &amp; method</div>
+    <div class="nb-marginalia__body">
+      <p style="max-width:64ch">
+        Model: <span class="mono">Aryagm/HRM-Text-1B-MLX</span> (bf16 probing / 4bit serving), via
+        <a href="https://github.com/Aryagm/HRM-mlx">HRM-mlx</a>. Always <span class="mono">--static-cache</span>; bf16, never fp16.
+        Scripts: <span class="mono">extract_states.py</span> · <span class="mono">interlingua_scan.py</span> ·
+        <span class="mono">logit_lens.py</span> · <span class="mono">experiments.py</span> (sampling) ·
+        <span class="mono">regrade.py</span> (strict boxed) · <span class="mono">probe_coherence.py</span>. Full-generation JSONs in <span class="mono">figs/</span>.
+        Sibling specimens: <a href="/lab/05_granite.html">Granite</a> · <a href="/lab/gemma.html">Gemma 4</a>.
+        Shared <a href="/lab/methods.html">methods &amp; references</a>.
+      </p>
+    </div>
+  </div>
 </section>
 
 </main>
