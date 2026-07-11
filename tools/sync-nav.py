@@ -1,48 +1,55 @@
 #!/usr/bin/env python3
-"""Sync the shared site bar into every page that opts in with markers.
+"""Sync shared fragments (site bar, footer) into every page that opts in with markers.
 
-Single source of truth:  components/_site-bar.html
+Single source of truth per fragment:  components/_site-bar.html, components/_footer.html
 A page opts in by wrapping its <nav class="site-bar"> with:
 
     <!-- SITE-BAR:START — managed by tools/sync-nav.py; edit components/_site-bar.html -->
     ...(managed, do not hand-edit)...
     <!-- SITE-BAR:END -->
 
+and/or its <footer> with:
+
+    <!-- FOOTER:START — managed by tools/sync-nav.py; edit components/_footer.html -->
+    ...(managed, do not hand-edit)...
+    <!-- FOOTER:END -->
+
 Usage:
-    python3 tools/sync-nav.py           # stamp the fragment into all opted-in pages
+    python3 tools/sync-nav.py           # stamp the fragments into all opted-in pages
     python3 tools/sync-nav.py --check   # report drift and exit 1 (for a pre-push hook)
 
-Only files containing the START marker are touched, so drafts / bakeoff files
+Only files containing a START marker are touched, so drafts / bakeoff files
 are left alone. The page-TOC sidebar is per-page and is NOT managed here.
 """
 import sys
 import pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-FRAGMENT_FILE = ROOT / "components" / "_site-bar.html"
-START = "SITE-BAR:START"
-END = "SITE-BAR:END"
+FRAGMENTS = [
+    (ROOT / "components" / "_site-bar.html", "SITE-BAR:START", "SITE-BAR:END"),
+    (ROOT / "components" / "_footer.html", "FOOTER:START", "FOOTER:END"),
+]
 
 
-def fragment_lines():
-    return FRAGMENT_FILE.read_text(encoding="utf-8").rstrip("\n").split("\n")
+def fragment_lines(fragment_file):
+    return fragment_file.read_text(encoding="utf-8").rstrip("\n").split("\n")
 
 
-def restamp(text, frag):
+def restamp(text, frag, start, end):
     """Replace the lines between each START/END marker with the fragment,
     indented to match the START marker. Returns (new_text, changed)."""
     lines = text.split("\n")
     out, i, changed = [], 0, False
     while i < len(lines):
         line = lines[i]
-        if START in line:
+        if start in line:
             indent = line[: len(line) - len(line.lstrip())]
             block = [indent + f if f.strip() else "" for f in frag]
             j = i + 1
-            while j < len(lines) and END not in lines[j]:
+            while j < len(lines) and end not in lines[j]:
                 j += 1
             if j >= len(lines):
-                sys.exit(f"error: {START} without matching {END}")
+                sys.exit(f"error: {start} without matching {end}")
             if lines[i + 1 : j] != block:
                 changed = True
             out.append(line)          # START marker
@@ -57,17 +64,20 @@ def restamp(text, frag):
 
 def main():
     check = "--check" in sys.argv
-    frag = fragment_lines()
     drift = []
     for path in sorted(ROOT.rglob("*.html")):
         text = path.read_text(encoding="utf-8")
-        if START not in text:
-            continue
-        new, changed = restamp(text, frag)
-        if changed:
+        touched = False
+        for fragment_file, start, end in FRAGMENTS:
+            if start not in text:
+                continue
+            frag = fragment_lines(fragment_file)
+            text, changed = restamp(text, frag, start, end)
+            touched = touched or changed
+        if touched:
             drift.append(path.relative_to(ROOT))
             if not check:
-                path.write_text(new, encoding="utf-8")
+                path.write_text(text, encoding="utf-8")
 
     if check:
         if drift:
