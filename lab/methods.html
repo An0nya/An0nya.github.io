@@ -134,10 +134,10 @@
       <dt>The <span class="mono">r</span>-gauge</dt>
       <dd>
         <span class="mono">std(per-seed Δ) / std(baseline seed-noise)</span>.
-        <b>r&nbsp;&lt;&nbsp;1</b> → pairing cancels common-mode seed noise, so trust
+        <span class="qx">r&nbsp;&lt;&nbsp;<span class="qv">1</span></span> → pairing cancels common-mode seed noise, so trust
         <span class="mono">d</span> even when the config's raw mean sits inside the
         baseline's spread (overlapping ranges are <em>not</em> "it's noise" — the
-        paired diff is the test). <b>r&nbsp;≈&nbsp;1</b> → the difference noise is
+        paired diff is the test). <span class="qx">r&nbsp;≈&nbsp;<span class="qv">1</span></span> → the difference noise is
         seed-independent; the config is riding the discovery noise floor and more
         seeds won't rescue it.
       </dd>

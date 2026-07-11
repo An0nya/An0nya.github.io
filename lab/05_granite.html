@@ -126,7 +126,7 @@
     <div class="nb-correction__head"><span>⌦ Correction</span><span class="nb-correction__disp">superseded — does not reproduce</span></div>
     <div class="nb-correction__row"><span class="nb-correction__k">Headline claim</span><span class="nb-correction__b"><code>combo_10_38</code>, a cross-depth pair, is the champion: it boosts EQ to 0.769 (t +9.38) while holding multiple-choice <em>pristine</em> at 1.000 — Granite's "small change, broad capability" generalist, the best thing the 469-config sweep found.</span></div>
     <div class="nb-correction__row"><span class="nb-correction__k">Why it looked true</span><span class="nb-correction__b">It was measured on a <em>half-saturated</em> battery: MC was ceilinged at 1.000 so it could only ever read "pristine," and EQ was measured with an un-primed prompt that left it bimodal. A saturated channel manufactures a clean result.</span></div>
-    <div class="nb-correction__row"><span class="nb-correction__k">Why it failed</span><span class="nb-correction__b">Re-run on the <em>fair</em> v3/v4 battery — balanced-key MC, in-band calibrated math, properly-primed EQ — <code>combo_10_38</code> came back at balanced <b>t = −3.05</b>, and <code>dup_10</code> (the single-layer version) went flat. Fix the instrument and the champion evaporates.</span></div>
+    <div class="nb-correction__row"><span class="nb-correction__k">Why it failed</span><span class="nb-correction__b">Re-run on the <em>fair</em> v3/v4 battery — balanced-key MC, in-band calibrated math, properly-primed EQ — <code>combo_10_38</code> came back at balanced <span class="qx">t = <span class="qv">−3.05</span></span>, and <code>dup_10</code> (the single-layer version) went flat. Fix the instrument and the champion evaporates.</span></div>
     <div class="nb-correction__row"><span class="nb-correction__k">Disposition</span><span class="nb-correction__b"><b>Leaderboard retired; mechanism kept.</b> The same lesson the <a href="/lab/hrm.html">HRM specimen</a> already carries, paid for a second time. Everything below is the constructive line that replaced it.</span></div>
   </aside>
 
@@ -158,8 +158,8 @@
         <p class="dropcap">Granite's no-CoT arithmetic baseline
         doesn't fail <em>randomly</em>; it fails <span class="hl-acc">deterministically</span>, in a handful of
         specific, reproducible ways. <code>907 − 131</code> (= 776) never comes back right across 15 seeds — it
-        settles into one of <em>two</em> stable wrong answers, <b>676</b> (9/15, a hundreds-column slip) or
-        <b>131</b> (6/15, echoing the subtrahend): 0 of 15 correct, two error basins. A particular carry-drop on
+        settles into one of <em>two</em> stable wrong answers, <span class="qv">676</span> (9/15, a hundreds-column slip) or
+        <span class="qv">131</span> (6/15, echoing the subtrahend): 0 of 15 correct, two error basins. A particular carry-drop on
         an addition probe, likewise. I call these <b>metastable bugs</b> — <span class="olabel obs">observation</span>
         the 0/15 reproducibility is what's measured; <span class="olabel inf">interpretation</span> "basin / attractor" is
         the interpretation.</p>

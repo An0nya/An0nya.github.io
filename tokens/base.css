@@ -77,3 +77,15 @@ code {
      inline identifiers sit flush with prose instead of shouting over it */
   font-size: 0.85em;
 }
+
+/* Quantitative-value voice — results wear the machine face, prose stays human.
+   .qx wraps the whole quantitative statement (wash + padding, base font);
+   .qv is the number itself (mono + bold). Standalone .qv gets its own wash.
+   Rollout: tools/convert-quant.py (bolded-metric → qx/qv, ≥60% quant chars). */
+.qv { font-family: var(--font-mono); font-size: 0.85em; font-weight: 600; }
+.qx, .qv, :not(pre) > code {
+  background: color-mix(in srgb, var(--text) 12%, transparent);
+  padding: 0.08em 0.32em;
+  border-radius: 4px;
+}
+.qx .qv { background: none; padding: 0; border-radius: 0; }

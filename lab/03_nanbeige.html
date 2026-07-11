@@ -506,7 +506,7 @@
     math" is <em>the surgery added arithmetic capability</em>. A control test says mostly no.</p>
     <p>Force the bare baseline to commit — logit-bias the <code>&lt;think&gt;</code> token to −100 and stop on the
     reasoning-wrapper strings, so it physically cannot open a deliberation — and the bare model's m|g jumps to
-    <b>0.522</b>, within reach of the <em>unbiased top-RYS</em> m|g of <b>0.58</b>. In other words: when you make the
+    <span class="qv">0.522</span>, within reach of the <em>unbiased top-RYS</em> m|g of <span class="qv">0.58</span>. In other words: when you make the
     untouched model answer instead of letting it stall, its guesses are nearly as good as the surgically-boosted model's.
     <span class="hl-acc">Most of Nanbeige's "no-CoT badness" was unwillingness to commit, not poor intuition.</span>
     <span class="olabel obs">observation</span> (And the mechanical-damage configs stay broken under bias —
@@ -526,7 +526,7 @@
     </table>
 
     <p>The forced-commit row is n=1, from the biased singles phase: forcing the bare model to answer barely
-    moved the <em>rate</em> (0.194→0.244) yet lifted quality to m|g <b>0.522</b> — nearly top-RYS's <b>0.582</b>. So what
+    moved the <em>rate</em> (0.194→0.244) yet lifted quality to m|g <span class="qv">0.522</span> — nearly top-RYS's <span class="qv">0.582</span>. So what
     suppression was hiding was mostly <em>intuition the model already had</em>, not just the willingness to use it. One
     caveat on <code>m|g</code> itself: it's conditional on the answers the model actually emits, so it's a selection
     effect, not a pure capability measure — if surgery makes the model commit more often, the extra answers it ventures

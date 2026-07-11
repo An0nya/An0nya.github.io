@@ -1025,13 +1025,13 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
       <div class="nb-prov"><span><b>source</b> split_curvature_probe.npz · L1 residual vectors</span><span><b>type</b> data-grounded; gap closed-form to 1.6%</span><span><b>safety</b> paths by curvature + marker; no red/green</span></div>
     </figure>
 
-    <p>And it isn't only those three controls. We swept a <em>single</em> damped pass of L1 across the whole
-    single-knob range (α = 0.5 → 1.5, the entire envelope a single α can reach). It tops out at <b>+0.028</b> (α ≈ 0.6)
-    and craters under amplification (α = 1.5 → <b>−0.115</b>); it never clears baseline by more than noise. The best
-    split/stack sits at <b>+0.153</b>. No single α comes close: a <b>+0.125</b> gap, ~5×. And at the
-    <em>same</em> total dose <b>Σα = 1.5</b>, one pass scores −0.115 and the split scores +0.153, a <b>0.27 swing</b>
-    that is pure re-evaluation. (Cross-checked across two independent sweep files: L1 at α = 1.30 gives Δ −0.080 in
-    <em>both</em> to four decimals, so the comparison rides on Δ-vs-baseline, where the constant harness offset
+    <p>And it isn't only those three controls. We swept a single damped pass of L1 across the whole
+    single-knob range (<span class="qx">α = <span class="qv">0.5 → 1.5</span></span>, the entire envelope a single α can reach). It tops out at <span class="qv">+0.028</span> (<span class="qx">α ≈ <span class="qv">0.6</span></span>)
+    and craters under amplification (<span class="qx">α = <span class="qv">1.5</span> → <span class="qv">−0.115</span></span>); it never clears baseline by more than noise. The best
+    split/stack sits at <span class="qv">+0.153</span>. No single α comes close: a <span class="qx"><span class="qv">+0.125</span> gap, <span class="qv">~5×</span></span>. And at the
+    <em>same</em> total dose <span class="qx">Σα = <span class="qv">1.5</span></span>, one pass scores <span class="qv">−0.115</span> and the split scores <span class="qv">+0.153</span>, a <span class="qx"><span class="qv">0.27</span> swing</span>
+    that is pure re-evaluation. (Cross-checked across two independent sweep files: L1 at <span class="qx">α = <span class="qv">1.30</span></span> gives <span class="qx">Δ <span class="qv">−0.080</span></span> in
+    both to four decimals, so the comparison rides on Δ-vs-baseline, where the constant harness offset
     cancels.)</p>
 
     <div class="negresult">
@@ -1313,9 +1313,9 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 
     <p style="margin-top:var(--sp-5)">Read down the Σα column and the score tracks it, not the shape. The conserve row
     (Σα = 1) is <em>flat from k=2 to k=8</em> — once total update is fixed, adding copies does nothing. A fine scan then
-    sharpened it: the peak isn't at Σα = 1 (just the lowest densely-sampled cell). On L1 it sits at <b>Σα ≈ 1.25</b>, on
+    sharpened it: the peak isn't at Σα = 1 (just the lowest densely-sampled cell). On L1 it sits at <span class="qx">Σα ≈ <span class="qv">1.25</span></span>, on
     a broad 1.1–1.5 ridge, fading by ~2.0, cratering by ~3, and reaching full residual-norm collapse around
-    <b>Σα ≈ 4.8</b>.</p>
+    <span class="qx">Σα ≈ <span class="qv">4.8</span></span>.</p>
 
     <figure class="figure" id="fig5">
       <p class="nb-plate__note">↳ the signature plot — k spreads the curve <em>vertically</em> (gain), it does not move the peak horizontally</p>
@@ -1519,9 +1519,9 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
   <section id="death">
     <h2><span class="num">§5</span>One death, two doors</h2>
     <p>Over-drive (Σα ≫ 1) and negative-α reversal converge on the <b>same</b> failure. Grade the verbatim generations
-    along the Σα climb and you watch the model die the same way each time: at <b>Σα = 1</b> clean; at <b>Σα ≈ 2</b>
+    along the Σα climb and you watch the model die the same way each time: at <span class="qx">Σα = <span class="qv">1</span></span> clean; at <span class="qx">Σα ≈ <span class="qv">2</span></span>
     coherent but with arithmetic slips plus de-narration derail (the model wandering into MMLU-style narration); at
-    <b>Σα = 3</b> wounded (operand echo, CJK script leaking); at <b>Σα ≈ 4.8</b> dead — <code>500000…0</code>
+    <span class="qx">Σα = <span class="qv">3</span></span> wounded (operand echo, CJK script leaking); at <span class="qx">Σα ≈ <span class="qv">4.8</span></span> dead — <code>500000…0</code>
     digit-repetition, special tokens, random scripts.</p>
 
     <div class="negresult">
@@ -1861,11 +1861,11 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     both lower Σa² at fixed Σα.</p>
 
     <p>Where the regression <em>fails</em> is itself informative: the residual-norm wall is not smooth. A k1→k2 rescue
-    at Σ1.5 was observed at <b>+0.252</b> against a quadratic prediction of ~+0.05 — a single concentrated pass breaks
+    at Σ1.5 was observed at <span class="qv">+0.252</span> against a quadratic prediction of ~+0.05 — a single concentrated pass breaks
     <em>beyond</em> what smooth curvature predicts. The model is approximately additive inside its trained envelope and
     catastrophically nonlinear at the norm walls: a regime-linear residual stream, polite in the middle, lethal at the
     edges. Per-layer the additivity has a spectrum — <b>L0</b> is an extreme outlier (−0.19; it wants <em>one
-    concentrated write</em>, corroborating its amplification-site identity), <b>L1 (+0.035) and L23 (+0.049)</b> are the
+    concentrated write</em>, corroborating its amplification-site identity), <span class="qx">L1 (<span class="qv">+0.035</span>) and L23 (<span class="qv">+0.049</span>)</span> are the
     only saturating layers (splitting the dose helps — exactly why L1 rewards high k, a suggestive bookend symmetry),
     and the mid-stack is near-additive.</p>
   </section>

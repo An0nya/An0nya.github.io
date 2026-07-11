@@ -854,10 +854,10 @@
     <pre class="code"><span class="hl">r</span>  =  std(per-seed Δ) / std(baseline seed-noise)</pre>
 
     <ul>
-      <li><b>r &lt; 1</b> → pairing is cancelling common-mode seed noise. Trust <code>d</code> <em>even when the config's
+      <li><span class="qx">r &lt; <span class="qv">1</span></span> → pairing is cancelling common-mode seed noise. Trust <code>d</code> <em>even when the config's
       raw mean sits inside the baseline's spread.</em> The overlapping ranges are not the test; the paired diff is. This
       is the case people misread as "noise."</li>
-      <li><b>r ≳ 1.4 (≈√2)</b> → the difference noise is seed-independent; pairing buys you nothing and more seeds won't
+      <li><span class="qx">r ≳ <span class="qv">1.4</span> (≈√<span class="qv">2</span>)</span> → the difference noise is seed-independent; pairing buys you nothing and more seeds won't
       rescue it. This config is riding the discovery noise floor.</li>
     </ul>
     <p>And this gives a budgeting rule that's the <em>opposite</em> of the naive one. You don't spend seeds where the
