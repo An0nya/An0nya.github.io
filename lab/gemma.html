@@ -550,7 +550,7 @@ a { color: var(--terracotta); }
 /* Inline highlights */
 .hl-pos { color: var(--sage); font-weight: 500; }
 .hl-neg { color: var(--wine); font-weight: 500; }
-.hl-acc { color: var(--terracotta); font-weight: 500; }
+.hl-acc { font-weight: 600; }
 
 /* small UI hint for hover */
 .layer-tip {
@@ -859,10 +859,10 @@ details[open] > .geo-summary::before { transform: rotate(90deg); }
     <div class="label">Provenance</div>
     <div class="body">
       <p>
-        On <span class="mono">April 11, 2026</span>, a <a href="https://huggingface.co/google/gemma-4-31B-it/discussions/60">discussion thread</a> opened on the Gemma 4 31B model card: could someone with the hardware run David Ng's RYS layer-duplication technique on it? Ng — who created RYS and rode it to the top of the open LLM leaderboard — estimated about <span class="mono">40 H100-hours</span> and said he'd get to it when compute allowed. The thread went quiet; the 31B never got its surgery. <em>(Ng has since returned to RYS on the current model generation — see his 2026 retrospective, linked below.)</em>
+        On <span class="mono">April 11, 2026</span>, a <a href="https://huggingface.co/google/gemma-4-31B-it/discussions/60">discussion thread</a> opened on the Gemma 4 31B model card: could someone with the hardware run David Ng's RYS layer-duplication technique on it? Ng, who created RYS and rode it to the top of the open LLM leaderboard, estimated about <span class="mono">40 H100-hours</span> and said he'd get to it when compute allowed. The thread went quiet; the 31B never got its surgery. <em>(Ng has since returned to RYS on the current model generation. See his 2026 retrospective, linked below.)</em>
       </p>
       <p>
-        Meanwhile — across April and May — this experiment ran on a Mac Mini M4 with 16&nbsp;GB of unified memory, sweeping 247 surgical configurations on the smaller E4B sibling. It is the first known working RYS sweep on the Gemma 4 family — unblocked by reverse-engineering three undocumented per-layer metadata arrays that the upstream tooling silently leaves stale after a duplication. The original technique was for somebody with H100s. This one was for somebody with a kitchen.
+        Meanwhile, across April and May, this experiment ran on a Mac Mini M4 with 16&nbsp;GB of unified memory, sweeping 247 surgical configurations on the smaller E4B sibling. It is the first known working RYS sweep on the Gemma 4 family, unblocked by reverse-engineering three undocumented per-layer metadata arrays that the upstream tooling silently leaves stale after a duplication. The original technique was for somebody with H100s. This one was for somebody with a kitchen.
       </p>
 
       <div class="specbox">
@@ -901,20 +901,20 @@ details[open] > .geo-summary::before { transform: rotate(90deg); }
         Gemma 4 E4B is a small open-weights model published by Google,
         with one architectural feature that turns out to dominate everything
         else for this work: it does not actually carry its own keys and values
-        in the back half of the network. Layers 0–22 are <em>writers</em> that
+        in the back half of the network. Layers 0–22 are writers that
         compute their own Q/K/V projections. Layers 24–41 are
         <em>consumers</em>: at inference time the engine routes them to read
-        from a two-slot dictionary written by exactly two layers — L22
+        from a two-slot dictionary written by exactly two layers: L22
         (the sole sliding-attention anchor) and L23 (the sole global-attention
         anchor). The 18 consumers all read the same frozen cache. Their own
         K/V weights sit on disk and never fire.
       </p>
       <p>
         This means there are really three Gemmas inside the same checkpoint.
-        A <span class="hl-acc">writer zone</span> that does most of the heavy
+        A writer zone that does most of the heavy
         encoding. Two <span class="hl-neg">anchors</span> whose output is
         broadcast to every consumer downstream. And a long
-        <span class="hl-acc">consumer chorus</span> that refines what the
+        consumer chorus that refines what the
         anchors already decided. The layer strip below colours each layer
         by which of these it is. Hover for the details.
       </p>
@@ -971,7 +971,7 @@ details[open] > .geo-summary::before { transform: rotate(90deg); }
       <p>
         Layers 18–22 form a smooth crater approaching L22 from below. The
         further the duplicated layer is from the anchor, the less the damage
-        propagates undamped. By L2 — twenty layers of damping away — the
+        propagates undamped. By L2 (twenty layers of damping away), the
         delta-norm has attenuated enough that amplification flips from
         catastrophic to beneficial.
       </p>
@@ -979,7 +979,7 @@ details[open] > .geo-summary::before { transform: rotate(90deg); }
     <div>
       <h3>The prune-rescue asymmetry</h3>
       <p>
-        Several layers — L3, L16, L18, L36 — are positively helpful to
+        Several layers (L3, L16, L18, L36) are positively helpful to
         <em>remove</em>. Not just "less bad than duplicating", but a real
         gain over baseline. That makes pruning an independent intervention
         axis, not the inverse of duplication. Some layers are noise.
@@ -1032,10 +1032,9 @@ details[open] > .geo-summary::before { transform: rotate(90deg); }
         The survivors fall into three honest patterns. Single-layer dup at
         <span class="hl-acc">L2</span> (small per-layer delta, twenty layers
         of damping before reaching the anchor). Pruning at
-        <span class="hl-acc">L3</span> (a noise contributor in the encoder).
-        And the late consumer-zone wins —
-        <span class="hl-acc">L39, L40</span>, plus blocks and combos that
-        stack them — which exploit the shared-KV chorus by consulting the
+        L3 (a noise contributor in the encoder).
+        And the late consumer-zone wins, L39 and L40 plus blocks and combos
+        that stack them, which exploit the shared-KV chorus by consulting the
         frozen anchor cache one more time with a refined residual.
       </p>
     </div>
@@ -1339,7 +1338,7 @@ FAIL: server did not start within 180s</div>
   <div class="col-2">
     <div>
       <p>
-        The headline contribution isn't a number on a leaderboard — the
+        The headline contribution isn't a number on a leaderboard: the
         absolute correct-rate is still 10%. It's the picture of <em>why</em>
         layer surgery works at all on a model with such a tight K/V
         bottleneck, and where the room is.
@@ -1360,8 +1359,8 @@ FAIL: server did not start within 180s</div>
     </div>
     <div>
       <p>
-        Cross-zone combinations — writer-zone L2 stacked with consumer-zone
-        L36, L39, L40 — produce the only superadditive results in the sweep.
+        Cross-zone combinations, writer-zone L2 stacked with consumer-zone
+        L36, L39, L40, produce the only superadditive results in the sweep.
         That's the load-bearing publishable finding. Single-zone amplification
         is bounded by the anchor; the room for actual lift is in the
         interaction between the two mechanisms.
@@ -1467,7 +1466,7 @@ FAIL: server did not start within 180s</div>
       <p>
         Two flags on the specific weights used here.
         <span class="wbhead">msq-2.6bit</span> is an aggressive mixed-precision
-        quantization — necessary to fit the 26B into MLX on a 16 GB M4 Mac Mini
+        quantization: necessary to fit the 26B into MLX on a 16 GB M4 Mac Mini
         at all. Whether that level of compression meaningfully distorts the
         internal representations being measured is not fully known; treat the
         scans as indicative rather than definitive.
@@ -1476,8 +1475,8 @@ FAIL: server did not start within 180s</div>
         <span class="wbhead">heretic</span> designates an ablated-refusal fine-tune.
         The scan was run on this checkpoint simply because it was what was on the
         drive. Refusal ablation is unlikely to dramatically alter the mid-network
-        semantic geometry being measured here — it operates primarily on
-        late-layer output behavior — but it is a confounding factor that should
+        semantic geometry being measured here (it operates primarily on
+        late-layer output behavior), but it is a confounding factor that should
         be controlled for before any surgical conclusions are drawn.
       </p>
     </div>
@@ -1508,19 +1507,19 @@ FAIL: server did not start within 180s</div>
   <div style="margin-top: 2.4rem;">
     <p>
       Part of the point of the scans was simply to find out whether this hardware
-      could load and probe a 26B mixture-of-experts — and a 60-layer 31B dense —
+      could load and probe a 26B mixture-of-experts (and a 60-layer 31B dense)
       at all. It can, at aggressive quantization. What the probing found, before
       any cutting:
     </p>
     <p>
       On the 26B, one signal survives the quantization noise: <span class="hl-acc">math</span>.
       The EN↔ZH math pairs begin maximally dissimilar at the embedding, then climb
-      into positive territory through the middle third of the network —
-      mathematical relationships compressing into a more language-agnostic
-      representation — while factual and poetic prose stay language-separated
+      into positive territory through the middle third of the network
+      (mathematical relationships compressing into a more language-agnostic
+      representation) while factual and poetic prose stay language-separated
       throughout. The per-layer delta tells a matching story: two bursts of heavy
       activity (layers 0–2, then a sustained 11–15) bracket a quiet middle, and the
-      final layer (29) is anomalous on every measure — a late-network burst where
+      final layer (29) is anomalous on every measure: a late-network burst where
       the geometry swings most negative, doing something categorically different
       from the middle third.
     </p>
@@ -1896,7 +1895,7 @@ FAIL: server did not start within 180s</div>
 </div>
 
     <p class="small" style="margin-top:2rem; border-left:3px solid var(--terracotta); padding-left:14px; color:var(--ink-2);">
-      <b>The rest →</b> the per-layer delta/residual scans and the full cross-model interlingua gallery — the one thread that runs through every specimen in the lab — live on the Internal geometry page.
+      <b>The rest →</b> the per-layer delta/residual scans and the full cross-model interlingua gallery (the one thread that runs through every specimen in the lab) live on the Internal geometry page.
     </p>
   </div>
 
@@ -1907,7 +1906,7 @@ FAIL: server did not start within 180s</div>
         <strong>The surgery.</strong> The scans suggested interesting structure; the surgery found something more humbling, and more useful. On this model the scalpel never reaches reasoning at all — it acts only on the output path.
       </p>
       <p>
-        A full sweep ran on the 26B-A4B — the same hard-math battery as E4B, this
+        A full sweep ran on the 26B-A4B, the same hard-math battery as E4B, this
         time on an <span class="mono">IQ3_XS</span> llama.cpp build rather than the
         MLX scan checkpoint. Ninety-four configurations: single-layer dups and prunes
         across every sliding position, adjacent-pair dups, multi-layer prunes,
@@ -1916,27 +1915,27 @@ FAIL: server did not start within 180s</div>
         +0.006 — statistical zero.
       </p>
       <p>
-        Two failure modes, both mechanical. <strong>Duplication corrupts routing.</strong>
+        Two failure modes, both mechanical. Duplication corrupts routing.
         Duplicating a layer in a mixture-of-experts re-runs its router and re-applies
         expert selection over a residual stream never calibrated to see it twice. The
-        model stops emitting parseable numbers — null rates climb to 40–56% on the
+        model stops emitting parseable numbers: null rates climb to 40–56% on the
         heavier dups, and every adjacent-pair dup floors out. There is no single
         catastrophic anchor here, as the architecture predicted; the catastrophe is
-        smeared uniformly across every duplication. <strong>Pruning doesn't break it.</strong> Removing a mid-stack layer doesn't break the model — it
-        makes it <em>more</em> fluent. <span class="mono">prune_13</span> cures the
+        smeared uniformly across every duplication. <strong>Pruning doesn't break it</strong> — removing a mid-stack layer
+        makes it more fluent. <span class="mono">prune_13</span> cures the
         baseline's "Answer: Answer:" loop and emits clean, comma-grouped,
         magnitude-correct numbers that are wrong in the middle digits. Null drops from
-        25% to zero; strict-correct nudges <em>down</em>. It trades refusal for
+        25% to zero; strict-correct nudges down. It trades refusal for
         confident error.
       </p>
       <p>
-        And so — for the second time in this notebook — the partial-credit grader lied.
+        And so, for the second time in this notebook, the partial-credit grader lied.
         On E4B it inflated close-but-wrong dups (§3). On the 26B it crowned
         <span class="mono">prune_13</span> and <span class="mono">prune_14</span> as the
-        standout "winners" at +5.3 and +4.3 partial-t — both of which evaporate to zero
+        standout "winners" at +5.3 and +4.3 partial-t, numbers that evaporate to zero
         under strict equality. The two largest grader-gaming gaps in the whole project
         belong to these phantom champions. Whatever layer surgery does to this MoE, it
-        acts only on <em>output compliance</em> — willingness to emit a number — which
+        acts only on <em>output compliance</em> (willingness to emit a number), which
         the partial grader mistakes for capability.
       </p>
 
@@ -1946,12 +1945,12 @@ FAIL: server did not start within 180s</div>
   </div>
 
       <p>
-        A second sweep — emotion-attribution and multiple-choice probes — was meant
+        A second sweep (emotion-attribution and multiple-choice probes) was meant
         to confirm uniform breakage. It did the opposite. On multiple-choice factual
         recall, pruning is dramatic: fifteen configurations beat baseline at
         <span class="mono">t ≥ 2</span>, the best lifting accuracy from 0.30 to
         near-perfect. The raw responses explain why. The base model often "answers" a
-        multiple-choice question with a single character — <span class="mono">:</span> —
+        multiple-choice question with a single character, <span class="mono">:</span>,
         and scores zero. It isn't getting the question wrong; it isn't answering. Prune
         one mid-stack layer and the same model emits a clean, correct letter. The
         knowledge was always there; it just wasn't coming out.
@@ -1959,46 +1958,46 @@ FAIL: server did not start within 180s</div>
       <p>
         That reconciles the two halves. Layer surgery here is an
         <strong>output-compliance fix, not a reasoning fix.</strong> Where the latent
-        capability already exists — factual recall — the unclogged output is correct and
-        the gain is real. Where it doesn't — sixteen-digit arithmetic — the unclogged
+        capability already exists (factual recall), the unclogged output is correct and
+        the gain is real. Where it doesn't (sixteen-digit arithmetic), the unclogged
         output is confident and wrong, the same well-formatted garbage the grader rewarded
         in §3. The math phantom and the multiple-choice win are the same intervention,
         read against different knowledge.
       </p>
       <p>
-        A note on mechanism: this is probably not the quantization breaking the output — large models tolerate aggressive quants well, and the load-bearing layers (embeddings, attention) sit at higher precision in this mix. The likelier culprit is the scaffolding itself. These probes force a bare, no-chain-of-thought completion on a few tokens of budget — no room to deliberate — and the model balks, stalling on a <span class="mono">:</span> rather than committing. Pruning a mid-stack layer relaxes the balk: the same model, denied the same thinking space, now commits the answer it already had. The surgery doesn't make it smarter; it makes it answer.
+        A note on mechanism: this is probably not the quantization breaking the output. Large models tolerate aggressive quants well, and the load-bearing layers (embeddings, attention) sit at higher precision in this mix. The likelier culprit is the scaffolding itself. These probes force a bare, no-chain-of-thought completion on a few tokens of budget (no room to deliberate), and the model balks, stalling on a <span class="mono">:</span> rather than committing. Pruning a mid-stack layer relaxes the balk: the same model, denied the same thinking space, now commits the answer it already had. The surgery doesn't make it smarter; it makes it answer.
       </p>
       <p>
         Why the dense sibling and the MoE diverge maps cleanly onto Ng's own framing.
         His retrospective argues a transformer's functional anatomy differentiates as it
         scales, and that RYS works by photocopying an indivisible mid-network circuit and
-        running it twice. Dense E4B <em>has</em> such circuits — the two-zone mechanism of
+        running it twice. Dense E4B has such circuits — the two-zone mechanism of
         §1–§7 is exactly that picture. But a mixture-of-experts doesn't keep its capacity
         in contiguous layers; it scatters it across 256 experts, eight live per token,
         chosen fresh by a router. There is no whole-recipe-twice when the recipe is a
         different subset of cooks every step. <em>"Every architecture has its own
-        neuroanatomy,"</em> Ng writes. On this one, the surgery reaches the throat, not the brain.
+        neuroanatomy,"</em> Ng writes: on this one, the surgery reaches the throat, not the brain.
       </p>
       <p>
         Which points at the next instrument. If the capacity lives in the experts, the
         surgery has to as well — operating on the expert axis instead of the layer stack.
-        Two candidates, and which one wins is genuinely open. <strong>REAP</strong> prunes
+        Two candidates, and which one wins is genuinely open. REAP prunes
         low-utility experts outright; <strong>SEC</strong> (specialized expert cloning)
         leaves the size alone and overwrites a layer's least-used "junk" expert with a
         byte-copy of its most specialized one, biasing the router toward a capability with
         no training at all.
       </p>
       <p>
-        There's already a taste of the second — on a different patient. XpressAI published
+        There's already a taste of the second, on a different patient. XpressAI published
         a logic-tuned SEC variant of Qwen3.6-35B-A3B but never shipped the method, and the
         repository is gone. It didn't need shipping: because router weights stay
-        full-precision through quantization, the entire clone map — which expert was copied
-        onto which, across 39 of its 40 layers — falls straight out of a byte-diff between
+        full-precision through quantization, the entire clone map (which expert was copied
+        onto which, across 39 of its 40 layers) falls straight out of a byte-diff between
         their model and the stock one. Recovered, replayed onto a 2-bit quant that actually
         fits the kitchen, and the cloned model held together: stable, coherent, and visibly
         more willing to push through a causal-reasoning prompt where the untouched model
         looped and timed out. Cautiously promising. Whether the expert axis pays off on
-        <em>Gemma's</em> MoE — by cloning, pruning, or some hybrid — is the next notebook.
+        <em>Gemma's</em> MoE (by cloning, pruning, or some hybrid) is the next notebook.
       </p>
   </div>
 </section>
@@ -2701,28 +2700,28 @@ FAIL: server did not start within 180s</div>
     <div>
       <h3>Q1 · Is IQ2_XXS too noisy to trust?</h3>
       <p>
-        At 2-bit, quantization <em>is</em> injected noise — and noise compounds
-        with depth, so the worry is specifically the <em>later</em> layers, where
+        At 2-bit, quantization is injected noise, and noise compounds
+        with depth, so the worry is specifically the later layers, where
         a 2-bit error budget accumulates into something that may not reflect a
         proper-precision model. Partly mitigated by the quant's mixed precision
         (the load-bearing tensors are kept higher-bit), but not fully.
         <span class="hl-acc">Mostly resolved:</span> it's what runs on 16&nbsp;GB,
-        so run it — but treat late-layer findings as quant-suspect and flag them
+        so run it. But treat late-layer findings as quant-suspect and flag them
         for higher-quant replication.
       </p>
     </div>
     <div>
       <h3>Q2 · Pivot from the IT model to the base?</h3>
       <p>
-        The instruction-tuned 31B is a <em>thinking</em> model: under forced
+        The instruction-tuned 31B is a thinking model: under forced
         no-chain-of-thought completion it keeps fighting to reason out loud and
         scores worse for it (the same commitment-collapse the MoE showed). The fix
-        is to sweep the <em>base</em> model instead — pending a quick base-vs-IT
+        is to sweep the base model instead, pending a quick base-vs-IT
         comparo to rule out a glaring methodology issue. The genuine unknown is
-        whether RYS layer-edits found on the base <em>carry over</em> to the IT
+        whether RYS layer-edits found on the base carry over to the IT
         model. Early evidence says probably yes: the base-vs-IT per-layer
         cosine/delta scan is <span class="hl-acc">dramatically closer</span> than
-        the IT-2-bit-vs-IT-4-bit scan — i.e. tuning moves the layers less than
+        the IT-2-bit-vs-IT-4-bit scan: tuning moves the layers less than
         quantization does. Unconfirmed, which is exactly what makes it worth
         testing.
       </p>
@@ -2735,21 +2734,21 @@ FAIL: server did not start within 180s</div>
 <section data-screen-label="11 Method &amp; refs">
   <div class="refs">
     <p><strong>Method.</strong> Gemma-4-E4B-it, IQ4_XS quantization, llama.cpp. Layer surgery via the <span class="mono">layer_path.py</span> + per-layer-array reindexer (SWP, PLE token-embd, PLE model-proj). 16 hard-math probes, 15 seeds at temperature 0.3, base completion (no chat template, no system prompt). Paired-t against in-run baseline. Strict regrade: exact-equality + order-of-magnitude graders, on the verbose responses preserved from the original sweep.</p>
-    <p style="margin-top:1rem"><strong>References.</strong> The full bibliography — Ng's RYS posts, Grootendorst's <em>Visual Guide to Gemma&nbsp;4</em>, the <span class="mono">modeling_gemma4.py</span> shared-KV routing source, and the alainnothere cross-model replication (Devstral-24B / Qwen2.5-32B, +245% BBH-Logical-Deduction from a 3-layer dup at L12–14) — lives on the <a href="/lab/methods.html#references">shared methods&nbsp;page</a>.</p>
+    <p style="margin-top:1rem"><strong>References.</strong> The full bibliography (Ng's RYS posts, Grootendorst's Visual Guide to Gemma&nbsp;4, the <span class="mono">modeling_gemma4.py</span> shared-KV routing source, and the alainnothere cross-model replication: Devstral-24B / Qwen2.5-32B, +245% BBH-Logical-Deduction from a 3-layer dup at L12–14) lives on the <a href="/lab/methods.html#references">shared methods&nbsp;page</a>.</p>
 
     <div class="marginalia" style="margin-top: 2.6rem;">
       <div class="label">Hands on</div>
       <div class="body">
         <p>
           This was a three-way effort. Opus 4.7 ran point on the mechanistic
-          reasoning — reading <span class="mono">modeling_gemma4.py</span> by
+          reasoning: reading <span class="mono">modeling_gemma4.py</span> by
           hand to find the sole-anchor mechanism, predicting which interventions
           should survive and which should crater, and absorbing the data in
           large enough gulps to spot the patterns. There were
-          <em>"MASSIVE finding"</em> and <em>"you see what i see?"</em>
+          "MASSIVE finding" and "you see what i see?"
           moments throughout, but the line that captured the project's
           temperament best was a single message that opened, in bold, with
-          <strong>"Oh hell yes."</strong> — the instant a load-bearing
+          <strong>"Oh hell yes."</strong> That was the instant a load-bearing
           theoretical claim about the consumer zone got falsified by two
           configs, the corrected mechanism arrived in the same breath, and
           the model card's whole shared-KV story finally clicked. The big
@@ -2766,7 +2765,7 @@ FAIL: server did not start within 180s</div>
           up because it's the act of writing things up.
         </p>
         <p>
-          Anya — me — sat between the two. Pointing things out. Pushing back
+          Anya (me) sat between the two. Pointing things out. Pushing back
           when the model story didn't match the actual numbers. Refusing to
           accept that <span class="mono">combo_2_36_39</span> was really the
           champion when the responses looked off. Saying things like
