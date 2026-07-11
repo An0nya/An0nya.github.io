@@ -2,11 +2,21 @@
 """Prose-density linter (a report, like sync-nav.py --check, not a build step).
 
 The site's editorial rule for running body prose: per paragraph, max ONE
-em-dash, max ONE styled "pop" (italic/bold/accent-highlight), ideally max ONE
-observation/interpretation chip. Structural/layout uses of dashes and styling
-(figure captions, header-grid fields, kickers, marginalia, the page TOC,
-tables, headings, deks, nav/footer, walkback headlines) are design grammar,
-not prose, and are exempt.
+em-dash, max ONE styled "pop" (italic/bold/accent-highlight). Structural/
+layout uses of dashes and styling (figure captions, header-grid fields,
+kickers, marginalia, the page TOC, tables, headings, deks, nav/footer,
+walkback headlines) are design grammar, not prose, and are exempt.
+
+Observation/interpretation chips (span.olabel) are ALSO design grammar —
+chips pair an observation with an interpretation by intent, so chip count
+never flags a unit. It's still tallied per file, informationally, in the
+summary line.
+
+A <b>/<strong> element whose text is mostly numeric/quantitative (digits,
+math symbols, Greek letters used as math, whitespace) is a data callout,
+not prose styling, so it doesn't count toward the pop budget either — it's
+tallied separately as Q. <em>/<i> and span.hl-* always count as pops
+regardless of content.
 
 This tool only FLAGS violations for human review. It never edits a page.
 
@@ -37,7 +47,25 @@ UNIT_TAGS = {"p", "li"}
 # "Pop" = a styled emphasis in running prose.
 POP_TAGS = {"em", "i", "b", "strong"}
 
+# b/strong are the only tags eligible for the quant-callout discount; em/i
+# always count as pops regardless of content (per owner calibration).
+QUANT_ELIGIBLE_TAGS = {"b", "strong"}
+
 MIN_UNIT_LEN = 40
+
+# "Quantitative characters" for the pop-budget discount: digits, math/measure
+# symbols, and Greek letters used as math notation. Whitespace also counts
+# (doesn't count against the ratio) per owner calibration.
+QUANT_CHARS = set("0123456789+−–%.,×≈±=:/<>αβΣΔσ")
+QUANT_THRESHOLD = 0.6
+
+
+def is_quant_text(text):
+    if not text:
+        return False
+    total = len(text)
+    quant = sum(1 for c in text if c in QUANT_CHARS or c.isspace())
+    return (quant / total) >= QUANT_THRESHOLD
 
 
 def classes_of(attrs):
@@ -63,6 +91,7 @@ class Unit:
         self.dash = 0
         self.pop = 0
         self.chip = 0
+        self.quant = 0
 
     def text(self):
         return re.sub(r"\s+", " ", "".join(self.text_parts)).strip()
@@ -74,6 +103,7 @@ class ProseLinter(HTMLParser):
         self.stack = []          # Frame stack, mirrors open tags
         self.units_stack = []    # currently-open prose units (p/li)
         self.finished = []       # completed units
+        self.quant_stack = []    # open b/strong elements pending quant classification
 
     def _exempt(self):
         return self.stack[-1].exempt if self.stack else False
@@ -93,7 +123,10 @@ class ProseLinter(HTMLParser):
         if parent_exempt or not self.units_stack:
             return
 
-        if tag in POP_TAGS:
+        if tag in QUANT_ELIGIBLE_TAGS:
+            # Defer the pop/Q decision until we've seen the element's text.
+            self.quant_stack.append({"units": list(self.units_stack), "text": []})
+        elif tag in POP_TAGS:
             for u in self.units_stack:
                 u.pop += 1
         elif tag == "span":
@@ -112,12 +145,25 @@ class ProseLinter(HTMLParser):
         if not self.stack:
             return
         frame = self.stack.pop()
+
+        if frame.tag in QUANT_ELIGIBLE_TAGS and self.quant_stack:
+            entry = self.quant_stack.pop()
+            text = "".join(entry["text"])
+            if is_quant_text(text):
+                for u in entry["units"]:
+                    u.quant += 1
+            else:
+                for u in entry["units"]:
+                    u.pop += 1
+
         if frame.tag in UNIT_TAGS and not frame.exempt and self.units_stack:
             u = self.units_stack.pop()
             if len(u.text()) >= MIN_UNIT_LEN:
                 self.finished.append(u)
 
     def handle_data(self, data):
+        if self.quant_stack:
+            self.quant_stack[-1]["text"].append(data)
         if self._exempt() or not self.units_stack:
             return
         for u in self.units_stack:
@@ -151,27 +197,29 @@ def lint_file(path):
 
     units = parser.finished
     violations = []
-    dash_v = pop_v = chip_v = 0
+    dash_v = pop_v = 0
+    chip_total = sum(u.chip for u in units)
     for u in units:
-        bad = u.dash > 1 or u.pop > 1 or u.chip > 1
+        # Chips are design grammar (observation/interpretation pairs by
+        # intent) — they never flag a unit, only dash and pop budgets do.
+        bad = u.dash > 1 or u.pop > 1
         if not bad:
             continue
         if u.dash > 1:
             dash_v += 1
         if u.pop > 1:
             pop_v += 1
-        if u.chip > 1:
-            chip_v += 1
         snippet = u.text()[:80]
-        violations.append(
-            f"{path}:{u.line}  [D:{u.dash} P:{u.pop} C:{u.chip}]  {snippet}…"
-        )
+        line = f"{path}:{u.line}  [D:{u.dash} P:{u.pop} Q:{u.quant}]  {snippet}…"
+        if u.dash > 1:
+            line += " → rewrite: comma / parens / colon / sentence break / bullets"
+        violations.append(line)
 
     for line in violations:
         print(line)
     print(
         f"{path}: {len(units)} units scanned, {len(violations)} violations "
-        f"(dash:{dash_v} pop:{pop_v} chip:{chip_v})"
+        f"(dash:{dash_v} pop:{pop_v}) | chips:{chip_total} (informational, never flags)"
     )
 
 
