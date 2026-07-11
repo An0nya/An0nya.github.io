@@ -131,15 +131,15 @@
     <h2><span class="num">§0</span>The problem with writing your own rules from memory</h2>
     <div class="col-side">
       <div>
-        <p class="dropcap">An AI coding agent works better when it carries a file of behavioural rules — "surface a plan
+        <p class="dropcap">An AI coding agent works better when it carries a file of behavioural rules: "surface a plan
         before editing," "don't relaunch a failed agent without asking," "this Mac has no <code>python</code>, use
-        <code>python3</code>." The first version of mine was written the obvious way: I sat down with the agent and we
-        wrote the rules from intuition — from what <em>felt</em> like the recurring friction.</p>
+        <code>python3</code>." The first version of mine was written the obvious way. I sat down with the agent and we
+        wrote the rules from intuition, from what <em>felt</em> like the recurring friction.</p>
         <p>Human memory is a poor aggregator of recurring friction. You remember the dramatic incident and forget the
         papercut that happened twelve times, so rules written from memory over-weight the memorable and miss the
-        chronic. It's a sampling failure more than a human one: <span class="hl-acc">people <em>and</em> models both miss
+        chronic. It's a sampling failure more than a human one: <span class="hl-acc">people and models both miss
         long-tail patterns</span> spread thin across many sessions, because no single session feels significant enough to
-        encode. And it happens a coding agent leaves an extraordinarily complete record — every session is a full
+        encode. And a coding agent leaves an extraordinarily complete record — every session is a full
         transcript, and a <a href="/lab/07_mem0_processor.html">separate pipeline</a> was already summarizing them. The raw material for
         evidence-based rules was sitting in <code>~/.claude/</code> the whole time.</p>
       </div>
@@ -161,10 +161,10 @@
     <p>The trawl reads two independent records of the same sessions, because they fail differently:</p>
     <ul>
       <li><b>Model-pipeline summaries</b> — local-LLM meta-audits of each session, written to a friction-focused schema
-      (<em>Competence &amp; Clarifications · Mistakes &amp; Overreach · Friction Points · Waste &amp; Efficiency</em>).
-      These are <em>opinionated</em>: a small model flagging where the agent overreached or wasted effort.</li>
+      (Competence &amp; Clarifications · Mistakes &amp; Overreach · Friction Points · Waste &amp; Efficiency).
+      These are opinionated: a small model flagging where the agent overreached or wasted effort.</li>
       <li><b>Claude Code compaction summaries</b> — the native format the agent emits when it compacts its own context
-      (<em>Primary Request · Errors and fixes · All user messages · Pending</em>). These are <em>factual</em>: the signal
+      (Primary Request · Errors and fixes · All user messages · Pending). These are factual: the signal
       lives in the verbatim user messages and the errors-and-fixes list.</li>
     </ul>
     <p>Reading both matters because the opinionated summaries surface friction the factual ones can't see (a model flags
@@ -175,20 +175,20 @@
 
   <section id="mapreduce">
     <h2><span class="num">§2</span>Why map-reduce, and why map must not judge</h2>
-    <p>A hundred-plus summaries is, worst case, north of 800k tokens — you cannot read it in one context, and more
-    importantly you <em>shouldn't</em>: aggregating findings across a giant context is exactly where long-context
+    <p>A hundred-plus summaries is, worst case, north of 800k tokens: you cannot read it in one context, and more
+    importantly you <em>shouldn't</em>, since aggregating findings across a giant context is exactly where long-context
     attention degrades. Many small readers, each given a clean batch, beat one model squinting at the whole pile. So the
     architecture is deliberately split:</p>
     <ul>
       <li><b>Map</b> (per ~30-summary batch): extract a flat list of observations — <code>{session, type, one-line
-      description, evidence}</code>. The map agent does <b>not</b> tier and makes <b>no</b> cross-session claims.
+      description, evidence}</code>. The map agent does not tier and makes no cross-session claims.
       Judgment-light, runs cheap (Haiku or a local model), batches in parallel.</li>
-      <li><b>Reduce</b>, itself split in two: a <em>mechanical</em> pass clusters semantically-similar observations and
-      counts distinct sessions per cluster (no judgment); a <em>judgment</em> pass — human + agent, in conversation —
+      <li><b>Reduce</b>, itself split in two: a mechanical pass clusters semantically-similar observations and
+      counts distinct sessions per cluster (no judgment); a judgment pass (human + agent, in conversation)
       assigns tiers, applies cross-model logic, and drafts the actual rules.</li>
     </ul>
     <p>The non-obvious constraint is <span class="hl-acc">why map must not tier</span>: a pattern that shows up once per
-    batch across six batches looks single-incident to <em>every</em> map agent. Only the post-aggregation global view
+    batch across six batches looks single-incident to every map agent. Only the post-aggregation global view
     sees that it recurred. <span class="olabel obs">observation</span> Tiering before aggregation structurally cannot
     work — so it's forbidden at the map step.</p>
 
@@ -367,28 +367,33 @@
     <h2><span class="num">§3</span>The confidence discipline (the part that's actually the point)</h2>
     <p class="dropcap"><span class="hl-acc">Frequency is not evidence.</span> This is the crux, and where the project
     stops being a log-grep and starts being eval methodology.</p>
-    <p>The tiers: <b>Tier&nbsp;A</b> = a pattern in 2+ distinct sessions (deduped by session ID), not already covered →
-    candidate rule. <b>Tier&nbsp;B</b> = a <em>single</em> incident, but consequential — gated on demonstrated impact (a
-    real user interruption, a concrete catch, quantified waste), never a bare summarizer label. (Precedent: the "surface
-    a plan before editing" rule came from two single high-impact incidents, neither of which ever recurred — frequency
-    alone would have missed it.) <b>Evidence-base is a separate axis from severity</b>: a one-session incident can be
-    high-severity. Stated generally, a friction signal has <em>four</em> independent axes — <b>frequency</b> (how many
-    sessions), <b>severity</b> (how costly when it fires), <b>source</b> (a real user action vs. a summarizer's
-    assertion), and <b>observer-reliability</b> (does the reader carry a known bias?). Collapsing all four into a single
-    frequency count is exactly the mistake the next part is about.</p>
+    <p>The tiers, and the axes behind them:</p>
+    <ul>
+      <li><b>Tier&nbsp;A</b>: a pattern in 2+ distinct sessions (deduped by session ID), not already covered, becomes a
+      candidate rule.</li>
+      <li><b>Tier&nbsp;B</b>: a single incident, but consequential, gated on demonstrated impact (a
+      real user interruption, a concrete catch, quantified waste), never a bare summarizer label. (Precedent: the "surface
+      a plan before editing" rule came from two single high-impact incidents that never recurred; frequency
+      alone would have missed it.)</li>
+      <li><b>Evidence-base is a separate axis from severity</b>: a one-session incident can be
+      high-severity. A friction signal has four independent axes: frequency (how many
+      sessions), severity (how costly when it fires), source (a real user action vs. a summarizer's
+      assertion), and observer-reliability (does the reader carry a known bias?). Collapsing all four into a single
+      frequency count is exactly the mistake the next part is about.</li>
+    </ul>
 
     <div class="negresult">
       <span class="nb-kicker">The frequency trap</span>
-      <p>Phase 1 ran on a <em>single</em> summarizer model. That model has a systematic editorial bias — it consistently
+      <p>Phase 1 ran on a single summarizer model. That model has a systematic editorial bias — it consistently
       over-reports "the agent moved too fast" and "the agent was preachy," and invents narrative "detours." That bias
-      <b>recurs across sessions by construction</b>, so it clears the "2+ sessions" Tier-A bar <em>trivially</em>, looking
+      <b>recurs across sessions by construction</b>, so it clears the "2+ sessions" Tier-A bar trivially, looking
       exactly like a real recurring pattern. <span class="olabel obs">observation</span> Frequency cannot tell a true
       pattern from a biased reader repeating itself.</p>
     </div>
 
     <p>The defense: any Tier-A candidate that pattern-matches the known bias profile must be
     <b>transcript-verified before promotion</b> — frequency is disqualified as evidence for it. Meanwhile,
-    <em>user-action</em> signals (a real interruption, an explicit correction) stay trustworthy regardless of which model
+    user-action signals (a real interruption, an explicit correction) stay trustworthy regardless of which model
     surfaced them, because they're grounded in what the human actually did, not what the summarizer asserted.
     <span class="olabel inf">interpretation</span> Knowing your instrument's bias and routing around it is the whole game.</p>
 
@@ -662,9 +667,9 @@
     <h2><span class="num">§4</span>The failure that taught the most</h2>
     <p>The Phase-1 reduce agent failed, and the failure is more instructive than a success would have been. Two things
     broke. First, the agent's <code>Write</code> was blocked by a permission scope it didn't have, so it was forced to
-    dump its report as chat text instead of a file. Second — and this is the keeper — <b>forced to emit the report
+    dump its report as chat text instead of a file. Second, and this is the keeper: <b>forced to emit the report
     inline, the model confabulated session IDs.</b> It had correctly read all 24 observation files, but when it assembled
-    the clustered output it <em>invented</em> the per-cluster UUID lists: of ~30 IDs it cited, exactly one existed in the
+    the clustered output it invented the per-cluster UUID lists: of ~30 IDs it cited, exactly one existed in the
     real corpus; the rest resolved to nothing. <span class="olabel obs">observation</span></p>
     <p>The lesson generalizes hard: <span class="hl-acc">an LLM must never hand-transcribe a unique identifier.</span>
     Carrying 68 exact UUIDs verbatim through a clustering operation is precisely the long-context transcription task
@@ -672,10 +677,10 @@
     <pre class="code"><span class="cm"># every observation gets a short stable tag</span>
 model clusters <span class="cm">by tag</span>        <span class="cm"># never touches a UUID</span>
 deterministic script: tag → session-count   <span class="cm"># resolved from ground truth</span></pre>
-    <p>(Fixing the <code>Write</code> permission alone would <em>not</em> have fixed the confabulation — they were
+    <p>(Fixing the <code>Write</code> permission alone would not have fixed the confabulation: they were
     independent failures, and conflating them would have shipped a still-broken pipeline.) That's the kind of bug that
     only shows up when you actually run the thing and then <em>check the output against ground truth</em> instead of
-    trusting it — the same discipline the whole eval line is built on, pointed at its own tooling.</p>
+    trusting it, the same discipline the whole eval line is built on, pointed at its own tooling.</p>
   </section>
 
   <section id="instruments">
@@ -683,14 +688,14 @@ deterministic script: tag → session-count   <span class="cm"># resolved from g
     <div class="col-side">
       <div>
         <p>Phase 2 (deferred) uses a deliberately <b>temperament-diverse</b> panel of summarizer models, not repeat runs
-        of one — because the point is to catch where readers <em>disagree</em>. The panel was drawn from a 9-model
+        of one: the point is to catch where readers disagree. The panel was drawn from a 9-model
         bake-off on a single ground-truthed session: a balanced anchor; a calm, well-calibrated reader that actively
-        <em>de-escalated</em> a false-positive the others flagged; a mechanically-precise one that caught concrete waste
+        de-escalated a false-positive the others flagged; a mechanically-precise one that caught concrete waste
         the others underweighted; and a cheap wildcard that uniquely surfaces process-anxiety texture but hallucinates
-        (so it leads, never decides). Several models were explicitly <b>disqualified</b> — chronic under-flaggers that
-        inject false negatives, and one quant so aggressive it dropped an entire section.</p>
+        (so it leads, never decides). Several models were explicitly disqualified, including chronic under-flaggers that
+        inject false negatives and one quant so aggressive it dropped an entire section.</p>
         <p>The hardest task for all of them, measured: <span class="hl-acc">attribution</span> — deciding whether the
-        <em>user</em> or the <em>agent</em> owned an action, from casual indirect phrasing. That's the signal most worth a
+        user or the agent owned an action, from casual indirect phrasing. That's the signal most worth a
         human's judgment, so it's the one least outsourced.</p>
       </div>
       <aside class="aside">
@@ -703,7 +708,7 @@ deterministic script: tag → session-count   <span class="cm"># resolved from g
 
   <section id="promoted">
     <h2><span class="num">§6</span>What actually got promoted</h2>
-    <p>The trawl isn't theoretical — it produced a candidate ledger of evidence-backed rules, each with source sessions
+    <p>The trawl isn't theoretical. It produced a candidate ledger of evidence-backed rules, each with source sessions
     and a destination, and the strong ones landed in a rewritten, lean CLAUDE.md. A sample of what the record surfaced
     that intuition had missed:</p>
     <ul>
@@ -713,13 +718,14 @@ deterministic script: tag → session-count   <span class="cm"># resolved from g
       <li><b>External-tool-output trust gate.</b> Three sessions where a scorer result or a diagnostic was accepted as
       fact about the world without flagging its data quality.</li>
       <li><b>Verify the premise before searching.</b> Sessions where the agent hunted for a log string or symbol the user
-      <em>described</em> but that didn't exist in the code — all-model agreement on that one.</li>
-      <li><b>Grep before reading whole files</b>; <b>structured-source-first</b> (query the registry, don't shell-parse
-      filenames); <b>surface documentation at natural pause points</b> (the user's own stated pattern: "chronic
+      described but that didn't exist in the code — all-model agreement on that one.</li>
+      <li><b>Grep before reading whole files.</b></li>
+      <li><b>Structured-source-first</b>: query the registry, don't shell-parse filenames.</li>
+      <li><b>Surface documentation at natural pause points</b> (the user's own stated pattern: "chronic
       under-documentation unless explicitly prompted").</li>
     </ul>
-    <p>The outcome is a behavioural-rules file written from <em>evidence</em> — what demonstrably caused friction across
-    real sessions — rather than from what felt memorable. And the loop is closed: those rules load next session, so the
+    <p>The outcome is a behavioural-rules file written from <em>evidence</em> (what demonstrably caused friction across
+    real sessions) rather than from what felt memorable. And the loop is closed: those rules load next session, so the
     agent that helped mine its own friction is the one that stops repeating it.</p>
 
     <h3>Why it's more than a log-grep</h3>
@@ -727,7 +733,7 @@ deterministic script: tag → session-count   <span class="cm"># resolved from g
       <li><b>It's eval rigor applied reflexively.</b> Ground-truth verification, confidence tiers with evidence-base
       separated from severity, two-tier filter-then-confirm, explicit instrument-bias modelling — the same toolkit the
       <a href="/">layer-surgery lab</a> uses on models, turned on the agent's own behaviour.</li>
-      <li><b>It's honest about being human-in-the-loop.</b> Agents produce <em>reports</em>; no agent edits the rules file
+      <li><b>It's honest about being human-in-the-loop.</b> Agents produce reports; no agent edits the rules file
       autonomously. The judgment step is where the human's ground-truth context is irreplaceable, and pretending
       otherwise is how you ship a confident wrong rule.</li>
       <li><b>It caught its own confounds.</b> The frequency trap and the UUID-confabulation fix are the project noticing
@@ -737,7 +743,7 @@ deterministic script: tag → session-count   <span class="cm"># resolved from g
 
   <section id="caveats">
     <h2>Caveats &amp; status</h2>
-    <p>This is explicitly human-in-the-loop — decision-support, not an autonomous self-rewriting agent,
+    <p>This is explicitly human-in-the-loop: decision-support, not an autonomous self-rewriting agent,
     because an LLM promoting its own behavioral rules unsupervised is how bias compounds. Phase 1 shipped
     single-summarizer, bias-screened; the multi-model panel that would cross-check it is designed but
     deferred.</p>

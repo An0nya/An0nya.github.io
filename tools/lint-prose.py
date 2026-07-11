@@ -39,7 +39,7 @@ import sys
 from html.parser import HTMLParser
 
 # Tags whose entire subtree is exempt structural content, never prose.
-EXEMPT_TAGS = {"figcaption", "table", "nav", "footer",
+EXEMPT_TAGS = {"figure", "figcaption", "table", "nav", "footer",
                "h1", "h2", "h3", "h4", "h5", "h6"}
 
 # Classes that mark an element (any tag) as exempt structural content.
