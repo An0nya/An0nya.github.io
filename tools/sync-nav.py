@@ -26,8 +26,8 @@ import pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 FRAGMENTS = [
-    (ROOT / "components" / "_site-bar.html", "SITE-BAR:START", "SITE-BAR:END"),
-    (ROOT / "components" / "_footer.html", "FOOTER:START", "FOOTER:END"),
+    (ROOT / "components" / "_site-bar.html", "SITE-BAR:START", "SITE-BAR:END", "site bar"),
+    (ROOT / "components" / "_footer.html", "FOOTER:START", "FOOTER:END", "footer"),
 ]
 
 
@@ -64,33 +64,36 @@ def restamp(text, frag, start, end):
 
 def main():
     check = "--check" in sys.argv
-    drift = []
+    drift = {}  # fragment label -> list of paths touched
     for path in sorted(ROOT.rglob("*.html")):
         text = path.read_text(encoding="utf-8")
         touched = False
-        for fragment_file, start, end in FRAGMENTS:
+        for fragment_file, start, end, label in FRAGMENTS:
             if start not in text:
                 continue
             frag = fragment_lines(fragment_file)
             text, changed = restamp(text, frag, start, end)
-            touched = touched or changed
-        if touched:
-            drift.append(path.relative_to(ROOT))
-            if not check:
-                path.write_text(text, encoding="utf-8")
+            if changed:
+                drift.setdefault(label, []).append(path.relative_to(ROOT))
+                touched = True
+        if touched and not check:
+            path.write_text(text, encoding="utf-8")
 
     if check:
         if drift:
-            print("site bar OUT OF SYNC — run tools/sync-nav.py:")
-            for d in drift:
-                print(f"  {d}")
+            print("fragments OUT OF SYNC — run tools/sync-nav.py:")
+            for label, paths in drift.items():
+                print(f"  {label}:")
+                for d in paths:
+                    print(f"    {d}")
             sys.exit(1)
-        print("site bar in sync")
+        print("fragments in sync")
     else:
         if drift:
-            print("synced site bar into:")
-            for d in drift:
-                print(f"  {d}")
+            for label, paths in drift.items():
+                print(f"synced {label} into:")
+                for d in paths:
+                    print(f"  {d}")
         else:
             print("nothing to sync — all pages already match")
 
