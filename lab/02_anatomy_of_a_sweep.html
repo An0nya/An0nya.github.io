@@ -126,17 +126,17 @@
   <section id="establishes">
     <h3 style="margin-top:0">What this page establishes</h3>
     <ul>
-      <li>The surgery is trivial to <em>do</em>; the <b>measurement</b> is the whole contribution. Four distinct
-      confounds — seed luck, lenient grading, multiplicity, exposure — each manufacture fake results, and each has a
-      characteristic fingerprint you can subtract. (The grading trap alone comes in three flavours — partial-credit
-      leniency, answer echo, format-compliance-as-capability — dissected in §1.)</li>
+      <li>The surgery is trivial to do; the <b>measurement</b> is the whole contribution. Four distinct
+      confounds (seed luck, lenient grading, multiplicity, exposure) each manufacture fake results, and each has a
+      characteristic fingerprint you can subtract. The grading trap alone comes in three flavours: partial-credit
+      leniency, answer echo, format-compliance-as-capability, dissected in §1.</li>
       <li><b>The seed is the unit of replication.</b> No seeds means no paired test, no effect size, no confidence
       interval. That missing layer is exactly what published RYS work lacks.</li>
-      <li><b>Pairing is what lets you trust a config whose scores overlap the baseline's.</b> The per-seed
-      <em>difference</em> is the test, not the spread — and that single idea reverses the most common wrong call in the
+      <li>Pairing is what lets you trust a config whose scores overlap the baseline's: the per-seed
+      <b>difference</b> is the test, not the spread, and that single idea reverses the most common wrong call in the
       field.</li>
-      <li>Most of what people fear about local-model evals — quantization, sampler choice — <b>cancels</b> in that
-      pairing. Only an <em>interaction</em> can distort a ranking, and you can test for one directly.</li>
+      <li>Most of what people fear about local-model evals (quantization, sampler choice) <b>cancels</b> in that
+      pairing. Only an interaction can distort a ranking, and you can test for one directly.</li>
     </ul>
   </section>
 
@@ -144,22 +144,22 @@
     <h2><span class="num">§0</span>The one hard problem</h2>
     <div class="col-side">
       <div>
-        <p class="dropcap">The surgery itself is trivial. Duplicate a transformer block, or
-        delete one, or — once you're in a live process instead of a static file — turn one down to 60% strength. No
+        <p class="dropcap">The surgery itself is trivial. Duplicate a transformer block, delete one, or, if you're
+        in a live process instead of a static file, turn one down to 60% strength. No
         training, seconds per edit. Re-run a benchmark, read the number, declare a winner.</p>
         <p>That last step is where it goes wrong: the number moved, but a benchmark number on a perturbed
         model moves for at least four reasons, and only one is the one you want:</p>
         <ol>
           <li><b>The model genuinely got better (or worse)</b> at the thing you measured.</li>
           <li><b>Seed noise</b> — you happened to sample a luckier set of generations.</li>
-          <li><b>A generous grader</b> rewarded the <em>form</em> of the output, not its correctness.</li>
+          <li><b>A generous grader</b> rewarded the form of the output, not its correctness.</li>
           <li><b>Multiplicity</b> — you tried 300 configs, so ~15 cleared p&lt;0.05 by chance alone, and you're looking at
           one of those.</li>
         </ol>
         <p>Every rule below exists to subtract (2), (3), and (4) so that what's left is (1). This is the entire
-        methodological content of the lab. <span class="hl-acc">The surgery is the easy part; the measurement is the
-        contribution.</span> (And underneath all four sits a fifth, quieter choice — whether you're measuring what the
-        model <em>believes</em> or what it <em>does</em> — which the last section comes back to.)</p>
+        methodological content of the lab: <span class="hl-acc">the surgery is the easy part; the measurement is the
+        contribution.</span> Underneath all four sits a fifth, quieter choice: whether you're measuring what the
+        model believes or what it does, which the last section comes back to.</p>
       </div>
       <aside class="aside">
         <span class="nb-kicker">Credit, precisely</span>
@@ -169,9 +169,9 @@
         sidestepping three confounds at once. This page doesn't correct his method. It bolts the statistics on.
       </aside>
     </div>
-    <p>What he doesn't report — what <em>nobody</em> in published RYS practice reports — is seeds. And without seeds
+    <p>What he doesn't report, and what nobody in published RYS practice reports, is seeds. Without seeds
     there's no replication unit: no paired test, no effect size, no confidence interval, no multiplicity correction. The
-    reason is structural, not careless — the implicit model treats each generation as one independent draw from the
+    reason is structural, not careless. The implicit model treats each generation as one independent draw from the
     truth, so why would you repeat it? The work below is the layer that assumption skips over.</p>
     <blockquote class="nb-pull nb-pull--wide">It isn't a correction of his method. <b>It's the statistics bolted onto
     it.</b></blockquote>
@@ -180,30 +180,32 @@
   <section id="grader">
     <h2><span class="num">§1</span>Phantom #1: the grader (every model's first leaderboard is partly fake)</h2>
     <p class="dropcap">Run any model's first sweep and you get a leaderboard. Some fraction of it is hallucinated, and the
-    mechanism is always identical: <span class="hl-acc">a lenient grader scores output form</span> — well-shaped,
-    right-magnitude, compliant — instead of correctness. I've watched it manufacture champions on every model in the lab,
+    mechanism is always identical: <span class="hl-acc">a lenient grader scores output form</span> (well-shaped,
+    right-magnitude, compliant) instead of correctness. I've watched it manufacture champions on every model in the lab,
     in three distinct flavours.</p>
 
     <h3>Echo contamination</h3>
-    <p>This one cost a full overnight. A naive integer parser grabs the <em>last</em> number in a response; when the model
-    just echoes the question back — "What is 4,318 plus 2,901?" — the parser scores partial credit on the <em>input</em>
-    numbers. On Nanbeige, <b>66% of one overnight run was echo-only.</b> And when you de-contaminate —
-    blocklist each prompt's own integers — the real RYS effect <em>grew</em>, from +0.21 to +0.32.
+    <p>This one cost a full overnight. A naive integer parser grabs the last number in a response. When the model
+    just echoes the question back, "What is 4,318 plus 2,901?", the parser scores partial credit on the input
+    numbers. On Nanbeige, <span class="qx"><span class="qv">66%</span> of one overnight run was echo-only.</span> Once you
+    de-contaminate (blocklist each prompt's own integers), the real RYS effect grew: <span class="qx">from
+    <span class="qv">+0.21</span> to <span class="qv">+0.32</span></span>.
     <span class="olabel inf">interpretation</span> The baseline had been quietly scoring on echo too, so cleaning it up
     widened the gap. The signal was hiding under the baseline's own cheating.</p>
 
     <h3>Partial-credit inflation</h3>
     <p>A digit-overlap or magnitude-plausibility scorer gives a close-but-wrong tidy number ~0.99. On Gemma-E4B,
-    <code>combo_2_36_39</code> scored <b>+6.11 on partial credit and −0.82 on strict</b> (paired <em>t</em> vs baseline) —
-    a top-of-board "champion" that was, in fact, slightly worse than baseline once you demanded the right answer. A
-    simpler config on the same model, <code>prune_16</code>, did the same: +3.45 on partial, a flat <b>strict-zero</b> —
-    every "win" was magnitude-plausible garbage, not one exactly-right answer. The fix is a strict-equality regrade, and
-    the <em>diagnostic</em> is the partial-minus-strict gap — sort the configs by that gap and the biggest gappers are
-    exactly your phantoms.</p>
+    <code>combo_2_36_39</code> scored <span class="qx"><span class="qv">+6.11</span> on partial credit and
+    <span class="qv">−0.82</span> on strict</span> (paired t vs baseline): a top-of-board "champion" that was, in fact,
+    slightly worse than baseline once you demanded the right answer. A simpler config on the same model,
+    <code>prune_16</code>, did the same, <span class="qx"><span class="qv">+3.45</span> on partial, a flat
+    strict-zero</span>: every "win" was magnitude-plausible garbage, not one exactly-right answer. The fix is a
+    strict-equality regrade, and the diagnostic is the partial-minus-strict gap: sort the configs by that gap, and the
+    biggest gappers are exactly your phantoms.</p>
 
     <h3>Compliance, not capability</h3>
-    <p>Pruning a layer can unclog a stalled output valve — the model that was looping <code>"Answer: Answer:"</code> or
-    stuck on a dangling colon finally emits one clean token. A partial grader reads that as a win. Whether it <em>is</em>
+    <p>Pruning a layer can unclog a stalled output valve: the model that was looping <code>"Answer: Answer:"</code> or
+    stuck on a dangling colon finally emits one clean token. A partial grader reads that as a win. Whether it is
     a win depends entirely on whether the knowledge was already there: on multiple-choice factual recall, unclogging the
     valve surfaces a real answer the model knew (genuine gain); on 16-digit arithmetic it knew no answer to, unclogging
     just produces confident, well-formatted garbage (the strict phantom). <span class="hl-acc">Same mechanism, opposite
@@ -211,8 +213,8 @@
 
     <div class="negresult">
       <span class="nb-kicker">A landmine in the regrade itself — it bites both directions</span>
-      <p>The <em>right</em> integer to extract is the first non-operand one for blurt-first prompts, but the <em>last</em>
-      one for narrate-last prompts. Regrade an old sweep with the wrong convention and you manufacture a <b>new</b>
+      <p>The right integer to extract is the first non-operand one for blurt-first prompts, but the last
+      one for narrate-last prompts. Regrade an old sweep with the wrong convention and you manufacture a new
       phantom while removing the old one. The robust fix is <b>operand-aware any-match</b>: drop the operand integers,
       score 1.0 if the correct answer appears anywhere in the response. It sidesteps the direction problem entirely. Use
       it everywhere.</p>
@@ -814,21 +816,21 @@
 
   <section id="single">
     <h2><span class="num">§2</span>Phantom #2: the single draw (greedy n=1 fabricates results)</h2>
-    <p>A champion that scored <b>0/3 on the retest</b> — worse than baseline — on a config an overnight sweep had crowned
-    with a beautiful, theoretically-motivated story. That's the most seductive failure mode, because the fake result is
-    <em>clean</em>.</p>
-    <p>The lab has it written up as a cautionary tale — the <a href="/lab/hrm.html">HRM specimen</a>. An overnight sweep,
+    <p>A champion scored <span class="qx"><span class="qv">0/3</span> on the retest</span>, worse than baseline, on a
+    config an overnight sweep had crowned with a beautiful, theoretically-motivated story. That's the most seductive
+    failure mode: the fake result is clean.</p>
+    <p>The lab has it written up as a cautionary tale: the <a href="/lab/hrm.html">HRM specimen</a>. An overnight sweep,
     scored greedily and once per item, produced a gorgeous champion ("duplicate the renderer module and multi-hop
-    reasoning improves"), corroborated by an elegant geometric metric. Then the verification pass — sampling at
-    temperature, three draws per item instead of one — put the champion at 0/3, and showed the base model already solved
+    reasoning improves"), corroborated by an elegant geometric metric. Then the verification pass sampled at
+    temperature, three draws per item instead of one, and put the champion at 0/3, showing the base model already solved
     the puzzle ~70% of the time on its own. <span class="olabel obs">observation</span> The greedy sweep had been
     measuring <em>which single draw got lucky</em>, not capability. The corroborating geometry turned out to be decoupled
     from the outcome it seemed to confirm.</p>
     <p>The rule that fell out is absolute: <span class="hl-acc">greedy / temperature-0 / n=1 fabricates false positives
-    on this entire research line.</span> HRM, Gemma, and Nanbeige were all bitten. Use a fixed, low-variance
-    <em>sampling</em> sampler (temp ~0.3 plus engine defaults), seed-controlled, and average over many seeds. Greedy is
-    fine for <em>characterizing</em> a baseline — where there's no knife-edge config comparison — and nowhere else. This
-    is why <b>the seed is the unit of replication</b>, and why everything statistical below is built on seeds. No seeds,
+    on this entire research line.</span> HRM, Gemma, and Nanbeige were all bitten. Use a fixed, low-variance sampling
+    sampler (temp ~0.3 plus engine defaults), seed-controlled, and average over many seeds. Greedy is
+    fine for characterizing a baseline, where there's no knife-edge config comparison, and nowhere else. This
+    is why the seed is the unit of replication, and why everything statistical below is built on seeds. No seeds,
     no test.</p>
   </section>
 
@@ -838,17 +840,17 @@
     the baseline's mean score, you notice their <em>ranges overlap</em>, and you conclude the difference is noise. That
     conclusion is unjustified, and seeing why is the whole game.</p>
     <p>Every config is scored against the baseline <b>on the same seeds</b>. Think of each seed as a fixed exam paper
-    handed to both students. If seed 7 is a hard paper, it's hard for the config <em>and</em> the baseline — so the gap
+    handed to both students. If seed 7 is a hard paper, it's hard for the config and the baseline — so the gap
     between them on seed 7 has that shared difficulty subtracted out. The marginal spread of either score is dominated by
-    which papers got drawn; the thing you actually care about is how the config did <em>relative to baseline on the same
-    paper</em>:</p>
+    which papers got drawn; the thing you actually care about is how the config did relative to baseline on the same
+    paper:</p>
 
     <pre class="code"><span class="hl">paired Cohen's d</span>  =  mean(per-seed diffs) / std(per-seed diffs)</pre>
 
-    <p><code>d</code> is <b>seed-count-independent</b> — an effect size, not a test statistic. The test statistic
+    <p><code>d</code> is <b>seed-count-independent</b>: an effect size, not a test statistic. The test statistic
     <code>t ≈ d·√n</code> grows with the number of seeds; <code>d</code> doesn't. So a real-but-underpowered config shows
-    up as <b>high d, low t</b> — worth spending more seeds on, not yet proven — and you rank your retest queue by exactly
-    that signature. A second number tells you whether to trust <code>d</code> over the eyeball test — the ratio of the
+    up as high d, low t (worth spending more seeds on, not yet proven), and you rank your retest queue by exactly
+    that signature. A second number tells you whether to trust <code>d</code> over the eyeball test: the ratio of the
     paired-difference noise to the baseline's own seed noise:</p>
 
     <pre class="code"><span class="hl">r</span>  =  std(per-seed Δ) / std(baseline seed-noise)</pre>
@@ -860,12 +862,13 @@
       <li><span class="qx">r ≳ <span class="qv">1.4</span> (≈√<span class="qv">2</span>)</span> → the difference noise is seed-independent; pairing buys you nothing and more seeds won't
       rescue it. This config is riding the discovery noise floor.</li>
     </ul>
-    <p>And this gives a budgeting rule that's the <em>opposite</em> of the naive one. You don't spend seeds where the
-    variance is highest — you spend them on the <b>seed-independent channel</b>, the high-r one, because that's where
-    pairing <em>can't</em> already cancel the noise for you. Empirically, no-CoT math is the high-r channel (so it eats
-    the seed budget and needs sign-consistency checks — a high-d config with scattered diff signs is a magnitude mirage,
-    drop it); multiple-choice and EQ are low-r. <span class="olabel inf">interpretation</span> Seeds are precision; probes
-    are coverage; they're orthogonal, and bulking seeds on a thin battery just makes it <em>precisely narrow.</em></p>
+    <p>And this gives a budgeting rule that's the opposite of the naive one. You don't spend seeds where the
+    variance is highest: you spend them on the <b>seed-independent channel</b>, the high-r one, because that's where
+    pairing can't already cancel the noise for you. Empirically, no-CoT math is the high-r channel (so it eats
+    the seed budget and needs sign-consistency checks, since a high-d config with scattered diff signs is a magnitude
+    mirage, drop it); multiple-choice and EQ are low-r. <span class="olabel inf">interpretation</span> Seeds are
+    precision; probes are coverage; they're orthogonal, and bulking seeds on a thin battery just makes it precisely
+    narrow.</p>
 
     <figure class="figure" id="fig2">
       <div class="nb-plate">
@@ -1117,21 +1120,21 @@
   <section id="multiplicity">
     <h2><span class="num">§4</span>Phantom #3: the multiplicity budget</h2>
     <p>A sweep is a multiple-comparisons machine. The intuition is the lottery: buy 300 tickets and one of them winning
-    tells you nothing about your skill at picking numbers — somebody had to win. Run ~150–500 config×channel tests and
+    tells you nothing about your skill at picking numbers, somebody had to win. Run ~150–500 config×channel tests and
     <span class="hl-acc">you should expect ~25 false positives at p&lt;0.05 by chance alone.</span> So a lone discovery
-    sitting at t ≈ 1.7–2.3 is not a finding — it's exactly at the look-elsewhere floor, indistinguishable from the noise
-    you <em>expect</em> a sweep that size to throw up.</p>
+    sitting at t ≈ 1.7–2.3 is not a finding: it's exactly at the look-elsewhere floor, indistinguishable from the noise
+    you expect a sweep that size to throw up.</p>
     <p>A result clears the bar only if it (a) beats the multiplicity budget outright, or (b) is corroborated on an
     independent axis — a second channel, a second seed batch, a mechanistic prediction that came true. A single t in the
     2s, standing alone, is a candidate, not a conclusion. The discipline is cheap to state and expensive to hold to,
     because the seductive result is <em>always</em> the lone one: the config nothing else corroborates is the config you
     most want to be real.</p>
     <p>This is why the lab's structure is <b>two-tier</b>. A cheap, narrow battery (the no-CoT delta-detector, 2–3 seeds)
-    <em>ranks</em> all configs — explicitly not ground truth, just an intuition delta-detector. Then a richer, slower
+    ranks all configs — explicitly not ground truth, just an intuition delta-detector. Then a richer, slower
     eval (more probes plus a real generation task, ≥5 seeds, with the wide-variance configs re-run) runs on the
-    <b>winner shortlist only</b>. Round-1 sorts; round-2 confirms. Never make a public claim off the thin battery.
-    (xpressai learned this the hard way and said so: their small internal probe reported a RYS config had <em>lower</em>
-    EQ; their larger held-out probe said <em>higher</em>. "Small-probe variance was misleading us." Same lesson, paid for
+    winner shortlist only. Round-1 sorts; round-2 confirms. Never make a public claim off the thin battery.
+    (xpressai learned this the hard way and said so: their small internal probe reported a RYS config had lower
+    EQ; their larger held-out probe said higher. "Small-probe variance was misleading us." Same lesson, paid for
     independently.)</p>
   </section>
 
@@ -1140,30 +1143,34 @@
     <h3>First, profile what the baseline leaves room to measure</h3>
     <p>A channel can only measure what its baseline leaves room to measure, so you profile the baseline's per-channel
     saturation and per-seed variance <em>first</em>. Picture each channel as a ruler with a usable middle and two dead
-    ends — push the baseline against either end and there's no room for a config to register. The recurring profile across
+    ends: push the baseline against either end and there's no room for a config to register. The recurring profile across
     dense models at aggressive quant:</p>
     <ul>
       <li><b>math-strict is floored</b> — huge no-CoT arithmetic is impossible, the column is near-dead, zero
-      discriminative power. Only <em>easy</em> math (baseline 0.2–0.8) gives a live strict signal.</li>
-      <li><b>multiple-choice is ceilinged</b> — bare-letter MMLU sits near 1.0, so it's a <em>downside-only</em> damage
+      discriminative power. Only easy math (baseline 0.2–0.8) gives a live strict signal.</li>
+      <li><b>multiple-choice is ceilinged</b> — bare-letter MMLU sits near 1.0, so it's a downside-only damage
       detector. It maps which layers are load-bearing for retrieval; it structurally can't show an improvement.</li>
-      <li><b>EQ is the bidirectional channel</b> — real two-sided headroom — <em>but</em> often the dirtiest. On
-      Gemma-31B the EQ standard deviation was 0.277, per-seed values swinging 0.00↔0.80; every EQ "leader" sat inside
-      baseline noise. The bimodality turned out to be a missing answer-priming suffix (<code>"\n&lt;emotion&gt;:"</code>),
-      not signal. <b>A channel's t-stats are noise until you understand its variance.</b></li>
+      <li>EQ is the bidirectional channel, with real two-sided headroom, but often the dirtiest. On
+      Gemma-31B the <span class="qx">EQ standard deviation was <span class="qv">0.277</span></span>, per-seed values
+      swinging 0.00↔0.80; every EQ "leader" sat inside baseline noise. The bimodality turned out to be a missing
+      answer-priming suffix (<code>"\n&lt;emotion&gt;:"</code>), not signal. <b>A channel's t-stats are noise until you
+      understand its variance.</b></li>
     </ul>
-    <p>A related subtlety: no-CoT math is not binary. On Gemma-31B (n=4896), strict was 0.44 and partial 0.76 — 43.6%
-    both-correct, 48.7% a smooth near-miss continuum, only 7.7% outright junk. The partial scorer is capturing a <em>real</em> second axis — magnitude/shape
-    closeness — so a config can tighten sub-threshold near-misses without moving strict at all. That's why partial stays
-    an <em>annotation</em> on the strict leaders, never folded into the headline: it's real information about a different
+    <p>A related subtlety: no-CoT math is not binary. On Gemma-31B (n=4896), <span class="qx">strict was
+    <span class="qv">0.44</span> and partial <span class="qv">0.76</span></span>: <span class="qx"><span class="qv">43.6%</span>
+    both-correct, <span class="qv">48.7%</span> a smooth near-miss continuum, only <span class="qv">7.7%</span> outright
+    junk</span>. The partial scorer is capturing a real second axis, magnitude/shape
+    closeness, so a config can tighten sub-threshold near-misses without moving strict at all. That's why partial stays
+    an annotation on the strict leaders, never folded into the headline: it's real information about a different
     capability, and it's also the exact thing that inflates phantoms. Both, at once.</p>
 
     <h3>Then calibrate the channel before you spend compute</h3>
-    <p>The usable middle of the ruler is <b>40–70% baseline pass</b>. Above ~80% is ceilinged (no variance to move);
-    below ~20% is floored (can't detect improvement). If a channel is out of band, recenter the <em>probes</em> — smaller
-    operands, not new problem types — to land the baseline mid-band <b>before</b> you reseed. Reseeding a ceilinged or
-    floored or bimodal channel just measures the artifact at higher resolution: wasted compute. The sequencing rule, in
-    order: <span class="hl-acc">fix the probe / grader / suffix first, reseed second.</span></p>
+    <p>The usable middle of the ruler is <span class="qx"><span class="qv">40–70%</span> baseline pass</span>. Above
+    ~80% is ceilinged (no variance to move); below ~20% is floored (can't detect improvement). If a channel is out of
+    band, recenter the probes (smaller operands, not new problem types) to land the baseline mid-band before you
+    reseed. Reseeding a ceilinged or floored or bimodal channel just measures the artifact at higher resolution: wasted
+    compute. The sequencing rule, in order: <span class="hl-acc">fix the probe / grader / suffix first, reseed
+    second.</span></p>
 
     <figure class="figure" id="fig3">
       <div class="nb-plate">
@@ -1285,44 +1292,44 @@
     <h2><span class="num">§6</span>The metrics that earned their place across models</h2>
     <p>Four measurement habits generalized off specific models and are now run by default.</p>
     <p><b>Degeneration rate</b> (from <a href="/lab/01_minicpm5_sigma_alpha.html">MiniCPM5</a> and
-    <a href="/lab/05_granite.html">Granite</a>). A zero-compute count over <em>already-stored</em> responses: how often a
-    generation derails — special-token leaks (<code>&lt;|fim_prefix|&gt;</code>), name:number line-loops, digit
-    repetition. It's monotone in both surgery knobs (copy count and cumulative-α), and it turns out to be the <em>real</em>
-    cost axis. Throw out only the derailed responses and score the clean ones, and <b>the surgery improves
-    content quality on every channel — the only thing it costs is derailment probability.</b> That reframes a lot of
-    apparent "EQ craters" as a single mechanism: <span class="hl-acc">channel divergence ≈ exposure divergence.</span> A
+    <a href="/lab/05_granite.html">Granite</a>): a zero-compute count over already-stored responses, how often a
+    generation derails (special-token leaks (<code>&lt;|fim_prefix|&gt;</code>), name:number line-loops, digit
+    repetition). It's monotone in both surgery knobs (copy count and cumulative-α), and it turns out to be the real
+    cost axis. Throw out only the derailed responses and score the clean ones, and the surgery improves
+    content quality on every channel: the only thing it costs is derailment probability. That reframes a lot of
+    apparent "EQ craters" as a single mechanism, channel divergence ≈ exposure divergence. A
     short channel (~16-token math) barely gives a low per-token derailment risk room to fire; a long channel (~96-token
-    EQ) rolls the dice five times as often. The "EQ crater" isn't lost competence — it's the same small risk, exposed
+    EQ) rolls the dice five times as often. The "EQ crater" isn't lost competence: it's the same small risk, exposed
     longer. Put a degen-% column on every report.</p>
     <p><b>The fine-α grid is mandatory; the 3-point map lies.</b> A prune(α=0)/baseline(α=1)/dup(α=2) skeleton is
-    invisible to any layer with a U-shaped α-response — Granite's L6 <em>peaks</em> at α≈0.7 while both prune and dup
+    invisible to any layer with a U-shaped α-response — Granite's L6 peaks at α≈0.7 while both prune and dup
     collapse it. Any per-layer sensitivity claim needs the dense single-pass α grid (~0.5–1.5), not the dup/prune
     endpoints.</p>
-    <p>The other two are ranking hygiene, stated briefly. <b>Rank by balanced-t, and treat no t as a p-value:</b> the
+    <p>The other two are ranking hygiene, stated briefly. <b>Rank by balanced-t, and treat no t as a p-value.</b> The
     harness "strict t" pools every (probe×seed) cell, over-weighting whichever channel has the most cells; the monitor
-    "balanced t" gives one vote per channel. Rank by the latter, read both as ordering devices only. <b>Per-probe autopsy
-    is a lens, never the rank target:</b> a balanced 49-probe average dilutes concentrated capability flips, and often
-    that's the real win — Granite's deterministic borrow/carry errors were wrong the same way on every seed, and the
-    winning config flipped them 12 of 12. Read per-probe to <em>see which bug got fixed</em>; never rank by
-    max-over-probes, which just rewards a lucky single tip.</p>
+    "balanced t" gives one vote per channel. Rank by the latter, and read both as ordering devices only.</p>
+    <p><b>Per-probe autopsy is a lens, never the rank target.</b> A balanced 49-probe average dilutes concentrated
+    capability flips, and often that's the real win: Granite's deterministic borrow/carry errors were wrong the same
+    way on every seed, and the winning config flipped them 12 of 12. Read per-probe to see which bug got fixed; never
+    rank by max-over-probes, which just rewards a lucky single tip.</p>
   </section>
 
   <section id="cancels">
     <h2><span class="num">§7</span>What cancels, and what doesn't</h2>
     <p>A recurring worry on local-model work is that aggressive quantization or sampler choice contaminates everything.
     The seed-paired design dissolves most of it, and the precise version tells you exactly which worry survives.</p>
-    <p>A uniform sampler setting, a uniform quant level, even the engine's own nondeterminism — each is a <b>constant
-    offset</b> that applies equally to the config and the baseline on a fixed seed, so it <b>cancels in the paired
-    difference.</b> Same exam paper, same handicap on both students. The only thing that can distort a <em>ranking</em>
-    (as opposed to an effect-size <em>magnitude</em>) is an <em>interaction</em>: a sampler×config or quant×surgery
+    <p>A uniform sampler setting, a uniform quant level, even the engine's own nondeterminism: each is a constant
+    offset that applies equally to the config and the baseline on a fixed seed, so it <b>cancels in the paired
+    difference.</b> Same exam paper, same handicap on both students. The only thing that can distort a ranking
+    (as opposed to an effect-size magnitude) is an interaction: a sampler×config or quant×surgery
     effect, where the offset differs across configs. And a baseline-only ladder structurally cannot detect an
-    interaction — you need ≥2 configs across the ladder to see one.</p>
+    interaction: you need ≥2 configs across the ladder to see one.</p>
     <p>So the scope statement is: <span class="hl-acc">quant noise is real, and it degrades the precision
-    tails</span> — exact multi-digit arithmetic, tool-call and structured tokens, long-context, strict
-    instruction-following — which is exactly where production agentic use breaks even when broad-strokes sweep capability
-    doesn't. But it is <em>not</em> a blocker for what a sweep measures, and it never touches rank or direction. The clean
-    way to <em>settle</em> this rather than argue it is a 3-point quant ladder — IQ2 / IQ4_XS / Q8 — on baseline plus a
-    few standouts, reading the <em>shape</em> of per-config Δ across the three: flat = pure offset, monotone = graded but
+    tails</span> (exact multi-digit arithmetic, tool-call and structured tokens, long-context, strict
+    instruction-following), which is exactly where production agentic use breaks even when broad-strokes sweep capability
+    doesn't. But it is not a blocker for what a sweep measures, and it never touches rank or direction. The clean
+    way to settle this rather than argue it is a 3-point quant ladder (IQ2 / IQ4_XS / Q8) on baseline plus a
+    few standouts, reading the shape of per-config Δ across the three: flat = pure offset, monotone = graded but
     rank-preserving, a threshold flip = the worry vindicated and the cliff located.</p>
   </section>
 
@@ -1331,13 +1338,13 @@
     <div class="col-side">
       <div>
         <p class="dropcap">There's a more elegant solution to sampling noise than the one this lab uses, and it's worth
-        sitting with because the difference is conceptual, not just engineering. Ng reads the model's <em>logit
-        distribution</em> over the answer tokens and computes the expected score — <code>E[score] = Σ p(token)·score</code>
-        — directly from one forward pass. No sampling, no seeds, zero sampling variance, removed at the source. This lab
-        does the opposite: it <em>characterizes and averages over</em> the sampling variance, with temp-0.3 and many
+        sitting with because the difference is conceptual, not just engineering. Ng reads the model's logit
+        distribution over the answer tokens and computes the expected score directly from one forward pass:
+        <code>E[score] = Σ p(token)·score</code>. No sampling, no seeds, zero sampling variance, removed at the source.
+        This lab does the opposite: it characterizes and averages over the sampling variance, with temp-0.3 and many
         paired seeds.</p>
         <p>Neither is strictly better; they measure different things. His is cheaper and lower-variance, but it measures
-        <b>belief</b> — what the model assigns probability to — and would therefore <em>hide</em> the very pathologies
+        belief (what the model assigns probability to) and would therefore hide the very pathologies
         this lab is built to catch: the seed-1 letter-collapse, the commit/no-commit bimodality, the derailment exposure.
         This lab measures <b>sampled behaviour</b>, which is noisier but is what a deployed model actually does at the
         API.</p>
