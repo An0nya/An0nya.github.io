@@ -524,7 +524,7 @@ a { color: var(--terracotta); }
 /* Inline highlights */
 .hl-pos { color: var(--sage); font-weight: 500; }
 .hl-neg { color: var(--wine); font-weight: 500; }
-.hl-acc { color: var(--terracotta); font-weight: 500; }
+.hl-acc { font-weight: 600; }
 
 /* small UI hint for hover */
 .layer-tip {
@@ -670,11 +670,11 @@ main { overflow-x: clip; }
     <div class="label">The patient</div>
     <div class="body">
       <p>
-        <span class="mono">gemma-4-31B</span> (dense) — the prestige target of the
+        <span class="mono">gemma-4-31B</span> (dense), the prestige target of the
         Gemma line: sixty blocks in a <span class="mono">[5 sliding + 1 global]×10</span>
         rhythm, no mixture-of-experts, no shared-KV anchor. Reputationally a
-        conversational / creative model — a spiritual successor to the warm,
-        fluent GPT-4o register — which, as it turns out, is exactly the problem
+        conversational/creative model (a spiritual successor to the warm,
+        fluent GPT-4o register), which turns out to be exactly the problem
         with testing it on arithmetic. Hold that thought; it's <a href="#scope">§6</a>.
       </p>
       <p>
@@ -721,15 +721,15 @@ main { overflow-x: clip; }
         it, and the model barely flinches. The exceptions are structural and few:
         the embedding-adjacent pair (L0–1), the final pair (L58–59), and a couple
         of mid hinges (L35, L40) zero out completely. But across the entire
-        <em>interior</em> of both ladders, no single-layer surgery moves capability
+        interior of both ladders, no single-layer surgery moves capability
         outside the seed-noise envelope. Read alone, that reads as
         <em>robustness</em>.
       </p>
       <p>
         But robustness is the wrong word, and the blocks prove it. Chain a few
-        layers into a duplicated <em>block</em> and the model doesn't degrade
-        gracefully — it craters, and it craters <em>faster than the sum of its
-        parts would predict from averaging</em>. The damage isn't additive; the
+        layers into a duplicated block and the model doesn't degrade
+        gracefully — it craters, and it craters faster than the sum of its
+        parts would predict from averaging. The damage isn't additive; the
         layers interact. Each block wants its exact neighbours, in its exact
         order. That isn't a robust stack. It's a <span class="hl-acc">rigid,
         positionally specialised</span> one that happens to absorb a single
@@ -758,8 +758,8 @@ main { overflow-x: clip; }
         prune. Gemma-31B has this.
       </p>
       <p>
-        <b>Position-robust</b> — a layer keeps working after you <em>move</em> it.
-        nanbeige had this; Gemma-31B does <em>not</em>. The block dose-response
+        <b>Position-robust</b> — a layer keeps working after you move it.
+        nanbeige had this; Gemma-31B does not. The block dose-response
         below is the measurement of its absence.
       </p>
     </div>
@@ -772,8 +772,8 @@ main { overflow-x: clip; }
   <h2><span class="num">§2</span>The winners that aren't</h2>
   <p style="max-width:760px">
     Three configs sit a little above baseline on strict math. The discipline of
-    this lab is to not believe them. The gauge that matters is <span class="mono">r</span>
-    — the standard deviation of the per-seed paired difference, divided by the
+    this lab is to not believe them. The gauge that matters is <span class="mono">r</span>:
+    the standard deviation of the per-seed paired difference, divided by the
     standard deviation of baseline's own seed noise. When <span class="mono">r&lt;1</span>,
     pairing cancels common-mode noise and the effect is trustworthy. When
     <span class="mono">r≈1</span>, the difference is just <em>more noise</em>, and
@@ -796,11 +796,11 @@ main { overflow-x: clip; }
   </table>
   </div>
   <p class="figcap" style="margin-top:0.9rem">
-    <b>Two configs clear the floor — at half budget.</b>
+    Two configs clear the floor, at half budget.
     <span class="mono">prune_14</span> (r=0.64) and <span class="mono">dup_9</span>
-    (r=0.71) dip under 1 with d≈0.8, while the only <em>fully-seeded</em> leader,
+    (r=0.71) dip under 1 with d≈0.8, while the only fully-seeded leader,
     <span class="mono">dup_22</span>, sits at r=1.16. But both sub-1 configs ran
-    just <b>n=8</b> seeds — the sweep was killed before their budget filled, and a
+    just <span class="qx">n=<span class="qv">8</span></span> seeds: the sweep was killed before their budget filled, and a
     shallower seed count flatters r. Even at face value, t≈2.3 is inside the
     look-elsewhere budget: ~176 configs × 3 channels ≈ 500 tests, ~25 false
     positives at p&lt;0.05 expected by chance alone. And what actually sinks them is
@@ -817,7 +817,7 @@ main { overflow-x: clip; }
   <p style="max-width:780px">
     If single layers don't move the model, the obvious next question is whether a
     <em>contiguous block</em> of "good" layers, duplicated together, surfaces a
-    reasoning circuit — the move that paid off on the dense E4B. It does not. It
+    reasoning circuit (the move that paid off on the dense E4B). It does not. It
     only ever costs. And the cost has a clean law.
   </p>
 
@@ -949,7 +949,7 @@ main { overflow-x: clip; }
       <b>Fig 1 — Block dup math-strict vs depth.</b> Faint dots = single-layer
       dups (the "parts"), which hug baseline everywhere. Terracotta discs =
       duplicated blocks, radius ∝ span (2→5+ layers). Two gradients are visible:
-      blocks fall as they get <b>bigger</b> (radius) and as they sit <b>deeper</b>
+      blocks fall as they get bigger (radius) and as they sit deeper
       (rightward). A 3-layer block at L2–4 costs −0.15; the same 3 layers at
       L37–39 hits the floor (0.000). Depth and span both bite; nothing recovers
       baseline.
@@ -961,14 +961,14 @@ main { overflow-x: clip; }
       <h3>Worse than the average, floored below the sum</h3>
       <p>
         Take a block's constituent single-layer dups and ask what the block
-        "should" score. Two predictions bracket it. The <em>average</em> of the
+        "should" score. Two predictions bracket it. The average of the
         parts is the optimistic one — and blocks land far below it
         (<span class="mono">blk_12_16</span>: actual −0.57 vs part-average −0.16).
         Damage <span class="hl-neg">compounds</span> beyond averaging: the layers
         interfere, they don't just add.
       </p>
       <p>
-        The <em>sum</em> of the parts is the pessimistic one — and blocks land
+        The sum of the parts is the pessimistic one — and blocks land
         <em>above</em> it (<span class="mono">blk_2_6</span>: actual −0.34 vs
         part-sum −1.01). That's not mercy; it's the floor. Strict score can't go
         below zero, so once a block bottoms out, extra bad layers have nothing
@@ -986,8 +986,8 @@ main { overflow-x: clip; }
         dup, and the moment a combo spans a real interval it joins the cascade.
       </p>
       <p>
-        The intended payoff — the E4B trick of chaining near-baseline layers to
-        bracket a reasoning circuit — finds <span class="hl-acc">no circuit
+        The intended payoff (the E4B trick of chaining near-baseline layers to
+        bracket a reasoning circuit) finds <span class="hl-acc">no circuit
         here</span>. There is nothing to amplify; there is only structure to
         damage. The deepest blocks take EQ to 0.00 outright: not wrong answers,
         generation-mode collapse.
@@ -1001,12 +1001,12 @@ main { overflow-x: clip; }
 <section data-screen-label="04 Noise map" id="noise-map">
   <h2><span class="num">§4</span>The noise lives at the front</h2>
   <p style="max-width:780px">
-    A prediction we made early — and held too firmly — from the very first
+    A prediction we made early (and held too firmly), from the very first
     geometry scan, where the late layers rewrite the hidden state by far the
     hardest: later layers <em>should</em> be the fragile ones, noisier and less
     trustworthy under surgery. On Gemma-31B's behaviour, that is simply false, and
-    the full ladder says so in both directions. The scan wasn't wrong. We read
-    magnitude as fragility — see the walkback below.
+    the full ladder says so in both directions. The scan wasn't wrong; we read
+    magnitude as fragility (see the walkback below).
   </p>
 
   <div class="figure">
@@ -1039,17 +1039,17 @@ main { overflow-x: clip; }
       <b>Fig 2 — Per-layer seed noise (std of per-seed math means), L0–59.</b>
       Terracotta = dup ladder, slate = prune ladder; dead/bricked configs
       (zero-variance constant garbage) excluded so they don't masquerade as
-      "stable." Both ladders agree: the <b>front third is the noisiest</b>, the
-      mid stack is calmest, the late third sits in between — the opposite of the
-      quant-noise prediction.
+      "stable." Both ladders agree: the front third is the noisiest, the
+      mid stack is calmest, the late third sits in between (the opposite of the
+      quant-noise prediction).
     </p>
   </div>
 
   <div class="col-side">
     <div>
       <p>
-        Zone-averaged over both ladders: front L0–19 = <b>0.165</b>, mid L20–39 =
-        <b>0.105</b>, late L40–59 = <b>0.120</b>. The noisiest individual configs
+        Zone-averaged over both ladders: front L0–19 = <span class="qv">0.165</span>, mid L20–39 =
+        <span class="qv">0.105</span>, late L40–59 = <span class="qv">0.120</span>. The noisiest individual configs
         are all up front — <span class="mono">prune_19</span> 0.29,
         <span class="mono">dup_7</span> 0.28, <span class="mono">prune_4</span> 0.28.
         The prediction that duplicating a heavily-quantised late layer would
@@ -1060,7 +1060,7 @@ main { overflow-x: clip; }
         The reconciliation is a distinction worth keeping: <span class="hl-acc">magnitude
         of change is not sensitivity to change</span>. The late layers genuinely
         rewrite the hidden-state geometry the hardest (the scan-delta measurement,
-        Fig 3) — but that's deterministic output-shaping, the detokenisation
+        Fig 3), but that's deterministic output-shaping, the detokenisation
         regime a logit lens predicts, not noise-amplifying computation. The front
         layers carry the computational load; a late perturbation washes out before
         it reaches the logits. The two axes decouple with depth. Late layers are
@@ -1113,9 +1113,9 @@ main { overflow-x: clip; }
       <b>Fig 3 — Geometry change vs behavioural noise, by depth.</b> Wine =
       per-layer Δ/residual ratio (how hard each layer rewrites the stream,
       2-bit scan-delta; boundary layers L0 &amp; L59 spike off-scale to 1.5 and
-      13.5). Terracotta = per-layer seed-noise (Fig 2, right axis). <b>Opposite
-      slopes.</b> The geometry rewrites hardest exactly where surgery does the
-      <em>least</em> behavioural damage. Magnitude of change is not sensitivity
+      13.5). Terracotta = per-layer seed-noise (Fig 2, right axis). Opposite
+      slopes. The geometry rewrites hardest exactly where surgery does the
+      least behavioural damage. Magnitude of change is not sensitivity
       to change.
     </p>
   </div>
@@ -1126,13 +1126,13 @@ main { overflow-x: clip; }
       <b>We expected the late layers to be the fragile ones.</b> The very first
       thing we ran on this model was a 2-bit hidden-state scan, and it showed the
       deep layers rewriting the residual stream far harder than the front. We read
-      that as <em>fragility</em> — "duplicate a heavily-quantised late layer and
-      its 2-bit noise will propagate" — and the assumption quietly coloured how we
-      read everything after. Then the full dup <em>and</em> prune ladders came in
+      that as fragility: "duplicate a heavily-quantised late layer and
+      its 2-bit noise will propagate," and the assumption quietly coloured how we
+      read everything after. Then the full dup and prune ladders came in
       and said the opposite: the front is the noisy zone, the late stack is calm.
-      The scan was never wrong. We had mistaken the <em>amount</em> a layer changes
-      the stream for how <em>sensitive</em> the output is to changing that layer —
-      and those are different measurements. The late layers move the stream a lot
+      The scan was never wrong. We had mistaken the amount a layer changes
+      the stream for how sensitive the output is to changing that layer;
+      those are different measurements. The late layers move the stream a lot
       because that's where token-shaping happens; perturbing that shaping is
       deterministic, not noisy. Naming the prior is the point: it's the kind of
       assumption that survives precisely because it sounds mechanistic.
@@ -1148,15 +1148,15 @@ main { overflow-x: clip; }
     <div>
       <p class="dropcap">
         Every page in this lab carries a warning about partial-credit math
-        grading — David Ng's elegant pad-and-relative-difference scorer, which
-        rewards an answer for being <em>close in magnitude</em>. On the
+        grading: David Ng's elegant pad-and-relative-difference scorer, which
+        rewards an answer for being close in magnitude. On the
         <a href="/lab/gemma.html#moe">26B MoE</a> it manufactured a fake <em>winner</em>:
         a config that gamed magnitude rocketed up the partial leaderboard while
         strict saw nothing. The lesson there was rank-inversion.
       </p>
       <p>
         On 31B the grader misbehaves differently, and more quietly. Strict and
-        partial correlate at <span class="mono">r=0.85</span> — no rank-inversion
+        partial correlate at <span class="mono">r=0.85</span>: no rank-inversion
         this time. But partial sits a flat <span class="mono">+0.36</span> above
         strict and <span class="hl-acc">saturates</span>: baseline already scores
         0.96 partial, and nearly every config piles up between 0.92 and 1.0.
@@ -1165,8 +1165,8 @@ main { overflow-x: clip; }
         at all.
       </p>
       <p>
-        So the failure mode flips: on the MoE, partial <em>lied about the
-        ordering</em>; on 31B, partial <em>erases the ordering</em> at the top.
+        So the failure mode flips: on the MoE, partial lied about the
+        ordering; on 31B, partial erases the ordering at the top.
         Either way the conclusion is identical — <span class="hl-acc">strict is
         the only axis you may headline.</span> The any-match strict grader
         (correct integer present anywhere in the output, operands filtered) is
@@ -1202,9 +1202,9 @@ main { overflow-x: clip; }
     <div>
       <h3>We may be testing the wrong organ</h3>
       <p>
-        Gemma-4 is, by reputation, a conversational and creative-writing model —
-        the warm GPT-4o register, not a math engine. Our battery is arithmetic,
-        factual recall, and formal logic. If the layers that are <em>worth</em>
+        Gemma-4 is, by reputation, a conversational and creative-writing model
+        (the warm GPT-4o register, not a math engine). Our battery is arithmetic,
+        factual recall, and formal logic. If the layers that are worth
         duplicating are creative-writing circuits, a math/logic sweep would see
         exactly this null. There is no cheap objective grader for "complete the
         simile" — so the creative axis stays untested, and the result is
@@ -1212,7 +1212,7 @@ main { overflow-x: clip; }
       </p>
       <p>
         The closest probe we have to that native register is
-        <span class="mono">eq-sketch</span> — open-ended equation completion. We
+        <span class="mono">eq-sketch</span>: open-ended equation completion. We
         kept it at three seeds and <em>chose not to deepen it</em>: it's the most
         expensive channel to run and the most stable, so extra seeds buy almost no
         variance reduction. The budget went to finishing the sweep instead. And the
@@ -1242,18 +1242,18 @@ main { overflow-x: clip; }
     <div class="label">Caveat — the quant ceiling, and the one experiment that lifts it</div>
     <div class="body">
       <p>
-        Everything here runs at <span class="mono">IQ2_M</span> — the quality
+        Everything here runs at <span class="mono">IQ2_M</span>, the quality
         floor that a 16&nbsp;GB RAM ceiling forces. The geometry scans show 2-bit
         heavily reshaping the deep-layer hidden
         state (<a href="#noise-map">Fig 3</a>), so a late-layer <em>positive</em>
         could in principle hide under the quant ceiling (the behavioural noise map
-        argues against it — see the §4 walkback — but can't prove a negative). The standard fix — sweep the same model at 4-bit —
+        argues against it, see the §4 walkback, but can't prove a negative). The standard fix, sweeping the same model at 4-bit,
         doesn't fit the hardware.
       </p>
       <p>
         <span class="wbhead">The hardware-bounded version that does fit:</span>
-        build a <em>mixed-precision</em> GGUF — bump only the RYS-target and
-        late layers to Q4/Q5 while the rest stays IQ2 — and re-sweep just those.
+        build a <em>mixed-precision</em> GGUF (bump only the RYS-target and
+        late layers to Q4/Q5 while the rest stays IQ2) and re-sweep just those.
         It isolates "is the late-layer null a quant artifact" without ever loading
         a full 4-bit 31B. That is the concrete replication path, and it's the
         right next experiment for anyone who wants to push past the consumer
@@ -1269,7 +1269,7 @@ main { overflow-x: clip; }
   <h2><span class="num">§7</span>Preliminary candidates</h2>
   <p style="max-width:760px">
     With no statistically defensible winner, these are offered as
-    <em>preliminary</em> — the configs that sat highest on strict math, for others
+    <em>preliminary</em>: the configs that sat highest on strict math, for others
     with more hardware to confirm or refute. Treat them as "try these," not "use
     these."
   </p>
@@ -1279,7 +1279,7 @@ main { overflow-x: clip; }
       <div class="arch-title">dup_22</div>
       <div class="arch-blurb">Duplicate L22, the front-zone math layer. Best strict math (0.806) and the only fully-seeded leader — but at n=12 it sits at r=1.16, dead on the noise floor. Believe it only on replication.</div>
       <div class="arch-winners">
-        <div class="arch-row"><span class="arch-cfg">math</span><span class="arch-stat">0.806 · <b>+0.07</b></span></div>
+        <div class="arch-row"><span class="arch-cfg">math</span><span class="arch-stat">0.806 · <span class="qv">+0.07</span></span></div>
         <div class="arch-row arch-substats">d +0.51 <span class="dot">·</span> t +1.8 <span class="dot">·</span> r 1.16 <span class="dot">·</span> n=12</div>
       </div>
     </div>
@@ -1288,7 +1288,7 @@ main { overflow-x: clip; }
       <div class="arch-title">prune_14</div>
       <div class="arch-blurb">Delete L14 — a lonely skippable layer (its neighbours hurt, its dup hurts). Pairing cancels noise here (r=0.64, d=0.83) — but on only 8 seeds before the kill, and still inside the multiplicity budget.</div>
       <div class="arch-winners">
-        <div class="arch-row"><span class="arch-cfg">math</span><span class="arch-stat">0.792 · <b>+0.07</b></span></div>
+        <div class="arch-row"><span class="arch-cfg">math</span><span class="arch-stat">0.792 · <span class="qv">+0.07</span></span></div>
         <div class="arch-row arch-substats">d +0.83 <span class="dot">·</span> t +2.3 <span class="dot">·</span> r 0.64 <span class="dot">·</span> n=8</div>
       </div>
     </div>
@@ -1297,19 +1297,19 @@ main { overflow-x: clip; }
       <div class="arch-title">dup_9</div>
       <div class="arch-blurb">Duplicate L9, in the productive front band. Ties prune_14 on strict (r=0.71, d=0.75, n=8). The third corner of the non-winner cluster.</div>
       <div class="arch-winners">
-        <div class="arch-row"><span class="arch-cfg">math</span><span class="arch-stat">0.792 · <b>+0.07</b></span></div>
+        <div class="arch-row"><span class="arch-cfg">math</span><span class="arch-stat">0.792 · <span class="qv">+0.07</span></span></div>
         <div class="arch-row arch-substats">d +0.75 <span class="dot">·</span> t +2.1 <span class="dot">·</span> r 0.71 <span class="dot">·</span> n=8</div>
       </div>
     </div>
   </div>
   <p class="figcap" style="margin-top:1.1rem;max-width:760px">
     <b>And the cross-channel aggregate doesn't endorse them either.</b> The strict-math
-    gain is the <em>only</em> place these configs win. Balance all three channels
-    equally and it evaporates: dup_22 <b>−0.037</b>, prune_14 <b>+0.006</b>, dup_9
-    <b>−0.002</b> — net zero to negative. The math bump is paid for on eq-sketch and
-    MC. (eq-sketch ran only <b>n=3</b> seeds — a <em>deliberate</em> budget call, not a
+    gain is the only place these configs win. Balance all three channels
+    equally and it evaporates: dup_22 <span class="qv">−0.037</span>, prune_14 <span class="qv">+0.006</span>, dup_9
+    <span class="qv">−0.002</span> — net zero to negative. The math bump is paid for on eq-sketch and
+    MC. (eq-sketch ran only n=3 seeds, a deliberate budget call, not a
     truncation: it's the most expensive channel and the most stable, so extra seeds
-    buy almost nothing. The negative eq Δ is therefore the <em>trustworthy</em> part;
+    buy almost nothing. The negative eq Δ is therefore the trustworthy part;
     only its Cohen's d is wide at n=3.) These aren't suppressed
     winners; they're noise-floor configs with one flattering channel.
   </p>
@@ -1325,10 +1325,10 @@ main { overflow-x: clip; }
 <section data-screen-label="08 Notes">
   <h2><span class="num">§8</span>Notes from the rig</h2>
   <ul class="walkback">
-    <li><span class="wbhead">Sliding vs global is not a behavioural distinction here.</span> Every probe runs well under the sliding-window length, so a sliding layer attends to the entire sequence — the attention math is identical to a global layer's. The catastrophes at the global grid (L5,11,…) are <em>structural</em> — the V=K tie of <span class="mono">use_alt</span> attention and the per-layer-array reindex (<span class="mono">sliding_window_pattern</span>, <span class="mono">head_count_kv</span>) — not a receptive-field effect. The boundaries matter for tensor shape, not for what the layer can see.</li>
+    <li><span class="wbhead">Sliding vs global is not a behavioural distinction here.</span> Every probe runs well under the sliding-window length, so a sliding layer attends to the entire sequence: the attention math is identical to a global layer's. The catastrophes at the global grid (L5,11,…) are structural: the V=K tie of <span class="mono">use_alt</span> attention and the per-layer-array reindex (<span class="mono">sliding_window_pattern</span>, <span class="mono">head_count_kv</span>), not a receptive-field effect. The boundaries matter for tensor shape, not for what the layer can see.</li>
     <li><span class="wbhead">Seeds, per channel.</span> 12 for math/mc baseline, 8 for the slow eq channel; 8–12 for candidate configs. Paired-difference stats match seeds on the intersection, so a config is only as deep as its shallower half — the baseline was deepened in lockstep so the pairing never wastes a seed.</li>
     <li><span class="wbhead">Base-vs-IT is settled at the substrate level.</span> Base is the right RYS substrate: the IT model restates the equation or hedges before answering, base blurts a number first; base out-scores IT on eq and mc once priming lands. The dramatic base-vs-IT <em>geometry</em> difference decomposed to quant (3→2-bit), not tuning. What remains pending is carrying a winner onto IT with room to respond.</li>
-    <li><span class="wbhead">The receipt.</span> ~32 GPU-hours, ~34k probe-cells (reruns from growing the battery included), ~418k generated tokens, ≈1 kWh. The write line is the surprising one: the GGUF is mmap-<em>read</em> at inference, but every config <em>rebuilt</em> the frankenstein twice — the layer-surgery copy, then a second copy with the per-layer-array fix, ~10&nbsp;GB apiece, both deleted after. Across 176 configs plus reruns and reseeds that's several terabytes shuffled through the NVMe — real, but ~1% of the drive's rated endurance. A load of laundry's worth of electricity to prove a model is stubborn.</li>
+    <li><span class="wbhead">The receipt.</span> ~32 GPU-hours, ~34k probe-cells (reruns from growing the battery included), ~418k generated tokens, ≈1 kWh. The write line is the surprising one: the GGUF is mmap-read at inference, but every config <em>rebuilt</em> the frankenstein twice: the layer-surgery copy, then a second copy with the per-layer-array fix, ~10&nbsp;GB apiece, both deleted after. Across 176 configs plus reruns and reseeds that's several terabytes shuffled through the NVMe — real, but ~1% of the drive's rated endurance. A load of laundry's worth of electricity to prove a model is stubborn.</li>
   </ul>
 
   <div class="rule" style="margin-top:3rem"></div>
@@ -1338,7 +1338,7 @@ main { overflow-x: clip; }
     <span class="mono">gemma_fix_per_layer_arrays_31b.py</span> (SWP + head_count_kv reindex) ·
     <span class="mono">monitor.py --sweep 31b_v2</span>.
     Data: <span class="mono">gemma_31b_v2_base_results.jsonl</span> (per-cell, 176 configs × per-channel seeds).
-    Sister specimens: <a href="/lab/gemma.html">Gemma 4 E4B / 26B — a surgical record</a> ·
+    Sister specimens: <a href="/lab/gemma.html">Gemma 4 E4B / 26B</a> ·
     <a href="/lab/05_granite.html">Granite</a> · geometry in the <a href="/lab/gemma12b.html">appendix</a>.
     Shared <a href="/lab/methods.html">methods &amp; references</a>.
   </p>
