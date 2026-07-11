@@ -135,7 +135,7 @@
     <div class="col-side">
       <div>
         <p class="dropcap">The instrument-dependence cuts cleanly. What evaporated was the <em>leaderboard</em>
-        layer — which configs win, and why. What stands, because none of it was instrument-dependent, is the
+        layer (which configs win, and why). What stands, because none of it was instrument-dependent, is the
         whole mechanism stack: direction-is-read / magnitude-is-discarded, the U-shaped depth-vulnerability
         curve, RYS-dup-as-power-iteration, the ~4-layer circuit-coherence length, the steering /
         soft-abliteration results, the continuous-depth ODE framing. The page keeps every one of those.</p>
@@ -156,18 +156,18 @@
     <div class="col-side">
       <div>
         <p class="dropcap">Granite's no-CoT arithmetic baseline
-        doesn't fail <em>randomly</em>; it fails <span class="hl-acc">deterministically</span>, in a handful of
-        specific, reproducible ways. <code>907 − 131</code> (= 776) never comes back right across 15 seeds — it
-        settles into one of <em>two</em> stable wrong answers, <span class="qv">676</span> (9/15, a hundreds-column slip) or
-        <span class="qv">131</span> (6/15, echoing the subtrahend): 0 of 15 correct, two error basins. A particular carry-drop on
-        an addition probe, likewise. I call these <b>metastable bugs</b> — <span class="olabel obs">observation</span>
+        doesn't fail randomly; it fails deterministically, in a handful of
+        specific, reproducible ways. <code>907 − 131</code> (= 776) never comes back right across 15 seeds. It
+        settles into one of two stable wrong answers: <span class="qv">676</span> (9/15, a hundreds-column slip) or
+        <span class="qv">131</span> (6/15, echoing the subtrahend). 0 of 15 correct, two error basins. A particular carry-drop on
+        an addition probe, likewise. I call these <b>metastable bugs</b>: <span class="olabel obs">observation</span>
         the 0/15 reproducibility is what's measured; <span class="olabel inf">interpretation</span> "basin / attractor" is
         the interpretation.</p>
-        <p>A "winning" surgery doesn't lift a diffuse competence — it <span class="hl-acc">flips a few of these
+        <p>A "winning" surgery doesn't lift a diffuse competence: it <span class="hl-acc">flips a few of these
         specific bugs to 12/12 right</span>. The measurement trap is that a balanced 49-probe average
-        <em>dilutes</em> a concentrated flip until it looks like a tiny effect. The small balanced t-stats badly
-        <em>understate</em> what's happening — and that's correct behaviour, not a measurement failure. The win
-        really is concentrated. The right lens is <b>per-probe</b>: which exact bug got fixed, and how many
+        dilutes a concentrated flip until it looks like a tiny effect. The small balanced t-stats badly
+        understate what's happening, and that's correct behaviour, not a measurement failure. The win
+        really is concentrated. The right lens is per-probe: which exact bug got fixed, and how many
         configs reach it.</p>
       </div>
       <aside class="aside">
@@ -468,9 +468,9 @@
       <div>
         <p class="dropcap">Once you know wins are disjoint bug-fixes, composition has an apparent rule and a
         non-obvious failure mode. <span class="olabel obs">observation</span> depth-separated treatments tend to stack;
-        same-region or redundant ones mask. I'm calling this a <b>heuristic, not a law</b> — earning the
+        same-region or redundant ones mask. I'm calling this a <b>heuristic, not a law</b> (earning the
         stronger word would take a regression of effect against layer-distance plus an effect-size
-        distribution, and the margins below are thin.</p>
+        distribution, and the margins below are thin).</p>
       </div>
       <aside class="aside">
         <span class="nb-kicker">Metric note · 2026-06-21</span>
@@ -494,7 +494,7 @@
     <p style="margin-top:var(--sp-5)">The recipe for a constructive profile: <b>compose per-layer treatments
     that are (a) depth-separated AND (b) fix disjoint probes</b> — and the per-probe autopsy (Finding 1) is
     exactly what tells you which fix which. This generalizes the Gemma cross-zone superadditivity (writer-zone ×
-    consumer-block) and, crucially, adds its <em>failure</em> mode, which Gemma never made explicit: redundancy
+    consumer-block) and adds its failure mode, which Gemma never made explicit: redundancy
     near in depth appears to dilute rather than compound. The emerging data-driven math profile that falls out:
     <code>L5↑(α1.3) + L26↓(prune or α0.15) + L14↑(α1.8)</code>, all depth-separated, predicted to stack.
     Held-out-seed validation is the open next step; argmax off noisy
@@ -649,15 +649,15 @@
     <div class="col-side">
       <div>
         <p class="dropcap">The published page reads layers through a prune/dup endpoint map. That skeleton is
-        blind to any layer with a U-shaped α-response — and Granite has them. <span class="hl-acc">L6 peaks at
-        α≈0.7</span> (+0.062 Δ-vs-baseline on the gcore in-band probes, n=348/point — the top single-site math
-        move) while <em>both</em> <code>prune_6</code> (α=0, removed outright) and <code>dup_6</code> (α=2,
-        −0.105) collapse it. A gentle damp is neither endpoint, so the 3-point map can't see it — it reads L6 as
-        "touch it and it dies," when in fact a <em>partial</em> damp is the single best thing you can do there.
+        blind to any layer with a U-shaped α-response, and Granite has them. <span class="hl-acc">L6 peaks at
+        α≈0.7</span> (+0.062 Δ-vs-baseline on the gcore in-band probes, n=348/point: the top single-site math
+        move) while both <code>prune_6</code> (α=0, removed outright) and <code>dup_6</code> (α=2,
+        −0.105) collapse it. A gentle damp is neither endpoint, so the 3-point map can't see it: it reads L6 as
+        "touch it and it dies," when in fact a partial damp is the single best thing you can do there.
         L5 similarly peaks at α≈1.3.</p>
-        <p>This sorts the layers into two math populations: <b>damp-down layers</b> (L7/8/10/18/26/27 want
+        <p>This sorts the layers into two math populations: damp-down layers (L7/8/10/18/26/27 want
         α&lt;0.5 — L26 is the "savant," optimum monotone toward zero, where a heavy partial damp ≈ pruning it
-        <em>without</em> removal) and <b>boost layers</b> (L9/14/15/16/19/21/22/24/29/34 want α&gt;1). Any
+        without removal) and <b>boost layers</b> (L9/14/15/16/19/21/22/24/29/34 want α&gt;1). Any
         per-layer sensitivity claim needs the dense single-pass α grid (~0.5–1.5), not the dup/prune
         endpoints.</p>
       </div>
@@ -673,7 +673,7 @@
     <div class="negresult">
       <span class="nb-kicker">Negative result — k-splitting does not raise the per-layer ceiling</span>
       <p>The boost layers cap at ~α1.5, and the obvious move to push past it is to spread the gain across
-      <em>k</em> damped passes. It fails: L22 and L34 each peak at single-pass α1.5, and spreading α&gt;1.5
+      k damped passes. It fails: L22 and L34 each peak at single-pass α1.5, and spreading α&gt;1.5
       across k passes <em>overshoots</em> rather than extending the ceiling (<code>sa22_S160_k6</code> d−0.022,
       <code>sa34</code> d−0.07). The "k-split rescues α&gt;1.5" hypothesis is refuted at these sites — stated
       plainly because it's the obvious thing to try.</p>
@@ -884,9 +884,9 @@
       <div>
         <p class="dropcap">Granite was the cross-model confirmation of the Σα-law first found on
         <a href="/lab/01_minicpm5_sigma_alpha.html">MiniCPM5</a>. The governing variable for a stacked/damped layer is
-        <b>Σα = the sum of all per-pass alphas</b>; k (copy count) scales the <em>magnitude</em>, Σα sets the
-        <em>sign</em>. On Granite the peak sits at <span class="hl-acc">Σα ≈ 0.75</span> versus MiniCPM's ≈1.25
-        — and that downshift was <em>named in advance</em>: the pre-run note (2026-06-12, before the
+        <b>Σα = the sum of all per-pass alphas</b>; k (copy count) scales the magnitude, Σα sets the
+        sign. On Granite the peak sits at <span class="qx">Σα ≈ <span class="qv">0.75</span></span> versus MiniCPM's ≈1.25,
+        and that downshift was named in advance: the pre-run note (2026-06-12, before the
         fair-battery run executed) flagged Granite's <code>residual_multiplier = 0.22</code> as the suspect, and
         the run confirmed Σα≈0.75.</p>
         <p><span class="olabel inf">interpretation</span> The working mechanism: a smaller per-layer residual write means a
@@ -1118,13 +1118,13 @@
 
   <section id="caveats">
     <h2>Caveats</h2>
-    <p>The mechanism work here is solid — re-checked against the v3 results file, and unrelated to what
-    follows. What's still open is the constructive side: the profile and the stacking heuristic that replaced
+    <p>The mechanism work here is solid (re-checked against the v3 results file, and unrelated to what
+    follows). What's still open is the constructive side: the profile and the stacking heuristic that replaced
     the old leaderboard are early reads off noisy per-layer data, not confirmed findings yet.</p>
     <ul class="walkback">
       <li><span class="wbhead">The constructive profile (<code>L5↑+L26↓+L14↑</code>) is not yet held-out-validated.</span> Present it as the emerging endgame, not a confirmed champion — argmax off noisy per-layer curves overfits.</li>
       <li><span class="wbhead">The stacking heuristic lives on the in-band / gcore probes</span>, not the floored/ceilinged 49-probe mean. One combo marginally beats its best component, one masks — suggestive, not established. It's a <em>heuristic, not a law</em> until there's a regression of effect against layer-distance.</li>
-      <li><span class="wbhead">CoT remains unrun on Granite</span> (it decodes ~250 tok/s vs MiniCPM's ~1500 — an est. 10–20 h sweep, gated on a smoke test). The open question that would close the line: does reasoning fix the <em>same</em> metastable bugs the surgery does (redundant) or <em>different</em> ones (compound)? Compare fix-sets via the swing board.</li>
+      <li><span class="wbhead">CoT remains unrun on Granite</span> (it decodes ~250 tok/s vs MiniCPM's ~1500 — an est. 10–20 h sweep, gated on a smoke test). The open question that would close the line: does reasoning fix the same metastable bugs the surgery does (redundant) or <em>different</em> ones (compound)? Compare fix-sets via the swing board.</li>
     </ul>
 
     <div class="nb-marginalia" style="margin-top:var(--sp-7)">
