@@ -24,6 +24,14 @@ body {
 /* Links — quiet by default, underline on hover. No colour-shift dance. */
 a { color: var(--link); text-decoration: none; }
 a:hover { text-decoration: underline; text-underline-offset: 0.18em; }
+/* Body-prose links carry a resting underline: colour alone can't be the only
+   link signal (WCAG 1.4.1; protan reader). Nav/TOC/cards/headers stay quiet. */
+main p a, main li a, main figcaption a {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, var(--link) 55%, transparent);
+}
 
 /* Focus — always visible, accent ring, no removal anywhere. */
 :focus-visible {
