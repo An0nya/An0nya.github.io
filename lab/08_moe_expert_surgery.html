@@ -126,18 +126,18 @@
     <div class="col-side">
       <div>
         <p class="dropcap">Whole-layer surgery has no purchase on a Mixture-of-Experts model, for two
-        distinct reasons. <span class="hl-acc">Duplication corrupts routing</span> — a duplicated MoE block
-        is mechanically destructive. And <span class="hl-acc">pruning is the wrong axis, not
-        harmful</span>: pruning an MoE layer is an <em>output-compliance</em> fix — it unclogs a stalled
-        output valve so the model emits a clean letter or number — not a reasoning fix.</p>
+        distinct reasons. Duplication corrupts routing: a duplicated MoE block is mechanically destructive.
+        And <span class="hl-acc">pruning is the wrong axis, not harmful</span>: pruning an MoE layer is an
+        output-compliance fix, unclogging a stalled output valve so the model emits a clean letter or
+        number, not a reasoning fix.</p>
         <p>Whether the unclogged output is <em>correct</em> depends entirely on whether the latent
         capability was already there. On factual multiple-choice (latent), unclogging surfaces a real
-        answer the model knew — a genuine, large gain. On 16-digit arithmetic (not latent), unclogging just
+        answer the model knew (a genuine, large gain). On 16-digit arithmetic (not latent), unclogging just
         produces confident, well-formatted garbage: the strict phantom. Same mechanism, opposite verdict,
         decided by latent-knowledge presence — the exact compliance-not-capability pattern, here as the
         whole story rather than a footnote.</p>
-        <p>The reason is structural: on an MoE the unit of capacity is the <span class="hl-acc">expert</span>
-        — distributed across hundreds of them, ~8 active per token — not the layer. To touch what the model
+        <p>The reason is structural: on an MoE the unit of capacity is the <span class="hl-acc">expert</span>,
+        distributed across hundreds of them (~8 active per token), not the layer. To touch what the model
         actually knows, you have to operate on experts.</p>
       </div>
       <aside class="aside">
@@ -449,7 +449,7 @@
   <section id="toolkit">
     <h2><span class="num">§2</span>The expert-surgery toolkit</h2>
     <p>Three operations on the expert axis, three different jobs. REAP is a <em>functional-importance</em>
-    cut — it measures each expert's data-conditioned contribution (gate weight × output, aggregated over a
+    cut: it measures each expert's data-conditioned contribution (gate weight × output, aggregated over a
     calibration set) and culls the low-saliency ones. That's a "what does the model actually use" cut, the
     opposite of the geometric cosine/delta scans the dense work uses.</p>
 
@@ -463,12 +463,12 @@
     </table>
 
     <p style="margin-top:var(--sp-5)">REAP's published headline (Cerebras,
-    <a href="https://arxiv.org/abs/2510.13999">arXiv&nbsp;2510.13999</a>) is <span class="hl-acc">50% expert
-    compression, near-lossless on code</span> for very large MoEs (Qwen3-Coder-480B, Kimi-K2), with pruning
-    beating merging on generative tasks because merging loses routing control. The lab's own datapoints
-    below deliberately go <em>deeper</em> than that documented window, into the degraded-but-usable regime.
-    The two concrete results that follow are an SEC replay and a REAP teardown; the lab's <em>own</em> runs
-    of both are still ahead.</p>
+    <a href="https://arxiv.org/abs/2510.13999">arXiv&nbsp;2510.13999</a>) is <span class="qx"><span
+    class="qv">50%</span> expert compression, near-lossless on code</span> for very large MoEs
+    (Qwen3-Coder-480B, Kimi-K2), with pruning beating merging on generative tasks because merging loses
+    routing control. The lab's own datapoints below deliberately go deeper than that documented window,
+    into the degraded-but-usable regime. The two concrete results that follow are an SEC replay and a REAP
+    teardown; the lab's own runs of both are still ahead.</p>
   </section>
 
   <section id="clonemap">
@@ -476,16 +476,16 @@
     <div class="col-side">
       <div>
         <p class="dropcap">Someone had surgically re-biased an MoE's routing toward its specialist experts,
-        shipped the result, and withheld the how. xpressai published a modified MoE — the live card is
-        <a href="https://huggingface.co/XpressAI/Qwen3.6-35B-A3B-ExpertClone-Logic-UD-Q4_K_XL-GGUF"><code>Qwen3.6-35B-A3B-ExpertClone-Logic</code></a> — but the implementation repo is <span class="hl-acc">not
+        shipped the result, and withheld the how. xpressai published a modified MoE (the live card is
+        <a href="https://huggingface.co/XpressAI/Qwen3.6-35B-A3B-ExpertClone-Logic-UD-Q4_K_XL-GGUF"><code>Qwen3.6-35B-A3B-ExpertClone-Logic</code></a>), but the implementation repo is <span class="hl-acc">not
         publicly accessible</span> (and not on the Wayback Machine as of 2026-06), so the profiling
         methodology is permanently opaque. That opacity is what makes the router-diff method necessary: without it, the surgery couldn't be recovered at all.</p>
-        <p>You don't need their code to <em>replay</em> the surgery, because of one architectural fact: the
+        <p>You don't need their code to replay the surgery, because of one architectural fact: the
         router tensor (<code>ffn_gate_inp.weight</code>) is <span class="hl-acc">F32 in every quant</span> of
         the same base. In the cloned file, the victim router columns were overwritten with the donor's — so
-        they now match the donor. Therefore a router column that <em>matches base</em> is a donor
-        (untouched); a column that <em>differs from base</em> is a victim (overwritten). Donor→victim
-        direction falls out definitively, no guessing.</p>
+        they now match the donor. Therefore a router column that matches base is a donor (untouched); a
+        column that differs from base is a victim (overwritten). Donor→victim direction falls out
+        definitively, no guessing.</p>
         <p>Run that diff and you recover the clone map — <span class="hl-acc">39 of 40 layers cleanly</span>
         (layer 39 was genuinely untouched), with victim indices systematically small (0–17, the low-firing
         experts) and donors spread (1–229), which independently confirms a "lowest-total-firing expert as
@@ -983,21 +983,23 @@
 
   <section id="teardown">
     <h2><span class="num">§4</span>Deep expert excision is usable below parity</h2>
-    <p>You can't A/B a 100B→30B retention on a 16&nbsp;GB Mac — you can't run the 100B base — so the
-    locally-obtainable verdict is <em>usability</em>, not parity. And there's one clean, unconfounded
+    <p>You can't A/B a 100B→30B retention on a 16&nbsp;GB Mac (you can't run the 100B base), so the
+    locally-obtainable verdict is <em>usability</em>, not parity. There's one clean, unconfounded
     datapoint, read straight off a published model's own card.</p>
     <p><code>huihui-ai/Huihui4-8B-A4B</code> is a REAP of <code>gemma-4-26B-A4B-it</code>: experts
-    <span class="hl-acc">128→32 (75% culled)</span>, 8 active/token, all 30 layers intact, a pure
-    count-prune. The param math checks out exactly — base routed-expert 22.84B + fixed 2.40B = 25.23B; cull
-    to 32 → routed 5.71B + unchanged 2.40B = <span class="hl-acc">8.10B</span>, dead-on the "8B" label. The
-    26→8B ratio is only 3.1× despite a 4× expert cut because fixed overhead (attention, dense FFN,
-    embeddings, router, norms) doesn't scale with expert count.</p>
+    <span class="qx"><span class="qv">128→32</span> (75% culled)</span>, 8 active/token, all 30 layers
+    intact, a pure count-prune. The param math checks out exactly: base routed-expert 22.84B + fixed 2.40B
+    = 25.23B; cull to 32 → routed 5.71B + unchanged 2.40B = <span class="qx"><span
+    class="qv">8.10B</span></span>, dead-on the "8B" label. The 26→8B ratio is only 3.1× despite a 4×
+    expert cut because fixed overhead (attention, dense FFN, embeddings, router, norms) doesn't scale with
+    expert count.</p>
     <p>The unconfounded number, from their own perplexity eval: straight 128→32 prune, 0 SFT steps,
-    <span class="hl-acc">PPL 1.596 → 2.483 (+55%)</span>. Degraded, but <em>not broken</em> — 75% of the
-    experts are gone and it's still a functioning model. The baseline that makes that interesting isn't the
-    unpruned model — you can't run that on 16&nbsp;GB — it's <em>non-existence</em>. The real comparison is
-    "a degraded version you can actually run" vs. "nothing at all," which is why a +55% PPL hit reads as
-    intriguing rather than disqualifying: this is an accessibility result, not a capability claim.</p>
+    <span class="qx">PPL <span class="qv">1.596 → 2.483</span> (+55%)</span>. Degraded, but not broken:
+    75% of the experts are gone and it's still a functioning model. The baseline that makes that
+    interesting isn't the unpruned model (you can't run that on 16&nbsp;GB), it's non-existence. The real
+    comparison is "a degraded version you can actually run" vs. "nothing at all," which is why a +55% PPL
+    hit reads as intriguing rather than disqualifying: this is an accessibility result, not a capability
+    claim.</p>
 
     <figure class="figure" id="fig3">
       <p class="nb-plate__note">↳ the only measured point sits past the estimated cliff, yet well above the broken floor</p>
@@ -1203,14 +1205,14 @@
 
   <section id="direction">
     <h2><span class="num">§5</span>Why this is the live direction for consumer ML</h2>
-    <p>A 250B <em>dense</em> model is dead in the water locally (250&nbsp;GB working set). A 250B <em>MoE</em>
-    with mmap + expert offload has a working set of ~10&nbsp;GB, because only the active experts are hot —
-    tractable at ~1–3 tok/s for cold-NVMe pages. <span class="hl-acc">MoE + REAP + local is the one regime
-    where a consumer machine gets to touch frontier-scale models at all.</span></p>
-    <p>The standing hypothesis (<em>speculative — plausible mechanism, untested in this lab</em>): active
+    <p>A 250B dense model is dead in the water locally (250&nbsp;GB working set). A 250B MoE with mmap +
+    expert offload has a working set of ~10&nbsp;GB, because only the active experts are hot: tractable at
+    ~1–3 tok/s for cold-NVMe pages. <span class="hl-acc">MoE + REAP + local is the one regime where a
+    consumer machine gets to touch frontier-scale models at all.</span></p>
+    <p>The standing hypothesis (<em>speculative: plausible mechanism, untested in this lab</em>): active
     params, not total, may be the intelligence proxy, up to the trained router-k. Pruning total to 30–40B
-    while keeping ~6–10B active per token <em>might</em> gain per-token quality — remaining experts get hit
-    more often, the router is less stretched. The supporting datapoint, a 35→14B-A3B reaped model "nearly
+    while keeping ~6–10B active per token might gain per-token quality: remaining experts get hit more
+    often, the router is less stretched. The supporting datapoint, a 35→14B-A3B reaped model "nearly
     keeping up" with full siblings, is an eyeball read, not a paired eval — so this stays a hypothesis, not a
     finding. The tax: a reaped older base loses to a newer dense one (generational gains > REAP
     preservation), so the workflow only pays on current-SOTA bases and has to be re-run per base update.</p>
@@ -1224,10 +1226,10 @@
   <section id="caveats">
     <h2>Caveats</h2>
     <p>The router-diff method is solid; what it hasn't produced yet is a quantified capability result.
-    SEC extraction and the lab's own REAP run are still open — read this page as a working log of a pivot
+    SEC extraction and the lab's own REAP run are still open: read this page as a working log of a pivot
     in progress, not a finished result.</p>
     <ul class="walkback">
-      <li><span class="wbhead">SEC capability is preliminary</span> — extracted + replayed + vibe-tested, no fixed-seed paired battery run, no probe battery or standardized benchmark run yet. I have a premade SEC-edited model but not the SEC tooling itself, so reproducing the method from scratch is still needed; so far the only test has been extracting the merged experts' routing and running it ad hoc. The router-diff <em>method</em> is solid; the <em>quantified recovery</em> is the next step.</li>
+      <li><span class="wbhead">SEC capability is preliminary</span> — extracted + replayed + vibe-tested, no fixed-seed paired battery run, no probe battery or standardized benchmark run yet. I have a premade SEC-edited model but not the SEC tooling itself, so reproducing the method from scratch is still needed; so far the only test has been extracting the merged experts' routing and running it ad hoc. The router-diff method is solid; the <em>quantified recovery</em> is the next step.</li>
       <li><span class="wbhead">The lab's own REAP run has not happened yet.</span> The point of REAP is exactly that no training is needed — scan activations, prune the unfired experts, done. Huihui's authors considered a retrain because their prune was deep; the bet here is that a bare reaped instruct model stays coherent without one, which is what would let a model too big for this Mac at full size run locally in a degraded but still-capable pruned form.</li>
       <li><span class="wbhead">Huihui (the 26B→8B-A4B reap) isn't the model I'll actually test on.</span> It's just the one I happened to find with a deep prune already applied. I've also run a barely-perturbed-feeling Qwen3.5-A3B pruned from 35B down to 14B. The plan: validate REAP on models small enough to run at full size first, then extend it to 60B+ models that only become usable locally once pruned.</li>
       <li><span class="wbhead">All numbers are point-in-time from memory.</span> Fig 2's exact per-layer victim columns are illustrative; the clustering structure is the claim, not the specific indices.</li>
