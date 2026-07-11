@@ -70,4 +70,10 @@ hr, .rule {
 }
 
 img, svg { max-width: 100%; }
-code { overflow-wrap: break-word; }
+code {
+  overflow-wrap: break-word;
+  font-family: var(--font-mono);
+  /* mono x-height reads larger than the serif at equal em — compensate so
+     inline identifiers sit flush with prose instead of shouting over it */
+  font-size: 0.85em;
+}
