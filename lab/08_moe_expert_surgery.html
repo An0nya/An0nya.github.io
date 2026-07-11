@@ -103,7 +103,7 @@
   <header class="nb-record">
     <div class="nb-record__title">Experts, not layers</div>
     <div class="nb-record__grid">
-      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v">Gemma-26B-A4B · Huihui4-8B-A4B · MoE</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v"><a href="https://huggingface.co/bartowski/google_gemma-4-26B-A4B-it-GGUF">Gemma-26B-A4B</a> · <a href="https://huggingface.co/huihui-ai/Huihui4-8B-A4B">Huihui4-8B-A4B</a> · MoE</span></div>
       <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">pivot-explainer · surgery in-flight · revised 2026-06-21</span></div>
       <div class="nb-record__field"><span class="nb-record__k">Source</span><span class="nb-record__v">router-diff · REAP teardown (no fixed-seed eval yet)</span></div>
     </div>
@@ -477,7 +477,7 @@
       <div>
         <p class="dropcap">Someone had surgically re-biased an MoE's routing toward its specialist experts,
         shipped the result, and withheld the how. xpressai published a modified MoE — the live card is
-        <code>Qwen3.6-35B-A3B-ExpertClone-Logic</code> — but the implementation repo is <span class="hl-acc">not
+        <a href="https://huggingface.co/XpressAI/Qwen3.6-35B-A3B-ExpertClone-Logic-UD-Q4_K_XL-GGUF"><code>Qwen3.6-35B-A3B-ExpertClone-Logic</code></a> — but the implementation repo is <span class="hl-acc">not
         publicly accessible</span> (and not on the Wayback Machine as of 2026-06), so the profiling
         methodology is permanently opaque. That opacity is what makes the router-diff method necessary: without it, the surgery couldn't be recovered at all.</p>
         <p>You don't need their code to <em>replay</em> the surgery, because of one architectural fact: the
