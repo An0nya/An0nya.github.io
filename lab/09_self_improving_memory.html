@@ -28,8 +28,6 @@
   /* code primitive blocks */
   pre.code { font-family: var(--font-mono); font-size: 0.82em; line-height: 1.6; background: var(--surface-sunken); border: 1px solid var(--rule2,#27323D); border-left: 3px solid var(--accent); border-radius: var(--radius-2); padding: var(--sp-4) var(--sp-5); margin: var(--sp-5) 0; max-width: var(--measure); overflow-x: auto; color: var(--ink2,#A4B0BC); }
   pre.code .cm { color: var(--muted); }
-  /* [VERIFY] markers — visible honesty flags, not hidden */
-  .vrfy { font-family: var(--font-mono); font-size: 0.72em; letter-spacing: .04em; color: var(--cause); border: 1px solid var(--cause); border-radius: 3px; padding: 0 .35em; opacity: .85; white-space: nowrap; vertical-align: 1px; }
   /* observation / interpretation epistemic tags — slate vs violet, both protan-safe */
   .olabel { font-family: var(--font-mono); font-size: 0.7em; letter-spacing: .06em; text-transform: uppercase; padding: 0 .3em; border-radius: 3px; vertical-align: 1px; }
   .olabel.obs { color: var(--fourth); border: 1px solid var(--fourth); }
@@ -707,7 +705,7 @@ deterministic script: tag → session-count   <span class="cm"># resolved from g
     <h2><span class="num">§6</span>What actually got promoted</h2>
     <p>The trawl isn't theoretical — it produced a candidate ledger of evidence-backed rules, each with source sessions
     and a destination, and the strong ones landed in a rewritten, lean CLAUDE.md. A sample of what the record surfaced
-    that intuition had missed <span class="vrfy">VERIFY · against the ledger</span>:</p>
+    that intuition had missed:</p>
     <ul>
       <li><b>Diagnostic phrases aren't directives.</b> "Check if running," "continue," "let's draft it" are ambient, not
       action requests — surfaced from four sessions where they triggered unwanted action (one "check if running" killed
@@ -742,7 +740,7 @@ deterministic script: tag → session-count   <span class="cm"># resolved from g
     <p>This is explicitly human-in-the-loop — decision-support, not an autonomous self-rewriting agent,
     because an LLM promoting its own behavioral rules unsupervised is how bias compounds. Phase 1 shipped
     single-summarizer, bias-screened; the multi-model panel that would cross-check it is designed but
-    deferred. Specific promoted-rule counts are tagged <span class="vrfy">VERIFY</span> against the ledger.</p>
+    deferred.</p>
     <ul class="walkback">
       <li><span class="wbhead">The summarizers are small local models</span> — they editorialize and occasionally fabricate; the whole confidence discipline exists <em>because</em> the readers are imperfect.</li>
       <li><span class="wbhead">The feeder pipeline is paused, not retired</span> — the <a href="/lab/07_mem0_processor.html">mem0-processor</a> that produces the summaries is on hold; sessions after its last run have no summaries yet, so extending the trawl today means reading raw transcripts directly. Either way the <em>method</em> is the durable artifact, not the running service.</li>

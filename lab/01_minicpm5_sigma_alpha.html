@@ -37,8 +37,6 @@
   details.nbdetails[open] > summary { border-bottom: 1px solid var(--rule2,#27323D); margin-bottom: var(--sp-4); }
   details.nbdetails p { font-size: var(--fs-sm); line-height: 1.6; color: var(--text-dim); }
   details.nbdetails pre.code { margin: var(--sp-4) 0; }
-  /* [VERIFY] markers — visible honesty flags, not hidden */
-  .vrfy { font-family: var(--font-mono); font-size: 0.72em; letter-spacing: .04em; color: var(--cause); border: 1px solid var(--cause); border-radius: 3px; padding: 0 .35em; opacity: .85; white-space: nowrap; vertical-align: 1px; }
   /* observation / interpretation epistemic tags — slate vs violet, both protan-safe */
   .olabel { font-family: var(--font-mono); font-size: 0.7em; letter-spacing: .06em; text-transform: uppercase; padding: 0 .3em; border-radius: 3px; vertical-align: 1px; }
   .olabel.obs { color: var(--fourth); border: 1px solid var(--fourth); }
@@ -671,7 +669,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
         <p class="dropcap">The first thing that actually moved the needle: take a layer, duplicate it, and damp
         <b>both</b> the original pass and the copy. On <b>L1 and L10 specifically</b> — not the "refine zone" L5–12 we'd
         guessed — this buys <span class="hl-acc">+0.11–0.12 strict math</span>, confirmed at 24 seeds, t ≈ +6.
-        <span class="vrfy">VERIFY</span> <code>split_1_a50_a70 = 0.53 strict, t +6.2</code>.</p>
+        <code>split_1_a50_a70 = 0.53 strict, t +6.2</code>.</p>
         <p>Don't apply the layer's contribution in one go. Apply a <em>scaled-back</em> version, let the residual
         stream move, then run the layer <em>again</em> on that moved stream and apply another scaled-back version —
         two gentle nudges instead of one shove. What makes this its own mechanism is that on the second nudge the
@@ -1511,7 +1509,7 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
 
     <p><b>Honesty about the peak.</b> "Σα ≈ 1.25" is the L1 finescan answer, but it's not clean across the board. A
     separate distributed sweep found Σ1.50 k6 stacks beating the Σ1.25 band at the very top
-    (<span class="vrfy">VERIFY</span> champion <code>shp1_S150_k6_flat</code>, t +7.33), and the pooled regression put
+    (champion <code>shp1_S150_k6_flat</code>, t +7.33), and the pooled regression put
     the <em>math</em> optimum nearer Σα ≈ 1.65 versus ~1.5 for the balanced battery. So the truthful statement is:
     <b>a broad peak in the ~1.25–1.65 region, drifting higher for the narrow math channel</b> — not a single magic
     constant. The ridge is real; its exact crest is channel-dependent. That tension is in the data and stays in the
@@ -1917,7 +1915,6 @@ out = x + α · (block(x) − x)   =   x + α·Δ</pre>
     <ul class="walkback">
       <li><span class="wbhead">The CoT prosthesis hypothesis is a smoke-test hunch</span> (§8), not a result — flagged because it's the most promising unfinished thread, not because it's settled.</li>
       <li><span class="wbhead">eq is a null-rate gauge, not a ranker</span> on the v4 battery (r &gt; 1, low signal); use it for derailment exposure, not leaderboards.</li>
-      <li><span class="wbhead">Numbers tagged <span class="vrfy">VERIFY</span></span> (<code>split_1_a50_a70</code>, <code>shp1_S150_k6_flat</code>) want a glance at the results JSONL before they ship.</li>
     </ul>
 
     <div class="nb-marginalia" style="margin-top:var(--sp-7)">

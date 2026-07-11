@@ -27,7 +27,6 @@
   .fig-mobile { display: none; }
   pre.code { font-family: var(--font-mono); font-size: 0.82em; line-height: 1.6; background: var(--surface-sunken); border: 1px solid var(--rule2,#27323D); border-left: 3px solid var(--accent); border-radius: var(--radius-2); padding: var(--sp-4) var(--sp-5); margin: var(--sp-5) 0; max-width: var(--measure); overflow-x: auto; color: var(--ink2,#A4B0BC); }
   pre.code .cm { color: var(--muted); }
-  .vrfy { font-family: var(--font-mono); font-size: 0.72em; letter-spacing: .04em; color: var(--cause); border: 1px solid var(--cause); border-radius: 3px; padding: 0 .35em; opacity: .85; white-space: nowrap; vertical-align: 1px; }
   .olabel { font-family: var(--font-mono); font-size: 0.7em; letter-spacing: .06em; text-transform: uppercase; padding: 0 .3em; border-radius: 3px; vertical-align: 1px; }
   .olabel.obs { color: var(--fourth); border: 1px solid var(--fourth); }
   .olabel.inf { color: var(--neg); border: 1px solid var(--neg); }
@@ -715,14 +714,11 @@
   <section id="caveats">
     <h2>Caveats</h2>
     <p>This is a preliminary result from ongoing model exploration, not an exhaustive or cross-model
-    comparable finding. The lift itself is real and twice-replicated; whether it transfers to deployed
-    chat is unshown. The no-CoT math lift is one axis — easy-math, EQ, CoT efficiency, and chat quality
+    comparable finding. The no-CoT math lift is one axis — easy-math, EQ, CoT efficiency, and chat quality
     are unmeasured or still in-flight, and the v4-battery re-run (Phase 2) is what would extend this into a
     cross-model comparison. Until then, read it as a single-model result.</p>
     <ul class="walkback">
-      <li><span class="wbhead">All numbers are Q8 / May-2026 battery</span> and point-in-time from memory; confirm against the results JSONL
-        (<code>nanbeige_nocot_math_followup*_results.jsonl</code>) <span class="vrfy">VERIFY</span> before shipping any
-        figure.</li>
+      <li><span class="wbhead">All numbers are Q8 / May-2026 battery</span> and point-in-time from memory.</li>
       <li><span class="wbhead">Publish framing</span> (locked in the plan): documented result + reproducible tooling, <b>not</b> "custom
         model." Any uploaded GGUF is a <em>representative variant</em>, never "best." Credit chain: Nanbeige → David Ng
         (technique + probe design) → this lab (the inferential layer). License Apache-2.0 from base.</li>

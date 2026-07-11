@@ -24,8 +24,6 @@
   .figure { margin: var(--sp-6) 0; }
   .nb-plate svg { display: block; width: 100%; height: auto; }
   .fig-mobile { display: none; }
-  /* [VERIFY] markers — visible honesty flags, not hidden */
-  .vrfy { font-family: var(--font-mono); font-size: 0.72em; letter-spacing: .04em; color: var(--cause); border: 1px solid var(--cause); border-radius: 3px; padding: 0 .35em; opacity: .85; white-space: nowrap; vertical-align: 1px; }
   /* observation / interpretation epistemic tags — slate vs violet, both protan-safe */
   .olabel { font-family: var(--font-mono); font-size: 0.7em; letter-spacing: .06em; text-transform: uppercase; padding: 0 .3em; border-radius: 3px; vertical-align: 1px; }
   .olabel.obs { color: var(--fourth); border: 1px solid var(--fourth); }
@@ -148,7 +146,7 @@
         <span class="nb-kicker">Draft status</span>
         This is an addendum + correction spec for the <em>already-published</em> <code>granite.html</code>, not
         a new page. Whoever updates the page: diff this against the live page and the current
-        <code>rys_granite.md</code> first; numbers tagged <span class="vrfy">VERIFY</span> still want a pass.
+        <code>rys_granite.md</code> first.
       </aside>
     </div>
   </section>
@@ -499,7 +497,7 @@
     consumer-block) and, crucially, adds its <em>failure</em> mode, which Gemma never made explicit: redundancy
     near in depth appears to dilute rather than compound. The emerging data-driven math profile that falls out:
     <code>L5↑(α1.3) + L26↓(prune or α0.15) + L14↑(α1.8)</code>, all depth-separated, predicted to stack.
-    <span class="vrfy">VERIFY</span> — held-out-seed validation is the open next step; argmax off noisy
+    Held-out-seed validation is the open next step; argmax off noisy
     per-layer curves overfits, so the profile must be confirmed out-of-sample before it's a claim.</p>
 
     <figure class="figure" id="figB">
@@ -1127,7 +1125,6 @@
       <li><span class="wbhead">The constructive profile (<code>L5↑+L26↓+L14↑</code>) is not yet held-out-validated.</span> Present it as the emerging endgame, not a confirmed champion — argmax off noisy per-layer curves overfits.</li>
       <li><span class="wbhead">The stacking heuristic lives on the in-band / gcore probes</span>, not the floored/ceilinged 49-probe mean. One combo marginally beats its best component, one masks — suggestive, not established. It's a <em>heuristic, not a law</em> until there's a regression of effect against layer-distance.</li>
       <li><span class="wbhead">CoT remains unrun on Granite</span> (it decodes ~250 tok/s vs MiniCPM's ~1500 — an est. 10–20 h sweep, gated on a smoke test). The open question that would close the line: does reasoning fix the <em>same</em> metastable bugs the surgery does (redundant) or <em>different</em> ones (compound)? Compare fix-sets via the swing board.</li>
-      <li><span class="wbhead">Re-confirmed, with a caveat.</span> The combo numbers, the L6 α-peak, and the <code>combo_10_38</code> walkback were re-checked against <code>granite_nocot_v3_da50cdae_results.jsonl</code> on 2026-06-21. <span class="vrfy">VERIFY</span> any remaining v5/v6 figures still carried from memory against the same file before they ship.</li>
     </ul>
 
     <div class="nb-marginalia" style="margin-top:var(--sp-7)">

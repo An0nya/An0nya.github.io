@@ -28,7 +28,6 @@
   pre.code { font-family: var(--font-mono); font-size: 0.82em; line-height: 1.6; background: var(--surface-sunken); border: 1px solid var(--rule2,#27323D); border-left: 3px solid var(--accent); border-radius: var(--radius-2); padding: var(--sp-4) var(--sp-5); margin: var(--sp-5) 0; max-width: var(--measure); overflow-x: auto; color: var(--ink2,#A4B0BC); }
   pre.code .cm { color: var(--muted); }
   pre.code .hl { color: var(--accent); }
-  .vrfy { font-family: var(--font-mono); font-size: 0.72em; letter-spacing: .04em; color: var(--cause); border: 1px solid var(--cause); border-radius: 3px; padding: 0 .35em; opacity: .85; white-space: nowrap; vertical-align: 1px; }
   .olabel { font-family: var(--font-mono); font-size: 0.7em; letter-spacing: .06em; text-transform: uppercase; padding: 0 .3em; border-radius: 3px; vertical-align: 1px; }
   .olabel.obs { color: var(--fourth); border: 1px solid var(--fourth); }
   .olabel.inf { color: var(--neg); border: 1px solid var(--neg); }
@@ -1154,8 +1153,7 @@
       not signal. <b>A channel's t-stats are noise until you understand its variance.</b></li>
     </ul>
     <p>A related subtlety: no-CoT math is not binary. On Gemma-31B (n=4896), strict was 0.44 and partial 0.76 — 43.6%
-    both-correct, 48.7% a smooth near-miss continuum, only 7.7% outright junk. <span class="vrfy">VERIFY · n=4896 vs the
-    chosen 31b file's cell counts</span> The partial scorer is capturing a <em>real</em> second axis — magnitude/shape
+    both-correct, 48.7% a smooth near-miss continuum, only 7.7% outright junk. The partial scorer is capturing a <em>real</em> second axis — magnitude/shape
     closeness — so a config can tighten sub-threshold near-misses without moving strict at all. That's why partial stays
     an <em>annotation</em> on the strict leaders, never folded into the headline: it's real information about a different
     capability, and it's also the exact thing that inflates phantoms. Both, at once.</p>

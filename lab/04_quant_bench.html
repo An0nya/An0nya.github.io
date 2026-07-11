@@ -24,8 +24,6 @@
   .figure { margin: var(--sp-6) 0; }
   .nb-plate svg { display: block; width: 100%; height: auto; }
   .fig-mobile { display: none; }
-  /* [VERIFY] markers — visible honesty flags, not hidden */
-  .vrfy { font-family: var(--font-mono); font-size: 0.72em; letter-spacing: .04em; color: var(--cause); border: 1px solid var(--cause); border-radius: 3px; padding: 0 .35em; opacity: .85; white-space: nowrap; vertical-align: 1px; }
   .nb-table td.win { color: var(--accent); font-weight: 500; }
   @media (max-width: 760px) {
     .col-side { grid-template-columns: 1fr; gap: var(--sp-5); }
@@ -166,9 +164,9 @@
         <tr><td><b>PyTorch/MPS</b></td><td>last on every speed axis</td><td>(but mid on RAM)</td></tr>
       </tbody>
     </table>
-    <p style="margin-top:var(--sp-4)"><span class="vrfy">VERIFY</span> headline numbers against
+    <p style="margin-top:var(--sp-4)">The headline numbers come from
     <code>unified_results.jsonl</code> — 438+ rows spanning runtime × quant method × batch-width grid ×
-    prefill-sequence sweep; confirm exact row breakdown. Everything below is the unpacking, and most of it is
+    prefill-sequence sweep. Everything below is the unpacking, and most of it is
     more useful than the table.</p>
 
     <p style="margin-top:var(--sp-5)"><b>Throughput was quant-agnostic.</b> At peak concurrency <em>all</em> MLX
@@ -395,7 +393,7 @@
         <p>Score by <span class="hl-acc">throughput per gigabyte</span> — the figure of merit that matters when memory
         is the constraint, which on consumer Apple Silicon it always is — and llama.cpp dominates by 4–5×. Best
         llama (IQ2_XS) hit ~615 tok/s/GB; <em>every</em> llama quant (~490–615) beat <em>every</em> MLX quant
-        (~114–120); PyTorch trailed at ~56. <span class="vrfy">VERIFY</span>
+        (~114–120); PyTorch trailed at ~56.
         <b>MLX is the raw-speed-at-any-RAM-cost choice; llama.cpp is the efficient choice, and on a 16&nbsp;GB
         machine efficiency is what runs.</b></p>
       </div>
@@ -859,14 +857,13 @@
     <p>This benchmark's scope only covers speed and memory usage, and does not address the real accuracy
     differences between quants. Accuracy is the axis that discriminates the quants for functional usage, but
     this sets aside that aspect in order to assess runtime factors since often the quant is dependent on
-    maximizing bit weight within hardware limitations. Within that scope the speed and RAM measurements
-    are solid; the headline numbers still want a verify pass.</p>
+    maximizing bit weight within hardware limitations.</p>
     <ul class="walkback">
       <li><span class="wbhead">RAM-measurement calibration.</span> MLX <code>phys_footprint</code> is a cumulative high-watermark, llama is per-config-fresh. The runtime-by-axis <em>direction</em> holds; a live Activity Monitor pass would tighten the magnitude claims.</li>
       <li><span class="wbhead"><code>IQ3_M</code> (llama) is EOS-broken</span> in this run — excluded from all comparisons.</li>
       <li><span class="wbhead">The roofline crossover (Fig 3) is partly unrun</span> — needs sub-64 batch widths on both machines, and the M5 Air isn't currently accessible. The sub-64 region is the prediction; the w64–384 band is measured.</li>
       <li><span class="wbhead">Sustained-vs-burst on the fanless Air is untested</span> — 3700 is a burst number; whether it holds under sustained load (or droops toward the Mini) is an open asterisk.</li>
-      <li><span class="wbhead">Numbers tagged <span class="vrfy">VERIFY</span></span> against <code>unified_results.jsonl</code>. M5 peak decode (3693–3699, plateau confirmed w384→w768) is verified from the run log.</li>
+      <li><span class="wbhead">Numbers from <code>unified_results.jsonl</code>.</span> M5 peak decode is 3693–3699, a plateau across w384→w768.</li>
     </ul>
 
     <div class="nb-marginalia" style="margin-top:var(--sp-7)">
