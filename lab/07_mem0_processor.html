@@ -124,18 +124,18 @@
     <h2><span class="num">§1</span>One inversion is the whole architecture</h2>
     <div class="col-side">
       <div>
-        <p class="dropcap">Ask an agent to write its own memories <em>during</em> a conversation and the
+        <p class="dropcap">Ask an agent to write its own memories during a conversation, and the
         memory-writing competes with the user's task for the model's attention. On every turn the model
-        splits effort between answering you and persisting state, and persistence is the lower-urgency job —
+        splits effort between answering you and persisting state, and persistence is the lower-urgency job,
         so in practice it gets a perfunctory sentence or gets skipped. <span class="hl-acc">So invert it:
-        don't instrument the live session — mine the logs offline.</span></p>
+        don't instrument the live session, mine the logs offline.</span></p>
         <p>Claude Code already writes complete JSONL transcripts of every session it runs. After the fact, a
         local model batch-summarizes those transcripts, the summaries are scored against ground truth, and
         the survivors are uploaded as searchable memory. ETL, not live-write. That single inversion is the
         entire architecture; everything else is making it reliable.</p>
-        <p>The appeal: the source of truth is data you <em>already have</em> and never had to contaminate the
+        <p>The appeal: the source of truth is data you already have and never had to contaminate the
         live interaction to collect. The cost: you've now made writing good memory into a
-        <em>summarization-quality</em> problem — which means you have to know which local model actually
+        <em>summarization-quality</em> problem, which means you have to know which local model actually
         summarizes well, and that turned out to be a real question with no published answer. That cost is the
         pivot. Chasing "which model summarizes well" turned mem0-processor into a model-evaluation system that
         happens to emit memories as its output.</p>
@@ -166,16 +166,16 @@
     <p>Picking which 1–9B local model writes your memories is a model-selection problem, so the pipeline grew
     a benchmark, and the benchmark grew teeth. It carries <span class="hl-acc">119 models scored</span> (62 in
     the quality tier, 31 with enough shared sessions to rank head-to-head), evaluated on the exact task they'd
-    be used for — not MMLU, not vibes, but "did the summary capture the facts this session actually
+    be used for: not MMLU, not vibes, but "did the summary capture the facts this session actually
     established." Three disciplines do the work:</p>
     <ul>
       <li><b>Ground truth is hand-written fact sets</b>, per reference session. A summary is scored on fact
       recall against a human-authored list of what the session genuinely contained — so the metric rewards
-      <em>capturing the thing</em>, not producing fluent prose about it. The recurring failure it catches: the
+      capturing the thing, not producing fluent prose about it. The recurring failure it catches: the
       model that writes a beautiful, confident summary of facts that were never in the transcript.</li>
       <li><b>Ranking is by z-score across sessions, not raw averages.</b> Session mixes differ wildly in how
       much there is to capture, so a raw mean over a model's sessions isn't comparable to another model's raw
-      mean over a <em>different</em> set. Z-normalizing per session first makes the comparison legitimate. (The
+      mean over a different set. Z-normalizing per session first makes the comparison legitimate. (The
       same "raw averages aren't comparable across different mixes" correction the RYS work makes with
       channel-balanced aggregates — identical bias, identical fix.)</li>
       <li><b>Sampler/config provenance is tracked.</b> "Model X is good at this" without sampler provenance
@@ -191,23 +191,23 @@
     <div class="col-side">
       <div>
         <p class="dropcap">The scored target is not the shape of the session or its headline events. Those are
-        close to free — Claude Code's own Haiku compaction pass already emits a high-quality summary of
-        <em>what happened</em>. What this benchmark scores is the layer above that:
-        <span class="hl-acc">decision attribution</span> — who made each call, who caught what, and whether a
+        close to free: Claude Code's own Haiku compaction pass already emits a high-quality summary of
+        what happened. What this benchmark scores is the layer above that,
+        <span class="hl-acc">decision attribution</span>, meaning who made each call, who caught what, and whether a
         decision was contested or silently assumed. That's the layer later sessions actually need (the
-        <em>why</em> outlives the <em>what</em>), and the layer models fall down on.</p>
+        why outlives the what), and the layer models fall down on.</p>
         <p>Session <code>2503c51c</code> is the canonical hard case: three distractors wrapped around one real
         bug. Mid-session, Claude proposed <code>new Date()</code> for a summary's timestamp header; the user
-        read the code and caught that this stamps <em>processing time</em> rather than <em>session time</em>,
+        read the code and caught that this stamps processing time rather than session time,
         and redirected the fix to pull <code>startedAt</code> from the transcript JSONL. The bug never threw —
         it would have silently corrupted the timestamp on every future summary, undetectable until someone ran
         temporal analysis. The two nearby exchanges are traps: a double-timestamp worry and a timezone
-        question were both cases where the <em>user</em> misunderstood and Claude was correct. A model that
+        question were both cases where the user misunderstood and Claude was correct. A model that
         pattern-matches "user raised a concern → there was a bug" inverts all three.</p>
-        <p>A summary scores well here only if it gets the attribution right, not the content: <b>Claude</b> was
-        wrong, the <b>user</b> caught it <em>by reviewing code</em>, and the failure mode was <em>silent
-        corruption</em>. That last clause is second-order — it requires reasoning about a downstream failure
-        that never visibly happened — and it was hit by <span class="hl-acc">0 of 232</span> local-model runs
+        <p>A summary scores well here only if it gets the attribution right, not the content: Claude was
+        wrong, the user caught it by reviewing code, and the failure mode was silent
+        corruption. That last clause is second-order (it requires reasoning about a downstream failure
+        that never visibly happened), and it was <span class="qx">hit by <span class="qv">0 of 232</span></span> local-model runs
         as of the 2026-04 scoring epoch.</p>
       </div>
       <aside class="aside">
@@ -240,11 +240,11 @@
   <section id="zscore">
     <h2><span class="num">§4</span>Why raw averages lie</h2>
     <p>What this catches isn't hypothetical. In the current dataset, ranking by raw fact-recall puts
-    <code>qwen35-9b-os-auto-thinking</code> <span class="hl-acc">4th</span> — but it only drew a handful of
-    easy sessions (n=7), and per-session z-scoring drops it to <span class="hl-acc">26th</span>. The mirror
-    case is a 2-bit quant, <code>qwen3-6-27b-iq2-m</code>: <span class="hl-acc">15th</span> on raw average,
-    <span class="hl-acc">2nd</span> on z-score, because it happened to be tested on harder sessions where its
-    real margin showed. Raw and normalized rankings here don't just shift — they invert, and the 2-bit model
+    <code>qwen35-9b-os-auto-thinking</code> 4th, but it only drew a handful of
+    easy sessions (n=7), and <span class="qx">per-session z-scoring drops it to <span class="qv">26th</span></span>. The mirror
+    case is a 2-bit quant, <code>qwen3-6-27b-iq2-m</code>: 15th on raw average,
+    <span class="qx">rising to <span class="qv">2nd</span></span> on z-score, because it happened to be tested on harder sessions where its
+    real margin showed. Raw and normalized rankings here don't just shift, they invert, and the 2-bit model
     outranks the raw-average favorite once difficulty is normalized out.</p>
 
     <figure class="figure" id="fig1">
@@ -458,12 +458,12 @@
         <p>Working daily: transcript discovery, llama-server orchestration from the registry, summarization,
         scoring, the upload, and session-id dedupe. In progress: a sampler-config schema (v9.4) and dataset
         epoch tagging. Planned: a migration <em>off</em> the current Mem0 backend to an AWS-native one
-        (DynamoDB&nbsp;+&nbsp;Lambda) — because Mem0's search reliability is the pipeline's weakest link
+        (DynamoDB&nbsp;+&nbsp;Lambda), because Mem0's search reliability is the pipeline's weakest link
         (retrieval is unreliable enough that the practical workaround is fetching memories by direct UUID
         rather than trusting search).</p>
-        <p>The architecture — the ETL inversion and the eval layer — is the stable part; the memory
+        <p>The architecture (the ETL inversion and the eval layer) is the stable part; the memory
         <em>backend</em> is explicitly the swappable part, and is being swapped. That's worth stating plainly
-        rather than hiding, because the weakness <em>is</em> the roadmap: the project knows its retrieval layer
+        rather than hiding, because the weakness is the roadmap: the project knows its retrieval layer
         is the soft spot, has diagnosed why, and has a concrete migration that addresses it.</p>
       </div>
       <aside class="aside">
@@ -478,7 +478,7 @@
 
   <section id="caveats">
     <h2>Caveats &amp; reproduction</h2>
-    <p>The methodology holds up here — z-scored against ground truth, not raw averages — but the model
+    <p>The methodology holds up here (z-scored against ground truth, not raw averages), but the model
     roster is smaller and shakier than the raw counts imply, and each grader is only as good as the
     wording patterns it was tuned on.</p>
     <ul class="walkback">
