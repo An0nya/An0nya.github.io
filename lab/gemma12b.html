@@ -66,7 +66,7 @@ p{margin:0 0 1.1rem}p:last-child{margin-bottom:0}
 .pull{font-size:1.42rem;line-height:1.4;font-style:italic;color:var(--ink);border-top:1px solid var(--rule2);border-bottom:1px solid var(--rule2);padding:1.4rem 0;margin:2.4rem 0;max-width:820px;text-wrap:balance}
 
 .dropcap::first-letter{float:left;font-size:3.1em;line-height:.82;padding:.02em .12em 0 0;font-family:var(--font-serif);color:var(--acc2);font-weight:500}
-.hl-acc{color:var(--acc2);font-style:italic}
+.hl-acc{font-weight:600}
 .hl-zone{color:var(--citron);font-family:'JetBrains Mono',monospace;font-size:.9em}
 .muted{color:var(--muted)}.small{font-size:.85rem}
 
@@ -209,13 +209,13 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
     <div class="mlabel">The question</div>
     <div class="mbody">
       <p>
-        I went in without a goal in mind and converged on one question: <em>what does the model 
-        already know about its context, and when in the stack does it know it?</em> 
-        I started with the interlingua scan we run on every new model — a multilingual cosine sweep
+        I went in without a goal in mind and converged on one question: <em>what does the model
+        already know about its context, and when in the stack does it know it?</em>
+        I started with the interlingua scan we run on every new model, a multilingual cosine sweep
         to find where language gets stripped and meaning takes over. After seeing a result
          similar to Gemma-4-31B and trying a few tweaks to the shape of the scan,
          I started wondering how much two sentences with
-        <em>completely different words but the same meaning</em> would converge in the mid-stack. That
+        completely different words but the same meaning would converge in the mid-stack. That
         one stray question kicked off about six hours of probes.
       </p>
     </div>
@@ -231,14 +231,14 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
       <p class="dropcap">
         Six probe sets, each built around a different question. Do paraphrases with different words
         but the same meaning converge mid-stack? Does a one-word flip that reverses meaning actually
-        separate the vectors? When does an ambiguous token commit to one reading — and at which
+        separate the vectors? When does an ambiguous token commit to one reading, and at which
         layer? Does an inflection point survive past the sliding-attention window? Which kinds of
         meaning survive translation across twelve languages? Where does word-sense disambiguation
         live at dataset scale?
       </p>
       <p>
-        Every single one pointed at the same band of layers, roughly <span class="hl-zone">L18
-        through L27</span>. That band is where this model <em>does meaning</em>. Everything below it
+        Every single one pointed at the same band of layers, roughly L18
+        through L27. That band is where this model <em>does meaning</em>. Everything below it
         is still mostly working with surface form — tokens, spelling, word identity. Everything above
         it is already pivoting toward "what word comes next." The understanding lives in that middle
         third.
@@ -283,18 +283,18 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
       </p>
       <p>
         <b>The readout problem.</b> The first probes were paraphrase-invariance and sensitivity
-        tests — same meaning / different words, versus near-identical surface / flipped meaning, on
+        tests: same meaning / different words, versus near-identical surface / flipped meaning, on
         standard last-token cosine. The sensitivity probes came back flat. "The dog chased the cat"
         versus "the cat chased the dog" barely moved the number. My instinct was to aggregate over
-        more tokens — mean-pool instead. That made it <em>worse</em>, and the reason was obvious once
-        I saw it: mean-pooling is <span class="hl-acc">permutation-invariant by construction.</span>
-        "Dog chased cat" and "cat chased dog" are the same multiset of tokens — averaging throws away
+        more tokens, mean-pool instead. That made it worse, and the reason was obvious once
+        I saw it: mean-pooling is permutation-invariant by construction.
+        "Dog chased cat" and "cat chased dog" are the same multiset of tokens. Averaging throws away
         the word order that distinguishes them. I'd grabbed exactly the wrong tool for the one probe
         I was trying to fix.
       </p>
       <p>
         Both approaches had the same blind spot: collapsing the whole sequence to one number loses
-        <em>where</em> meaning diverges. The signal was in the data; I just couldn't see it. Which
+        where meaning diverges. The signal was in the data; I just couldn't see it. Which
         finally surfaced the obvious question — <em>can we just show all of it?</em> Every token
         position, every layer, similarity as color. Four axes of data collapse cleanly to a 2D
         heatmap per sentence pair: layer on one axis, token on the other, cosine as color. Stack them
@@ -303,13 +303,13 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
       </p>
       <p>
         <b>The homograph problem.</b> Now I needed good pairs. I asked for homophones and got
-        corrected immediately — I wanted <em>homographs</em>: words spelled the same, meaning
+        corrected immediately. I wanted homographs: words spelled the same, meaning
         different things. And not just two different sentences that happen to share a token (that
-        proves nothing). I needed an <span class="hl-acc">inflection point</span> — a later token
-        whose meaning is set by something <em>earlier</em>, so that even though it's byte-for-byte
+        proves nothing). I needed an inflection point: a later token
+        whose meaning is set by something earlier, so that even though it's byte-for-byte
         identical between two versions, it becomes the place the geometry diverges. Not a changed
-        token. A changed <em>reading</em> of an unchanged token. Two probes finally cracked it: "how
-        do you do" vs "how do you do <em>it</em>" (one trailing word flips ritual into question), and
+        token. A changed reading of an unchanged token. Two probes finally cracked it: "how
+        do you do" vs "how do you do it" (one trailing word flips ritual into question), and
         the crane.
       </p>
     </div>
@@ -333,21 +333,21 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
   <div class="col-side">
     <div>
       <p class="dropcap">
-        Take two sentences identical except for one early word — "All afternoon at the
-        <b>harbor</b>, we watched the crane" versus "…at the <b>marsh</b>, we watched the crane."
+        Take two sentences identical except for one early word: "All afternoon at the
+        harbor, we watched the crane" versus "…at the marsh, we watched the crane."
         "Crane" is byte-for-byte the same token in both. A construction crane at the harbor, a bird
-        at the marsh — but the model reads the exact same characters. So when does its internal
+        at the marsh, but the model reads the exact same characters. So when does its internal
         representation of "crane" <em>split</em> between the two readings?
       </p>
       <p>
-        Not at the input. There, "crane" is "crane" — the vectors are identical. The split happens
+        Not at the input. There, "crane" is "crane": the vectors are identical. The split happens
         <b>mid-stack</b>, layers deep, well after the word has been read. The model finishes reading
-        "crane," carries it forward unchanged for several layers, and <em>then</em> — somewhere in
-        the concept zone — decides which crane it is. You can watch the moment it decides.
+        "crane," carries it forward unchanged for several layers, and then, somewhere in
+        the concept zone, decides which crane it is. You can watch the moment it decides.
       </p>
       <p>
-        It even survives distance. Push "harbor"/"marsh" and "crane" over a thousand tokens apart —
-        further than the model's sliding-attention window — and the split still happens. The early
+        It even survives distance. Push "harbor"/"marsh" and "crane" over a thousand tokens apart,
+        further than the model's sliding-attention window, and the split still happens. The early
         word still recolors the later one. <span class="muted">(How that's possible is the next
         section.)</span>
       </p>
@@ -355,22 +355,22 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
     <aside class="aside">
       <div class="kicker">Reading the heatmap</div>
       <p class="dark-only">
-        Tokens enter at the <b>top</b> and fall down through the stack (emb → L47). <b>Bright =
-        diverged</b> — where the two sentence versions split; dark = still identical. The
+        Tokens enter at the top and fall down through the stack (emb → L47). <b>Bright =
+        diverged</b>: where the two sentence versions split; dark = still identical. The
         <span style="color:var(--citron)">citron</span> column is the injected difference
-        (harbor vs marsh) — never identical, though the column has structure of its own (below). Watch the
+        (harbor vs marsh), never identical, though the column has structure of its own (below). Watch the
         <span style="color:var(--acc2)">cyan</span> "crane" column: dark (identical) through the
-        early layers, igniting only mid-stack — the model commits <em>after</em> reading the
-        context, not at input.
+        early layers, igniting only mid-stack (the model commits after reading the
+        context, not at input).
       </p>
       <p class="light-only">
-        Tokens enter at the <b>top</b> and fall down through the stack (emb → L47). <b>Dark =
-        diverged</b> — where the two sentence versions split; pale = still identical. The
+        Tokens enter at the top and fall down through the stack (emb → L47). <b>Dark =
+        diverged</b>: where the two sentence versions split; pale = still identical. The
         <span style="color:var(--citron)">citron</span> column is the injected difference
-        (harbor vs marsh) — never identical, though the column has structure of its own (below). Watch the
+        (harbor vs marsh), never identical, though the column has structure of its own (below). Watch the
         <span style="color:var(--acc2)">teal</span> "crane" column: pale (identical) through the
-        early layers, darkening only mid-stack — the model commits <em>after</em> reading the
-        context, not at input.
+        early layers, darkening only mid-stack (the model commits after reading the
+        context, not at input).
       </p>
     </aside>
   </div>
@@ -387,19 +387,19 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
     The citron column has structure of its own, and it runs roughly opposite to the crane's. "Harbor"
     and "marsh" are different tokens, so the column enters near-orthogonal (cosine 0.09 at the
     embedding) and never reaches identical. But it doesn't just sit there diverged: similarity climbs
-    through the mid-stack and peaks at <span class="hl-zone">0.74 around L29–31</span>, at the top of
-    the concept zone — the two versions are most alike in the middle, right where the crane column is
+    through the mid-stack and <span class="qx">peaks at <span class="qv">0.74</span> around L29–31</span>, at the top of
+    the concept zone, the two versions are most alike in the middle, right where the crane column is
     busy splitting (its widest gap is L22). The late stack then pulls them apart again, back down to
-    ~0.35–0.45 through the L30s, until the L47 collapse catches this column too (0.88 — everything
+    ~0.35–0.45 through the L30s, until the L47 collapse catches this column too (<span class="qv">0.88</span>, everything
     <em>after</em> either word is identical, and by the last layer that's all that matters).
   </p>
   <p style="max-width:820px">
     One hypothesis for the mid-stack convergence, explicitly untested: it's measuring meaning. Shared
-    context is the boring floor — every other token in the pair is identical, and by the mid-stack
-    each position has soaked up its neighbors — but shared context alone doesn't order the pairs.
-    Harbor and marsh are two waterside places a scene can be set in; their column peaks at 0.74.
+    context is the boring floor: every other token in the pair is identical, and by the mid-stack
+    each position has soaked up its neighbors, but shared context alone doesn't order the pairs.
+    Harbor and marsh are two waterside places a scene can be set in; their column peaks at <span class="qv">0.74</span>.
     Flood and heist (the <a href="#specimens">bank specimen</a> below) are a disaster and a crime;
-    same trick, same depth, and they only reach 0.62. If that ordering held across a ladder of
+    same trick, same depth, and they only reach <span class="qv">0.62</span>. If that ordering held across a ladder of
     swapped-word pairs at graded semantic distances, the injected column would double as a
     meaning-distance probe, for free. Two pairs isn't a ladder, so for now this is a guess with a
     suggestive n of 2.
@@ -418,10 +418,13 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
         <span class="hl-acc">independently:</span>
       </p>
       <p>
-        <b>Access</b> — can the later token even <em>reach</em> the earlier one? That's an
+        <b>Access</b>: can the later token even reach the earlier one? That's an
         attention-architecture question. Gemma 4 alternates sliding-window layers (local, cheap) with
         global full-attention layers (the whole sequence). Past ~1024 tokens, only the global layers
-        can bridge the gap. <b>Computation</b> — once it has access, <em>where</em> does it actually
+        can bridge the gap.
+      </p>
+      <p>
+        <b>Computation</b>: once it has access, where does it actually
         compute the meaning? That's a depth question, and the answer is the concept zone, ~L17 onward.
       </p>
       <p>
@@ -454,12 +457,12 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
   <div class="sec-label">more specimens</div>
   <h2>The crane is the cleanest, not the only one.</h2>
   <p style="max-width:820px">
-    Eight more pairs from the same session — some nearly as crisp, some deliberately soft, one
+    Eight more pairs from the same session, some nearly as crisp, some deliberately soft, one
     control. A single pair could
-    be a special case; what makes it a <em>finding</em> is that the same shape — <span class="hl-acc">cold
-    early, heating in the concept zone</span> — keeps recurring, and when it doesn't, the reason is
-    legible. One early pair got cut for bad design instead of earning a plate: "she will <b>lead</b>
-    the team" / "pipes made of <b>lead</b>" share almost nothing but the word, so its −0.05 measured
+    be a special case; what makes it a finding is that the same shape (<span class="hl-acc">cold
+    early, heating in the concept zone</span>) keeps recurring, and when it doesn't, the reason is
+    legible. One early pair got cut for bad design instead of earning a plate: "she will lead
+    the team" / "pipes made of lead" share almost nothing but the word, so its <span class="qv">−0.05</span> measured
     general dissimilarity, not disambiguation. A real minimal pair holds the frame constant and flips
     only the sense. The shaded band on each is L17–27; the tracked token is named. Click any plate
     to zoom.
@@ -488,7 +491,7 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
     <div>
       <p>
         The interlingua scan was the starting gun. This is the pointed version: take one sentence,
-        translate it into twelve languages across seven writing systems, and ask — at each layer, how
+        translate it into twelve languages across seven writing systems, and ask, at each layer, how
         close together do all twelve land? High convergence means the model threw away the language
         and kept the meaning. Then do it for four <em>kinds</em> of sentence: a concrete fact
         ("the sun rises in the east"), an arithmetic one ("two plus three equals five"), an emotional
@@ -496,11 +499,11 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
         money").
       </p>
       <p>
-        I'd have bet on concrete and numeric converging hardest — they feel the most universal. Two
+        I'd have bet on concrete and numeric converging hardest: they feel the most universal. Two
         plus three is five in every language, right? The bet came back backwards: the order is
         <b>abstract &gt; emotion &gt; concrete &gt; numeric.</b> The abstract, relational,
         propositional sentences are the most language-invariant; arithmetic is the most
-        language-<em>locked</em> — it stays tied to its surface symbols the longest and converges the
+        language-locked: it stays tied to its surface symbols the longest and converges the
         least.
       </p>
       <p>
@@ -532,15 +535,15 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
   <h2>Word-sense, computed in the middle.</h2>
   <p style="max-width:820px">
     One more, at dataset scale. The WiC task (Words-in-Context) gives pairs that use the same word in
-    either the same or a different sense — "river <em>bank</em>" vs "savings <em>bank</em>." I tracked
+    either the same or a different sense: "river bank" vs "savings bank." I tracked
     the target word and asked where same-sense and different-sense pairs separate the most. Peak
-    separation: <span class="hl-zone">L20</span> — right in the middle of the zone. Disambiguation
+    separation: <span class="qv">L20</span>, right in the middle of the zone. Disambiguation
     isn't an input lookup and it isn't a late decision; the model <em>builds</em> the separation
     through the mid-stack, peaking at L20, then sheds it on the way to output.
   </p>
   <div class="fig">
     <div class="fig-plate"><img class="fig-dark" src="/lab/figures/figWiC.svg" alt="Same-sense versus different-sense cosine bands across layers; together at the embedding layer, fanning apart to a peak gap at L20, then narrowing."><img class="fig-light" src="/lab/figures/figWiC.light.svg" alt="Same-sense versus different-sense cosine bands across layers; together at the embedding layer, fanning apart to a peak gap at L20, then narrowing."></div>
-    <p class="fig-cap"><b>Fig 6 — WiC sense bands.</b> Same-sense vs different-sense cosine across layers. The bands sit on top of each other at the embedding layer (the word is the same token), fan apart through the mid-stack to a peak gap at <b>L20</b>, then close again toward output.</p>
+    <p class="fig-cap"><b>Fig 6 — WiC sense bands.</b> Same-sense vs different-sense cosine across layers. The bands sit on top of each other at the embedding layer (the word is the same token), fan apart through the mid-stack to a peak gap at <span class="qv">L20</span>, then close again toward output.</p>
   </div>
 </section>
 
@@ -551,12 +554,12 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
   <div class="col-side">
     <div>
       <p>
-        The last thing worth pointing at is the very top of the stack. After all of this — built
-        meaning, disambiguated senses, stripped language — the final layer
-        <span class="hl-zone">L47</span> <b>collapses</b> a lot of it. The representations that were
+        The last thing worth pointing at is the very top of the stack. After all of this (built
+        meaning, disambiguated senses, stripped language) the final layer
+        <span class="qv">L47</span> <b>collapses</b> a lot of it. The representations that were
         rich and semantic in the concept zone get reshaped into something else, and that something
         else is "what token comes next." The last layer isn't holding the meaning; it's
-        <em>spending</em> it — converting understanding into a prediction.
+        spending it: converting understanding into a prediction.
       </p>
       <p>
         The concept zone is where the meaning lives; the top of the stack is where it gets
@@ -580,13 +583,13 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
   <div class="sec-label">what this is</div>
   <h2>First specimen in the vivarium.</h2>
   <p style="max-width:820px">
-    The plan is to run this same battery — sleeper tokens, the two-gate staircase, cross-lingual
-    convergence, WiC, paraphrase invariance — across other models, and see which findings are
+    The plan is to run this same battery across other models: sleeper tokens, the two-gate
+    staircase, cross-lingual convergence, WiC, paraphrase invariance. Then see which findings are
     Gemma-specific and which are just <em>how transformers work.</em> Does every model put word-sense
     at ~40% of its depth? Is the boundary between language and meaning a single layer or a gradient?
     Is numeric always the most language-locked? Does everything collapse at the final layer? I don't
-    know yet — that's the next several entries. The method itself — how you pull per-layer hidden
-    states out of a running MLX model, the hooks, the cosine math, the token alignment — is over in
+    know yet; that's the next several entries. The method itself, how you pull per-layer hidden
+    states out of a running MLX model, the hooks, the cosine math, the token alignment, is over in
     <a href="/lab/methods.html">Methods</a>, deliberately kept out of the way here. For now: a brand-new
     twelve-billion-parameter model, opened up on its launch day, and a middle third of its layers
     doing the thinking.
