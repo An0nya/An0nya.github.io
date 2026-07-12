@@ -31,8 +31,10 @@ This tool only FLAGS violations for human review. It never edits a page.
 
 Usage:
     python3 tools/lint-prose.py lab/minicpm5-sigma-alpha.html [more.html ...]
+    python3 tools/lint-prose.py --gate index.html geometry.html lab/*.html
 
-Exit code is always 0 — this is a report, not a gate.
+Without --gate the exit code is always 0 — a report, not a gate. With --gate
+(pre-push hook / CI) any file exceeding its ALLOWED budget fails the run.
 """
 import re
 import sys
@@ -70,6 +72,12 @@ VOID_TAGS = {"br", "img", "hr", "input", "meta", "link", "source", "wbr",
 QUANT_ELIGIBLE_TAGS = {"b", "strong"}
 
 MIN_UNIT_LEN = 40
+
+# --gate mode: accepted violation counts (owner-blessed exceptions).
+# index: 1 lead-dash, human-reviewed page, blessed 2026-07-12.
+# duologue: HELD for the interactive log-excerpt pass.
+# geometry: never in the density-pass scope; pending its own pass.
+ALLOWED = {"index.html": 1, "lab/duologue.html": 8, "geometry.html": 6}
 
 # "Quantitative characters" for the pop-budget discount: digits, math/measure
 # symbols, and Greek letters used as math notation. Whitespace also counts
@@ -292,13 +300,25 @@ def lint_file(path):
         f"(dash:{dash_v} pop:{pop_v} lead:{lead_v} qx:{qx_v}) | "
         f"chips:{chip_total} (informational, never flags)"
     )
+    return len(violations)
 
 
 def main():
-    if len(sys.argv) < 2:
-        sys.exit("usage: lint-prose.py PAGE.html [PAGE2.html ...]")
-    for path in sys.argv[1:]:
-        lint_file(path)
+    args = sys.argv[1:]
+    gate = "--gate" in args
+    paths = [a for a in args if a != "--gate"]
+    if not paths:
+        sys.exit("usage: lint-prose.py [--gate] PAGE.html [PAGE2.html ...]")
+    over = []
+    for path in paths:
+        count = lint_file(path)
+        if gate and count > ALLOWED.get(path, 0):
+            over.append(f"{path}: {count} violations (allowed {ALLOWED.get(path, 0)})")
+    if gate and over:
+        print("\nPROSE GATE FAILED:")
+        for line in over:
+            print(f"  {line}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,13 @@
+name: site checks
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: fragment sync
+        run: python3 tools/sync-nav.py --check
+      - name: TOC drift
+        run: python3 tools/lint-toc.py index.html geometry.html lab/*.html
+      - name: prose-density gate
+        run: python3 tools/lint-prose.py --gate index.html geometry.html lab/*.html
