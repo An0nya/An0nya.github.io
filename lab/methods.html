@@ -209,21 +209,21 @@
   <section id="references">
     <h2><span class="num">§2</span>References</h2>
     <ol class="refs-list">
-      <li><b>David Ng (dnhkng).</b> RYS &amp; RYS-II, the sapir-whorf and
+      <li><b>David Ng (dnhkng).</b> <em>RYS &amp; RYS-II</em>, the sapir-whorf and
         rys posts on dnhkng.github.io — the original "Repeat Your Self" technique,
         which he rode to the top of the open-LLM leaderboard. Stalled publicly on
         Gemma&nbsp;4 31B over the per-layer-array problem; the reindexer used here
         solves that case. His 2026 retrospective ("never found a single duplication
         that generalised; could only boost one talent at another's expense")
         independently matches the archetype split found across this lab.</li>
-      <li><b>Maarten Grootendorst.</b> A Visual Guide to Gemma 4. The
+      <li><b>Maarten Grootendorst.</b> <em>A Visual Guide to Gemma 4.</em> The
         shared-KV routing and the global/sliding attention pattern aren't documented
         in Google's model card; this guide is the reference.</li>
       <li><b>HF transformers</b> <span class="mono">modeling_gemma4.py</span> — the
         actual routing rule for <span class="mono">shared_kv_states</span>, read by
         hand to identify the sole attention anchors that make Gemma-4 surgery
         behave the way it does.</li>
-      <li><b>alainnothere.</b> llm-circuit-finder,
+      <li><b>alainnothere.</b> <em>llm-circuit-finder</em>,
         <a href="https://github.com/alainnothere/llm-circuit-finder">github.com/alainnothere/llm-circuit-finder</a>.
         Independent RYS replication on Devstral-24B and Qwen2.5-32B — same
         <span class="mono">layer_path.py</span> primitive, different models, sharp

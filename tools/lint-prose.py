@@ -48,7 +48,10 @@ EXEMPT_TAGS = {"figure", "figcaption", "table", "nav", "footer",
 # wbhead: the bold headline span inside a walkback <li> — the REST of that
 #   <li> is still prose and stays in scope; only this inner span is skipped.
 EXEMPT_CLASSES = {"nb-kicker", "nb-record", "nb-marginalia", "page-toc",
-                   "fig-note", "dek", "wbhead"}
+                   "fig-note", "dek", "wbhead",
+                   # refs-list: bibliography — bold author + italic title is
+                   # citation convention, not prose styling (owner call 07-12)
+                   "refs-list"}
 
 # Prose units: each <p> and each <li> that survives exemption stripping.
 UNIT_TAGS = {"p", "li"}
