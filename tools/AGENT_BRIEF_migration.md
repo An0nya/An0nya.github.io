@@ -26,9 +26,11 @@ Immediately inside `<main>`:
    Specimen / Status / Source. Fold the old hero's scattered facts (topbar
    lines, spec figures, run counts) into these fields — RELOCATE, never delete.
 3. `<p class="dek">` — existing dek text verbatim.
-4. Old `.stats-strip`/`.stat` blocks → DS `.nb-stats`/`.nb-stat` with
-   `nb-stat__num`/`nb-stat__label`; numbers and label text verbatim.
-No `<h1>`, no `.topbar`, no old `.hero`/`.kicker` scaffolding survives.
+4. Old `.stats-strip`/`.stat` blocks are REMOVED (owner ruling 2026-07-13:
+   spec pages carry no stats strip). Every stat's number + label facts fold
+   into the `nb-record__grid` fields — relocate verbatim, never delete.
+No `<h1>`, no `.topbar`, no stats strip, no old `.hero`/`.kicker`
+scaffolding survives.
 Draft banners (`.draft-banner`) stay where they are.
 
 ## Hard rules
