@@ -48,6 +48,10 @@ MAPS = {
         "fig1": "fig_09_pipeline",
         "fig2": "fig_09_frequency",
     },
+    "lab/hrm.html": {
+        "fig1": "fig_hrm_depth_geometry",
+        "fig2": "fig_hrm_sweep",
+    },
     "lab/nanbeige.html": {
         "fig1": "fig_03_echo_dumbbell",
         "fig2": "fig_03_layer_fingerprint",

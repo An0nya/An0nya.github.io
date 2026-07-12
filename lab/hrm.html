@@ -218,10 +218,265 @@
     </aside>
   </div>
 
-  <div class="figure">
-    <div class="fig-stub">[ Fig 1 — depth geometry · inline-SVG redraw pending ]</div>
+  <figure class="figure" id="fig1">
+    <div class="nb-plate">
+      <div class="fig-desktop"><svg role="img" aria-label="Fig 1 — depth geometry" viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Depth geometry — 128 unrolled layers</title>
+  <desc>Adjacent-layer cosine (left axis, solid) and delta-norm (right axis, dashed) across all 128 unrolled-layer transitions of the baseline HRM forward pass — two cycles, each cycle three L-submodules then H, 16 layers per module. A smooth residual highway sits at cosine 0.85-0.99 through most of the body, punctured by eight sharp dips exactly at the module-boundary transitions (marked with vertical rules), where cosine falls as low as 0.55 and delta-norm spikes as high as 399. A secondary panel below isolates the last pass's H module (16 states) against its last L submodule (16 states): H's per-layer cosine spans a wider range than L's, consistent with H being noisier per layer than L late in the pass.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .cosln{ fill:none; stroke: var(--accent,#4FB2C2); stroke-width:1.6; }
+    .dnln { fill:none; stroke: var(--fourth,#6E92C4); stroke-width:1.3; stroke-dasharray:4 2.5; }
+    .bnd  { stroke: var(--rule2,#27323D); stroke-width:1; stroke-dasharray:2 3; }
+    .axis { stroke: var(--ink2,#A4B0BC); stroke-width:1; }
+  </style>
+
+  <rect x="0" y="0" width="900" height="520" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="34" font-size="18">Depth geometry — 128 unrolled layers, one prompt</text>
+  <text class="mut" x="40" y="53" font-size="11">Adjacent-layer cosine (left, solid) and ‖Δ‖ (right, dashed) · baseline config, 2 cycles × (L0,L1,L2,H) × 16 layers</text>
+
+  <!-- boundary rules (module-transition dips, incl. embed->L0) -->
+  <g class="bnd">
+    <line x1="90.0" y1="78" x2="90.0" y2="300"/>
+    <line x1="183.23" y1="78" x2="183.23" y2="300"/>
+    <line x1="276.46" y1="78" x2="276.46" y2="300"/>
+    <line x1="369.69" y1="78" x2="369.69" y2="300"/>
+    <line x1="462.91" y1="78" x2="462.91" y2="300"/>
+    <line x1="556.14" y1="78" x2="556.14" y2="300"/>
+    <line x1="649.37" y1="78" x2="649.37" y2="300"/>
+    <line x1="742.6" y1="78" x2="742.6" y2="300"/>
+  </g>
+  <text x="462.91" y="70" text-anchor="middle" class="mut" font-size="8.5">cycle 0→1 (c0.H→c1.L0)</text>
+
+  <!-- axes -->
+  <line x1="90" y1="78" x2="90" y2="300" class="axis"/>
+  <line x1="830" y1="78" x2="830" y2="300" class="axis"/>
+  <line x1="90" y1="300" x2="830" y2="300" class="axis"/>
+
+  <!-- left axis ticks: cosine -->
+  <g class="mut" font-size="9" text-anchor="end">
+    <text x="84" y="303">0.5</text>
+    <text x="84" y="258.6">0.6</text>
+    <text x="84" y="214.2">0.7</text>
+    <text x="84" y="169.8">0.8</text>
+    <text x="84" y="125.4">0.9</text>
+    <text x="84" y="81">1.0</text>
+  </g>
+  <text x="40" y="189" text-anchor="middle" class="ink2" font-size="9.5" transform="rotate(-90 40 189)">adjacent cos ↑</text>
+
+  <!-- right axis ticks: delta norm -->
+  <g class="mut" font-size="9" text-anchor="start">
+    <text x="836" y="303">0</text>
+    <text x="836" y="247.5">100</text>
+    <text x="836" y="192">200</text>
+    <text x="836" y="136.5">300</text>
+    <text x="836" y="81">400</text>
+  </g>
+  <text x="874" y="189" text-anchor="middle" class="ink2" font-size="9.5" transform="rotate(90 874 189)">‖Δ‖ ↑</text>
+
+  <!-- x ticks -->
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="90" y="316">1</text>
+    <text x="462.91" y="316">64/65</text>
+    <text x="830" y="316">128</text>
+    <text x="830" y="334" text-anchor="end" letter-spacing="0.5">transition # (of 128)</text>
+  </g>
+
+  <!-- delta-norm line (right axis, dashed) -->
+  <path class="dnln" d="M90.0,262.96 L95.83,278.06 L101.65,272.96 L107.48,280.58 L113.31,281.75 L119.13,282.44 L124.96,284.12 L130.79,283.95 L136.61,281.38 L142.44,283.99 L148.27,284.0 L154.09,286.26 L159.92,281.36 L165.75,278.83 L171.57,272.9 L177.4,221.91 L183.23,170.76 L189.06,288.87 L194.88,286.67 L200.71,288.23 L206.54,286.36 L212.36,287.44 L218.19,287.63 L224.02,282.21 L229.84,280.45 L235.67,282.0 L241.5,281.8 L247.32,278.92 L253.15,269.76 L258.98,268.67 L264.8,253.73 L270.63,123.93 L276.46,92.28 L282.28,285.02 L288.11,284.92 L293.94,286.17 L299.76,284.27 L305.59,286.54 L311.42,286.48 L317.24,283.57 L323.07,285.57 L328.9,284.93 L334.72,280.53 L340.55,277.99 L346.38,269.97 L352.2,274.17 L358.03,255.71 L363.86,221.11 L369.69,163.81 L375.51,264.36 L381.34,265.38 L387.17,274.68 L392.99,276.61 L398.82,278.03 L404.65,282.18 L410.47,277.94 L416.3,275.02 L422.13,270.68 L427.95,268.85 L433.78,274.27 L439.61,273.71 L445.43,273.05 L451.26,254.63 L457.09,242.55 L462.91,78.59 L468.74,289.75 L474.57,287.2 L480.39,285.0 L486.22,289.35 L492.05,287.08 L497.87,287.9 L503.7,277.69 L509.53,282.17 L515.35,283.16 L521.18,279.09 L527.01,278.11 L532.83,273.24 L538.66,274.29 L544.49,251.64 L550.31,212.87 L556.14,160.92 L561.97,290.39 L567.8,287.37 L573.62,286.69 L579.45,289.86 L585.28,288.21 L591.1,288.52 L596.93,278.61 L602.76,282.85 L608.58,283.5 L614.41,280.67 L620.24,277.91 L626.06,275.01 L631.89,275.76 L637.72,254.65 L643.54,246.27 L649.37,192.47 L655.2,288.69 L661.02,286.01 L666.85,285.93 L672.68,288.77 L678.5,287.29 L684.33,286.46 L690.16,277.63 L695.98,280.73 L701.81,282.56 L707.64,279.68 L713.46,277.15 L719.29,276.55 L725.12,277.08 L730.94,252.35 L736.77,235.4 L742.6,179.95 L748.43,280.57 L754.25,275.5 L760.08,279.52 L765.91,281.36 L771.73,281.13 L777.56,282.15 L783.39,279.87 L789.21,277.82 L795.04,273.2 L800.87,267.44 L806.69,271.0 L812.52,272.66 L818.35,264.87 L824.17,235.8 L830.0,199.64"/>
+
+  <!-- adjacent-cosine line (left axis, solid) -->
+  <path class="cosln" d="M90.0,265.76 L95.83,115.77 L101.65,112.15 L107.48,93.01 L113.31,90.83 L119.13,88.02 L124.96,86.26 L130.79,86.43 L136.61,88.81 L142.44,85.68 L148.27,85.19 L154.09,83.27 L159.92,86.59 L165.75,87.74 L171.57,91.43 L177.4,127.63 L183.23,201.98 L189.06,90.84 L194.88,91.74 L200.71,88.31 L206.54,91.42 L212.36,88.49 L218.19,87.7 L224.02,96.39 L229.84,97.58 L235.67,93.19 L241.5,91.88 L247.32,95.43 L253.15,106.72 L258.98,104.57 L264.8,118.23 L270.63,197.19 L276.46,162.17 L282.28,101.76 L288.11,93.55 L293.94,89.83 L299.76,93.34 L305.59,88.06 L311.42,87.49 L317.24,91.0 L323.07,86.76 L328.9,87.05 L334.72,90.68 L340.55,93.36 L346.38,101.7 L352.2,93.12 L358.03,111.75 L363.86,126.33 L369.69,276.81 L375.51,104.83 L381.34,95.66 L387.17,86.35 L392.99,84.13 L398.82,83.03 L404.65,81.41 L410.47,82.73 L416.3,83.84 L422.13,85.22 L427.95,85.31 L433.78,82.23 L439.61,82.06 L445.43,81.33 L451.26,84.57 L457.09,85.19 L462.91,142.33 L468.74,85.5 L474.57,85.3 L480.39,88.81 L486.22,83.53 L492.05,85.43 L497.87,84.16 L503.7,95.92 L509.53,87.52 L515.35,85.99 L521.18,88.37 L527.01,88.83 L532.83,92.01 L538.66,89.87 L544.49,109.3 L550.31,122.36 L556.14,142.84 L561.97,83.87 L567.8,84.42 L573.62,85.65 L579.45,82.65 L585.28,83.77 L591.1,83.29 L596.93,93.91 L602.76,86.81 L608.58,85.85 L614.41,87.14 L620.24,88.92 L626.06,90.38 L631.89,88.7 L637.72,105.97 L643.54,114.93 L649.37,241.43 L655.2,84.85 L661.02,84.6 L666.85,85.21 L672.68,82.87 L678.5,83.71 L684.33,84.14 L690.16,92.19 L695.98,87.01 L701.81,84.84 L707.64,85.9 L713.46,87.13 L719.29,86.4 L725.12,85.49 L730.94,101.86 L736.77,123.21 L742.6,269.79 L748.43,93.96 L754.25,95.33 L760.08,91.43 L765.91,86.19 L771.73,86.02 L777.56,84.94 L783.39,86.01 L789.21,87.16 L795.04,90.36 L800.87,93.4 L806.69,88.76 L812.52,87.31 L818.35,91.35 L824.17,110.57 L830.0,135.02"/>
+
+  <!-- boundary markers on the cos line (dips are the module-injection points) -->
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.6">
+    <circle cx="90.0" cy="265.76" r="3"/>
+    <circle cx="183.23" cy="201.98" r="3"/>
+    <circle cx="276.46" cy="162.17" r="3"/>
+    <circle cx="369.69" cy="276.81" r="3"/>
+    <circle cx="462.91" cy="142.33" r="3"/>
+    <circle cx="556.14" cy="142.84" r="3"/>
+    <circle cx="649.37" cy="241.43" r="3"/>
+    <circle cx="742.6" cy="269.79" r="3"/>
+  </g>
+
+  <!-- legend -->
+  <g font-size="9.5">
+    <line x1="600" y1="93" x2="622" y2="93" class="cosln"/>
+    <text x="628" y="96" class="ink2">adjacent cos (left)</text>
+    <line x1="600" y1="109" x2="622" y2="109" class="dnln"/>
+    <text x="628" y="112" class="ink2">‖Δ‖ (right, dashed)</text>
+    <line x1="600" y1="125" x2="622" y2="125" class="bnd"/>
+    <text x="628" y="128" class="mut">module boundary</text>
+  </g>
+
+  <!-- secondary panel: last-pass per-module depth -->
+  <text x="40" y="332" class="ink2" font-size="11">Last-pass per-module depth (cycle 1) — H (16 states) vs L2 (16 states, last L submodule)</text>
+  <line x1="90" y1="348" x2="830" y2="348" class="axis"/>
+  <line x1="90" y1="348" x2="90" y2="470" class="axis"/>
+  <line x1="90" y1="470" x2="830" y2="470" class="axis"/>
+  <g class="mut" font-size="9" text-anchor="end">
+    <text x="84" y="473">0.80</text>
+    <text x="84" y="412.5">0.90</text>
+    <text x="84" y="351">1.00</text>
+  </g>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="90" y="484">l0→1</text>
+    <text x="460" y="484">layer transition (1 of 15, last pass)</text>
+    <text x="830" y="484">l14→15</text>
+  </g>
+
+  <path fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="1.6"
+        d="M90.0,369.93 L142.86,371.81 L195.71,366.45 L248.57,359.26 L301.43,359.02 L354.29,357.53 L407.14,359.0 L460.0,360.58 L512.86,364.98 L565.71,369.16 L618.57,362.78 L671.43,360.79 L724.29,366.34 L777.14,392.75 L830.0,426.34"/>
+  <path fill="none" stroke="var(--fourth,#6E92C4)" stroke-width="1.4" stroke-dasharray="4 2.5"
+        d="M90.0,357.41 L142.86,357.06 L195.71,357.9 L248.57,354.7 L301.43,355.85 L354.29,356.43 L407.14,367.5 L460.0,360.37 L512.86,357.4 L565.71,358.85 L618.57,360.54 L671.43,359.54 L724.29,358.29 L777.14,380.79 L830.0,410.12"/>
+
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.6">
+    <circle cx="90.0" cy="369.93" r="2.6"/><circle cx="142.86" cy="371.81" r="2.6"/><circle cx="195.71" cy="366.45" r="2.6"/><circle cx="248.57" cy="359.26" r="2.6"/><circle cx="301.43" cy="359.02" r="2.6"/><circle cx="354.29" cy="357.53" r="2.6"/><circle cx="407.14" cy="359.0" r="2.6"/><circle cx="460.0" cy="360.58" r="2.6"/><circle cx="512.86" cy="364.98" r="2.6"/><circle cx="565.71" cy="369.16" r="2.6"/><circle cx="618.57" cy="362.78" r="2.6"/><circle cx="671.43" cy="360.79" r="2.6"/><circle cx="724.29" cy="366.34" r="2.6"/><circle cx="777.14" cy="392.75" r="2.6"/><circle cx="830.0" cy="426.34" r="2.6"/>
+  </g>
+  <g fill="var(--bg,#0E141A)" stroke="var(--fourth,#6E92C4)" stroke-width="1.4">
+    <rect x="86.6" y="353.71" width="7" height="7"/><rect x="139.46" y="353.36" width="7" height="7"/><rect x="192.31" y="354.2" width="7" height="7"/><rect x="245.17" y="351.0" width="7" height="7"/><rect x="298.03" y="352.15" width="7" height="7"/><rect x="350.89" y="352.73" width="7" height="7"/><rect x="403.74" y="363.8" width="7" height="7"/><rect x="456.6" y="356.67" width="7" height="7"/><rect x="509.46" y="353.7" width="7" height="7"/><rect x="562.31" y="355.15" width="7" height="7"/><rect x="615.17" y="356.84" width="7" height="7"/><rect x="668.03" y="355.84" width="7" height="7"/><rect x="720.89" y="354.59" width="7" height="7"/><rect x="773.74" y="377.09" width="7" height="7"/><rect x="826.6" y="406.42" width="7" height="7"/>
+  </g>
+
+  <g font-size="9.5">
+    <line x1="600" y1="362" x2="622" y2="362" stroke="var(--accent,#4FB2C2)" stroke-width="1.6"/>
+    <text x="628" y="365" class="ink2">H, last pass (cycle 1)</text>
+    <line x1="600" y1="378" x2="622" y2="378" stroke="var(--fourth,#6E92C4)" stroke-width="1.4" stroke-dasharray="4 2.5"/>
+    <text x="628" y="381" class="ink2">L2, last pass (cycle 1)</text>
+  </g>
+
+  <text x="40" y="504" class="ink2" font-size="10.5">Final adjacent-cos in this run: H 0.872, L2 0.898 — both plotted verbatim above, neither hits the caption's 0.71.</text>
+</svg></div>
+      <div class="fig-mobile"><svg role="img" aria-label="Fig 1 — depth geometry" viewBox="0 0 420 720" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Depth geometry — 128 unrolled layers</title>
+  <desc>Adjacent-layer cosine (left axis, solid) and delta-norm (right axis, dashed) across all 128 unrolled-layer transitions of the baseline HRM forward pass — two cycles, each cycle three L-submodules then H, 16 layers per module. A smooth residual highway sits at cosine 0.85-0.99 through most of the body, punctured by eight sharp dips exactly at the module-boundary transitions (marked with vertical rules), where cosine falls as low as 0.55 and delta-norm spikes as high as 399. A secondary panel below isolates the last pass's H module (16 states) against its last L submodule (16 states): H's per-layer cosine spans a wider range than L's, consistent with H being noisier per layer than L late in the pass.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .cosln{ fill:none; stroke: var(--accent,#4FB2C2); stroke-width:1.3; }
+    .dnln { fill:none; stroke: var(--fourth,#6E92C4); stroke-width:1.1; stroke-dasharray:3.5 2; }
+    .bnd  { stroke: var(--rule2,#27323D); stroke-width:1; stroke-dasharray:2 3; }
+    .axis { stroke: var(--ink2,#A4B0BC); stroke-width:1; }
+  </style>
+
+  <rect x="0" y="0" width="420" height="720" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="28" font-size="15">Depth geometry —</text>
+  <text class="ttl" x="20" y="48" font-size="15">128 unrolled layers</text>
+  <text class="mut" x="20" y="66" font-size="8.5">cos (left, solid) · ‖Δ‖ (right, dashed) · baseline, 2 cycles × (L0,L1,L2,H) × 16</text>
+
+  <!-- boundary rules -->
+  <g class="bnd">
+    <line x1="46.0" y1="96" x2="46.0" y2="280"/>
+    <line x1="88.08" y1="96" x2="88.08" y2="280"/>
+    <line x1="130.16" y1="96" x2="130.16" y2="280"/>
+    <line x1="172.24" y1="96" x2="172.24" y2="280"/>
+    <line x1="214.31" y1="96" x2="214.31" y2="280"/>
+    <line x1="256.39" y1="96" x2="256.39" y2="280"/>
+    <line x1="298.47" y1="96" x2="298.47" y2="280"/>
+    <line x1="340.55" y1="96" x2="340.55" y2="280"/>
+  </g>
+  <text x="214.31" y="88" text-anchor="middle" class="mut" font-size="7.5">cycle 0→1</text>
+
+  <line x1="46" y1="96" x2="46" y2="280" class="axis"/>
+  <line x1="380" y1="96" x2="380" y2="280" class="axis"/>
+  <line x1="46" y1="280" x2="380" y2="280" class="axis"/>
+
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="41" y="283">0.5</text>
+    <text x="41" y="246.4">0.6</text>
+    <text x="41" y="209.6">0.7</text>
+    <text x="41" y="172.8">0.8</text>
+    <text x="41" y="136">0.9</text>
+    <text x="41" y="99">1.0</text>
+  </g>
+  <g class="mut" font-size="8" text-anchor="start">
+    <text x="384" y="283">0</text>
+    <text x="384" y="188">200</text>
+    <text x="384" y="99">400</text>
+  </g>
+  <g class="mut" font-size="8" text-anchor="middle">
+    <text x="46" y="296">1</text>
+    <text x="214" y="296">64/65</text>
+    <text x="380" y="296">128</text>
+  </g>
+  <text x="20" y="312" class="mut" font-size="7.5">transition # of 128 (embed→c0.L0.l0 … c1.H.l14→l15)</text>
+
+  <path class="dnln" d="M46.0,249.3 L48.63,261.81 L51.26,257.59 L53.89,263.91 L56.52,264.87 L59.15,265.45 L61.78,266.84 L64.41,266.7 L67.04,264.57 L69.67,266.73 L72.3,266.74 L74.93,268.61 L77.56,264.55 L80.19,262.45 L82.82,257.54 L85.45,215.28 L88.08,172.88 L90.71,270.77 L93.34,268.95 L95.97,270.24 L98.6,268.69 L101.23,269.59 L103.86,269.75 L106.49,265.25 L109.12,263.8 L111.75,265.08 L114.38,264.91 L117.01,262.53 L119.64,254.94 L122.27,254.03 L124.9,241.65 L127.53,134.06 L130.16,107.83 L132.79,267.59 L135.42,267.5 L138.05,268.54 L140.68,266.96 L143.31,268.85 L145.94,268.8 L148.57,266.38 L151.2,268.04 L153.83,267.51 L156.46,263.86 L159.09,261.76 L161.72,255.11 L164.35,258.59 L166.98,243.29 L169.61,214.62 L172.24,167.12 L174.87,250.46 L177.5,251.3 L180.13,259.02 L182.76,260.61 L185.39,261.79 L188.02,265.23 L190.65,261.72 L193.28,259.3 L195.91,255.7 L198.54,254.18 L201.17,258.68 L203.8,258.21 L206.43,257.66 L209.06,242.4 L211.69,232.38 L214.31,96.49 L216.94,271.51 L219.57,269.39 L222.2,267.57 L224.83,271.18 L227.46,269.29 L230.09,269.97 L232.72,261.51 L235.35,265.22 L237.98,266.04 L240.61,262.67 L243.24,261.86 L245.87,257.82 L248.5,258.69 L251.13,239.92 L253.76,207.78 L256.39,164.73 L259.02,272.03 L261.65,269.53 L264.28,268.97 L266.91,271.6 L269.54,270.23 L272.17,270.48 L274.8,262.27 L277.43,265.78 L280.06,266.33 L282.69,263.98 L285.32,261.69 L287.95,259.28 L290.58,259.91 L293.21,242.41 L295.84,235.47 L298.47,190.88 L301.1,270.62 L303.73,268.4 L306.36,268.34 L308.99,270.7 L311.62,269.47 L314.25,268.78 L316.88,261.46 L319.51,264.03 L322.14,265.54 L324.77,263.16 L327.4,261.06 L330.03,260.56 L332.66,261.0 L335.29,240.5 L337.92,226.45 L340.55,180.5 L343.18,263.9 L345.81,259.69 L348.44,263.03 L351.07,264.55 L353.7,264.36 L356.33,265.2 L358.96,263.32 L361.59,261.62 L364.22,257.79 L366.85,253.01 L369.48,255.96 L372.11,257.34 L374.74,250.88 L377.37,226.79 L380.0,196.82"/>
+
+  <path class="cosln" d="M46.0,251.62 L48.63,127.3 L51.26,124.3 L53.89,108.44 L56.52,106.64 L59.15,104.31 L61.78,102.85 L64.41,102.99 L67.04,104.96 L69.67,102.36 L72.3,101.96 L74.93,100.37 L77.56,103.12 L80.19,104.07 L82.82,107.13 L85.45,137.13 L88.08,198.75 L90.71,106.64 L93.34,107.39 L95.97,104.55 L98.6,107.12 L101.23,104.69 L103.86,104.04 L106.49,111.25 L109.12,112.23 L111.75,108.59 L114.38,107.5 L117.01,110.45 L119.64,119.81 L122.27,118.02 L124.9,129.34 L127.53,194.79 L130.16,165.76 L132.79,115.7 L135.42,108.89 L138.05,105.8 L140.68,108.71 L143.31,104.34 L145.94,103.86 L148.57,106.77 L151.2,103.26 L153.83,103.5 L156.46,106.51 L159.09,108.73 L161.72,115.64 L164.35,108.53 L166.98,123.97 L169.61,136.06 L172.24,260.78 L174.87,118.23 L177.5,110.64 L180.13,102.92 L182.76,101.08 L185.39,100.17 L188.02,98.82 L190.65,99.92 L193.28,100.84 L195.91,101.98 L198.54,102.06 L201.17,99.51 L203.8,99.36 L206.43,98.76 L209.06,101.45 L211.69,101.96 L214.31,149.32 L216.94,102.22 L219.57,102.05 L222.2,104.96 L224.83,100.58 L227.46,102.16 L230.09,101.1 L232.72,110.85 L235.35,103.89 L237.98,102.62 L240.61,104.6 L243.24,104.98 L245.87,107.61 L248.5,105.84 L251.13,121.94 L253.76,132.77 L256.39,149.74 L259.02,100.86 L261.65,101.32 L264.28,102.34 L266.91,99.86 L269.54,100.79 L272.17,100.38 L274.8,109.19 L277.43,103.31 L280.06,102.5 L282.69,103.58 L285.32,105.05 L287.95,106.26 L290.58,104.87 L293.21,119.18 L295.84,126.61 L298.47,231.46 L301.1,101.68 L303.73,101.47 L306.36,101.97 L308.99,100.04 L311.62,100.73 L314.25,101.09 L316.88,107.77 L319.51,103.46 L322.14,101.67 L324.77,102.55 L327.4,103.57 L330.03,102.96 L332.66,102.21 L335.29,115.78 L337.92,133.47 L340.55,254.96 L343.18,109.23 L345.81,110.37 L348.44,107.13 L351.07,102.79 L353.7,102.65 L356.33,101.75 L358.96,102.64 L361.59,103.59 L364.22,106.25 L366.85,108.76 L369.48,104.92 L372.11,103.72 L374.74,107.06 L377.37,122.99 L380.0,143.26"/>
+
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.4">
+    <circle cx="46.0" cy="251.62" r="2.6"/>
+    <circle cx="88.08" cy="198.75" r="2.6"/>
+    <circle cx="130.16" cy="165.76" r="2.6"/>
+    <circle cx="172.24" cy="260.78" r="2.6"/>
+    <circle cx="214.31" cy="149.32" r="2.6"/>
+    <circle cx="256.39" cy="149.74" r="2.6"/>
+    <circle cx="298.47" cy="231.46" r="2.6"/>
+    <circle cx="340.55" cy="254.96" r="2.6"/>
+  </g>
+
+  <g font-size="8">
+    <line x1="46" y1="332" x2="66" y2="332" class="cosln"/>
+    <text x="72" y="335" class="ink2">adjacent cos (left)</text>
+  </g>
+  <g font-size="8">
+    <line x1="46" y1="348" x2="66" y2="348" class="dnln"/>
+    <text x="72" y="351" class="ink2">‖Δ‖ (right, dashed)</text>
+  </g>
+
+  <!-- secondary panel -->
+  <text x="20" y="378" class="ink2" font-size="9.5">Last pass (cycle 1): H vs L2 per-layer</text>
+  <line x1="46" y1="392" x2="380" y2="392" class="axis"/>
+  <line x1="46" y1="392" x2="46" y2="480" class="axis"/>
+  <line x1="46" y1="480" x2="380" y2="480" class="axis"/>
+  <g class="mut" font-size="8" text-anchor="end">
+    <text x="41" y="483">0.80</text>
+    <text x="41" y="437">0.90</text>
+    <text x="41" y="395">1.00</text>
+  </g>
+  <g class="mut" font-size="7.5" text-anchor="middle">
+    <text x="46" y="494">l0→1</text>
+    <text x="213" y="494">layer transition (last pass)</text>
+    <text x="380" y="494">l14→15</text>
+  </g>
+
+  <path fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="1.4"
+        d="M46.0,371.57 L69.86,373.42 L93.71,368.14 L117.57,361.07 L141.43,360.84 L165.29,359.37 L189.14,360.82 L213.0,362.37 L236.86,366.7 L260.71,370.81 L284.57,364.54 L308.43,362.58 L332.29,368.04 L356.14,394.01 L380.0,427.05"/>
+  <path fill="none" stroke="var(--fourth,#6E92C4)" stroke-width="1.2" stroke-dasharray="3.5 2"
+        d="M46.0,359.26 L69.86,358.91 L93.71,359.74 L117.57,356.59 L141.43,357.72 L165.29,358.29 L189.14,369.18 L213.0,362.17 L236.86,359.25 L260.71,360.67 L284.57,362.34 L308.43,361.35 L332.29,360.12 L356.14,382.25 L380.0,411.1"/>
+
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.4">
+    <circle cx="46.0" cy="371.57" r="2.2"/><circle cx="69.86" cy="373.42" r="2.2"/><circle cx="93.71" cy="368.14" r="2.2"/><circle cx="117.57" cy="361.07" r="2.2"/><circle cx="141.43" cy="360.84" r="2.2"/><circle cx="165.29" cy="359.37" r="2.2"/><circle cx="189.14" cy="360.82" r="2.2"/><circle cx="213.0" cy="362.37" r="2.2"/><circle cx="236.86" cy="366.7" r="2.2"/><circle cx="260.71" cy="370.81" r="2.2"/><circle cx="284.57" cy="364.54" r="2.2"/><circle cx="308.43" cy="362.58" r="2.2"/><circle cx="332.29" cy="368.04" r="2.2"/><circle cx="356.14" cy="394.01" r="2.2"/><circle cx="380.0" cy="427.05" r="2.2"/>
+  </g>
+  <g fill="var(--bg,#0E141A)" stroke="var(--fourth,#6E92C4)" stroke-width="1.2">
+    <rect x="43.2" y="356.46" width="6" height="6"/><rect x="67.06" y="355.91" width="6" height="6"/><rect x="90.91" y="356.74" width="6" height="6"/><rect x="114.77" y="353.59" width="6" height="6"/><rect x="138.63" y="354.72" width="6" height="6"/><rect x="162.49" y="355.29" width="6" height="6"/><rect x="186.34" y="366.18" width="6" height="6"/><rect x="210.2" y="359.17" width="6" height="6"/><rect x="234.06" y="356.25" width="6" height="6"/><rect x="257.91" y="357.67" width="6" height="6"/><rect x="281.77" y="359.34" width="6" height="6"/><rect x="305.63" y="358.35" width="6" height="6"/><rect x="329.49" y="357.12" width="6" height="6"/><rect x="353.34" y="379.25" width="6" height="6"/><rect x="377.2" y="408.1" width="6" height="6"/>
+  </g>
+
+  <g font-size="8">
+    <line x1="46" y1="504" x2="66" y2="504" stroke="var(--accent,#4FB2C2)" stroke-width="1.4"/>
+    <text x="72" y="507" class="ink2">H, last pass</text>
+    <line x1="46" y1="518" x2="66" y2="518" stroke="var(--fourth,#6E92C4)" stroke-width="1.2" stroke-dasharray="3.5 2"/>
+    <text x="72" y="521" class="ink2">L2, last pass</text>
+  </g>
+
+  <line x1="20" y1="546" x2="400" y2="546" class="mut" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="20" y="566" class="ink2" font-size="9.5">Final adjacent-cos this run:</text>
+  <text x="20" y="582" class="ink2" font-size="9.5">H 0.872, L2 0.898 — plotted</text>
+  <text x="20" y="598" class="ink2" font-size="9.5">verbatim, neither hits 0.71.</text>
+</svg></div>
+    </div>
     <div class="nb-figcap"><b>Fig 1 — depth geometry.</b> Adjacent-layer cosine and delta-norm down the unrolled stack. A smooth residual-stream highway (cos 0.96–0.99) through the body, then a violent rotation into output-token geometry at the final layer (cos→0.71, ‖Δ‖ spike). The L (fast) module is noisier per layer than H (slow). Same signature as Granite and Gemma — a textbook transformer wearing a recurrent costume.</div>
-  </div>
+  </figure>
 </section>
 
 
@@ -312,10 +567,244 @@
     hindsight, that the control won should have been the tell.)
   </p>
 
-  <div class="figure">
-    <div class="fig-stub">[ Fig 2 — the 35-config sweep · inline-SVG redraw pending ]</div>
+  <figure class="figure" id="fig2">
+    <div class="nb-plate">
+      <div class="fig-desktop"><svg role="img" aria-label="Fig 2 — the 35-config sweep" viewBox="0 0 860 480" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The config sweep — interlingua strength vs battery score</title>
+  <desc>Scatter of 29 configs that have both an interlingua measurement and a battery score on disk (of the page's stated 35; six configs — anchor_first, combo, damp_L, damp_native, hh_damp — have no battery file at all, so a 35-config sweep on this axis cannot be drawn). x is each config's peak per-cycle math-interlingua cosine; y is the mean pass-rate across that config's battery items. Points are drawn as circles for configs scored greedily at n=1 and squares for configs whose only on-disk battery file is the later n=3-sampled verification run — a scoring-protocol mix, not a single consistent battery. Under this reading only one config, ext_h3, shows a perfect age-sort score; the three configs the page text calls the champions (rys_l, ratio_hi_l, combo_rys_anchor) are all sampled-run points and do not solve age-sort in the data.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .axis { stroke: var(--ink2,#A4B0BC); stroke-width:1; }
+    .grid { stroke: var(--rule2,#27323D); stroke-width:1; stroke-dasharray:2 3; }
+  </style>
+
+  <rect x="0" y="0" width="860" height="480" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="30" font-size="17">The config sweep — interlingua strength vs battery score</text>
+  <text class="mut" x="40" y="47" font-size="10.5">29 of the stated 35 configs have both files on disk · x = max per-cycle math-interlingua cosine · y = mean battery pass-rate</text>
+
+  <!-- gridlines -->
+  <g class="grid">
+    <line x1="150.91" y1="60" x2="150.91" y2="330"/>
+    <line x1="272.73" y1="60" x2="272.73" y2="330"/>
+    <line x1="394.55" y1="60" x2="394.55" y2="330"/>
+    <line x1="516.36" y1="60" x2="516.36" y2="330"/>
+    <line x1="638.18" y1="60" x2="638.18" y2="330"/>
+    <line x1="760.0" y1="60" x2="760.0" y2="330"/>
+    <line x1="90" y1="330" x2="760" y2="330"/>
+    <line x1="90" y1="270" x2="760" y2="270"/>
+    <line x1="90" y1="210" x2="760" y2="210"/>
+    <line x1="90" y1="150" x2="760" y2="150"/>
+    <line x1="90" y1="90" x2="760" y2="90"/>
+  </g>
+
+  <!-- axes -->
+  <line x1="90" y1="60" x2="90" y2="330" class="axis"/>
+  <line x1="90" y1="330" x2="760" y2="330" class="axis"/>
+
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="150.91" y="344">0.0</text>
+    <text x="272.73" y="344">0.1</text>
+    <text x="394.55" y="344">0.2</text>
+    <text x="516.36" y="344">0.3</text>
+    <text x="638.18" y="344">0.4</text>
+    <text x="760.0" y="344">0.5</text>
+    <text x="425" y="362">interlingua strength (max per-cycle math cosine) →</text>
+  </g>
+  <g class="mut" font-size="9" text-anchor="end">
+    <text x="84" y="333">0.0</text>
+    <text x="84" y="273">0.2</text>
+    <text x="84" y="213">0.4</text>
+    <text x="84" y="153">0.6</text>
+    <text x="84" y="93">0.8</text>
+  </g>
+  <text x="46" y="195" text-anchor="middle" class="ink2" font-size="9.5" transform="rotate(-90 46 195)">battery score (mean pass-rate) ↑</text>
+
+  <!-- greedy (n=1) points: circles, accent -->
+  <g fill="var(--accent,#4FB2C2)" fill-opacity="0.8" stroke="var(--accent,#4FB2C2)" stroke-width="1">
+    <circle cx="600.42" cy="180.00" r="4.2"/>  <!-- combo_L -->
+    <circle cx="379.93" cy="330.00" r="4.2"/>  <!-- combo_anchor_dampH -->
+    <circle cx="148.47" cy="230.00" r="4.2"/>  <!-- combo_rys_dampH -->
+    <circle cx="278.82" cy="180.00" r="4.2"/>  <!-- damp_H -->
+    <circle cx="198.42" cy="230.00" r="4.2"/>  <!-- damp_H_a03 -->
+    <circle cx="215.47" cy="330.00" r="4.2"/>  <!-- damp_a02 -->
+    <circle cx="205.73" cy="230.00" r="4.2"/>  <!-- damp_a03 -->
+    <circle cx="577.27" cy="130.00" r="4.2"/>  <!-- damp_a07 -->
+    <circle cx="214.25" cy="180.00" r="4.2"/>  <!-- damp_ext_lite -->
+    <circle cx="674.73" cy="180.00" r="4.2"/>  <!-- ext_h2_l5 -->
+    <circle cx="250.80" cy="80.00"  r="4.2"/>  <!-- ext_h4_dampH -->
+    <circle cx="724.67" cy="280.00" r="4.2"/>  <!-- l_h2_l16 -->
+    <circle cx="567.53" cy="230.00" r="4.2"/>  <!-- l_h2_l4 -->
+    <circle cx="624.78" cy="180.00" r="4.2"/>  <!-- l_h2_l8 -->
+    <circle cx="301.96" cy="180.00" r="4.2"/>  <!-- rys_l_heavy -->
+    <circle cx="271.51" cy="130.00" r="4.2"/>  <!-- rys_l_late -->
+  </g>
+  <!-- ext_h3: greedy, solved -->
+  <circle cx="535.85" cy="180.00" r="4.2" fill="var(--accent,#4FB2C2)" fill-opacity="0.8" stroke="var(--accent,#4FB2C2)" stroke-width="1"/>
+
+  <!-- sampled (n=3, verification-run) points: squares, fourth -->
+  <g fill="var(--fourth,#6E92C4)" fill-opacity="0.8" stroke="var(--fourth,#6E92C4)" stroke-width="1">
+    <rect x="531.85" y="116.00" width="8" height="8"/>  <!-- baseline -->
+    <rect x="611.04" y="166.00" width="8" height="8"/>  <!-- combo_rys_anchor -->
+    <rect x="403.95" y="146.00" width="8" height="8"/>  <!-- combo_rysl_anchor -->
+    <rect x="513.58" y="156.00" width="8" height="8"/>  <!-- combo_rysl_l6 -->
+    <rect x="581.80" y="126.00" width="8" height="8"/>  <!-- combo_rysl_rysh -->
+    <rect x="562.31" y="96.00"  width="8" height="8"/>  <!-- ext_h2_l6 -->
+    <rect x="246.80" y="146.00" width="8" height="8"/>  <!-- ext_h3_dampH -->
+    <rect x="531.85" y="296.00" width="8" height="8"/>  <!-- ext_h4 -->
+    <rect x="697.53" y="116.00" width="8" height="8"/>  <!-- ratio_hi_l -->
+    <rect x="457.55" y="126.00" width="8" height="8"/>  <!-- rys_l -->
+    <rect x="495.31" y="166.00" width="8" height="8"/>  <!-- rys_l_1234 -->
+    <rect x="606.16" y="116.00" width="8" height="8"/>  <!-- rys_l_345 -->
+  </g>
+
+  <!-- solved marker: age_sort == 1.0 (only ext_h3 qualifies in the on-disk data) -->
+  <circle cx="535.85" cy="180.00" r="8.5" fill="none" stroke="var(--cause,#E3C24A)" stroke-width="1.8"/>
+
+  <!-- labels: mandatory (rys_l, ratio_hi_l, combo_rys_anchor) + a few anchors -->
+  <g font-size="9" class="ink2">
+    <text x="535.85" y="108" text-anchor="middle">baseline</text>
+    <text x="457.55" y="112" text-anchor="middle">rys_l</text>
+    <text x="701.53" y="136" text-anchor="middle">ratio_hi_l</text>
+    <text x="611.04" y="196" text-anchor="middle">combo_rys_anchor</text>
+    <text x="535.85" y="200" text-anchor="middle" fill="var(--cause,#E3C24A)">ext_h3 ✓ solved</text>
+    <text x="250.80" y="70" text-anchor="middle">ext_h4_dampH</text>
+    <text x="724.67" y="296" text-anchor="middle">l_h2_l16</text>
+  </g>
+
+  <!-- legend -->
+  <g font-size="9">
+    <circle cx="610" cy="70" r="4.2" fill="var(--accent,#4FB2C2)" fill-opacity="0.8" stroke="var(--accent,#4FB2C2)"/>
+    <text x="620" y="73" class="ink2">greedy, n=1 (original sweep score)</text>
+    <rect x="606" y="83" width="8" height="8" fill="var(--fourth,#6E92C4)" fill-opacity="0.8" stroke="var(--fourth,#6E92C4)"/>
+    <text x="620" y="90" class="ink2">sampled, n=3 (§5 verification-run file)</text>
+    <circle cx="610" cy="102" r="7" fill="none" stroke="var(--cause,#E3C24A)" stroke-width="1.6"/>
+    <text x="620" y="106" class="ink2">age_sort solved (rate/pass = 1.0)</text>
+  </g>
+
+  <text x="40" y="392" class="ink2" font-size="10.5">Solved configs scatter across the x-range — geometry/reasoning decoupling holds. But the "champion" cluster</text>
+  <text x="40" y="408" class="ink2" font-size="10.5">(rys_l, ratio_hi_l, combo_rys_anchor) only has <tspan fill="var(--fourth,#6E92C4)">verification-run</tspan> battery files on disk, and none solve age-sort there.</text>
+  <text x="40" y="428" class="mut" font-size="9.5">Item sets differ too: 6 items (greedy) vs 10 (sampled, +runners/seating/meetday/bus) — y averages what each file has.</text>
+</svg></div>
+      <div class="fig-mobile"><svg role="img" aria-label="Fig 2 — the 35-config sweep" viewBox="0 0 420 620" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The config sweep — interlingua strength vs battery score</title>
+  <desc>Scatter of 29 configs that have both an interlingua measurement and a battery score on disk (of the page's stated 35; six configs — anchor_first, combo, damp_L, damp_native, hh_damp — have no battery file at all, so a 35-config sweep on this axis cannot be drawn). x is each config's peak per-cycle math-interlingua cosine; y is the mean pass-rate across that config's battery items. Points are drawn as circles for configs scored greedily at n=1 and squares for configs whose only on-disk battery file is the later n=3-sampled verification run — a scoring-protocol mix, not a single consistent battery. Under this reading only one config, ext_h3, shows a perfect age-sort score; the three configs the page text calls the champions (rys_l, ratio_hi_l, combo_rys_anchor) are all sampled-run points and do not solve age-sort in the data.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .axis { stroke: var(--ink2,#A4B0BC); stroke-width:1; }
+    .grid { stroke: var(--rule2,#27323D); stroke-width:1; stroke-dasharray:2 3; }
+  </style>
+
+  <rect x="0" y="0" width="420" height="620" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="20" y="26" font-size="14">The config sweep</text>
+  <text class="mut" x="20" y="42" font-size="8.5">29 of 35 stated configs have both files · x = peak interlingua cosine · y = mean battery pass-rate</text>
+
+  <g class="grid">
+    <line x1="75.82" y1="56" x2="75.82" y2="300"/>
+    <line x1="135.45" y1="56" x2="135.45" y2="300"/>
+    <line x1="195.09" y1="56" x2="195.09" y2="300"/>
+    <line x1="254.73" y1="56" x2="254.73" y2="300"/>
+    <line x1="314.36" y1="56" x2="314.36" y2="300"/>
+    <line x1="374.0" y1="56" x2="374.0" y2="300"/>
+    <line x1="46" y1="300" x2="374" y2="300"/>
+    <line x1="46" y1="245.78" x2="374" y2="245.78"/>
+    <line x1="46" y1="191.56" x2="374" y2="191.56"/>
+    <line x1="46" y1="137.33" x2="374" y2="137.33"/>
+    <line x1="46" y1="83.11" x2="374" y2="83.11"/>
+  </g>
+
+  <line x1="46" y1="56" x2="46" y2="300" class="axis"/>
+  <line x1="46" y1="300" x2="374" y2="300" class="axis"/>
+
+  <g class="mut" font-size="7.5" text-anchor="middle">
+    <text x="75.82" y="312">0.0</text>
+    <text x="195.09" y="312">0.2</text>
+    <text x="314.36" y="312">0.4</text>
+    <text x="210" y="328">interlingua strength →</text>
+  </g>
+  <g class="mut" font-size="7.5" text-anchor="end">
+    <text x="41" y="303">0.0</text>
+    <text x="41" y="195">0.4</text>
+    <text x="41" y="86">0.8</text>
+  </g>
+  <text x="14" y="180" text-anchor="middle" class="ink2" font-size="8" transform="rotate(-90 14 180)">battery score ↑</text>
+
+  <g fill="var(--accent,#4FB2C2)" fill-opacity="0.8" stroke="var(--accent,#4FB2C2)" stroke-width="1">
+    <circle cx="295.88" cy="164.44" r="3.6"/>  <!-- combo_L -->
+    <circle cx="187.93" cy="300.00" r="3.6"/>  <!-- combo_anchor_dampH -->
+    <circle cx="74.63"  cy="209.63" r="3.6"/>  <!-- combo_rys_dampH -->
+    <circle cx="138.44" cy="164.44" r="3.6"/>  <!-- damp_H -->
+    <circle cx="99.08"  cy="209.63" r="3.6"/>  <!-- damp_H_a03 -->
+    <circle cx="107.43" cy="300.00" r="3.6"/>  <!-- damp_a02 -->
+    <circle cx="102.65" cy="209.63" r="3.6"/>  <!-- damp_a03 -->
+    <circle cx="284.55" cy="119.26" r="3.6"/>  <!-- damp_a07 -->
+    <circle cx="106.83" cy="164.44" r="3.6"/>  <!-- damp_ext_lite -->
+    <circle cx="332.25" cy="164.44" r="3.6"/>  <!-- ext_h2_l5 -->
+    <circle cx="124.72" cy="74.07"  r="3.6"/>  <!-- ext_h4_dampH -->
+    <circle cx="356.71" cy="254.81" r="3.6"/>  <!-- l_h2_l16 -->
+    <circle cx="279.77" cy="209.63" r="3.6"/>  <!-- l_h2_l4 -->
+    <circle cx="307.80" cy="164.44" r="3.6"/>  <!-- l_h2_l8 -->
+    <circle cx="149.77" cy="164.44" r="3.6"/>  <!-- rys_l_heavy -->
+    <circle cx="134.86" cy="119.26" r="3.6"/>  <!-- rys_l_late -->
+  </g>
+  <circle cx="264.27" cy="164.44" r="3.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.8" stroke="var(--accent,#4FB2C2)" stroke-width="1"/> <!-- ext_h3, solved -->
+
+  <g fill="var(--fourth,#6E92C4)" fill-opacity="0.8" stroke="var(--fourth,#6E92C4)" stroke-width="1">
+    <rect x="260.77" y="106.72" width="7" height="7"/>  <!-- baseline -->
+    <rect x="299.53" y="151.91" width="7" height="7"/>  <!-- combo_rys_anchor -->
+    <rect x="198.15" y="133.83" width="7" height="7"/>  <!-- combo_rysl_anchor -->
+    <rect x="251.82" y="142.87" width="7" height="7"/>  <!-- combo_rysl_l6 -->
+    <rect x="285.22" y="115.76" width="7" height="7"/>  <!-- combo_rysl_rysh -->
+    <rect x="275.68" y="88.65"  width="7" height="7"/>  <!-- ext_h2_l6 -->
+    <rect x="121.22" y="133.83" width="7" height="7"/>  <!-- ext_h3_dampH -->
+    <rect x="260.77" y="269.39" width="7" height="7"/>  <!-- ext_h4 -->
+    <rect x="341.87" y="106.72" width="7" height="7"/>  <!-- ratio_hi_l -->
+    <rect x="224.39" y="115.76" width="7" height="7"/>  <!-- rys_l -->
+    <rect x="242.88" y="151.91" width="7" height="7"/>  <!-- rys_l_1234 -->
+    <rect x="297.15" y="106.72" width="7" height="7"/>  <!-- rys_l_345 -->
+  </g>
+
+  <circle cx="264.27" cy="164.44" r="7" fill="none" stroke="var(--cause,#E3C24A)" stroke-width="1.5"/>
+
+  <g font-size="7.5" class="ink2">
+    <text x="264.27" y="97" text-anchor="middle">baseline</text>
+    <text x="224.39" y="108" text-anchor="middle">rys_l</text>
+    <text x="341.87" y="98" text-anchor="middle">ratio_hi_l</text>
+    <text x="299.53" y="177" text-anchor="middle">combo_rys_anchor</text>
+    <text x="252.27" y="196" text-anchor="middle" fill="var(--cause,#E3C24A)">ext_h3 ✓</text>
+  </g>
+
+  <g font-size="8">
+    <circle cx="60" cy="356" r="3.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.8" stroke="var(--accent,#4FB2C2)"/>
+    <text x="70" y="359" class="ink2">greedy, n=1 (original sweep)</text>
+    <rect x="56" y="368" width="7" height="7" fill="var(--fourth,#6E92C4)" fill-opacity="0.8" stroke="var(--fourth,#6E92C4)"/>
+    <text x="70" y="374" class="ink2">sampled, n=3 (§5 verification file)</text>
+    <circle cx="60" cy="386" r="6" fill="none" stroke="var(--cause,#E3C24A)" stroke-width="1.4"/>
+    <text x="70" y="390" class="ink2">age_sort solved (rate/pass = 1.0)</text>
+  </g>
+
+  <line x1="20" y1="416" x2="400" y2="416" stroke="var(--rule2,#27323D)" stroke-width="1"/>
+  <text x="20" y="434" class="ink2" font-size="9">Solved configs scatter across x —</text>
+  <text x="20" y="450" class="ink2" font-size="9">decoupling holds. But rys_l, ratio_hi_l,</text>
+  <text x="20" y="466" class="ink2" font-size="9">combo_rys_anchor only have <tspan fill="var(--fourth,#6E92C4)">verification-run</tspan></text>
+  <text x="20" y="482" class="ink2" font-size="9">files on disk, and none solve age-sort there.</text>
+  <text x="20" y="502" class="mut" font-size="8">Battery item sets differ: 6-item configs</text>
+  <text x="20" y="516" class="mut" font-size="8">(greedy) vs 10-item (sampled, +runners/</text>
+  <text x="20" y="530" class="mut" font-size="8">seating/meetday/bus) — y is the mean over</text>
+  <text x="20" y="544" class="mut" font-size="8">whatever items that config's file has.</text>
+</svg></div>
+    </div>
     <div class="nb-figcap"><b>Fig 2 — the 35-config sweep (greedy, n=1).</b> Each point a config: interlingua strength (x) vs battery score (y); solved-the-age-sort configs marked. Two things are visible at once — and only one of them survives §6. The solved configs scatter across <em>all</em> interlingua values (the claim that geometry is decoupled from reasoning — this <b>holds</b>); and they cluster in the more-L configs (rys_l, ratio_hi_l, combo_rys_anchor — the "champion" story that <b>does not</b>). This is the figure that looked like a result.</div>
-  </div>
+  </figure>
 </section>
 
 

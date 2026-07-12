@@ -1,0 +1,132 @@
+<svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>Depth geometry — 128 unrolled layers</title>
+  <desc>Adjacent-layer cosine (left axis, solid) and delta-norm (right axis, dashed) across all 128 unrolled-layer transitions of the baseline HRM forward pass — two cycles, each cycle three L-submodules then H, 16 layers per module. A smooth residual highway sits at cosine 0.85-0.99 through most of the body, punctured by eight sharp dips exactly at the module-boundary transitions (marked with vertical rules), where cosine falls as low as 0.55 and delta-norm spikes as high as 399. A secondary panel below isolates the last pass's H module (16 states) against its last L submodule (16 states): H's per-layer cosine spans a wider range than L's, consistent with H being noisier per layer than L late in the pass.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .cosln{ fill:none; stroke: var(--accent,#4FB2C2); stroke-width:1.6; }
+    .dnln { fill:none; stroke: var(--fourth,#6E92C4); stroke-width:1.3; stroke-dasharray:4 2.5; }
+    .bnd  { stroke: var(--rule2,#27323D); stroke-width:1; stroke-dasharray:2 3; }
+    .axis { stroke: var(--ink2,#A4B0BC); stroke-width:1; }
+  </style>
+
+  <rect x="0" y="0" width="900" height="520" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="34" font-size="18">Depth geometry — 128 unrolled layers, one prompt</text>
+  <text class="mut" x="40" y="53" font-size="11">Adjacent-layer cosine (left, solid) and ‖Δ‖ (right, dashed) · baseline config, 2 cycles × (L0,L1,L2,H) × 16 layers</text>
+
+  <!-- boundary rules (module-transition dips, incl. embed->L0) -->
+  <g class="bnd">
+    <line x1="90.0" y1="78" x2="90.0" y2="300"/>
+    <line x1="183.23" y1="78" x2="183.23" y2="300"/>
+    <line x1="276.46" y1="78" x2="276.46" y2="300"/>
+    <line x1="369.69" y1="78" x2="369.69" y2="300"/>
+    <line x1="462.91" y1="78" x2="462.91" y2="300"/>
+    <line x1="556.14" y1="78" x2="556.14" y2="300"/>
+    <line x1="649.37" y1="78" x2="649.37" y2="300"/>
+    <line x1="742.6" y1="78" x2="742.6" y2="300"/>
+  </g>
+  <text x="462.91" y="70" text-anchor="middle" class="mut" font-size="8.5">cycle 0→1 (c0.H→c1.L0)</text>
+
+  <!-- axes -->
+  <line x1="90" y1="78" x2="90" y2="300" class="axis"/>
+  <line x1="830" y1="78" x2="830" y2="300" class="axis"/>
+  <line x1="90" y1="300" x2="830" y2="300" class="axis"/>
+
+  <!-- left axis ticks: cosine -->
+  <g class="mut" font-size="9" text-anchor="end">
+    <text x="84" y="303">0.5</text>
+    <text x="84" y="258.6">0.6</text>
+    <text x="84" y="214.2">0.7</text>
+    <text x="84" y="169.8">0.8</text>
+    <text x="84" y="125.4">0.9</text>
+    <text x="84" y="81">1.0</text>
+  </g>
+  <text x="40" y="189" text-anchor="middle" class="ink2" font-size="9.5" transform="rotate(-90 40 189)">adjacent cos ↑</text>
+
+  <!-- right axis ticks: delta norm -->
+  <g class="mut" font-size="9" text-anchor="start">
+    <text x="836" y="303">0</text>
+    <text x="836" y="247.5">100</text>
+    <text x="836" y="192">200</text>
+    <text x="836" y="136.5">300</text>
+    <text x="836" y="81">400</text>
+  </g>
+  <text x="874" y="189" text-anchor="middle" class="ink2" font-size="9.5" transform="rotate(90 874 189)">‖Δ‖ ↑</text>
+
+  <!-- x ticks -->
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="90" y="316">1</text>
+    <text x="462.91" y="316">64/65</text>
+    <text x="830" y="316">128</text>
+    <text x="830" y="334" text-anchor="end" letter-spacing="0.5">transition # (of 128)</text>
+  </g>
+
+  <!-- delta-norm line (right axis, dashed) -->
+  <path class="dnln" d="M90.0,262.96 L95.83,278.06 L101.65,272.96 L107.48,280.58 L113.31,281.75 L119.13,282.44 L124.96,284.12 L130.79,283.95 L136.61,281.38 L142.44,283.99 L148.27,284.0 L154.09,286.26 L159.92,281.36 L165.75,278.83 L171.57,272.9 L177.4,221.91 L183.23,170.76 L189.06,288.87 L194.88,286.67 L200.71,288.23 L206.54,286.36 L212.36,287.44 L218.19,287.63 L224.02,282.21 L229.84,280.45 L235.67,282.0 L241.5,281.8 L247.32,278.92 L253.15,269.76 L258.98,268.67 L264.8,253.73 L270.63,123.93 L276.46,92.28 L282.28,285.02 L288.11,284.92 L293.94,286.17 L299.76,284.27 L305.59,286.54 L311.42,286.48 L317.24,283.57 L323.07,285.57 L328.9,284.93 L334.72,280.53 L340.55,277.99 L346.38,269.97 L352.2,274.17 L358.03,255.71 L363.86,221.11 L369.69,163.81 L375.51,264.36 L381.34,265.38 L387.17,274.68 L392.99,276.61 L398.82,278.03 L404.65,282.18 L410.47,277.94 L416.3,275.02 L422.13,270.68 L427.95,268.85 L433.78,274.27 L439.61,273.71 L445.43,273.05 L451.26,254.63 L457.09,242.55 L462.91,78.59 L468.74,289.75 L474.57,287.2 L480.39,285.0 L486.22,289.35 L492.05,287.08 L497.87,287.9 L503.7,277.69 L509.53,282.17 L515.35,283.16 L521.18,279.09 L527.01,278.11 L532.83,273.24 L538.66,274.29 L544.49,251.64 L550.31,212.87 L556.14,160.92 L561.97,290.39 L567.8,287.37 L573.62,286.69 L579.45,289.86 L585.28,288.21 L591.1,288.52 L596.93,278.61 L602.76,282.85 L608.58,283.5 L614.41,280.67 L620.24,277.91 L626.06,275.01 L631.89,275.76 L637.72,254.65 L643.54,246.27 L649.37,192.47 L655.2,288.69 L661.02,286.01 L666.85,285.93 L672.68,288.77 L678.5,287.29 L684.33,286.46 L690.16,277.63 L695.98,280.73 L701.81,282.56 L707.64,279.68 L713.46,277.15 L719.29,276.55 L725.12,277.08 L730.94,252.35 L736.77,235.4 L742.6,179.95 L748.43,280.57 L754.25,275.5 L760.08,279.52 L765.91,281.36 L771.73,281.13 L777.56,282.15 L783.39,279.87 L789.21,277.82 L795.04,273.2 L800.87,267.44 L806.69,271.0 L812.52,272.66 L818.35,264.87 L824.17,235.8 L830.0,199.64"/>
+
+  <!-- adjacent-cosine line (left axis, solid) -->
+  <path class="cosln" d="M90.0,265.76 L95.83,115.77 L101.65,112.15 L107.48,93.01 L113.31,90.83 L119.13,88.02 L124.96,86.26 L130.79,86.43 L136.61,88.81 L142.44,85.68 L148.27,85.19 L154.09,83.27 L159.92,86.59 L165.75,87.74 L171.57,91.43 L177.4,127.63 L183.23,201.98 L189.06,90.84 L194.88,91.74 L200.71,88.31 L206.54,91.42 L212.36,88.49 L218.19,87.7 L224.02,96.39 L229.84,97.58 L235.67,93.19 L241.5,91.88 L247.32,95.43 L253.15,106.72 L258.98,104.57 L264.8,118.23 L270.63,197.19 L276.46,162.17 L282.28,101.76 L288.11,93.55 L293.94,89.83 L299.76,93.34 L305.59,88.06 L311.42,87.49 L317.24,91.0 L323.07,86.76 L328.9,87.05 L334.72,90.68 L340.55,93.36 L346.38,101.7 L352.2,93.12 L358.03,111.75 L363.86,126.33 L369.69,276.81 L375.51,104.83 L381.34,95.66 L387.17,86.35 L392.99,84.13 L398.82,83.03 L404.65,81.41 L410.47,82.73 L416.3,83.84 L422.13,85.22 L427.95,85.31 L433.78,82.23 L439.61,82.06 L445.43,81.33 L451.26,84.57 L457.09,85.19 L462.91,142.33 L468.74,85.5 L474.57,85.3 L480.39,88.81 L486.22,83.53 L492.05,85.43 L497.87,84.16 L503.7,95.92 L509.53,87.52 L515.35,85.99 L521.18,88.37 L527.01,88.83 L532.83,92.01 L538.66,89.87 L544.49,109.3 L550.31,122.36 L556.14,142.84 L561.97,83.87 L567.8,84.42 L573.62,85.65 L579.45,82.65 L585.28,83.77 L591.1,83.29 L596.93,93.91 L602.76,86.81 L608.58,85.85 L614.41,87.14 L620.24,88.92 L626.06,90.38 L631.89,88.7 L637.72,105.97 L643.54,114.93 L649.37,241.43 L655.2,84.85 L661.02,84.6 L666.85,85.21 L672.68,82.87 L678.5,83.71 L684.33,84.14 L690.16,92.19 L695.98,87.01 L701.81,84.84 L707.64,85.9 L713.46,87.13 L719.29,86.4 L725.12,85.49 L730.94,101.86 L736.77,123.21 L742.6,269.79 L748.43,93.96 L754.25,95.33 L760.08,91.43 L765.91,86.19 L771.73,86.02 L777.56,84.94 L783.39,86.01 L789.21,87.16 L795.04,90.36 L800.87,93.4 L806.69,88.76 L812.52,87.31 L818.35,91.35 L824.17,110.57 L830.0,135.02"/>
+
+  <!-- boundary markers on the cos line (dips are the module-injection points) -->
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.6">
+    <circle cx="90.0" cy="265.76" r="3"/>
+    <circle cx="183.23" cy="201.98" r="3"/>
+    <circle cx="276.46" cy="162.17" r="3"/>
+    <circle cx="369.69" cy="276.81" r="3"/>
+    <circle cx="462.91" cy="142.33" r="3"/>
+    <circle cx="556.14" cy="142.84" r="3"/>
+    <circle cx="649.37" cy="241.43" r="3"/>
+    <circle cx="742.6" cy="269.79" r="3"/>
+  </g>
+
+  <!-- legend -->
+  <g font-size="9.5">
+    <line x1="600" y1="93" x2="622" y2="93" class="cosln"/>
+    <text x="628" y="96" class="ink2">adjacent cos (left)</text>
+    <line x1="600" y1="109" x2="622" y2="109" class="dnln"/>
+    <text x="628" y="112" class="ink2">‖Δ‖ (right, dashed)</text>
+    <line x1="600" y1="125" x2="622" y2="125" class="bnd"/>
+    <text x="628" y="128" class="mut">module boundary</text>
+  </g>
+
+  <!-- secondary panel: last-pass per-module depth -->
+  <text x="40" y="332" class="ink2" font-size="11">Last-pass per-module depth (cycle 1) — H (16 states) vs L2 (16 states, last L submodule)</text>
+  <line x1="90" y1="348" x2="830" y2="348" class="axis"/>
+  <line x1="90" y1="348" x2="90" y2="470" class="axis"/>
+  <line x1="90" y1="470" x2="830" y2="470" class="axis"/>
+  <g class="mut" font-size="9" text-anchor="end">
+    <text x="84" y="473">0.80</text>
+    <text x="84" y="412.5">0.90</text>
+    <text x="84" y="351">1.00</text>
+  </g>
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="90" y="484">l0→1</text>
+    <text x="460" y="484">layer transition (1 of 15, last pass)</text>
+    <text x="830" y="484">l14→15</text>
+  </g>
+
+  <path fill="none" stroke="var(--accent,#4FB2C2)" stroke-width="1.6"
+        d="M90.0,369.93 L142.86,371.81 L195.71,366.45 L248.57,359.26 L301.43,359.02 L354.29,357.53 L407.14,359.0 L460.0,360.58 L512.86,364.98 L565.71,369.16 L618.57,362.78 L671.43,360.79 L724.29,366.34 L777.14,392.75 L830.0,426.34"/>
+  <path fill="none" stroke="var(--fourth,#6E92C4)" stroke-width="1.4" stroke-dasharray="4 2.5"
+        d="M90.0,357.41 L142.86,357.06 L195.71,357.9 L248.57,354.7 L301.43,355.85 L354.29,356.43 L407.14,367.5 L460.0,360.37 L512.86,357.4 L565.71,358.85 L618.57,360.54 L671.43,359.54 L724.29,358.29 L777.14,380.79 L830.0,410.12"/>
+
+  <g fill="var(--bg,#0E141A)" stroke="var(--accent,#4FB2C2)" stroke-width="1.6">
+    <circle cx="90.0" cy="369.93" r="2.6"/><circle cx="142.86" cy="371.81" r="2.6"/><circle cx="195.71" cy="366.45" r="2.6"/><circle cx="248.57" cy="359.26" r="2.6"/><circle cx="301.43" cy="359.02" r="2.6"/><circle cx="354.29" cy="357.53" r="2.6"/><circle cx="407.14" cy="359.0" r="2.6"/><circle cx="460.0" cy="360.58" r="2.6"/><circle cx="512.86" cy="364.98" r="2.6"/><circle cx="565.71" cy="369.16" r="2.6"/><circle cx="618.57" cy="362.78" r="2.6"/><circle cx="671.43" cy="360.79" r="2.6"/><circle cx="724.29" cy="366.34" r="2.6"/><circle cx="777.14" cy="392.75" r="2.6"/><circle cx="830.0" cy="426.34" r="2.6"/>
+  </g>
+  <g fill="var(--bg,#0E141A)" stroke="var(--fourth,#6E92C4)" stroke-width="1.4">
+    <rect x="86.6" y="353.71" width="7" height="7"/><rect x="139.46" y="353.36" width="7" height="7"/><rect x="192.31" y="354.2" width="7" height="7"/><rect x="245.17" y="351.0" width="7" height="7"/><rect x="298.03" y="352.15" width="7" height="7"/><rect x="350.89" y="352.73" width="7" height="7"/><rect x="403.74" y="363.8" width="7" height="7"/><rect x="456.6" y="356.67" width="7" height="7"/><rect x="509.46" y="353.7" width="7" height="7"/><rect x="562.31" y="355.15" width="7" height="7"/><rect x="615.17" y="356.84" width="7" height="7"/><rect x="668.03" y="355.84" width="7" height="7"/><rect x="720.89" y="354.59" width="7" height="7"/><rect x="773.74" y="377.09" width="7" height="7"/><rect x="826.6" y="406.42" width="7" height="7"/>
+  </g>
+
+  <g font-size="9.5">
+    <line x1="600" y1="362" x2="622" y2="362" stroke="var(--accent,#4FB2C2)" stroke-width="1.6"/>
+    <text x="628" y="365" class="ink2">H, last pass (cycle 1)</text>
+    <line x1="600" y1="378" x2="622" y2="378" stroke="var(--fourth,#6E92C4)" stroke-width="1.4" stroke-dasharray="4 2.5"/>
+    <text x="628" y="381" class="ink2">L2, last pass (cycle 1)</text>
+  </g>
+
+  <text x="40" y="504" class="ink2" font-size="10.5">Final adjacent-cos in this run: H 0.872, L2 0.898 — both plotted verbatim above, neither hits the caption's 0.71.</text>
+</svg>

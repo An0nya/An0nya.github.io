@@ -1,0 +1,121 @@
+<svg viewBox="0 0 860 480" xmlns="http://www.w3.org/2000/svg"
+     font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
+  <title>The config sweep — interlingua strength vs battery score</title>
+  <desc>Scatter of 29 configs that have both an interlingua measurement and a battery score on disk (of the page's stated 35; six configs — anchor_first, combo, damp_L, damp_native, hh_damp — have no battery file at all, so a 35-config sweep on this axis cannot be drawn). x is each config's peak per-cycle math-interlingua cosine; y is the mean pass-rate across that config's battery items. Points are drawn as circles for configs scored greedily at n=1 and squares for configs whose only on-disk battery file is the later n=3-sampled verification run — a scoring-protocol mix, not a single consistent battery. Under this reading only one config, ext_h3, shows a perfect age-sort score; the three configs the page text calls the champions (rys_l, ratio_hi_l, combo_rys_anchor) are all sampled-run points and do not solve age-sort in the data.</desc>
+  <style>
+    .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
+    text  { fill: var(--ink,#DCE4EC); }
+    .mut  { fill: var(--muted,#6F7C88); }
+    .ink2 { fill: var(--ink2,#A4B0BC); }
+    .axis { stroke: var(--ink2,#A4B0BC); stroke-width:1; }
+    .grid { stroke: var(--rule2,#27323D); stroke-width:1; stroke-dasharray:2 3; }
+  </style>
+
+  <rect x="0" y="0" width="860" height="480" fill="var(--bg2,#141D26)"/>
+
+  <text class="ttl" x="40" y="30" font-size="17">The config sweep — interlingua strength vs battery score</text>
+  <text class="mut" x="40" y="47" font-size="10.5">29 of the stated 35 configs have both files on disk · x = max per-cycle math-interlingua cosine · y = mean battery pass-rate</text>
+
+  <!-- gridlines -->
+  <g class="grid">
+    <line x1="150.91" y1="60" x2="150.91" y2="330"/>
+    <line x1="272.73" y1="60" x2="272.73" y2="330"/>
+    <line x1="394.55" y1="60" x2="394.55" y2="330"/>
+    <line x1="516.36" y1="60" x2="516.36" y2="330"/>
+    <line x1="638.18" y1="60" x2="638.18" y2="330"/>
+    <line x1="760.0" y1="60" x2="760.0" y2="330"/>
+    <line x1="90" y1="330" x2="760" y2="330"/>
+    <line x1="90" y1="270" x2="760" y2="270"/>
+    <line x1="90" y1="210" x2="760" y2="210"/>
+    <line x1="90" y1="150" x2="760" y2="150"/>
+    <line x1="90" y1="90" x2="760" y2="90"/>
+  </g>
+
+  <!-- axes -->
+  <line x1="90" y1="60" x2="90" y2="330" class="axis"/>
+  <line x1="90" y1="330" x2="760" y2="330" class="axis"/>
+
+  <g class="mut" font-size="9" text-anchor="middle">
+    <text x="150.91" y="344">0.0</text>
+    <text x="272.73" y="344">0.1</text>
+    <text x="394.55" y="344">0.2</text>
+    <text x="516.36" y="344">0.3</text>
+    <text x="638.18" y="344">0.4</text>
+    <text x="760.0" y="344">0.5</text>
+    <text x="425" y="362">interlingua strength (max per-cycle math cosine) →</text>
+  </g>
+  <g class="mut" font-size="9" text-anchor="end">
+    <text x="84" y="333">0.0</text>
+    <text x="84" y="273">0.2</text>
+    <text x="84" y="213">0.4</text>
+    <text x="84" y="153">0.6</text>
+    <text x="84" y="93">0.8</text>
+  </g>
+  <text x="46" y="195" text-anchor="middle" class="ink2" font-size="9.5" transform="rotate(-90 46 195)">battery score (mean pass-rate) ↑</text>
+
+  <!-- greedy (n=1) points: circles, accent -->
+  <g fill="var(--accent,#4FB2C2)" fill-opacity="0.8" stroke="var(--accent,#4FB2C2)" stroke-width="1">
+    <circle cx="600.42" cy="180.00" r="4.2"/>  <!-- combo_L -->
+    <circle cx="379.93" cy="330.00" r="4.2"/>  <!-- combo_anchor_dampH -->
+    <circle cx="148.47" cy="230.00" r="4.2"/>  <!-- combo_rys_dampH -->
+    <circle cx="278.82" cy="180.00" r="4.2"/>  <!-- damp_H -->
+    <circle cx="198.42" cy="230.00" r="4.2"/>  <!-- damp_H_a03 -->
+    <circle cx="215.47" cy="330.00" r="4.2"/>  <!-- damp_a02 -->
+    <circle cx="205.73" cy="230.00" r="4.2"/>  <!-- damp_a03 -->
+    <circle cx="577.27" cy="130.00" r="4.2"/>  <!-- damp_a07 -->
+    <circle cx="214.25" cy="180.00" r="4.2"/>  <!-- damp_ext_lite -->
+    <circle cx="674.73" cy="180.00" r="4.2"/>  <!-- ext_h2_l5 -->
+    <circle cx="250.80" cy="80.00"  r="4.2"/>  <!-- ext_h4_dampH -->
+    <circle cx="724.67" cy="280.00" r="4.2"/>  <!-- l_h2_l16 -->
+    <circle cx="567.53" cy="230.00" r="4.2"/>  <!-- l_h2_l4 -->
+    <circle cx="624.78" cy="180.00" r="4.2"/>  <!-- l_h2_l8 -->
+    <circle cx="301.96" cy="180.00" r="4.2"/>  <!-- rys_l_heavy -->
+    <circle cx="271.51" cy="130.00" r="4.2"/>  <!-- rys_l_late -->
+  </g>
+  <!-- ext_h3: greedy, solved -->
+  <circle cx="535.85" cy="180.00" r="4.2" fill="var(--accent,#4FB2C2)" fill-opacity="0.8" stroke="var(--accent,#4FB2C2)" stroke-width="1"/>
+
+  <!-- sampled (n=3, verification-run) points: squares, fourth -->
+  <g fill="var(--fourth,#6E92C4)" fill-opacity="0.8" stroke="var(--fourth,#6E92C4)" stroke-width="1">
+    <rect x="531.85" y="116.00" width="8" height="8"/>  <!-- baseline -->
+    <rect x="611.04" y="166.00" width="8" height="8"/>  <!-- combo_rys_anchor -->
+    <rect x="403.95" y="146.00" width="8" height="8"/>  <!-- combo_rysl_anchor -->
+    <rect x="513.58" y="156.00" width="8" height="8"/>  <!-- combo_rysl_l6 -->
+    <rect x="581.80" y="126.00" width="8" height="8"/>  <!-- combo_rysl_rysh -->
+    <rect x="562.31" y="96.00"  width="8" height="8"/>  <!-- ext_h2_l6 -->
+    <rect x="246.80" y="146.00" width="8" height="8"/>  <!-- ext_h3_dampH -->
+    <rect x="531.85" y="296.00" width="8" height="8"/>  <!-- ext_h4 -->
+    <rect x="697.53" y="116.00" width="8" height="8"/>  <!-- ratio_hi_l -->
+    <rect x="457.55" y="126.00" width="8" height="8"/>  <!-- rys_l -->
+    <rect x="495.31" y="166.00" width="8" height="8"/>  <!-- rys_l_1234 -->
+    <rect x="606.16" y="116.00" width="8" height="8"/>  <!-- rys_l_345 -->
+  </g>
+
+  <!-- solved marker: age_sort == 1.0 (only ext_h3 qualifies in the on-disk data) -->
+  <circle cx="535.85" cy="180.00" r="8.5" fill="none" stroke="var(--cause,#E3C24A)" stroke-width="1.8"/>
+
+  <!-- labels: mandatory (rys_l, ratio_hi_l, combo_rys_anchor) + a few anchors -->
+  <g font-size="9" class="ink2">
+    <text x="535.85" y="108" text-anchor="middle">baseline</text>
+    <text x="457.55" y="112" text-anchor="middle">rys_l</text>
+    <text x="701.53" y="136" text-anchor="middle">ratio_hi_l</text>
+    <text x="611.04" y="196" text-anchor="middle">combo_rys_anchor</text>
+    <text x="535.85" y="200" text-anchor="middle" fill="var(--cause,#E3C24A)">ext_h3 ✓ solved</text>
+    <text x="250.80" y="70" text-anchor="middle">ext_h4_dampH</text>
+    <text x="724.67" y="296" text-anchor="middle">l_h2_l16</text>
+  </g>
+
+  <!-- legend -->
+  <g font-size="9">
+    <circle cx="610" cy="70" r="4.2" fill="var(--accent,#4FB2C2)" fill-opacity="0.8" stroke="var(--accent,#4FB2C2)"/>
+    <text x="620" y="73" class="ink2">greedy, n=1 (original sweep score)</text>
+    <rect x="606" y="83" width="8" height="8" fill="var(--fourth,#6E92C4)" fill-opacity="0.8" stroke="var(--fourth,#6E92C4)"/>
+    <text x="620" y="90" class="ink2">sampled, n=3 (§5 verification-run file)</text>
+    <circle cx="610" cy="102" r="7" fill="none" stroke="var(--cause,#E3C24A)" stroke-width="1.6"/>
+    <text x="620" y="106" class="ink2">age_sort solved (rate/pass = 1.0)</text>
+  </g>
+
+  <text x="40" y="392" class="ink2" font-size="10.5">Solved configs scatter across the x-range — geometry/reasoning decoupling holds. But the "champion" cluster</text>
+  <text x="40" y="408" class="ink2" font-size="10.5">(rys_l, ratio_hi_l, combo_rys_anchor) only has <tspan fill="var(--fourth,#6E92C4)">verification-run</tspan> battery files on disk, and none solve age-sort there.</text>
+  <text x="40" y="428" class="mut" font-size="9.5">Item sets differ too: 6 items (greedy) vs 10 (sampled, +runners/seating/meetday/bus) — y averages what each file has.</text>
+</svg>
