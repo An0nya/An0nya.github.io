@@ -103,7 +103,6 @@
   <a href="#stacking" data-spy>Stacking</a>
   <a href="#ushape" data-spy>U-shaped layers</a>
   <a href="#sigma" data-spy>The Σα-law</a>
-  <a href="#todo" data-spy>Corrections</a>
   <a href="#caveats" data-spy>Caveats</a>
 </aside>
 </div>
@@ -1103,20 +1102,6 @@
     </figure>
   </section>
 
-  <section id="todo">
-    <h2><span class="num">§6</span>What to actually do to the page</h2>
-    <table class="nb-table" style="margin-top:var(--sp-4)">
-      <thead><tr><th>#</th><th>Action</th></tr></thead>
-      <tbody>
-        <tr><td class="first">1</td><td>Add the <code>combo_10_38</code> walkback banner (text above). Keep the section, mark it superseded.</td></tr>
-        <tr><td class="first">2</td><td>Demote the eq/mc leaderboard to "old-battery, historical" + add the fair reading: Granite is balanced-<em>resistant</em> (nothing clears multiplicity), but channel <em>specialists</em> exist — interior damping for math, specific prunes for MC, EQ essentially unmovable (not collapsed → no headroom).</td></tr>
-        <tr><td class="first">3</td><td>Add the constructive section (Findings 1–3): metastable-bug repair, the combo-stacking heuristic, the fine-α / non-monotone layers. This is the new heart of the page.</td></tr>
-        <tr><td class="first">4</td><td>Add the shared Σα figure (Finding 4), cross-linked to the MiniCPM page — one law, two models, the predicted downshift.</td></tr>
-        <tr><td class="first">5</td><td>Keep all the mechanism sections unchanged — they were never the problem.</td></tr>
-      </tbody>
-    </table>
-  </section>
-
   <section id="caveats">
     <h2>Caveats</h2>
     <p>The mechanism work here is solid (re-checked against the v3 results file, and unrelated to what
@@ -1125,6 +1110,7 @@
     <ul class="walkback">
       <li><span class="wbhead">The constructive profile (<code>L5↑+L26↓+L14↑</code>) is not yet held-out-validated.</span> Present it as the emerging endgame, not a confirmed champion — argmax off noisy per-layer curves overfits.</li>
       <li><span class="wbhead">The stacking heuristic lives on the in-band / gcore probes</span>, not the floored/ceilinged 49-probe mean. One combo marginally beats its best component, one masks — suggestive, not established. It's a <em>heuristic, not a law</em> until there's a regression of effect against layer-distance.</li>
+      <li><span class="wbhead">The fair reading of the retired eq/mc leaderboard:</span> Granite is balanced-<em>resistant</em> (nothing clears the multiplicity bar), but channel specialists exist: interior damping moves math, specific prunes move MC, and EQ is essentially unmovable (never collapsed, so there's no headroom to recover).</li>
       <li><span class="wbhead">CoT remains unrun on Granite</span> (it decodes ~250 tok/s vs MiniCPM's ~1500 — an est. 10–20 h sweep, gated on a smoke test). The open question that would close the line: does reasoning fix the same metastable bugs the surgery does (redundant) or <em>different</em> ones (compound)? Compare fix-sets via the swing board.</li>
     </ul>
 

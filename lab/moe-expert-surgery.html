@@ -114,13 +114,14 @@
   the same machinery at a Mixture-of-Experts model and it stops working — and the way it stops working is
   informative enough to be its own result. This is the page where the line forks.</p>
 
-  <aside class="nb-correction">
-    <div class="nb-correction__head"><span>⌦ Correction</span><span class="nb-correction__disp">retired — for MoE</span></div>
-    <div class="nb-correction__row"><span class="nb-correction__k">Hypothesis</span><span class="nb-correction__b">A layer is the universal unit of surgery — duplicate, prune, or damp one and capability moves, on any architecture.</span></div>
-    <div class="nb-correction__row"><span class="nb-correction__k">Why it looked true</span><span class="nb-correction__b">It held across every dense specimen — Granite, MiniCPM5 — where a layer genuinely <em>is</em> a unit of computation you can amplify.</span></div>
-    <div class="nb-correction__row"><span class="nb-correction__k">Why it failed</span><span class="nb-correction__b">On an MoE, duplicating a block re-runs the router and double-applies expert selection on an <em>uncalibrated</em> residual. The router sees an input distribution it was never trained on, null rates explode, strict scores floor. It's not "no effect" — it's "actively breaks the routing."</span></div>
-    <div class="nb-correction__row"><span class="nb-correction__k">Disposition</span><span class="nb-correction__b"><b>Retired for MoE.</b> The unit of <em>capacity</em> here is the expert, not the layer — so the line forks to the expert axis; the rest of this page is that work.</span></div>
-  </aside>
+  <p>The working hypothesis coming in: a layer is the universal unit of surgery, duplicate, prune, or damp
+  one and capability moves, on any architecture. It held across every dense specimen, Granite, MiniCPM5,
+  where a layer genuinely is a unit of computation you can amplify. On an MoE it doesn't. Duplicating
+  a block re-runs the router and double-applies expert selection on an uncalibrated residual: the
+  router sees an input distribution it was never trained on, null rates explode, strict scores floor. It's
+  not "no effect," it's "actively breaks the routing." Hypothesis retired for MoE: the unit of
+  <em>capacity</em> here is the expert, not the layer, so the line forks to the expert axis, and the rest of
+  this page is that work.</p>
 
   <section id="wall">
     <h2><span class="num">§1</span>The wall</h2>
@@ -1196,12 +1197,12 @@
       <div class="nb-prov"><span><b>source</b> Huihui4-8B-A4B card + REAP arXiv 2510.13999</span><span><b>measured</b> 1 point (75% cull, PPL +55%)</span><span><b>band</b> estimated from literature, not measured</span></div>
     </figure>
 
-    <aside class="nb-correction" style="margin-top:var(--sp-6)">
-      <div class="nb-correction__head"><span>⌦ Grader-skepticism note</span><span class="nb-correction__disp">artifact, not result</span></div>
-      <div class="nb-correction__row"><span class="nb-correction__k">The tempting read</span><span class="nb-correction__b">Their <em>post-SFT</em> PPL drops <em>below</em> the 128-expert base (1.004 &lt; 1.596) — so 32 experts beat 128?</span></div>
-      <div class="nb-correction__row"><span class="nb-correction__k">Why it's false</span><span class="nb-correction__b">The SFT and the PPL eval are on the <em>same</em> 500 samples — eval-on-train-distribution leakage (memorising a narrow thinking-format), not genuine superiority.</span></div>
-      <div class="nb-correction__row"><span class="nb-correction__k">The defensible claim</span><span class="nb-correction__b">The 0-step <span class="qv">+55%</span> number. The sub-base number is an eval-leakage artifact and shouldn't be cited.</span></div>
-    </aside>
+    <p style="margin-top:var(--sp-6)">Grader-skepticism note: their post-SFT PPL drops below
+    the 128-expert base (1.004 &lt; 1.596), which tempts a read where 32 experts beat 128. That's false: the
+    SFT and the PPL eval are on the <em>same</em> 500 samples, eval-on-train-distribution leakage (memorising
+    a narrow thinking-format), not genuine superiority. The defensible claim is the 0-step
+    <span class="qv">+55%</span> number; the sub-base number is an eval-leakage artifact and shouldn't be
+    cited.</p>
   </section>
 
   <section id="direction">

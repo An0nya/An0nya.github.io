@@ -76,8 +76,7 @@ MIN_UNIT_LEN = 40
 # --gate mode: accepted violation counts (owner-blessed exceptions).
 # index: 1 lead-dash, human-reviewed page, blessed 2026-07-12.
 # duologue: HELD for the interactive log-excerpt pass.
-# geometry: never in the density-pass scope; pending its own pass.
-ALLOWED = {"index.html": 1, "lab/duologue.html": 8, "geometry.html": 6}
+ALLOWED = {"index.html": 1, "lab/duologue.html": 8}
 
 # "Quantitative characters" for the pop-budget discount: digits, math/measure
 # symbols, and Greek letters used as math notation. Whitespace also counts

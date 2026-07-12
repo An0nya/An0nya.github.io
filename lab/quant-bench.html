@@ -116,13 +116,14 @@
   decode; the gap only opens in batched decode, and it costs more than double the RAM.</p>
 
   <section id="gap">
-    <h2><span class="num">§1</span>The table I couldn't find, and the flag that makes the RAM numbers comparable</h2>
+    <h2><span class="num">§1</span>No table settles this, and the flag that makes the RAM numbers comparable</h2>
     <div class="col-side">
       <div>
         <p class="dropcap">If you run local models on a Mac, you've read the common recommendation to use MLX
-        since it's native and faster. What I couldn't find was <em>the table</em>: runtime × quant
+        since it's native and faster. No definitive version of <em>the table</em> exists: runtime × quant
         method × batch size × {prefill, decode} × RAM, all measured in one equal environment on the same
-        model. Pieces of it exist, mostly single-stream, long-context runs (arguably the more realistic
+        model, because the answer shifts enough by model and workload that one general table wouldn't hold
+        up. Pieces of it exist, mostly single-stream, long-context runs (arguably the more realistic
         workload), but nothing exhaustive focused on peak throughput, which is what a parallelizable sweep
         harness actually spends. The full grid is missing for a mundane reason: collecting it needs the same
         model across a dozen quant formats, three runtimes installed and warmed simultaneously, and one
@@ -688,9 +689,9 @@
     physical limit. Single-stream decode is memory-bandwidth-bound: a 4-bit 1.08B model is ~0.6&nbsp;GB,
     so <span class="qx">120&nbsp;GB/s ÷ 0.6 ≈ <span class="qv">200</span> tok/s</span>; observed best ~155 = ~78% of that bound.
     2-bit (~0.35&nbsp;GB) predicts ~343, observed 218 ≈ 64%. Prefill is compute-bound: <span class="qx">2000 tok/s ×
-    ~2·1.08e9&nbsp;FLOP/tok ≈ <span class="qv">4.3</span> TFLOP/s</span>, in the M4 10-core GPU's fp16 range. Which, I suppose,
-    answers the question I couldn't find online: <b>for speed, quant choice wasn't a meaningful
-    discriminator, pick the quant on quality.</b></p>
+    ~2·1.08e9&nbsp;FLOP/tok ≈ <span class="qv">4.3</span> TFLOP/s</span>, in the M4 10-core GPU's fp16 range. Which is exactly the kind of
+    answer no general table would have given me: <b>for speed, quant choice wasn't a meaningful
+    discriminator on this model and workload, pick the quant on quality.</b></p>
   </section>
 
   <section id="roofline">

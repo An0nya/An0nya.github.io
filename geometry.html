@@ -228,27 +228,27 @@ details[open]>.geo-summary::before{transform:rotate(90deg)}
     <div>
       <p>
         Each line tracks how similar the model&rsquo;s internal snapshots of two phrases
-        are, layer by layer — higher means the model treats them as more alike at that
-        depth. At the ends, the ranking is boring: cross-language pairs sit at the
-        bottom because they are literally different — different scripts, different
-        token counts — first as raw input, then again as the model rebuilds the output
+        are, layer by layer (higher means the model treats them as more alike at that
+        depth). At the ends, the ranking is boring: cross-language pairs sit at the
+        bottom because they are literally different (different scripts, different
+        token counts), first as raw input, then again as the model rebuilds the output
         language. The middle is where something interesting can happen: pairs that look
         nothing alike but mean the same thing climb toward each other, which suggests
         the model is translating both into an internal working representation of the
-        meaning — plausibly not any human language at all. The tell isn&rsquo;t convergence
+        meaning, plausibly not any human language at all. The tell isn&rsquo;t convergence
         by itself (deep in a network everything drifts somewhat closer; the scans are
-        centered to cancel exactly that) — it&rsquo;s same-meaning pairs rising above the
+        centered to cancel exactly that); it&rsquo;s same-meaning pairs rising above the
         different-meaning baseline.
       </p>
       <p>
         The delta charts are the second lens: how much each layer actually <em>moves</em>
-        the hidden state (‖h_L − h_{L−1}‖) — a rough measure of how much work it does.
+        the hidden state (‖h_L − h_{L−1}‖), a rough measure of how much work it does.
         The ends always spike (embedding handoff on the way in, generation mode on the
         way out); what matters is the middle, where low-delta layers barely touch the
-        stream. Those are the natural surgery candidates — duplicating or removing a
-        layer that changes little should hurt little — so where the cosine scan maps
-        what the mid-stack <em>holds</em>, the delta scan maps how hard each layer
-        <em>works</em> on it. Read it as a candidate picker, not a validated predictor:
+        stream. Those are the natural surgery candidates, since duplicating or removing a
+        layer that changes little should hurt little &mdash; so where the cosine scan maps
+        what the mid-stack holds, the delta scan maps how hard each layer works on it.
+        Read it as a candidate picker, not a validated predictor:
         it tells you where to try first, not where you&rsquo;ll win.
       </p>
       <p>
@@ -260,12 +260,12 @@ details[open]>.geo-summary::before{transform:rotate(90deg)}
         signature each architecture leaves.
       </p>
       <p>
-        Three things recur across the nine models: the interlingua is
-        <span class="hl-acc">mid-stack</span>, not distributed; the ends are token
-        I/O; and the whole picture is <span class="hl-acc">quant-invariant</span> —
-        2-bit and 8-bit scans of the same model superimpose. The geometry is a
-        property of training, not precision. The one thing that does <em>not</em>
-        recur: any relationship between this map and RYS results — the duplication
+        Three things recur across the nine models: the interlingua is mid-stack,
+        not distributed; the ends are token I/O; and the whole picture is
+        <span class="hl-acc">quant-invariant</span>, since 2-bit and 8-bit scans
+        of the same model superimpose. The geometry is a
+        property of training, not precision. The one thing that does not
+        recur: any relationship between this map and RYS results &mdash; the duplication
         configs that won their sweeps mostly sat on layers no scan pointed at.
       </p>
     </div>
@@ -3978,7 +3978,7 @@ details[open]>.geo-summary::before{transform:rotate(90deg)}
 <circle cx="887" cy="353" r="1.4" fill="var(--geo-diff)"/>
 <text x="900" y="356" font-family="JetBrains Mono" font-size="9.5" fill="var(--ink2)">EN fact ↔ ZH poem (diff lang, diff content)</text>
 </svg>
-<p class="figcap" id="figGeoGranite-cap"><b>Fig G7a.</b> Cross-language same-content cosine climbs to a broad mid-stack plateau (L15–30) — the interlingua / concept space — while the two ends sit in token-I/O geometry (deeply negative at the embedding side, re-separating at the output). The lesion map from the <a href="/lab/granite.html">Granite sweep</a> is this same map: noise is most lethal exactly where meaning lives. <b>Quant-invariant:</b> the 2-bit and 8-bit scans are superimposable on this (4-bit shown) — the geometry is a property of training, not precision.</p>
+<p class="figcap" id="figGeoGranite-cap"><b>Fig G7a.</b> Cross-language same-content cosine climbs to a broad mid-stack plateau (L15–30), the interlingua / concept space, while the two ends sit in token-I/O geometry (deeply negative at the embedding side, re-separating at the output). The lesion map from the <a href="/lab/granite.html">Granite sweep</a> is this same map: noise is most lethal exactly where meaning lives. Quant-invariant: the 2-bit and 8-bit scans are superimposable on this (4-bit shown); the geometry is a property of training, not precision.</p>
 </div>
 <div class="figure">
 <svg id="geoGraniteDelta" viewBox="0 0 1080 300" role="img" aria-label="Granite-4.1-3B — per-layer delta (4-bit)">
@@ -4042,7 +4042,7 @@ details[open]>.geo-summary::before{transform:rotate(90deg)}
 <text x="1052.00" y="276" font-family="JetBrains Mono" font-size="10" fill="var(--geo-base)" text-anchor="middle">39</text>
 <text x="560" y="298" font-family="JetBrains Mono" font-size="10.5" letter-spacing="1.5" fill="var(--ink2)" text-anchor="middle">layer</text>
 </svg>
-<p class="figcap" id="figGeoGraniteD-cap"><b>Fig G7b.</b> Per-layer hidden-state delta. The U-shape — large at the input/output ends, a flat ≈0.22 plateau through the middle — is the residual multiplier made visible, and the inverse of the noise-vulnerability curve.</p>
+<p class="figcap" id="figGeoGraniteD-cap"><b>Fig G7b.</b> Per-layer hidden-state delta. The U-shape (large at the input/output ends, a flat ≈0.22 plateau through the middle) is the residual multiplier made visible, and the inverse of the noise-vulnerability curve.</p>
 </div>
   </div>
 </details>
@@ -4437,7 +4437,7 @@ details[open]>.geo-summary::before{transform:rotate(90deg)}
 <circle cx="887" cy="353" r="1.4" fill="var(--geo-diff)"/>
 <text x="900" y="356" font-family="JetBrains Mono" font-size="9.5" fill="var(--ink2)">EN fact ↔ ZH poem (diff lang, diff content)</text>
 </svg>
-<p class="figcap" id="figGeoQwen-cap"><b>Fig G8.</b> Qwen-3.5-4B at 2-bit shows the same interlingua-in-the-middle signature — cross-lang same-content rising to a mid-stack peak, ends in token geometry — and it is unchanged at 4-bit (2-bit shown). Independent confirmation, on a different architecture and a harsher quant, that the concept-space geometry survives aggressive quantization.</p>
+<p class="figcap" id="figGeoQwen-cap"><b>Fig G8.</b> Qwen-3.5-4B at 2-bit shows the same interlingua-in-the-middle signature (cross-lang same-content rising to a mid-stack peak, ends in token geometry) and it is unchanged at 4-bit (2-bit shown). Independent confirmation, on a different architecture and a harsher quant, that the concept-space geometry survives aggressive quantization.</p>
 </div>
   </div>
 </details>
