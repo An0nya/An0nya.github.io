@@ -21,7 +21,7 @@
   .mono { font-family: var(--font-mono); font-size: 0.92em; }
   .small { font-size: var(--fs-sm); }
   .muted { color: var(--text-muted); }
-  .hl-acc { color: var(--accent); font-weight: 500; }
+  .hl-acc { font-weight: 600; }
   .hl-neg { color: var(--neg); font-weight: 500; }
   /* draft banner */
   .draft-banner { display: flex; gap: var(--sp-4); align-items: baseline; border: 1px solid var(--border-strong); border-left: 3px solid var(--accent); background: var(--surface-sunken); border-radius: var(--radius-2); padding: var(--sp-4) var(--sp-5); margin: 0 0 var(--sp-6); max-width: var(--measure); font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); }
@@ -208,17 +208,17 @@
   <div class="col-side">
     <div>
       <p class="dropcap">
-        The forward loop, almost literally: the fast <b>L</b> module relaxes many
-        times toward a target held fixed by the slow <b>H</b> state; then <b>H</b>
-        takes a single step, moving the target; repeat. It is nested fixed-point
-        iteration — <em>mutual</em> refinement of one evolving state, not a one-way
+        The forward loop, almost literally: the fast L module relaxes many
+        times toward a target held fixed by the slow H state, then H
+        takes a single step, moving the target, and repeats. It is nested fixed-point
+        iteration: <em>mutual</em> refinement of one evolving state, not a one-way
         pipeline.
       </p>
       <p>
-        A per-cycle <span class="hl-acc">logit lens</span> — decoding each module's
-        state through the output head — makes the division of labour visible in
-        plain token space. <b>H</b> (meaning) decodes to content: the problem's
-        actual numbers, reasoning words like "Since," "We," "By." <b>L</b> (surface)
+        A per-cycle <span class="hl-acc">logit lens</span> (decoding each module's
+        state through the output head) makes the division of labour visible in
+        plain token space. H (meaning) decodes to content: the problem's
+        actual numbers, reasoning words like "Since," "We," "By." L (surface)
         decodes to subword fragments that aren't clean output tokens. The roles
         aren't a training story you have to take on faith; they're right there in
         the decode.
@@ -254,11 +254,11 @@
   <div class="col-2">
     <div>
       <p>
-        Math, English↔Chinese: cosine jumps to <b>+0.32 the instant the state
-        enters the H (slow) module</b>, cycle 0, and recurs across cycles. Prose
-        (fact, poem) EN↔ZH <em>never</em> crosses (~0). Only structured, numeric
-        content becomes language-decoupled — and it happens in the meaning module,
-        exactly where the lens says meaning lives.
+        Math, English↔Chinese: cosine jumps to <span class="qv">+0.32</span> the
+        instant the state enters the H (slow) module, cycle 0, and recurs across
+        cycles. Prose (fact, poem) EN↔ZH <em>never</em> crosses (<span class="qv">~0</span>).
+        Only structured, numeric content becomes language-decoupled, and it happens
+        in the meaning module, exactly where the lens says meaning lives.
       </p>
     </div>
     <div>
@@ -278,21 +278,21 @@
   <h2><span class="num">§3</span>The loop-scaling negative (and a self-correction)</h2>
   <p>
     HRM's whole premise is buying reasoning with more loops, so I pushed
-    <span class="mono">H_cycles</span> from 2 to 8. It does not help: the math
+    <span class="mono">H_cycles</span> from <span class="qv">2 to 8</span>. It does not help: the math
     interlingua peaks at the <em>trained</em> cycles and decays to noise by H2+,
-    and the H-state does not converge to a fixed point — it oscillates.
+    and the H-state does not converge to a fixed point: it oscillates.
   </p>
   <p>
-    I first logged this as "low-rank collapse." <b>An effective-rank probe
-    falsified my own claim</b> — the participation ratio <em>rises</em> across
-    cycles (10→22), it doesn't fall. The real mechanism, from the lens: over
+    I first logged this as "low-rank collapse." An effective-rank probe
+    falsified my own claim: the participation ratio <em>rises</em> across
+    cycles (<span class="qv">10→22</span>), it doesn't fall. The real mechanism, from the lens: over
     iteration, the meaning channel converges onto end-of-sequence and formatting
     tokens (<span class="mono">&lt;|box_end|&gt;</span>, <span class="mono">\n</span>).
-    The model reads excess compute as "you're done — terminate." Content
-    evaporates into <em>termination</em>, at full rank. The checkpoint is
+    The model reads excess compute as "you're done, terminate." Content
+    evaporates into termination, at full rank. The checkpoint is
     saturated at its trained depth; you cannot buy reasoning with free test-time
-    loops. <em>(First lesson that a probe can mislead — a rank probe corrected a
-    wrong reading of a cosine probe. It would not be the last.)</em>
+    loops. (First lesson that a probe can mislead: a rank probe corrected a
+    wrong reading of a cosine probe. It would not be the last.)
   </p>
 </section>
 
@@ -325,9 +325,9 @@
     The pattern was gorgeous and theoretically motivated: <b>more settling in the
     fast/renderer module helped reasoning; more drift-inducing H hurt.</b> A narrow
     sweet spot, early-L duplication. And the interlingua geometry seemed to
-    corroborate it. It even survived a first robustness pass — the supposed
-    <em>null control</em> (duplicating L) was the single best config. <em>(In
-    hindsight, that the control won should have been the tell.)</em>
+    corroborate it. It even survived a first robustness pass: the supposed
+    null control (duplicating L) was the single best config. (In
+    hindsight, that the control won should have been the tell.)
   </p>
 
   <div class="figure">
@@ -359,19 +359,19 @@
   </div>
 
   <p style="margin-top:var(--sp-5)">
-    <b>The champion scored 0/3 — worse than baseline.</b> No config beat baseline;
+    <span class="qx">The champion scored <span class="qv">0/3</span></span>, worse than baseline. No config beat baseline;
     everything non-extended clustered within N=3 noise. The base model is simply
-    non-deterministic and solves these puzzles ~70% of the time on its own — the
+    non-deterministic and solves these puzzles <span class="qx">~<span class="qv">70%</span></span> of the time on its own: the
     greedy sweep had been measuring <em>which single draw got lucky</em>, not
     capability.
   </p>
   <p>
-    And the interlingua metric that "corroborated" the story? <b>Decoupled.</b>
+    And the interlingua metric that "corroborated" the story? Decoupled.
     Across all configs the highest-interlingua runs were among the <em>worst</em>
     behaviorally; a config with near-zero interlingua reasoned fine. The pretty
-    geometry measures a representational property, not capability — the §2 warning
-    label, cashed in. <em>(Second, decisive lesson that probes mislead — and this
-    one had fooled me for a full overnight.)</em>
+    geometry measures a representational property, not capability: the §2 warning
+    label, cashed in. (Second, decisive lesson that probes mislead: this
+    one had fooled me for a full overnight.)
   </p>
 </section>
 
@@ -403,13 +403,13 @@ generations:    ordering CORRECT, but Cara→"Costa"→"Rice", answers truncate<
   </div>
 
   <p style="margin-top:var(--sp-5)">
-    The modules behave exactly as their roles predict — the surgery perturbs the
-    <b>surface</b> (L) or the <b>state stability</b> (H), and neither reliably
-    improves reasoning. The robust conclusions: <span class="hl-neg">you can
-    reliably make this model worse</span> (extend H → garbage); <span class="hl-neg">you
+    The modules behave exactly as their roles predict: the surgery perturbs the
+    surface (L) or the state stability (H), and neither reliably
+    improves reasoning. The robust conclusions: you can
+    reliably make this model worse (extend H → garbage); <span class="hl-neg">you
     cannot reliably make it better</span> by inference-time surgery; one fencepost
-    trap (<span class="mono">clock_strike</span>) was solved by <em>nothing,
-    ever</em> — a hard capability ceiling. The reasoning capability is near-fixed
+    trap (<span class="mono">clock_strike</span>) was solved by nothing,
+    ever, a hard capability ceiling. The reasoning capability is near-fixed
     and saturated; the real lever is retraining, not surgery.
   </p>
 </section>
@@ -450,7 +450,7 @@ generations:    ordering CORRECT, but Cara→"Costa"→"Rice", answers truncate<
 <!-- ─── §9 CAVEATS / REPRO ────────────────────────────────────────── -->
 <section id="caveats">
   <h2>Caveats</h2>
-  <p>The verification pass that killed the headline finding is itself thin — N=3, on a battery calibrated
+  <p>The verification pass that killed the headline finding is itself thin: <span class="qx">N=<span class="qv">3</span></span>, on a battery calibrated
   for within-model deltas, not a cross-model claim. Read what follows as the honest state of an
   already-walked-back result, not fresh doubt on a stable one.</p>
   <ul class="walkback">
