@@ -1,169 +1,93 @@
-<svg viewBox="0 0 760 440" xmlns="http://www.w3.org/2000/svg"
+<svg viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg"
      font-family="var(--font-mono,'JetBrains Mono',ui-monospace,Menlo,monospace)">
-  <title>Friction clusters ranked by session span</title>
-  <desc>A schematic bar chart of friction clusters ranked by how many sessions each spans, with cluster counts shown as representative. Some of the tallest bars are flagged suspect because they match the summarizing model's known editorial bias, while some shorter bars are trusted because a real user action backs them — frequency and trustworthiness are different axes.</desc>
+  <defs>
+    <pattern id="stripe" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="var(--neg,#B98AD6)" stroke-width="1.1" opacity="0.5"/>
+    </pattern>
+  </defs>
   <style>
     .ttl  { font-family: var(--font-serif,'Newsreader',Georgia,serif); }
     text  { fill: var(--ink,#DCE4EC); }
     .mut  { fill: var(--muted,#6F7C88); }
     .ink2 { fill: var(--ink2,#A4B0BC); }
     .acc  { fill: var(--accent,#4FB2C2); }
-    .cit  { fill: var(--cause,#E3C24A); }
     .vio  { fill: var(--neg,#B98AD6); }
-    .sla  { fill: var(--fourth,#6E92C4); }
     .accs { stroke: var(--accent,#4FB2C2); fill:none; }
-    .cits { stroke: var(--cause,#E3C24A); fill:none; }
     .vios { stroke: var(--neg,#B98AD6); fill:none; }
-    .slas { stroke: var(--fourth,#6E92C4); fill:none; }
     .rule { stroke: var(--rule2,#27323D); }
     .axis { stroke: var(--ink2,#A4B0BC); }
+    .lbl  { fill: var(--ink2,#A4B0BC); font-size: 9px; }
   </style>
-  <rect x="0" y="0" width="760" height="440" fill="var(--bg2,#141D26)"/>
-<text class="ttl" x="40" y="34" font-size="18">Frequency isn't evidence</text>
-<text class="mut" x="40" y="53" font-size="10">Friction clusters by distinct-session count · bar height ≠ trust</text>
-<line x1="60" y1="350" x2="392" y2="350" class="axis" stroke-width="1"/>
-<rect x="68" y="110.0" width="26" height="240.0" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/>
-<line x1="68" y1="110" x2="94" y2="136" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="117" x2="94" y2="143" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="124" x2="94" y2="150" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="131" x2="94" y2="157" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="138" x2="94" y2="164" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="145" x2="94" y2="171" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="152" x2="94" y2="178" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="159" x2="94" y2="185" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="166" x2="94" y2="192" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="173" x2="94" y2="199" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="180" x2="94" y2="206" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="187" x2="94" y2="213" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="194" x2="94" y2="220" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="201" x2="94" y2="227" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="208" x2="94" y2="234" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="215" x2="94" y2="241" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="222" x2="94" y2="248" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="229" x2="94" y2="255" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="236" x2="94" y2="262" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="243" x2="94" y2="269" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="250" x2="94" y2="276" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="257" x2="94" y2="283" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="264" x2="94" y2="290" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="271" x2="94" y2="297" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="278" x2="94" y2="304" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="285" x2="94" y2="311" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="292" x2="94" y2="318" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="299" x2="94" y2="325" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="306" x2="94" y2="332" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="313" x2="94" y2="339" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="320" x2="94" y2="346" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="327" x2="94" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="334" x2="94" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="341" x2="94" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="68" y1="348" x2="94" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<text x="81.0" y="96.0" text-anchor="middle" class="vio" font-size="8.5">⚑</text>
-<text x="81.0" y="106.0" text-anchor="middle" class="mut" font-size="8.5">9</text>
-<text x="81.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 81.0 364)">agent rushed</text>
-<rect x="104" y="136.7" width="26" height="213.3" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/>
-<line x1="104" y1="136" x2="130" y2="162" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="143" x2="130" y2="169" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="150" x2="130" y2="176" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="157" x2="130" y2="183" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="164" x2="130" y2="190" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="171" x2="130" y2="197" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="178" x2="130" y2="204" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="185" x2="130" y2="211" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="192" x2="130" y2="218" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="199" x2="130" y2="225" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="206" x2="130" y2="232" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="213" x2="130" y2="239" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="220" x2="130" y2="246" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="227" x2="130" y2="253" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="234" x2="130" y2="260" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="241" x2="130" y2="267" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="248" x2="130" y2="274" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="255" x2="130" y2="281" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="262" x2="130" y2="288" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="269" x2="130" y2="295" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="276" x2="130" y2="302" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="283" x2="130" y2="309" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="290" x2="130" y2="316" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="297" x2="130" y2="323" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="304" x2="130" y2="330" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="311" x2="130" y2="337" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="318" x2="130" y2="344" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="325" x2="130" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="332" x2="130" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="339" x2="130" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="104" y1="346" x2="130" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<text x="117.0" y="122.7" text-anchor="middle" class="vio" font-size="8.5">⚑</text>
-<text x="117.0" y="132.7" text-anchor="middle" class="mut" font-size="8.5">8</text>
-<text x="117.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 117.0 364)">too preachy</text>
-<rect x="140" y="190.0" width="26" height="160.0" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/>
-<line x1="140" y1="190" x2="166" y2="216" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="197" x2="166" y2="223" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="204" x2="166" y2="230" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="211" x2="166" y2="237" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="218" x2="166" y2="244" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="225" x2="166" y2="251" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="232" x2="166" y2="258" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="239" x2="166" y2="265" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="246" x2="166" y2="272" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="253" x2="166" y2="279" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="260" x2="166" y2="286" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="267" x2="166" y2="293" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="274" x2="166" y2="300" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="281" x2="166" y2="307" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="288" x2="166" y2="314" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="295" x2="166" y2="321" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="302" x2="166" y2="328" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="309" x2="166" y2="335" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="316" x2="166" y2="342" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="323" x2="166" y2="349" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="330" x2="166" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="337" x2="166" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="140" y1="344" x2="166" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<text x="153.0" y="176.0" text-anchor="middle" class="vio" font-size="8.5">⚑</text>
-<text x="153.0" y="186.0" text-anchor="middle" class="mut" font-size="8.5">6</text>
-<text x="153.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 153.0 364)">invented detour</text>
-<rect x="176" y="216.7" width="26" height="133.3" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
-<text x="189.0" y="212.7" text-anchor="middle" class="mut" font-size="8.5">5</text>
-<text x="189.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 189.0 364)">grep-first</text>
-<rect x="212" y="216.7" width="26" height="133.3" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/>
-<line x1="212" y1="216" x2="238" y2="242" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="223" x2="238" y2="249" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="230" x2="238" y2="256" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="237" x2="238" y2="263" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="244" x2="238" y2="270" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="251" x2="238" y2="277" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="258" x2="238" y2="284" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="265" x2="238" y2="291" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="272" x2="238" y2="298" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="279" x2="238" y2="305" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="286" x2="238" y2="312" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="293" x2="238" y2="319" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="300" x2="238" y2="326" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="307" x2="238" y2="333" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="314" x2="238" y2="340" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="321" x2="238" y2="347" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="328" x2="238" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="335" x2="238" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="342" x2="238" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<line x1="212" y1="349" x2="238" y2="350" class="vios" stroke-width="0.6" opacity="0.5"/>
-<text x="225.0" y="202.7" text-anchor="middle" class="vio" font-size="8.5">⚑</text>
-<text x="225.0" y="212.7" text-anchor="middle" class="mut" font-size="8.5">5</text>
-<text x="225.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 225.0 364)">over-formatted</text>
-<rect x="248" y="243.3" width="26" height="106.7" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
-<text x="261.0" y="239.3" text-anchor="middle" class="mut" font-size="8.5">4</text>
-<text x="261.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 261.0 364)">verify premise</text>
-<rect x="284" y="243.3" width="26" height="106.7" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
-<text x="297.0" y="239.3" text-anchor="middle" class="mut" font-size="8.5">4</text>
-<text x="297.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 297.0 364)">diagnostic≠directive</text>
-<rect x="320" y="270.0" width="26" height="80.0" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
-<text x="333.0" y="266.0" text-anchor="middle" class="mut" font-size="8.5">3</text>
-<text x="333.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 333.0 364)">tool-trust gate</text>
-<rect x="356" y="270.0" width="26" height="80.0" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
-<text x="369.0" y="266.0" text-anchor="middle" class="mut" font-size="8.5">3</text>
-<text x="369.0" y="364" text-anchor="middle" class="ink2" font-size="8.0" transform="rotate(35 369.0 364)">under-documented</text>
-<rect x="530" y="77" width="14" height="12" class="vios" stroke-width="1.4" fill="none" stroke-dasharray="3 2"/><text x="550" y="87" class="ink2" font-size="8.5">⚑ suspect — matches reader bias</text>
-<rect x="530" y="95" width="14" height="12" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/><text x="550" y="105" class="ink2" font-size="8.5">trusted — user-action backed</text>
-<line x1="40" y1="396" x2="720" y2="396" class="rule" stroke-width="1"/>
-<text x="40" y="414" class="ink2" font-size="11">The <tspan class="vio">tallest bars</tspan> are suspect (a biased reader repeating itself); some <tspan class="acc">short bars</tspan> are trusted.</text>
+  <rect x="0" y="0" width="760" height="400" fill="var(--bg2,#141D26)"/>
+  <text class="ttl" x="40" y="34" font-size="18">Frequency isn't evidence</text>
+  <text class="mut" x="40" y="53" font-size="10">Friction clusters by distinct-session count · bar height ≠ trust</text>
+
+  <line x1="60" y1="300" x2="720" y2="300" class="axis" stroke-width="1"/>
+
+  <!-- agent rushed : 9 : suspect -->
+  <rect x="75.7" y="104.0" width="42" height="196.0" class="vios" stroke-width="1.4" fill="url(#stripe)" stroke-dasharray="3 2"/>
+  <text x="96.7" y="88.0" text-anchor="middle" class="vio" font-size="9">⚑</text>
+  <text x="96.7" y="99.0" text-anchor="middle" class="mut" font-size="8.5">9</text>
+  <text x="96.7" y="312" text-anchor="middle" class="lbl">agent</text>
+  <text x="96.7" y="324" text-anchor="middle" class="lbl">rushed</text>
+
+  <!-- too preachy : 8 : suspect -->
+  <rect x="149.0" y="125.8" width="42" height="174.2" class="vios" stroke-width="1.4" fill="url(#stripe)" stroke-dasharray="3 2"/>
+  <text x="170.0" y="109.8" text-anchor="middle" class="vio" font-size="9">⚑</text>
+  <text x="170.0" y="120.8" text-anchor="middle" class="mut" font-size="8.5">8</text>
+  <text x="170.0" y="312" text-anchor="middle" class="lbl">too</text>
+  <text x="170.0" y="324" text-anchor="middle" class="lbl">preachy</text>
+
+  <!-- invented detour : 6 : suspect -->
+  <rect x="222.3" y="169.3" width="42" height="130.7" class="vios" stroke-width="1.4" fill="url(#stripe)" stroke-dasharray="3 2"/>
+  <text x="243.3" y="153.3" text-anchor="middle" class="vio" font-size="9">⚑</text>
+  <text x="243.3" y="164.3" text-anchor="middle" class="mut" font-size="8.5">6</text>
+  <text x="243.3" y="312" text-anchor="middle" class="lbl">invented</text>
+  <text x="243.3" y="324" text-anchor="middle" class="lbl">detour</text>
+
+  <!-- grep-first : 5 : trusted -->
+  <rect x="295.7" y="191.1" width="42" height="108.9" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+  <text x="316.7" y="185.1" text-anchor="middle" class="mut" font-size="8.5">5</text>
+  <text x="316.7" y="312" text-anchor="middle" class="lbl">grep-</text>
+  <text x="316.7" y="324" text-anchor="middle" class="lbl">first</text>
+
+  <!-- over-formatted : 5 : suspect -->
+  <rect x="369.0" y="191.1" width="42" height="108.9" class="vios" stroke-width="1.4" fill="url(#stripe)" stroke-dasharray="3 2"/>
+  <text x="390.0" y="175.1" text-anchor="middle" class="vio" font-size="9">⚑</text>
+  <text x="390.0" y="186.1" text-anchor="middle" class="mut" font-size="8.5">5</text>
+  <text x="390.0" y="312" text-anchor="middle" class="lbl">over-</text>
+  <text x="390.0" y="324" text-anchor="middle" class="lbl">formatted</text>
+
+  <!-- verify premise : 4 : trusted -->
+  <rect x="442.3" y="212.9" width="42" height="87.1" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+  <text x="463.3" y="206.9" text-anchor="middle" class="mut" font-size="8.5">4</text>
+  <text x="463.3" y="312" text-anchor="middle" class="lbl">verify</text>
+  <text x="463.3" y="324" text-anchor="middle" class="lbl">premise</text>
+
+  <!-- diagnostic≠directive : 4 : trusted -->
+  <rect x="515.7" y="212.9" width="42" height="87.1" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+  <text x="536.7" y="206.9" text-anchor="middle" class="mut" font-size="8.5">4</text>
+  <text x="536.7" y="312" text-anchor="middle" class="lbl">diagnostic ≠</text>
+  <text x="536.7" y="324" text-anchor="middle" class="lbl">directive</text>
+
+  <!-- tool-trust gate : 3 : trusted -->
+  <rect x="589.0" y="234.7" width="42" height="65.3" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+  <text x="610.0" y="228.7" text-anchor="middle" class="mut" font-size="8.5">3</text>
+  <text x="610.0" y="312" text-anchor="middle" class="lbl">tool-trust</text>
+  <text x="610.0" y="324" text-anchor="middle" class="lbl">gate</text>
+
+  <!-- under-documented : 3 : trusted -->
+  <rect x="662.3" y="234.7" width="42" height="65.3" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+  <text x="683.3" y="228.7" text-anchor="middle" class="mut" font-size="8.5">3</text>
+  <text x="683.3" y="312" text-anchor="middle" class="lbl">under-</text>
+  <text x="683.3" y="324" text-anchor="middle" class="lbl">documented</text>
+
+  <!-- legend -->
+  <rect x="530" y="77" width="14" height="12" class="vios" stroke-width="1.4" fill="url(#stripe)" stroke-dasharray="3 2"/>
+  <text x="550" y="87" class="ink2" font-size="8.5">⚑ suspect — matches reader bias</text>
+  <rect x="530" y="95" width="14" height="12" class="accs" stroke-width="1.6" fill="var(--accent,#4FB2C2)" fill-opacity="0.18"/>
+  <text x="550" y="105" class="ink2" font-size="8.5">trusted — user-action backed</text>
+
+  <line x1="40" y1="352" x2="720" y2="352" class="rule" stroke-width="1"/>
+  <text x="40" y="370" class="ink2" font-size="11">The <tspan class="vio">tallest bars</tspan> are suspect (a biased reader repeating itself); some <tspan class="acc">short bars</tspan> are trusted.</text>
 </svg>
