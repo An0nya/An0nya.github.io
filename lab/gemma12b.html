@@ -49,12 +49,6 @@ h3{font-family:'JetBrains Mono',monospace;font-size:.8rem;letter-spacing:.08em;c
 p{margin:0 0 1.1rem}p:last-child{margin-bottom:0}
 .dek{font-size:1.1rem;line-height:1.7;color:var(--ink2);max-width:800px;margin-bottom:2.4rem}
 
-.stats-strip{display:flex;flex-wrap:wrap;border-top:1px solid var(--rule2);border-bottom:1px solid var(--rule2);margin:2.4rem 0}
-.stat{flex:1;min-width:130px;padding:1rem 1.4rem;border-right:1px solid var(--rule2)}
-.stat:last-child{border-right:none}
-.stat .num{display:block;font-family:'JetBrains Mono',monospace;font-size:1.45rem;color:var(--acc);line-height:1;margin-bottom:.35rem}
-.stat .label{display:block;font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.06em;color:var(--muted);line-height:1.45}
-
 .marginalia{display:grid;grid-template-columns:8.5rem 1fr;gap:0 2.5rem;align-items:start}
 .marginalia .mlabel{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:.2rem;text-align:right}
 .marginalia .mbody{max-width:720px}
@@ -115,7 +109,6 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
 }
 @media(max-width:480px){
   h1{font-size:2rem}
-  .stat{min-width:50%;border-right:none;border-bottom:1px solid var(--rule2)}
   .gallery{grid-template-columns:1fr}
 }
 </style>
@@ -188,9 +181,13 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
 
 <!-- ══ HERO ══ -->
 <section class="hero" data-screen-label="Hero">
-  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · the vivarium, first specimen · <em>Gemma-4-12B-mxfp4 · base · 48 layers · day-zero scan</em></div>
+  <div class="nb-kicker" style="margin-bottom:var(--sp-4)">Observation notebook · Anya · 2026 · the vivarium, first specimen</div>
   <header class="nb-record">
     <div class="nb-record__title">I probed Gemma-4-12B the day it dropped</div>
+    <div class="nb-record__grid">
+      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v">Gemma-4-12B-mxfp4 · base · 48 layers · day-zero scan</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">day-zero scan · 6 probe sets, all converge on one concept zone (L18–27) · final collapse at L47</span></div>
+    </div>
   </header>
   <p class="dek">
     Gemma 4 12B came out this afternoon. By the time the mxfp4 quant had landed on my drive
@@ -198,16 +195,16 @@ dialog.spec-lightbox::backdrop{background:rgba(0,0,0,.55)}
     it. The method is fast enough to crack open a brand-new model the same day it ships — so this
     is a zero-day look inside a 48-layer dense model, while it still has the plastic film on.
   </p>
-  <div class="stats-strip">
-    <div class="stat"><span class="num">6</span><span class="label">Probe sets<br>six questions</span></div>
-    <div class="stat"><span class="num">L18–27</span><span class="label">The concept zone<br>all six land here</span></div>
-    <div class="stat"><span class="num">48</span><span class="label">Dense layers<br>mxfp4 quant</span></div>
-    <div class="stat"><span class="num">12</span><span class="label">Languages<br>7 writing systems</span></div>
-    <div class="stat"><span class="num">L47</span><span class="label">Final collapse<br>meaning → next token</span></div>
+  <div class="nb-stats">
+    <div class="nb-stat"><span class="nb-stat__num">6</span><span class="nb-stat__label">Probe sets<br>six questions</span></div>
+    <div class="nb-stat"><span class="nb-stat__num">L18–27</span><span class="nb-stat__label">The concept zone<br>all six land here</span></div>
+    <div class="nb-stat"><span class="nb-stat__num">48</span><span class="nb-stat__label">Dense layers<br>mxfp4 quant</span></div>
+    <div class="nb-stat"><span class="nb-stat__num">12</span><span class="nb-stat__label">Languages<br>7 writing systems</span></div>
+    <div class="nb-stat"><span class="nb-stat__num">L47</span><span class="nb-stat__label">Final collapse<br>meaning → next token</span></div>
   </div>
-  <div class="marginalia" style="margin-top:2rem">
-    <div class="mlabel">The question</div>
-    <div class="mbody">
+  <div class="nb-marginalia" style="margin-top:2rem">
+    <div class="nb-marginalia__label">The question</div>
+    <div class="nb-marginalia__body">
       <p>
         I went in without a goal in mind and converged on one question: <em>what does the model
         already know about its context, and when in the stack does it know it?</em>

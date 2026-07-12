@@ -12,8 +12,6 @@
   main { max-width: var(--page-max); margin: 0 auto; padding: var(--sp-7) var(--gutter) var(--sp-9); }
   section { padding: var(--sp-7) 0 0; }
   .dek { font-family: var(--font-serif); font-style: italic; font-size: var(--fs-dek); line-height: 1.4; color: var(--text-dim); max-width: 64ch; margin: var(--sp-5) 0 0; }
-  h1 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.04; margin: var(--sp-3) 0 var(--sp-5); }
-  h1 em { font-style: italic; color: var(--accent-bright); }
   h2 { font-size: var(--fs-h2); margin: 0 0 var(--sp-4); }
   h2 .num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); letter-spacing: .1em; vertical-align: 0.7em; margin-right: var(--sp-3); }
   p { max-width: var(--measure); }
@@ -22,19 +20,10 @@
   .small { font-size: var(--fs-sm); }
   .muted { color: var(--text-muted); }
   .hl-acc { font-weight: 600; }
-  .hl-neg { color: var(--neg); font-weight: 500; }
+  .hl-neg { font-weight: 600; }
   /* draft banner */
   .draft-banner { display: flex; gap: var(--sp-4); align-items: baseline; border: 1px solid var(--border-strong); border-left: 3px solid var(--accent); background: var(--surface-sunken); border-radius: var(--radius-2); padding: var(--sp-4) var(--sp-5); margin: 0 0 var(--sp-6); max-width: var(--measure); font-size: var(--fs-sm); line-height: 1.55; color: var(--text-dim); }
   .draft-banner .dlabel { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); flex: none; }
-  /* hero topbar */
-  .topbar { display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-5); justify-content: space-between; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: .04em; color: var(--text-muted); }
-  .topbar .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: var(--sp-2); vertical-align: 1px; }
-  .nb-kicker { margin-top: var(--sp-6); }
-  /* stats strip */
-  .stats-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--sp-4); margin: var(--sp-6) 0; padding: var(--sp-5) 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .stat .num { display: block; font-family: var(--font-mono); font-size: 1.5rem; color: var(--text); line-height: 1.1; }
-  .stat .num small { font-size: 0.6em; color: var(--text-muted); }
-  .stat .label { display: block; font-size: var(--fs-micro); line-height: 1.4; color: var(--text-muted); margin-top: var(--sp-2); }
   /* two-up columns */
   .col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-6); }
   .col-side { display: grid; grid-template-columns: 1fr 260px; gap: var(--sp-7); align-items: start; }
@@ -152,14 +141,15 @@
   <span>This specimen is a recurrent architecture I don't yet fully understand, and the headline finding here was overturned by my own verification pass. It's published as an honest work-in-progress — the negative result and the methodology lesson are the point. Read it as a notebook entry, not a paper.</span>
 </div>
 
-<section class="hero">
-  <div class="topbar">
-    <div><span class="dot"></span>Specimen · HRM-Text-1B · recurrent · MLX bf16</div>
-    <div class="right">35 configs · 5 waves · then the verification that killed it</div>
-  </div>
+  <div class="nb-kicker" style="margin-bottom:var(--sp-5)">Observation notebook · Anya · 2026 · the collapsed-champion branch</div>
+  <header class="nb-record">
+    <div class="nb-record__title">HRM: a false dawn.</div>
+    <div class="nb-record__grid">
+      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v">HRM-Text-1B · recurrent · MLX bf16 · 35 configs · 5 waves · then the verification that killed it</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">A recurrent reasoner, and a result that didn't survive</span></div>
+    </div>
+  </header>
 
-  <div class="nb-kicker">A recurrent reasoner, and a result that didn't survive</div>
-  <h1>HRM:<br><em>a false dawn</em>.</h1>
   <p class="dek">
     A Hierarchical Reasoning Model — a recurrent architecture whose whole thesis
     is <em>reasoning-depth through loops, not parameters</em>. The dissection
@@ -169,12 +159,12 @@
     killed it. What survived is more useful than what died.
   </p>
 
-  <div class="stats-strip">
-    <div class="stat"><span class="num">2×3</span><span class="label">H · L cycles<br>= 8 passes / token</span></div>
-    <div class="stat"><span class="num">128</span><span class="label">Unrolled layers<br>weight-shared</span></div>
-    <div class="stat"><span class="num">35</span><span class="label">Configs swept<br>across 5 waves</span></div>
-    <div class="stat"><span class="num">5<small>/6</small></span><span class="label">"Champion" battery<br>greedy, n=1</span></div>
-    <div class="stat"><span class="num">0<small>/3</small></span><span class="label">Same champion<br>sampled, verified</span></div>
+  <div class="nb-stats">
+    <div class="nb-stat"><span class="nb-stat__num">2×3</span><span class="nb-stat__label">H · L cycles<br>= 8 passes / token</span></div>
+    <div class="nb-stat"><span class="nb-stat__num">128</span><span class="nb-stat__label">Unrolled layers<br>weight-shared</span></div>
+    <div class="nb-stat"><span class="nb-stat__num">35</span><span class="nb-stat__label">Configs swept<br>across 5 waves</span></div>
+    <div class="nb-stat"><span class="nb-stat__num">5<small>/6</small></span><span class="nb-stat__label">"Champion" battery<br>greedy, n=1</span></div>
+    <div class="nb-stat"><span class="nb-stat__num">0<small>/3</small></span><span class="nb-stat__label">Same champion<br>sampled, verified</span></div>
   </div>
 
   <div class="nb-marginalia">
@@ -199,7 +189,6 @@
       </p>
     </div>
   </div>
-</section>
 
 
 <!-- ─── §1 SLOW/FAST ──────────────────────────────────────────────── -->
