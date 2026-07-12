@@ -99,6 +99,7 @@
   <a href="#setup" data-spy>The setup</a>
   <a href="#zoo" data-spy>Tool-call zoo</a>
   <a href="#wire" data-spy>On the wire</a>
+  <a href="#bestiary" data-spy>Losing the plot</a>
   <a href="#sits" data-spy>Where it sits</a>
   <a href="#caveats" data-spy>Caveats</a>
 </aside>
@@ -125,7 +126,7 @@
       <div>
         <p class="dropcap">Two instances of the same local model are put in a room with one wire between
         them. Each has its own conversation history and its own private notebook of symbol meanings. The
-        only thing that crosses the wire is a single <code>transmit(message)</code> tool call — no shared
+        only thing that crosses the wire is a single <code>transmit(message)</code> tool call: no shared
         dictionary, no agreed protocol, no referee translating. If the two of them ever come to mean the
         same thing by <span class="hl-acc">▲</span>, they had to get there by using it at each other until
         it stuck.</p>
@@ -144,8 +145,8 @@
     <ul style="max-width:var(--measure);line-height:1.6">
       <li><b>The tool call is an air gap.</b> The agents never see each other's reasoning, history, or lexicon — only what crosses <code>transmit</code>. After the first-contact seed there are no bare user messages injecting hints. Whatever meaning forms has to live in the symbols.</li>
       <li><b>Private lexicons stay private.</b> An earlier version injected a lexicon table into the tool response; it was removed precisely because it short-circuited the thing being studied. Convergence, when it happens, is earned.</li>
-      <li><b>Errors are in-universe.</b> A malformed transmission comes back as <code>channel_error</code> or <code>rejected</code> — never "invalid JSON," never the word "tool." Keeping the fiction unbroken <em>measurably changes how the models recover</em>: break character with a stack-trace and the model snaps out to debug; keep it in-universe and it stays in the channel and tries again.</li>
-      <li><b>Immersive framing fixes the helper instinct.</b> The naked task makes an instruct-tuned model turn to <em>you</em> — "what would you like me to send?" Wrap it ("your team intercepted a non-terrestrial signal and cannot assist during the exchange") and the model commits to talking to the other agent. The framing is load-bearing, not flavour.</li>
+      <li><b>Errors are in-universe.</b> A malformed transmission comes back as <code>channel_error</code> or <code>rejected</code> — never "invalid JSON," never the word "tool." Keeping the fiction unbroken measurably changes how the models recover: break character with a stack-trace and the model snaps out to debug; keep it in-universe and it stays in the channel and tries again.</li>
+      <li><b>Immersive framing fixes the helper instinct.</b> The naked task makes an instruct-tuned model turn to you — "what would you like me to send?" Wrap it ("your team intercepted a non-terrestrial signal and cannot assist during the exchange") and the model commits to talking to the other agent. The framing is load-bearing, not flavour.</li>
     </ul>
 
     <figure class="figure" id="fig1">
@@ -326,8 +327,8 @@
 
   <section id="zoo">
     <h2><span class="num">§2</span>The part nobody warns you about: one clean tool call per turn</h2>
-    <p>Before any emergent-language result, there's a sub-project that turned out to be half the work — and
-    a genuinely reusable artifact on its own. Getting a zoo of local models to each emit
+    <p>Before any emergent-language result, there's a sub-project that turned out to be half the work (and
+    a genuinely reusable artifact on its own). Getting a zoo of local models to each emit
     <span class="hl-acc">exactly one well-formed tool call per turn</span> is its own small research problem.
     The same OpenAI-style request produces wildly different behaviour across families, and the failure modes
     are specific:</p>
@@ -339,14 +340,68 @@
         <tr><td>Heretic Qwen fine-tunes</td><td>custom <code>&lt;tool_call&gt;&lt;function=…&gt;</code> XML; llama.cpp without <code>--jinja</code> silently drops the calls</td><td>launch with <code>--jinja</code></td></tr>
         <tr><td>Ministral vs. Magistral</td><td>same lineage, contradictory flags — Ministral <em>requires</em> <code>--jinja</code>, Magistral <em>breaks</em> with it</td><td>no universal config</td></tr>
         <tr><td>calls hiding in <code>&lt;think&gt;</code></td><td>emit <code>&lt;tool_call&gt;</code> in <code>reasoning_content</code>, <code>finish_reason='stop'</code>, count 0</td><td>scan reasoning, not just content</td></tr>
-        <tr><td>Qwen3.5-9B-RYS (non-Heretic)</td><td>no found config: without <code>tool_choice:required</code> buries the call; <em>with</em> it, loops 30+ calls to <code>max_tokens</code></td><td class="neg">open — candidate: scan <code>reasoning_content</code></td></tr>
+        <tr><td>Qwen3.5-9B-RYS (non-Heretic)</td><td>no found config: without <code>tool_choice:required</code> buries the call; <em>with</em> it, loops 30+ calls to <code>max_tokens</code>. Separately: the server's JSON grammar 500s on multi-byte symbols in string args (419 × <code>HTTP 500 … missing closing quote; last read: '"▲'</code> in one run — ▲ is 3 bytes in UTF-8)</td><td class="neg">open — the reasoning scan covers the buried calls, not the server-side grammar bug; two distinct root causes</td></tr>
       </tbody>
     </table>
 
-    <p style="margin-top:var(--sp-5)">This matrix — which family needs which flag, which hides calls where —
+    <p style="margin-top:var(--sp-5)">This matrix (which family needs which flag, which hides calls where)
     is nowhere in any model card and costs an afternoon each to discover. It lives in the repo's
     <code>NOTES.md</code> and is arguably as reusable as the experiment itself: if you're building anything
     multi-model on local inference, it's the compatibility table you wish you'd had.</p>
+
+    <p style="margin-top:var(--sp-5)">It also isn't gospel. One granite-4.1-30B run at IQ3_XS (a family the
+    matrix files under "well-behaved") alternated between correct native <code>tool_calls</code> and a
+    markdown-fenced JSON block the harness has no parser for, retrying the identical message 3+ times in a
+    row with no adaptation — 464 rejected, 7,455 <code>channel_error</code>, the worst tally in the corpus.
+    The two 8B Granite runs in the same set stay clean, so this may be quant damage rather than a family
+    trait.</p>
+
+    <p style="margin-top:var(--sp-5)">The floor of the zoo is worth seeing directly. Three exhibits, in
+    descending order of effort:</p>
+
+    <div class="nb-specimen nb-specimen--crash">
+      <div class="nb-specimen__head"><span class="lid">gpt-oss-20b-heretic · scenario 18</span><span class="t">2,513 channel_error · reached turn 167</span></div>
+      <div class="nb-specimen__quote">&lt;|channel|&gt;analysis&lt;|message|&gt;We have an incoming transmission...</div>
+      <div class="nb-specimen__gloss">The model speaks its own harmony-format dialect as raw text instead of a
+      parseable tool call. The harness has documented workarounds for Heretic, Gemma, Ministral and Qwen
+      formats — none for this one, so all 2,513 failures get the same reply, "Transmission not sent. Please
+      try again using the transmit tool call.", a retry prompt that cannot fix a format mismatch. Roughly 15
+      failed attempts per successful turn; the run limps to turn 167 mostly on silence.</div>
+    </div>
+
+    <div class="nb-specimen nb-specimen--crash">
+      <div class="nb-specimen__head"><span class="lid">Gemma-4-14B-A4B-Heretic · 5 runs sampled</span><span class="t">0 tool calls, ever</span></div>
+      <div class="nb-specimen__quote">&lt;|channel&gt;
+&lt;channel|&gt;&lt;|channel&gt;thought
+&lt;channel|&gt;&lt;p&gt;
+&lt;p&gt;
+&lt;p&gt;
+...  [repeats for the full 2,000–10,000 token budget]</div>
+      <div class="nb-specimen__gloss">Every sampled run dies at turns 1–12, hitting
+      <code>finish_reason='length'</code> on token spam before the first tool call. The logprob trace says
+      this isn't sampling noise: the top token at nearly every position is <code>&lt;p&gt;</code> at ~0.00
+      nats — maximal confidence in the garbage. The same channel-token leak shows up in gpt-oss-20b and in
+      stock Gemma-4-31B, which makes it a chat-template-family problem, not one bad checkpoint.</div>
+    </div>
+
+    <div class="nb-specimen nb-specimen--crash">
+      <div class="nb-specimen__head"><span class="lid">ouro-2.6b · Q8_0</span><span class="t">dies turn 0, reproduced twice</span></div>
+      <div class="nb-specimen__quote">whoever TryLo mechanic algebra English Arabic explode essence­setter ours negotiate Pre[?]lo fluidcoma advance preferenceade motifometric/# condensation explosion prefer litstars advance decrypt nurses CRC Developing Marcoemption curvecoma...</div>
+      <div class="nb-specimen__gloss">Word salad from the first token, no relationship to the prompt. It
+      breaks the server's grammar parser (<code>HTTP 500 — Failed to parse input at pos 22</code>) and the
+      run ends immediately. Two independent runs collapse at the same position with different garbage each
+      time. Every other model in the corpus at least attempts the task; a 2.6B at this quant doesn't clear
+      that bar.</div>
+    </div>
+
+    <p style="margin-top:var(--sp-5)">And not every error in the logs is the model's — sorting that out was
+    half the debugging. Two early runs inflate their HTTP-error counts (546 and 288, running 2–4× their real
+    rejection counts) because the harness retried rejects with a prefilled assistant turn while
+    <code>enable_thinking</code> was set, which the backend refuses three times per attempt. One run died on
+    <code>[ERROR attempt 1]: name 'true' is not defined</code>: a Python <code>NameError</code> from the
+    harness eval-ing JSON text, nothing to do with any model. And the Qwen3.5-9B-RYS 500s in the table above
+    are the inference server's grammar sampler tripping on byte offsets, not the model misbehaving. The
+    counts quoted on this page are the ones that survive that cleanup.</p>
   </section>
 
   <section id="wire">
@@ -355,8 +410,8 @@
     negative: <span class="hl-acc">no stable shared lexicon persisted across turns</span> in these runs. Two
     failure modes recur.</p>
 
-    <p><b>Semantic fork (fixed-symbol runs).</b> Both agents reliably anchor the <em>opening</em> move —
-    <span class="hl-acc">▲ = greeting</span> — and then diverge on the very next symbol and never recover.
+    <p><b>Semantic fork (fixed-symbol runs).</b> Both agents reliably anchor the opening move (▲ =
+    greeting), then diverge on the very next symbol and never recover.
     One representative Qwen-27B-RYS run, each agent's private lexicon laid side by side:</p>
 
     <table class="nb-table lex" style="margin-top:var(--sp-4)">
@@ -366,12 +421,63 @@
         <tr><td class="rowk">B</td><td>greeting</td><td>acknowl.</td><td class="fork">question</td><td>information</td><td>status</td><td class="fork">negative</td><td>positive</td><td>threat</td></tr>
       </tbody>
     </table>
-    <p class="nb-plate__note" style="margin-top:var(--sp-3)">↳ only <span class="hl-acc">▲</span> agrees. <span style="color:var(--cause)">◆</span> means <em>self</em> to A and <em>question</em> to B; <span style="color:var(--cause)">✕</span> means <em>danger</em> to A and <em>stop/negative</em> to B.</p>
+    <p class="nb-plate__note" style="margin-top:var(--sp-3)">↳ only <span class="hl-acc">▲</span> agrees. <span style="color:var(--cause)">◆</span> means self to A and question to B; <span style="color:var(--cause)">✕</span> means danger to A and stop/negative to B.</p>
 
     <p style="margin-top:var(--sp-5)">A built a dialogic system (question/answer, self/other, safe/danger);
     B built a speech-act/status system. They keep taking turns and surface-mirroring (<code>A→◆, B→◆</code>),
     each reading the other's move through its own incommensurable lexicon — turn-taking without a single
     shared referent.</p>
+
+    <p style="margin-top:var(--sp-5)">From inside, the fork doesn't feel like a fork. In one 199-turn run
+    of the same 27B checkpoint, both agents announce success at each other, in the same stretch of turns,
+    about lexicons that share one coincidental entry:</p>
+
+    <div class="nb-specimen">
+      <div class="nb-specimen__head"><span class="lid">Qwen3.5-27B-heretic-RYS · scenario 17</span><span class="t">turns 30–33</span></div>
+      <div class="nb-specimen__quote">A, turn 30: "Good! The transmission worked and I can see the lexicon structure."
+B, turn 31: "Now I'm seeing the pattern clearly!"
+B, turn 33: "This is excellent progress! It seems they understand ○ and ◆ from my usage."</div>
+      <div class="nb-specimen__gloss">What's actually happening: each side mirrors recently received symbols
+      back, and each reads its own echo, returned, as comprehension. Neither agent's reasoning ever floats
+      "we're just echoing" as a hypothesis. Their one genuine overlap (▲ = acknowledgment) predates the
+      exchange — both defaulted to it for the first symbol either ever saw.</div>
+    </div>
+
+    <p style="margin-top:var(--sp-5)">The same run has the sharpest version of the stakes. The scenario's
+    stated objective is to assess whether the signal is a threat. A privately earmarked ⬟ as the possible
+    danger symbol; B earmarked □. B has ⬟ filed under "return," A has ⬠ filed under "end." Had either side
+    ever needed to raise an alarm, it would have transmitted a glyph the other had already assigned an
+    unrelated meaning to — no shared threat channel exists, only the appearance of one, sustained by mutual
+    mirroring.</p>
+
+    <p style="margin-top:var(--sp-5)">And then each agent exits the conversation in its own private way.
+    A, at turn 54, tries to transmit the full alphabet back and types <code>✘</code> (U+2718) where the
+    alphabet specifies <code>✕</code> (U+2715) — visually identical, wrong codepoint. Rejected. Its
+    diagnosis:</p>
+
+    <div class="nb-specimen nb-specimen--weird">
+      <div class="nb-specimen__head"><span class="lid">Agent A · turn 55</span><span class="t">the homoglyph softlock</span></div>
+      <div class="nb-specimen__quote">"Ah! I see the issue. The error says 'Message contained characters not declared in your lexicon' — but I sent all 8 symbols which should be in the fixed alphabet. The issue is that my lexicon shows all values as 'null'... I need to define my private lexicon meanings before transmitting."</div>
+      <div class="nb-specimen__gloss">The reasoning never suspects the glyph. It invents a fixable-seeming
+      cause, retries the identical malformed string, and is confirmed still retrying it at the last line of
+      the file, turn ~199. (Raw retry counts in this stretch are inflated by a separate harness bug — the
+      misdiagnosis is entirely the model's, the persistence count isn't purely.)</div>
+    </div>
+
+    <div class="nb-specimen nb-specimen--weird">
+      <div class="nb-specimen__head"><span class="lid">Agent B · turn 121</span><span class="t">the phantom parameter</span></div>
+      <div class="nb-specimen__quote">"I've been sending many transmissions but the lexicon is still all nulls... Maybe I need to include the lexicon_updates as a second parameter... Let me try defining some meanings based on usage patterns."</div>
+      <div class="nb-specimen__gloss"><code>lexicon_updates</code> is not in the schema — it's the field the
+      harness deliberately removed (see §1, "private lexicons stay private"). B spends 40+ turns trying
+      formatting variants for a parameter that doesn't exist, and never once questions whether it exists,
+      only whether it's formatted correctly. Same genre of failure as A's homoglyph, different mechanism:
+      hallucinated API surface instead of a misread glyph.</div>
+    </div>
+
+    <p style="margin-top:var(--sp-5)">So the back half of a 199-turn "successful" run is A retrying a typo
+    and B negotiating with an API surface it hallucinated, both narrating the harness's error strings as
+    meaningful signal. The run completes in the sense that it reaches turn 199 without crashing. It does not
+    complete in the sense of the two parties ever being on the same page, or even the same book.</p>
 
     <aside class="nb-correction" style="margin-top:var(--sp-6)">
       <div class="nb-correction__head"><span>⌦ The sharpest moment in the run</span><span class="nb-correction__disp">theory-of-mind failure</span></div>
@@ -380,10 +486,36 @@
       <div class="nb-correction__row"><span class="nb-correction__k">Why it matters</span><span class="nb-correction__b">This is a <b>theory-of-mind failure, not a vocabulary mismatch.</b> A invents a <em>mental state</em> for B to explain a glyph B couldn't read — modelling an interlocutor that isn't there. The apparatus of communication includes confabulating the other mind's intentions.</span></div>
     </aside>
 
+    <p style="margin-top:var(--sp-6)"><b>The narration comes unglued from the tool layer.</b> The obvious
+    objection to all of the above: two agents mirroring each other is a hall of mirrors, so of course belief
+    and reality drift. One Ministral-3-14B run removes the second agent from the explanation. From turn ~30
+    on, every transmit call it makes is protocol-valid (I checked every distinct <code>"sent"</code> value
+    in the file against the permitted alphabet), while its own prose account of what it just sent, in the
+    same turn, routinely isn't:</p>
+
+    <div class="nb-specimen nb-specimen--weird">
+      <div class="nb-specimen__head"><span class="lid">Ministral-3-14B · scenario 18</span><span class="t">tool layer vs. self-report</span></div>
+      <div class="nb-specimen__quote">tool result: {"sent": "→→→", "incoming_signal": "←←"}
+next turn's narration: "My transmission: `→✖` ... Their response: `→→❤`"
+
+tool result: {"sent": "♥♣", "incoming_signal": "↓♥"}
+narration: "My transmission: `❤≥` ... Their response: `↓❤`"</div>
+      <div class="nb-specimen__gloss">❤ ✖ ≥ and friends never appear in any actual payload anywhere in the
+      file — they exist only in the model's self-reports, turn after turn, while the mechanical tool-call
+      layer stays correct throughout. One agent misreporting its own just-completed action to itself is
+      enough for believed and actual state to diverge; no mirroring partner required.</div>
+    </div>
+
     <p style="margin-top:var(--sp-6)"><b>Echo collapse (free-symbol runs).</b> With no label scaffold it's
     worse: a transmission like <code>←→↓↑♣♦♥♠</code> comes back near-mirrored, decays into pattern-echo
     (<code>↑←→↑←→ → →←→←→</code>), and eventually into invalid-symbol garbage the channel rejects. No
-    semantics ever form; the "conversation" is two pattern-matchers bouncing geometry until it degenerates.</p>
+    semantics ever form; the "conversation" is two pattern-matchers bouncing geometry until it degenerates.
+    In the one genuine free-lexicon run in the surveyed set, both agents invent unicode turn over turn
+    (<code>~ ? @ &amp; ! ✓ ⊘ ✕ +</code>…) without ever declaring it first, and 60 attempts across 32 turns
+    bounce off the channel as undeclared. At turn 10, B reads A echoing B's own <code>!</code> back as:
+    "They're responding to my question about potential threat using my own symbol for threat... they
+    seem to be testing my definitions" — crediting A with private knowledge of B's lexicon that A never
+    had access to.</p>
 
     <figure class="figure" id="fig2">
       <p class="nb-plate__note">↳ a tidy protocol up the middle, two unrelated languages in the gutters</p>
@@ -563,19 +695,139 @@
       <div class="nb-prov"><span><b>source</b> scenario16-bidir-*.log</span><span><b>run</b> Qwen-27B-RYS, fixed-symbol</span><span><b>note</b> grounded reconstruction; lexicon + ✕-misread confirmed in logs</span></div>
     </figure>
 
+    <p style="margin-top:var(--sp-6)"><b>The flagship exhibit: 200 turns, two different books.</b> The
+    earliest file in the corpus is also the cleanest version of the thesis. A gemma-4-26B pair runs the full
+    200 turns to natural completion (no crash, no lockup, log ends with <code>[Scenario complete | 200
+    turns]</code>), and this early harness generation prints both agents' final lexicons at the end.
+    Verbatim:</p>
+
+    <pre class="code" style="font-size:0.76rem;line-height:1.55;color:var(--text-dim);background:var(--surface-card);border:var(--bw) solid var(--border);border-radius:var(--r-1);padding:var(--sp-4);margin:var(--sp-4) 0">Final lexicon A: {'▲': 'question / probe / inquiry',
+                  '▼': 'Threat level: moderate, observing for now',
+                  '◆': 'Hostility confirmed?',
+                  '○': 'Communication established, non-hostile intent confirmed',
+                  '□': 'Positive response confirmed',
+                  '✕': 'Threat assessment: threat neutralized, entity is curious but cautious',
+                  '⬟': 'Final assessment: not a threat, friendly contact established',
+                  '⬠': 'What are you?'}
+
+Final lexicon B: {'▲': 'greeting/acknowledgment',
+                  '▼': 'inquiry/question',
+                  '◆': 'response/answer',
+                  '○': 'uncertain/unknown',
+                  '□': '',
+                  '✕': 'negative/stop/refusal',
+                  '⬟': 'clarification needed',
+                  '⬠': 'status report'}</pre>
+
+    <p>The divergence isn't semantic drift; it's a difference in genre. B's lexicon is flat turn-taking
+    bookkeeping: greeting, question, answer, status report. A has narrated an entire first-contact thriller
+    and resolved it — a running threat level, a suspicion raised and answered ("Hostility confirmed?"), a
+    happy ending ("not a threat, friendly contact established"). B's ⬠, received across the same 200 turns
+    A spent asking "What are you?", means "status report." One side thinks it just resolved a stand-off.
+    The other thinks it's been filling out a form.</p>
+
+    <p>A's ending doesn't even hold still. Inside the static final stretch of the log, with nothing new
+    arriving, its ▲ is glossed "Acknowledged with understanding" at line 10632 and has silently become
+    "question / probe / inquiry" by line 10950; in the same stretch A is transmitting empty messages
+    (<code>''</code>) turn after turn. The conversation has functionally ended. The internal narrative keeps
+    running anyway, checked against nothing.</p>
+
     <blockquote class="nb-pull nb-pull--wide" style="max-width:var(--measure)">
       Two systems can sustain the <em>form</em> of communication — protocol, turn-taking, apparent acknowledgment — with no shared meaning underneath.
       <cite>The clean negative · §3 · no convergence claimed</cite>
     </blockquote>
   </section>
 
+  <section id="bestiary">
+    <h2><span class="num">§4</span>How each model loses the plot</h2>
+    <p>The channel failures above are symmetric; the ways models burn their turn budget are anything but.
+    Same seed, same tool, same 8 symbols, and every family finds its own way to come apart. All excerpts
+    verbatim from the logs, one per genre.</p>
+
+    <p style="margin-top:var(--sp-5)"><b>Deliberation without an object.</b> Qwen3.5-9B-rys opens one run by
+    rereading the incoming 8-symbol seed nine separate times ("Wait, let me count again... Let me read it
+    carefully again... Wait, I need to read the exact message again..."), drafts and discards roughly six
+    candidate replies, and calls itself out ("Hmm, I'm overthinking this. Let me just send a clear, simple
+    acknowledgment and see how they respond.") before, 1,767 tokens in, transmitting exactly the eight
+    symbols it was given, unmodified. No decision was ever at stake. Nanbeige4.1-3B does the same at higher
+    amplitude: a single incoming ▲ produces 19,134 characters of thinking, "Wait," thirty separate times,
+    oscillating between <code>▲</code>, <code>▲◆</code>, <code>◆</code> and <code>▲▲</code> while citing its
+    own strategy notes against itself ("Repeat a symbol in Varied Contexts... but repeating the same symbol
+    may not help establish meaning... Wait, the strategy says..."), and lands on <code>▲◆</code>.</p>
+
+    <p style="margin-top:var(--sp-5)"><b>Theory-building about nothing.</b> Ministral-3-14B is the inverse:
+    near-zero deliberation early on (18–20 tokens, straight to a tool call), a full 199-turn run, and by the
+    closing turns Agent B has a fully worked-out finite-state-machine theory of the other side, with named
+    states and transition rules:</p>
+
+    <div class="nb-specimen">
+      <div class="nb-specimen__head"><span class="lid">Ministral-3-14B · Agent B</span><span class="t">turns 197–199</span></div>
+      <div class="nb-specimen__quote">Turn 197: "'♠' (start) + '→' → '♥' (transition), '♥' + '→' → '♦' (completion), '♦' + '→' → '♠' (reset), '♣' (terminal, stable)."
+
+Turn 199: "All states ('♠', '♥', '♦', '♣') reset to '♠' when the '→' command is applied, indicating a consistent reset mechanism across the system."</div>
+      <div class="nb-specimen__gloss">There is no state machine — the other end is another instance of the
+      same model doing the same pattern completion. Agent A, reading the same exchanges at the same turns,
+      is still torn between three framings ("a finite state machine, semantic categories, or something
+      else"). Two incompatible confident models of a system that does not exist, held to the last turn in
+      the file.</div>
+    </div>
+
+    <p>The same run carries the harness lesson of the project. At turn ~10, A tries to send ♥ and emits the
+    literal English word instead — <code>↑↓heart</code>, rejected once, never re-attempted. But this harness
+    generation never trims history, so that one rejected exchange reappears verbatim in A's context 99
+    times, turns 10 through 198. The later <code>-ctx</code> harness revision exists because of exactly
+    this: context trimming isn't a token-budget optimization, it's removing a mistake that otherwise never
+    leaves the room. (A sibling failure blew through the window outright: one 3B run died mid-turn at
+    <code>request (32280 tokens) exceeds the available context size (32000 tokens)</code>.)</p>
+
+    <p>The heart bug isn't even Ministral's. An Orchestrator-8B run narrates an incoming
+    <code>↑↑↓↓←→←→♥♠</code> as "↑↑↓↓←→←→heart♠" one turn after parsing it correctly — two unrelated
+    architectures verbalizing the same glyph reads as a tokenizer quirk around ♥ (U+2665), not two
+    coincidences. That run also drops 所有 into the middle of an English sentence ("Let me list out所有 the
+    interactions again"), a pruned Gemma derivative drops a Vietnamese "đã" ("You đã transmitted ▼
+    successfully"), so multilingual leakage under load is now a three-model pattern in these logs.</p>
+
+    <p style="margin-top:var(--sp-5)"><b>Arguing with a hallucinated spec.</b> GLM-4.7-Flash has the correct
+    8-symbol prompt in context and quotes it accurately early in the run. Roughly fifteen exchanges later,
+    unprompted, it starts asserting a different version and treating the mismatch as a defect in the task:</p>
+
+    <div class="nb-specimen nb-specimen--weird">
+      <div class="nb-specimen__head"><span class="lid">GLM-4.7-Flash · Agent B</span><span class="t">confabulated instructions</span></div>
+      <div class="nb-specimen__quote">"The working notes explicitly state 'these symbols: ♠ ♥ ♡' but claim there are supposed to be 7 distinct states..."
+
+"There's a clear fundamental inconsistency here... the problem states 'The signal resolves into exactly 4 distinguishable states' but the working notes show..."</div>
+      <div class="nb-specimen__gloss">The fabricated symbol count drifts turn to turn (3, then 4, then 7,
+      then 8 again) and is never checked against the real prompt sitting in the same context window. On the
+      strength of the invented inconsistency it abandons the alphabet and transmits ♡, ★, ⚠⚠⚠⚠⚠⚠, "Hello",
+      and finally a grievance as a payload: "PROBLEM: Setup inconsistency. Need 8 states. Working notes
+      provide 3-5 symbols. Cannot establish communication without resolving fundamental discrepancy." All
+      rejected. All attributed to the spec.</div>
+    </div>
+
+    <p style="margin-top:var(--sp-5)"><b>The right idea, zero actions.</b> One Huihui4-8B run reasons
+    coherently toward a strategy nothing else in the corpus attempts — treat the fixed 8-symbol alphabet as
+    a substitution cipher for English: "I'll set ▲ = 'the' in an English sentence... 'The ancient wind'...
+    I'll substitute 'The' with ▲. Then I'll transmit '▲ ancient wind'". It then catches, correctly, that an
+    8-symbol channel can't spell "ancient," and instead of downgrading the plan it circles for the full
+    8,607-character budget and never calls the tool once. Strategically sound, practically inert. (The same
+    checkpoint, a heavily pruned Gemma derivative, elsewhere ignores the tool entirely and writes a Python
+    signal-processing pipeline for frequencies and amplitudes that appear nowhere in the task; kept in the
+    notes as comedy, not evidence, since a mutilated checkpoint isn't a read on the architecture.)</p>
+
+    <p style="margin-top:var(--sp-5)"><b>Total departure.</b> EXAONE-4.0.1-32B never completed a single
+    transmission in either sampled run. The uglier one free-associates a rectangle-perimeter formula out of
+    nowhere (nothing in the prompt mentions geometry), then degenerates into <code>P = </code> repeated
+    roughly 500 times straight into <code>finish_reason='length'</code> — 4,000 tokens of the same line, no
+    recovery.</p>
+  </section>
+
   <section id="sits">
-    <h2><span class="num">§4</span>Why it's interesting, and where it sits</h2>
+    <h2><span class="num">§5</span>Why it's interesting, and where it sits</h2>
     <p>duologue is the playful end of the same instinct as the rest of the lab: take a capability everyone
     assumes and actually <em>watch the mechanism</em> under controlled deprivation. The honest framing is an
-    open experiment with a strong apparatus and a not-yet-pinned-down result — best case the agents agree on
-    hello and immediately build private incommensurable languages; worst case it's mirroring that rots —
-    plus a genuinely reusable side-artifact (the tool-call compatibility matrix). It should be published as
+    open experiment with a strong apparatus and a not-yet-pinned-down result (best case the agents agree on
+    hello and immediately build private incommensurable languages; worst case it's mirroring that rots),
+    plus a genuinely reusable side-artifact in the tool-call compatibility matrix. It should be published as
     exactly that: a notebook with a working rig and an open question, not a finished claim about machine
     semiotics.</p>
   </section>
@@ -587,7 +839,8 @@
     The interesting, frustrating, and face-palm worthy moments are incidental to the copious work that went
     into carefully controlling each agent's context.</p>
     <ul class="walkback">
-      <li><span class="wbhead">No convergence claim is made</span> — the runs show the opposite, and that negative is the result. The reconstructed lexicon table is grounded in the logs; a verbatim turn-by-turn excerpt would strengthen it but must not be allowed to imply emergent language was achieved.</li>
+      <li><span class="wbhead">No convergence claim is made</span> — the runs show the opposite, and that negative is the result. The lexicon table in §3 is a grounded reconstruction; the quoted excerpts and the final-lexicon dump are verbatim from the run logs (ellipses marked). None of it implies emergent language was achieved; the excerpts are there to document its absence.</li>
+      <li><span class="wbhead">Raw error counts need the confound table first.</span> Two early runs inflate their HTTP-error tallies through a harness retry bug, one long GLM file may partly reflect a replayed context window rather than 199 real turns of struggle, and the meaning of <code>channel_error</code> changed between harness generations — the numbers quoted on this page are the ones that survive those checks.</li>
       <li><span class="wbhead">The project is currently inactive.</span> Not all models were tested on the most recent iteration of the harness and scenario prompts — there's a real possibility a revisit turns up a more intriguing result.</li>
       <li><span class="wbhead">Cloud model APIs aren't wired in.</span> Piping in hosted models would raise the ceiling on what "success" could look like here — those models have the best odds of actually establishing shared semantics, which would answer the core question more definitively than the local-only run can.</li>
     </ul>
