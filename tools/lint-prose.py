@@ -30,7 +30,7 @@ v3 additions (owner calibration 2026-07-11 night):
 This tool only FLAGS violations for human review. It never edits a page.
 
 Usage:
-    python3 tools/lint-prose.py lab/01_minicpm5_sigma_alpha.html [more.html ...]
+    python3 tools/lint-prose.py lab/minicpm5-sigma-alpha.html [more.html ...]
 
 Exit code is always 0 — this is a report, not a gate.
 """

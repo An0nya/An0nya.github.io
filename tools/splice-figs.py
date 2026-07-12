@@ -5,7 +5,7 @@ like sync-nav.py).
 Workflow: edit the standalone fig_XX_*.svg (and its .mobile.svg twin) in
 figures-src/, then run this from the repo root:
 
-    python3 tools/splice-figs.py lab/01_minicpm5_sigma_alpha.html
+    python3 tools/splice-figs.py lab/minicpm5-sigma-alpha.html
 
 It replaces each inline <svg> inside the page's <figure> blocks with the
 current file content, desktop and mobile variants both, preserving the
@@ -21,44 +21,44 @@ import sys
 FIGDIR = os.path.join(os.path.dirname(__file__), "..", "figures-src")
 
 MAPS = {
-    "lab/02_anatomy_of_a_sweep.html": {
+    "lab/sweep-anatomy.html": {
         "fig1": "fig_02_phantom_mover",
         "fig2": "fig_02_pairing",
         "fig3": "fig_02_saturation",
     },
-    "lab/04_quant_bench.html": {
+    "lab/quant-bench.html": {
         "fig1": "fig_04_occupancy",
         "fig2": "fig_04_leaderboard_flips",
         "fig3": "fig_04_roofline",
     },
-    "lab/05_granite.html": {
+    "lab/granite.html": {
         "figA": "fig_05_a_flipped_bugs",
         "figB": "fig_05_separation_masks",
         "figC": "fig_05_ushape_layer",
         "figD": "fig_05_sigma_alpha_downshift",
     },
-    "lab/06_duologue.html": {
+    "lab/duologue.html": {
         "fig1": "fig_06_air_gap",
         "fig2": "fig_06_turn_taking",
     },
-    "lab/07_mem0_processor.html": {
+    "lab/mem0-processor.html": {
         "fig1": "fig_07_zscore_inversion",
     },
-    "lab/09_self_improving_memory.html": {
+    "lab/self-improving-memory.html": {
         "fig1": "fig_09_pipeline",
         "fig2": "fig_09_frequency",
     },
-    "lab/03_nanbeige.html": {
+    "lab/nanbeige.html": {
         "fig1": "fig_03_echo_dumbbell",
         "fig2": "fig_03_layer_fingerprint",
         "fig3": "fig_03_willingness_capability",
     },
-    "lab/08_moe_expert_surgery.html": {
+    "lab/moe-expert-surgery.html": {
         "fig1": "fig_08_layer_wrong_handle",
         "fig2": "fig_08_clone_map",
         "fig3": "fig_08_reap_window",
     },
-    "lab/01_minicpm5_sigma_alpha.html": {
+    "lab/minicpm5-sigma-alpha.html": {
         "fig1": "fig_01_residual_highway",
         "fig2": "fig_01_arithmetic_cliff",
         "fig3": "fig_01_split_curvature",
