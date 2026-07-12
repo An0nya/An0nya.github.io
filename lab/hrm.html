@@ -145,8 +145,9 @@
   <header class="nb-record">
     <div class="nb-record__title">HRM: a false dawn.</div>
     <div class="nb-record__grid">
-      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v">HRM-Text-1B · recurrent · MLX bf16 · 35 configs · 5 waves · then the verification that killed it</span></div>
-      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">A recurrent reasoner, and a result that didn't survive</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v">HRM-Text-1B · recurrent · MLX bf16 · 2×3 H·L cycles = 8 passes / token · 128 unrolled layers, weight-shared · 35 configs · 5 waves · then the verification that killed it</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">A recurrent reasoner, and a result that didn't survive — "champion" 5/6 (greedy, n=1) → 0/3 sampled, verified</span></div>
+      <div class="nb-record__field"><span class="nb-record__k">Source</span><span class="nb-record__v"><a href="https://huggingface.co/sapientinc/HRM-Text-1B">sapientinc/HRM-Text-1B</a> · <a href="https://github.com/Aryagm/HRM-mlx">Aryagm/HRM-mlx</a> port</span></div>
     </div>
   </header>
 
@@ -158,14 +159,6 @@
     rigorous follow-up the finding deserved — the headline collapsed. Sampling
     killed it. What survived is more useful than what died.
   </p>
-
-  <div class="nb-stats">
-    <div class="nb-stat"><span class="nb-stat__num">2×3</span><span class="nb-stat__label">H · L cycles<br>= 8 passes / token</span></div>
-    <div class="nb-stat"><span class="nb-stat__num">128</span><span class="nb-stat__label">Unrolled layers<br>weight-shared</span></div>
-    <div class="nb-stat"><span class="nb-stat__num">35</span><span class="nb-stat__label">Configs swept<br>across 5 waves</span></div>
-    <div class="nb-stat"><span class="nb-stat__num">5<small>/6</small></span><span class="nb-stat__label">"Champion" battery<br>greedy, n=1</span></div>
-    <div class="nb-stat"><span class="nb-stat__num">0<small>/3</small></span><span class="nb-stat__label">Same champion<br>sampled, verified</span></div>
-  </div>
 
   <div class="nb-marginalia">
     <div class="nb-marginalia__label">The patient</div>
