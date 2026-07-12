@@ -1,6 +1,6 @@
 <!-- @dsCard group="Portfolio Hub" viewport="1180x2400" name="Writeup — Gemma 4 31B: the model that wouldn't break (a negative result, dissected)" subtitle="A 176-config dup/prune layer sweep of Gemma-4-31B-dense at IQ2_M on a 16GB Mac. No winning surgery — but the null has a shape: robust to a single cut, rigid under a structural one, damage scaling span x depth, and its seed-noise carried at the front of the stack, not the back. Warm LAB skin (intervention group)." -->
 <!DOCTYPE html>
-<html lang="en" class="lab">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,571 +9,203 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230E141A'/%3E%3Cpath d='M6 16 H15' stroke='%236F7C88' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 9' stroke='%236FCBD8' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M15 16 L26 23' stroke='%23E3C24A' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='15' cy='16' r='2.6' fill='%23ECEFF3'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/styles.css">
 <style>
-:root{
-  /* lab.css speaks warm var names that ARE the html.lab tokens; html.lab supplies
-     --bg/--bg2/--paper/--ink/--ink2/--muted/--rule/--rule2 + terracotta/sage/wine/
-     gold/slate natively (and html.lab.light flips them). Only the hyphenated aliases
-     + --shadow need declaring. */
-  --bg-2:   var(--bg2);
-  --ink-2:  var(--ink2);
-  --rule-2: var(--rule2);
-  --shadow: color-mix(in srgb, var(--ink) 12%, transparent);
-}
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
-body {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: 19px;
-  line-height: 1.55;
-  font-feature-settings: "onum" 1, "kern" 1;
-  -webkit-font-smoothing: antialiased;
-}
-.mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.85em; }
-.small { font-size: 0.82em; }
-.tiny { font-size: 0.74em; letter-spacing: 0.02em; }
-.muted { color: var(--muted); }
-.kicker {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--terracotta);
-}
-.rule { height: 1px; background: var(--rule); margin: 1.6rem 0; }
-.rule-tight { height: 1px; background: var(--rule-2); margin: 0.7rem 0; }
-.thick-rule { height: 2px; background: var(--ink); margin: 1.2rem 0; }
-
-main { max-width: 1180px; margin: 0 auto; padding: 64px 56px 120px; }
-section { margin: 80px 0; }
-h1 {
-  font-family: var(--font-serif);
-  font-weight: 500;
-  font-size: 76px;
-  line-height: 0.98;
-  letter-spacing: -0.022em;
-  margin: 0.4em 0 0.3em;
-  font-feature-settings: "onum" 1;
-  text-wrap: balance;
-}
-h1 em { font-style: italic; font-weight: 400; color: var(--ink-2); }
-h2 {
-  font-family: var(--font-serif);
-  font-weight: 500;
-  font-size: 36px;
-  line-height: 1.1;
-  letter-spacing: -0.012em;
-  margin: 0 0 1.2rem;
-  text-wrap: balance;
-}
+main { max-width: 1180px; margin: 0 auto; padding: var(--sp-8) var(--gutter) var(--sp-9); overflow-x: clip; }
+section { margin: var(--sp-9) 0; }
 h2 .num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 14px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
   font-weight: 500;
-  color: var(--terracotta);
+  color: var(--accent);
   letter-spacing: 0.12em;
   vertical-align: 0.7em;
-  margin-right: 0.8rem;
+  margin-right: var(--sp-3);
 }
-h3 {
-  font-family: var(--font-serif);
-  font-weight: 500;
-  font-size: 21px;
-  line-height: 1.2;
-  margin: 1.6rem 0 0.5rem;
-  letter-spacing: -0.005em;
-}
-.dek {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 24px;
-  line-height: 1.4;
-  color: var(--ink-2);
-  max-width: 760px;
-  margin: 0 0 1.6rem;
-  text-wrap: balance;
-}
+.dek { font-family: var(--font-serif); font-style: italic; font-size: var(--fs-dek); line-height: 1.4; color: var(--text-dim); max-width: 64ch; margin: 0 0 var(--sp-5); text-wrap: balance; }
+.dropcap { max-width: var(--measure); }
 .dropcap::first-letter {
   font-family: var(--font-serif);
   font-weight: 500;
-  font-size: 5.4em;
+  font-size: 3.4em;
   line-height: 0.86;
   float: left;
   padding: 0.05em 0.1em 0 0;
-  color: var(--terracotta);
+  color: var(--accent-bright);
 }
-.col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
-.col-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
-.col-side { display: grid; grid-template-columns: 1fr 280px; gap: 48px; align-items: start; }
+.col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-7); }
+.col-side { display: grid; grid-template-columns: 1fr 280px; gap: var(--sp-7); align-items: start; }
 .col-side .aside {
-  font-size: 14.5px;
+  font-size: var(--fs-sm);
   line-height: 1.5;
-  color: var(--ink-2);
-  border-left: 1px solid var(--rule);
-  padding-left: 20px;
+  color: var(--text-dim);
+  border-left: 1px solid var(--border);
+  padding-left: var(--sp-4);
   font-style: italic;
 }
-.col-side .aside .kicker { font-style: normal; margin-bottom: 0.5em; display: block; }
+.col-side .aside .nb-kicker { font-style: normal; margin-bottom: var(--sp-2); display: block; }
 
-.figure { margin: 2.4rem 0; }
-.figure svg { display: block; max-width: 100%; height: auto; }
-.figcap {
-  font-size: 13px;
-  line-height: 1.45;
-  color: var(--muted);
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: 0.01em;
-  margin-top: 0.8rem;
-  max-width: 760px;
-}
-.figcap b { color: var(--ink); font-weight: 600; }
-
-/* Marginalia */
-.marginalia {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 28px;
-  margin: 60px 0 0;
-  padding: 28px 0 0;
-  border-top: 1px solid var(--rule-2);
-  font-size: 16px;
-  line-height: 1.55;
-  color: var(--ink-2);
-}
-.marginalia .label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--terracotta);
-  line-height: 1.5;
-}
-.marginalia .body p { margin: 0 0 1.2em; text-indent: 0; display: block; }
-.marginalia .body p + p { text-indent: 0; margin-top: 0; }
-.marginalia .body p:last-child { margin-bottom: 0; }
+/* Marginalia — the relocated hero prose ("the patient" + rig/architecture specs) */
 .specbox {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: var(--sp-5);
   margin: 1.4em 0 0;
-  padding: 18px 0 0;
-  border-top: 1px solid var(--rule-2);
+  padding: var(--sp-4) 0 0;
+  border-top: 1px solid var(--border-strong);
 }
 .speccol .spechead {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.14em;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--tk-label);
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--text);
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: var(--sp-3);
 }
 .speccol dl {
   display: grid;
   grid-template-columns: 80px 1fr;
-  gap: 4px 14px;
+  gap: var(--sp-1) var(--sp-4);
   margin: 0;
-  font-size: 14px;
+  font-size: var(--fs-sm);
   line-height: 1.4;
 }
 .speccol dt {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--text-muted);
   padding-top: 3px;
 }
 .speccol dd {
   margin: 0;
-  color: var(--ink-2);
+  color: var(--text-dim);
   font-style: italic;
 }
-.speccol dd .muted { font-style: normal; font-size: 12px; }
-.speccol dd .mono { font-style: normal; color: var(--ink); }
+.speccol dd .muted { font-style: normal; font-size: 0.75rem; }
+.speccol dd .mono { font-style: normal; color: var(--text); }
 @media (max-width: 700px) {
   .specbox { grid-template-columns: 1fr; }
 }
 
-/* Walkback list */
-ul.walkback {
-  list-style: none;
-  padding: 0;
-  margin: 0.4em 0 0.8em;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7em;
-}
-ul.walkback li {
-  position: relative;
-  padding-left: 1.4em;
-  font-style: normal;
-  color: var(--ink-2);
-  line-height: 1.5;
-}
-ul.walkback li::before {
-  content: "—";
-  position: absolute;
-  left: 0;
-  color: var(--terracotta);
-  font-style: normal;
-}
-.wbhead {
-  font-style: italic;
-  color: var(--ink);
-  font-weight: 500;
-  margin-right: 4px;
-}
-
-/* Postscript */
+/* Postscript status badge (walkback header) */
 .status-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--terracotta);
-  border: 1px solid var(--terracotta);
-  padding: 6px 12px;
-  background: rgba(184,92,61,0.07);
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label); letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 6px var(--sp-3);
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
 }
 .status-badge::before {
   content: ""; display: inline-block;
   width: 7px; height: 7px; border-radius: 50%;
-  background: var(--terracotta);
+  background: var(--accent);
   animation: pulse 1.6s ease-in-out infinite;
 }
 @keyframes pulse {
   0%, 100% { opacity: 0.4; transform: scale(0.85); }
   50%      { opacity: 1;   transform: scale(1.1); }
 }
-.probe-inventory > div {
-  border-top: 1px solid var(--rule-2);
-  padding-top: 12px;
-}
-.probe-cat {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--ink);
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-.probe-cat .muted { font-weight: 400; text-transform: none; letter-spacing: 0; }
-.probe-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 12px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12.5px;
-  line-height: 1.7;
-  color: var(--ink-2);
-}
-.probe-list li::before {
-  content: "·\00a0";
-  color: var(--muted);
-}
-.probe-note {
-  font-size: 14px;
-  line-height: 1.45;
-  color: var(--ink-2);
-  font-style: italic;
-}
 
-/* Archetype cards */
+/* Archetype cards (§7 preliminary candidates) */
 .archetypes {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 18px;
-  margin: 2.2rem 0 1.6rem;
+  gap: var(--sp-4);
+  margin: 2.2rem 0 var(--sp-6);
 }
 .arch-card {
-  background: var(--paper);
-  border: 1px solid var(--rule);
-  padding: 18px 20px 18px;
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  padding: var(--sp-4) var(--sp-5) var(--sp-4);
   display: flex; flex-direction: column;
 }
 .arch-card.highlight {
-  border-color: var(--terracotta);
-  box-shadow: 0 1px 0 var(--terracotta) inset;
+  border-color: var(--accent);
+  box-shadow: 0 1px 0 var(--accent) inset;
 }
 .arch-tag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--terracotta);
+  font-family: var(--font-mono);
+  font-size: 0.625rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--accent);
   margin-bottom: 6px;
 }
 .arch-title {
   font-family: var(--font-serif);
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 500;
   line-height: 1.1;
   margin: 0 0 0.6em;
   letter-spacing: -0.005em;
 }
 .arch-blurb {
-  font-size: 14.5px;
+  font-size: var(--fs-sm);
   line-height: 1.45;
-  color: var(--ink-2);
+  color: var(--text-dim);
   margin: 0 0 0.9em;
   font-style: italic;
 }
 .arch-winners {
-  border-top: 1px solid var(--rule-2);
-  padding-top: 10px;
+  border-top: 1px solid var(--border-strong);
+  padding-top: var(--sp-3);
   margin-top: auto;
 }
 .arch-row {
-  display: flex; align-items: baseline; gap: 10px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px;
+  display: flex; align-items: baseline; gap: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
   line-height: 1.5;
   padding: 3px 0;
-  border-bottom: 1px dotted var(--rule-2);
+  border-bottom: 1px dotted var(--border-strong);
 }
 .arch-row:last-child { border-bottom: none; }
-.arch-row.arch-note {
-  display: block;
-  border: none;
-  font-family: var(--font-serif);
-  font-size: 13px;
-  color: var(--muted);
-  padding-top: 6px;
-}
-.arch-row.arch-multi {
-  border-bottom: none;
-  padding-bottom: 0;
-}
 .arch-row.arch-substats {
   display: block;
-  border-bottom: 1px dotted var(--rule-2);
+  border-bottom: 1px dotted var(--border-strong);
   padding: 0 0 4px 4px;
-  color: var(--ink-2);
-  font-size: 10.5px;
+  color: var(--text-dim);
+  font-size: var(--fs-label);
 }
-.arch-row.arch-substats b.pos { color: var(--sage); font-weight: 600; }
-.arch-row.arch-substats .dot { color: var(--muted); margin: 0 6px; }
+.arch-row.arch-substats .dot { color: var(--text-muted); margin: 0 6px; }
 .arch-cfg {
-  color: var(--ink);
+  color: var(--text);
   font-weight: 500;
   flex-shrink: 0;
 }
 .arch-stat {
   margin-left: auto;
-  color: var(--ink-2);
-  font-size: 10.5px;
+  color: var(--text-dim);
+  font-size: var(--fs-label);
   white-space: nowrap;
 }
-.arch-stat b {
-  font-weight: 600;
-  color: var(--ink);
-}
-.arch-stat b.pos { color: var(--sage); }
-.arch-stat.muted { color: var(--muted); }
+.arch-stat b { font-weight: 600; color: var(--text); }
 @media (max-width: 900px) {
   .archetypes { grid-template-columns: 1fr; }
 }
-.marginalia .body .q {
-  font-style: italic;
-  font-family: var(--font-serif);
-  color: var(--ink);
-  font-size: 17px;
-  line-height: 1.45;
-  border-left: 2px solid var(--rule);
-  padding-left: 14px;
-  margin: 0.4em 0 0.7em;
-  display: block;
-}
-.marginalia .body .q .who {
-  display: block;
-  font-style: normal;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 6px;
-}
 
-/* HERO */
-.hero { margin: 0 0 80px; }
-.hero .topbar {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding-bottom: 1.5rem; border-bottom: 2px solid var(--ink);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-2);
-}
-.hero .topbar .right { color: var(--muted); }
-.hero .topbar .dot {
-  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
-  background: var(--terracotta); margin: 0 8px 0 0; vertical-align: 1px;
-}
-.stats-strip {
-  display: grid; grid-template-columns: repeat(5, 1fr);
-  gap: 0; margin: 2rem 0 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
-}
-.stats-strip .stat {
-  padding: 1rem 1.2rem;
-  border-right: 1px solid var(--rule);
-}
-.stats-strip .stat:last-child { border-right: none; }
-.stat .num {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: 38px;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  font-feature-settings: "onum" 1;
-  display: block;
-  margin-bottom: 6px;
-}
-.stat .num small { font-size: 16px; color: var(--muted); font-style: italic; }
-.stat .label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  line-height: 1.4;
-}
+/* Data table — page-local additions on top of .nb-table */
+.nb-table .label { color: var(--text); }
+.nb-table tr.divider td { border-top: var(--bw-strong) solid var(--text); padding-top: var(--sp-3); }
 
-/* tag pills for zones */
-.tag {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--ink-2);
-}
-.tag .sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; }
-
-/* tables */
-.tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.tbl { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
-.tbl th, .tbl td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--rule-2); }
-.tbl th { font-weight: 600; color: var(--ink); text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.12em; border-bottom: 1px solid var(--ink); }
-.tbl td.num, .tbl th.num { text-align: right; font-feature-settings: "tnum" 1; }
-.tbl .label { color: var(--ink); }
-.tbl .pos { color: var(--sage); }
-.tbl .neg { color: var(--wine); }
-.tbl .game { color: var(--terracotta); font-style: italic; }
-.tbl tr.divider td { border-top: 2px solid var(--ink); padding-top: 12px; }
-
-/* sample-output boxes (failure mode taxonomy) */
-.specimen {
-  background: var(--paper);
-  border: 1px solid var(--rule-2);
-  padding: 18px 20px 16px;
-  margin: 14px 0;
-  border-left: 3px solid var(--terracotta);
-}
-.specimen.win { border-left-color: var(--sage); }
-.specimen.crash { border-left-color: var(--wine); }
-.specimen.weird { border-left-color: var(--gold); }
-.specimen .head {
-  display: flex; justify-content: space-between; align-items: baseline;
-  margin-bottom: 8px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px; letter-spacing: 0.06em;
-}
-.specimen .head .lid { font-weight: 600; color: var(--ink); text-transform: uppercase; letter-spacing: 0.1em; }
-.specimen .head .t { color: var(--muted); }
-.specimen .specimen-name {
-  font-family: var(--font-serif); font-style: italic; font-size: 17px;
-  color: var(--ink); margin-bottom: 4px;
-}
-.specimen .quote {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12.5px; line-height: 1.55;
-  color: var(--ink-2);
-  white-space: pre-wrap;
-  word-break: break-word;
-  margin: 6px 0 4px;
-  padding: 0;
-}
-.specimen .gloss { font-size: 14px; line-height: 1.45; color: var(--ink-2); font-style: italic; margin-top: 8px; }
-
-
-a { color: var(--terracotta); }
-
-/* Pull-quote */
-.pull {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: 30px;
-  line-height: 1.22;
-  letter-spacing: -0.005em;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  padding: 1.6rem 0;
-  margin: 2rem 0;
-  color: var(--ink);
-  text-wrap: balance;
-}
-.pull cite {
-  display: block;
-  font-style: normal;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 0.8rem;
-}
-
-/* Inline highlights */
-.hl-pos { color: var(--sage); font-weight: 500; }
-.hl-neg { color: var(--wine); font-weight: 500; }
+/* Inline highlights — colour retired sitewide; weight only, spans kept */
+.hl-neg { font-weight: 600; }
 .hl-acc { font-weight: 600; }
 
-/* small UI hint for hover */
-.layer-tip {
-  position: fixed; pointer-events: none;
-  background: var(--ink); color: var(--paper);
-  padding: 8px 10px; border-radius: 2px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; line-height: 1.4;
-  white-space: pre; z-index: 50;
-  opacity: 0; transition: opacity 0.08s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
-}
-.layer-tip.on { opacity: 1; }
-
-
-/* In dark mode, SVG hard-coded colors get a CSS filter to lift them.
-   Rather than patch every fill, we just invert the SVGs slightly. */
-html.lab:not(.light) .figure svg { filter: invert(0.92) hue-rotate(180deg) saturate(0.85) brightness(0.95); }
-html.lab:not(.light) .figure svg text { fill: revert; }  /* fallback — most browsers respect filter on text too */
-html.lab:not(.light) a { color: var(--terracotta); }
-
-p { margin: 0 0 1rem; }
-p + p { text-indent: 1.2em; }
-.lead p, .col-2 p, .col-side p, .col-3 p { text-indent: 0; }
-.lead p + p, .col-2 p + p, .col-side p + p, .col-3 p + p { text-indent: 1.2em; }
+/* Figures are baked in fixed hex (not token-driven); in dark mode invert+hue-rotate
+   so they still read against a dark ground. This used to key off html.lab (the
+   retired warm skin) — repointed to the sitewide dark/light gate (default dark,
+   html.light flips it) so the correction still fires now that class="lab" is gone.
+   FLAGGED: figures were colour-tuned for the old warm LAB palette specifically;
+   this keeps them legible but the owner should eyeball them against the new
+   cool skin. */
+html:not(.light) .figure svg { filter: invert(0.92) hue-rotate(180deg) saturate(0.85) brightness(0.95); }
+html:not(.light) .figure svg text { fill: revert; }
 
 @media (max-width: 900px) {
-  main { padding: 32px 22px 80px; }
-  h1 { font-size: 48px; }
-  h2 { font-size: 28px; }
-  .col-2, .col-3, .col-side { grid-template-columns: 1fr; gap: 28px; }
-  .stats-strip { grid-template-columns: repeat(2, 1fr); }
-  .stats-strip .stat { border-right: none; border-bottom: 1px solid var(--rule); }
+  .col-2, .col-side { grid-template-columns: 1fr; gap: 28px; }
 }
-@media (max-width: 520px) {
-  .hero .topbar { flex-direction: column; gap: 4px; }
-  .hero .topbar .right { font-size: 10px; letter-spacing: 0.1em; }
-  .stats-strip { grid-template-columns: 1fr; }
-  .stats-strip .stat { border-right: none; border-bottom: 1px solid var(--rule); }
-}
-
-/* Prevent horizontal overflow from any element wider than the viewport */
-main { overflow-x: clip; }
-
-
-
-/* Figures are baked in the warm LAB-light palette (hard-coded hex). In LAB dark, invert+
-   hue-rotate so they read on the dark ground; in LAB light no filter — native palette matches
-   the page. (This is the rescoped lab.css dark-figure filter, now keyed to html.lab.) */
 </style>
 </head>
 <body class="cat-intervention">
@@ -643,72 +275,73 @@ main { overflow-x: clip; }
 
 <main>
 
-<section class="hero">
-  <div class="topbar">
-    <div><span class="dot"></span>Specimen 03 · Gemma-4-31B-dense · base · IQ2_M</div>
-    <div class="right">60 layers · 176 configs · ~32 GPU-hours · 16&nbsp;GB&nbsp;Mac</div>
+<div class="nb-kicker" style="margin-bottom:var(--sp-5)">Observation notebook · Anya · 2026 · negative-result sweep</div>
+<header class="nb-record">
+  <div class="nb-record__title">The model that wouldn't break.</div>
+  <div class="nb-record__grid">
+    <div class="nb-record__field"><span class="nb-record__k">Specimen</span><span class="nb-record__v">Specimen 03 · Gemma-4-31B-dense · base · IQ2_M</span></div>
+    <div class="nb-record__field"><span class="nb-record__k">Status</span><span class="nb-record__v">A negative result, dissected — 60 layers · 176 configs swept · ~32 GPU-hours · 16&nbsp;GB&nbsp;Mac</span></div>
+    <div class="nb-record__field"><span class="nb-record__k">Source</span><span class="nb-record__v">rebuild GGUF · layer_path.py</span></div>
   </div>
+</header>
 
-  <div class="kicker" style="margin-top:2.4rem">A negative result, dissected</div>
-  <h1>The model that<br><em>wouldn't break</em>.</h1>
-  <p class="dek">
-    Every other specimen in this lab gave up a winning surgery — a layer you
-    could duplicate for a real gain. Gemma-4&#8209;31B gave up nothing. But
-    "nothing" turned out to have a shape: this model is robust to a single cut
-    and <em>rigid</em> under a structural one, and that contrast is the finding.
-  </p>
+<p class="dek">
+  Every other specimen in this lab gave up a winning surgery — a layer you
+  could duplicate for a real gain. Gemma-4&#8209;31B gave up nothing. But
+  "nothing" turned out to have a shape: this model is robust to a single cut
+  and <em>rigid</em> under a structural one, and that contrast is the finding.
+</p>
 
-  <div class="stats-strip">
-    <div class="stat"><span class="num">60</span><span class="label">Dense layers<br>[5 sliding + 1 global] × 10</span></div>
-    <div class="stat"><span class="num">176</span><span class="label">Configs swept<br>dup · prune · block · combo</span></div>
-    <div class="stat"><span class="num">0</span><span class="label">Real winners<br>top math gains vanish cross-channel</span></div>
-    <div class="stat"><span class="num">×<small>depth</small></span><span class="label">Block damage law<br>span × depth, floored</span></div>
-    <div class="stat"><span class="num">front</span><span class="label">Where the noise lives<br>not the back</span></div>
-  </div>
+<div class="nb-stats">
+  <div class="nb-stat"><span class="nb-stat__num">60</span><span class="nb-stat__label">Dense layers<br>[5 sliding + 1 global] × 10</span></div>
+  <div class="nb-stat"><span class="nb-stat__num">176</span><span class="nb-stat__label">Configs swept<br>dup · prune · block · combo</span></div>
+  <div class="nb-stat"><span class="nb-stat__num">0</span><span class="nb-stat__label">Real winners<br>top math gains vanish cross-channel</span></div>
+  <div class="nb-stat"><span class="nb-stat__num">×<small>depth</small></span><span class="nb-stat__label">Block damage law<br>span × depth, floored</span></div>
+  <div class="nb-stat"><span class="nb-stat__num">front</span><span class="nb-stat__label">Where the noise lives<br>not the back</span></div>
+</div>
 
-  <div class="marginalia">
-    <div class="label">The patient</div>
-    <div class="body">
-      <p>
-        <span class="mono">gemma-4-31B</span> (dense), the prestige target of the
-        Gemma line: sixty blocks in a <span class="mono">[5 sliding + 1 global]×10</span>
-        rhythm, no mixture-of-experts, no shared-KV anchor. Reputationally a
-        conversational/creative model (a spiritual successor to the warm,
-        fluent GPT-4o register), which turns out to be exactly the problem
-        with testing it on arithmetic. Hold that thought; it's <a href="#scope">§6</a>.
-      </p>
-      <p>
-        Run on consumer hardware: the <span class="mono">base</span> checkpoint
-        (not instruction-tuned — that choice is load-bearing, see <a href="#muzzle">§6</a>)
-        at <span class="mono">IQ2_M</span>, the heaviest quant that fits a 16&nbsp;GB
-        Mac. The sweep is a frankenstein factory: rebuild the GGUF with layers
-        duplicated or deleted, reload, re-measure. No training, ever.
-      </p>
+<div class="nb-marginalia" style="margin-top:var(--sp-7)">
+  <div class="nb-marginalia__label">The patient</div>
+  <div class="nb-marginalia__body">
+    <p>
+      <span class="mono">gemma-4-31B</span> (dense), the prestige target of the
+      Gemma line: sixty blocks in a <span class="mono">[5 sliding + 1 global]×10</span>
+      rhythm, no mixture-of-experts, no shared-KV anchor. Reputationally a
+      conversational/creative model (a spiritual successor to the warm,
+      fluent GPT-4o register), which turns out to be exactly the problem
+      with testing it on arithmetic. Hold that thought; it's <a href="#scope">§6</a>.
+    </p>
+    <p>
+      Run on consumer hardware: the <span class="mono">base</span> checkpoint
+      (not instruction-tuned — that choice is load-bearing, see <a href="#muzzle">§6</a>)
+      at <span class="mono">IQ2_M</span>, the heaviest quant that fits a 16&nbsp;GB
+      Mac. The sweep is a frankenstein factory: rebuild the GGUF with layers
+      duplicated or deleted, reload, re-measure. No training, ever.
+    </p>
 
-      <div class="specbox">
-        <div class="speccol">
-          <div class="spechead">Architecture</div>
-          <dl>
-            <dt>Layers</dt><dd class="mono">60 · dense</dd>
-            <dt>Rhythm</dt><dd class="mono">5 SWA : 1 global</dd>
-            <dt>Globals</dt><dd class="mono">L5,11,…,59</dd>
-            <dt>Attn</dt><dd class="mono">use_alt (V=K)</dd>
-            <dt>Anchor</dt><dd class="mono">none</dd>
-          </dl>
-        </div>
-        <div class="speccol">
-          <div class="spechead">Rig</div>
-          <dl>
-            <dt>Engine</dt><dd>llama-server</dd>
-            <dt>Quant</dt><dd class="mono">IQ2_M (base)</dd>
-            <dt>Surgery</dt><dd>rebuild GGUF<br><span class="mono">layer_path.py</span></dd>
-            <dt>Throughput</dt><dd class="mono">~6.4 tps</dd>
-          </dl>
-        </div>
+    <div class="specbox">
+      <div class="speccol">
+        <div class="spechead">Architecture</div>
+        <dl>
+          <dt>Layers</dt><dd class="mono">60 · dense</dd>
+          <dt>Rhythm</dt><dd class="mono">5 SWA : 1 global</dd>
+          <dt>Globals</dt><dd class="mono">L5,11,…,59</dd>
+          <dt>Attn</dt><dd class="mono">use_alt (V=K)</dd>
+          <dt>Anchor</dt><dd class="mono">none</dd>
+        </dl>
+      </div>
+      <div class="speccol">
+        <div class="spechead">Rig</div>
+        <dl>
+          <dt>Engine</dt><dd>llama-server</dd>
+          <dt>Quant</dt><dd class="mono">IQ2_M (base)</dd>
+          <dt>Surgery</dt><dd>rebuild GGUF<br><span class="mono">layer_path.py</span></dd>
+          <dt>Throughput</dt><dd class="mono">~6.4 tps</dd>
+        </dl>
       </div>
     </div>
   </div>
-</section>
+</div>
 
 
 <!-- ─── §1 THE HEADLINE: RIGIDITY ─────────────────────────────────── -->
@@ -745,14 +378,14 @@ main { overflow-x: clip; }
         residual stream routes around it; a block of layers cannot be copied
         because you've changed the order the model is built on.
       </p>
-      <p class="pull">
+      <p class="nb-pull">
         The negative result isn't "nothing happened." It's that this model is
         held together by where its layers sit — and a sweep that only moves one
         layer at a time can't see the glue.
       </p>
     </div>
     <div class="aside">
-      <span class="kicker">Two robustnesses</span>
+      <span class="nb-kicker">Two robustnesses</span>
       <p>
         <b>Perturbation-robust</b> — capability is invariant to a single dup or
         prune. Gemma-31B has this.
@@ -780,8 +413,7 @@ main { overflow-x: clip; }
     seeds won't save it.
   </p>
 
-  <div class="tbl-wrap">
-  <table class="tbl">
+  <table class="nb-table">
     <thead><tr>
       <th class="label">config</th><th class="num">math strict</th><th class="num">Δ vs base</th>
       <th class="num">d</th><th class="num">t</th><th class="num">r</th><th>verdict</th>
@@ -794,8 +426,7 @@ main { overflow-x: clip; }
       <tr><td class="label">prune_2_14</td><td class="num">0.781</td><td class="num">+0.062</td><td class="num">+0.37</td><td class="num">+1.0</td><td class="num">1.24</td><td class="game">noise floor · n=8</td></tr>
     </tbody>
   </table>
-  </div>
-  <p class="figcap" style="margin-top:0.9rem">
+  <p class="nb-figcap" style="margin-top:0.9rem">
     Two configs clear the floor, at half budget.
     <span class="mono">prune_14</span> (r=0.64) and <span class="mono">dup_9</span>
     (r=0.71) dip under 1 with d≈0.8, while the only fully-seeded leader,
@@ -822,6 +453,7 @@ main { overflow-x: clip; }
   </p>
 
   <div class="figure">
+   <div class="nb-plate">
     <svg viewBox="0 0 820 360" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
 <rect x="58" y="24" width="245" height="290" fill="#00000008"/>
 <rect x="303" y="24" width="252" height="290" fill="#00000000"/>
@@ -945,7 +577,8 @@ main { overflow-x: clip; }
 <circle cx="221.5" cy="292.7" r="8.0" fill="#B85C3D" fill-opacity="0.5" stroke="#7A2E2E" stroke-width="0.8"/>
 <circle cx="196.3" cy="154.1" r="5.8" fill="#B85C3D" fill-opacity="0.5" stroke="#7A2E2E" stroke-width="0.8"/>
     </svg>
-    <p class="figcap">
+   </div>
+    <p class="nb-figcap">
       <b>Fig 1 — Block dup math-strict vs depth.</b> Faint dots = single-layer
       dups (the "parts"), which hug baseline everywhere. Terracotta discs =
       duplicated blocks, radius ∝ span (2→5+ layers). Two gradients are visible:
@@ -1010,6 +643,7 @@ main { overflow-x: clip; }
   </p>
 
   <div class="figure">
+   <div class="nb-plate">
     <svg viewBox="0 0 820 300" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
 <rect x="50" y="30" width="249" height="230" fill="#00000008"/>
 <rect x="555" y="30" width="249" height="230" fill="#00000008"/>
@@ -1035,7 +669,8 @@ main { overflow-x: clip; }
 <text x="638" y="109" font-size="9" fill="#B85C3D">dup</text>
 <text x="715" y="97" font-size="9" fill="#2F3F52">prune</text>
     </svg>
-    <p class="figcap">
+   </div>
+    <p class="nb-figcap">
       <b>Fig 2 — Per-layer seed noise (std of per-seed math means), L0–59.</b>
       Terracotta = dup ladder, slate = prune ladder; dead/bricked configs
       (zero-variance constant garbage) excluded so they don't masquerade as
@@ -1069,7 +704,7 @@ main { overflow-x: clip; }
       </p>
     </div>
     <div class="aside">
-      <span class="kicker">What is back-loaded</span>
+      <span class="nb-kicker">What is back-loaded</span>
       <p>
         <b>Bricks</b>, not noise. The global-grid catastrophics
         (<span class="mono">dup_0/1</span>, late globals) skew slightly toward the
@@ -1080,6 +715,7 @@ main { overflow-x: clip; }
   </div>
 
   <div class="figure" style="margin-top:1.8rem">
+   <div class="nb-plate">
     <svg viewBox="0 0 850 290" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
 <rect x="58" y="30" width="236" height="220" fill="#00000008"/>
 <rect x="556" y="30" width="236" height="220" fill="#00000008"/>
@@ -1109,7 +745,8 @@ main { overflow-x: clip; }
 <text x="705" y="51" font-size="9" fill="#7A2E2E" text-anchor="middle">geometry — Δ/residual (left)</text>
 <text x="182" y="145" font-size="9" fill="#B85C3D" text-anchor="middle">behaviour — seed-noise (right)</text>
     </svg>
-    <p class="figcap">
+   </div>
+    <p class="nb-figcap">
       <b>Fig 3 — Geometry change vs behavioural noise, by depth.</b> Wine =
       per-layer Δ/residual ratio (how hard each layer rewrites the stream,
       2-bit scan-delta; boundary layers L0 &amp; L59 spike off-scale to 1.5 and
@@ -1175,11 +812,11 @@ main { overflow-x: clip; }
       </p>
     </div>
     <div class="aside">
-      <span class="kicker">Specimen: partial pays for garbage</span>
-      <div class="specimen weird" style="margin-top:0.6rem">
-        <div class="head"><span class="lid">baseline · math_add</span><span class="t">strict 0 · partial 0.53</span></div>
-        <div class="quote"> 111111111111111</div>
-        <div class="gloss">A degenerate repetition. The exact answer never
+      <span class="nb-kicker">Specimen: partial pays for garbage</span>
+      <div class="nb-specimen nb-specimen--weird" style="margin-top:0.6rem">
+        <div class="nb-specimen__head"><span class="lid">baseline · math_add</span><span class="t">strict 0 · partial 0.53</span></div>
+        <div class="nb-specimen__quote"> 111111111111111</div>
+        <div class="nb-specimen__gloss">A degenerate repetition. The exact answer never
         appears — strict zero. But the digit pattern is "magnitude-plausible," so
         partial pays out half credit. This is the same leniency, in miniature,
         that the 26B exploited wholesale.</div>
@@ -1238,9 +875,9 @@ main { overflow-x: clip; }
     </div>
   </div>
 
-  <div class="marginalia" style="margin-top:2.4rem">
-    <div class="label">Caveat — the quant ceiling, and the one experiment that lifts it</div>
-    <div class="body">
+  <div class="nb-marginalia" style="margin-top:2.4rem">
+    <div class="nb-marginalia__label">Caveat — the quant ceiling, and the one experiment that lifts it</div>
+    <div class="nb-marginalia__body">
       <p>
         Everything here runs at <span class="mono">IQ2_M</span>, the quality
         floor that a 16&nbsp;GB RAM ceiling forces. The geometry scans show 2-bit
@@ -1302,7 +939,7 @@ main { overflow-x: clip; }
       </div>
     </div>
   </div>
-  <p class="figcap" style="margin-top:1.1rem;max-width:760px">
+  <p class="nb-figcap" style="margin-top:1.1rem;max-width:760px">
     <b>And the cross-channel aggregate doesn't endorse them either.</b> The strict-math
     gain is the only place these configs win. Balance all three channels
     equally and it evaporates: dup_22 <span class="qv">−0.037</span>, prune_14 <span class="qv">+0.006</span>, dup_9
@@ -1313,7 +950,7 @@ main { overflow-x: clip; }
     only its Cohen's d is wide at n=3.) These aren't suppressed
     winners; they're noise-floor configs with one flattering channel.
   </p>
-  <p class="figcap">
+  <p class="nb-figcap">
     Publishing these inherits <b>Google's Gemma Terms of Use</b>, not Apache —
     the license, "Gemma" attribution, and use-restrictions travel with any
     derivative. Credit chain: Google (Gemma) → David Ng (RYS technique) → this lab.
