@@ -84,7 +84,7 @@
   <circle cx="264.27" cy="164.44" r="7" fill="none" stroke="var(--cause,#E3C24A)" stroke-width="1.5"/>
 
   <g font-size="7.5" class="ink2">
-    <text x="264.27" y="97" text-anchor="middle">baseline</text>
+    <text x="264.27" y="88" text-anchor="middle">baseline</text>
     <text x="224.39" y="108" text-anchor="middle">rys_l</text>
     <text x="341.87" y="98" text-anchor="middle">ratio_hi_l</text>
     <text x="299.53" y="177" text-anchor="middle">combo_rys_anchor</text>
